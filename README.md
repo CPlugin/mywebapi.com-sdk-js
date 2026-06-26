@@ -1,4 +1,4 @@
-# @cplugin.com/webapi-sdk
+# @mywebapi.com/sdk
 
 TypeScript client for the SaaS WebAPI v2 (MT4/MT5 trading platform management).
 
@@ -13,8 +13,8 @@ TypeScript client for the SaaS WebAPI v2 (MT4/MT5 trading platform management).
 ## Install
 
 ```bash
-bun add @cplugin.com/webapi-sdk
-# or: npm / pnpm install @cplugin.com/webapi-sdk
+bun add @mywebapi.com/sdk
+# or: npm / pnpm install @mywebapi.com/sdk
 ```
 
 **Credentials & trade platforms:** Create API keys (client ID and client secret) and manage your trade platforms in the CPlugin Toolbox — staging: https://pre.toolbox.cplugin.com · production: https://toolbox.cplugin.com
@@ -24,7 +24,7 @@ bun add @cplugin.com/webapi-sdk
 The SDK manages OAuth2 access tokens for you — pass `clientId` / `clientSecret` and the SDK handles discovery, caching, expiry, and 401-driven refresh transparently. Credentials and environment are configured once; then call methods on `client.mt4` or `client.mt5` namespaces.
 
 ```typescript
-import { CPluginWebApiClient, ApiError, collectAll } from '@cplugin.com/webapi-sdk';
+import { CPluginWebApiClient, ApiError, collectAll } from '@mywebapi.com/sdk';
 
 const client = new CPluginWebApiClient({
   env: 'prod',  // or 'staging' or { baseUrl, authUrl }
@@ -56,7 +56,7 @@ const allUsers = await collectAll((cursor) =>
 console.log(`Fetched ${allUsers.length} users across all pages`);
 
 // Async iteration over pages
-import { paginate } from '@cplugin.com/webapi-sdk';
+import { paginate } from '@mywebapi.com/sdk';
 for await (const pageItems of paginate((cursor) =>
   client.paged(() =>
     client.mt4.getUsersRequest(tp, { limit: 50, ...(cursor ? { cursor } : {}) }),
@@ -128,7 +128,7 @@ const client = new CPluginWebApiClient({
 `ApiError` is thrown for any API-level failure. It carries `code`, `description`, and `activityId` for diagnostics and correlation.
 
 ```typescript
-import { ApiError } from '@cplugin.com/webapi-sdk';
+import { ApiError } from '@mywebapi.com/sdk';
 
 const tp = '3029d415-d0a6-4710-a9c1-8cb063ef872f';
 
@@ -193,7 +193,7 @@ console.log(`Total trades: ${allTrades.length}`);
 **`paginate(fetchPage)`** — async iterable for streaming large datasets page-by-page:
 
 ```typescript
-import { paginate } from '@cplugin.com/webapi-sdk';
+import { paginate } from '@mywebapi.com/sdk';
 
 for await (const pageItems of paginate((cursor) =>
   client.paged(() =>

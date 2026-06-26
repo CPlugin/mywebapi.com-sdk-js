@@ -1,4 +1,4 @@
-# E2E Test Suite — @cplugin.com/webapi-sdk
+# E2E Test Suite — @mywebapi.com/sdk
 
 End-to-end tests that exercise the **real running WebAPI** server: OAuth token acquisition, REST v2 envelope unwrapping, `ApiError` propagation, pagination, and SignalR tick streaming.
 

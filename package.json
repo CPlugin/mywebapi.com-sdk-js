@@ -1,5 +1,5 @@
 {
-  "name": "@cplugin.com/webapi-sdk",
+  "name": "@mywebapi.com/sdk",
   "version": "0.1.0",
   "license": "MIT",
   "description": "TypeScript client for the SaaS WebAPI v2 (MT4/MT5 management). Auto-generated types + thin fetch wrapper.",

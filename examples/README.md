@@ -1,6 +1,6 @@
 # SDK Examples — v2 Trading Terminal
 
-Three progressive examples showing how to use the `@cplugin.com/webapi-sdk` SDK.
+Three progressive examples showing how to use the `@mywebapi.com/sdk` SDK.
 Each builds on the previous one, adding a new capability.
 
 > **WARNING — Example 03 with `--live`**

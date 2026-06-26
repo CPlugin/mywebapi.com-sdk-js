@@ -3,7 +3,7 @@
 ## Before the first release
 
 1. **Finalize the package name and scope** in `package.json` (`"name"` field).
-   The current value `@cplugin.com/webapi-sdk` is a working placeholder.
+   The current value `@mywebapi.com/sdk` is a working placeholder.
 2. **Update repository URLs** — replace `PLACEHOLDER_ORG/PLACEHOLDER_REPO` in
    `package.json` (`repository.url`, `homepage`, `bugs.url`) with the real
    GitHub org and repo name.
