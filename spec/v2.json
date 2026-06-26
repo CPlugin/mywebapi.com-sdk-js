@@ -8473,6 +8473,711 @@
           }
         }
       }
+    },
+    "/api/v2/MT4/{tradePlatform}/NewsSend": {
+      "post": {
+        "tags": [
+          "MT4 v2 :: Sidecar - Messaging"
+        ],
+        "summary": "Send news to terminals",
+        "description": "Push a news item to all connected client terminals. Requires 'Send news' admin right.\r\n            \r\nManager (live) call to the wrapper's `NewsSend(NewsTopic news)`.\r\nSidecar-only because `mtmanapi64.dll` throws\r\n`PlatformNotSupportedException` on the body setter.",
+        "parameters": [
+          {
+            "name": "tradePlatform",
+            "in": "path",
+            "description": "Trade platform id (GUID)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "News topic + body + category + priority",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4NewsSendRequest"
+                  }
+                ],
+                "description": "v2 request DTO for `POST NewsSend` — pushes a single news item\r\nto the MT4 server, which fans it out to all connected client\r\nterminals. Wrapper signature: `ResultCode NewsSend(NewsTopic news)`."
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4NewsSendRequest"
+                  }
+                ],
+                "description": "v2 request DTO for `POST NewsSend` — pushes a single news item\r\nto the MT4 server, which fans it out to all connected client\r\nterminals. Wrapper signature: `ResultCode NewsSend(NewsTopic news)`."
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4NewsSendRequest"
+                  }
+                ],
+                "description": "v2 request DTO for `POST NewsSend` — pushes a single news item\r\nto the MT4 server, which fans it out to all connected client\r\nterminals. Wrapper signature: `ResultCode NewsSend(NewsTopic news)`."
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4NewsSendRequest"
+                  }
+                ],
+                "description": "v2 request DTO for `POST NewsSend` — pushes a single news item\r\nto the MT4 server, which fans it out to all connected client\r\nterminals. Wrapper signature: `ResultCode NewsSend(NewsTopic news)`."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/MT4/{tradePlatform}/MailSend": {
+      "post": {
+        "tags": [
+          "MT4 v2 :: Sidecar - Messaging"
+        ],
+        "summary": "Send mail to accounts",
+        "description": "Send an email to one or more client logins. Requires 'Email' admin right.\r\n            \r\nManager (live) call to the wrapper's\r\n`MailSend(MailBox mail, ICollection<int> logins)`.\r\nThe wrapper itself refuses to run on x64 (\r\n`throw new WrapperException(\"MailSend cannot be called in x64 environment\")`),\r\nso this endpoint exists only in the sidecar build.",
+        "parameters": [
+          {
+            "name": "tradePlatform",
+            "in": "path",
+            "description": "Trade platform id (GUID)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Mail content + recipient logins",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4MailSendRequest"
+                  }
+                ],
+                "description": "v2 request DTO for `POST MailSend` (sidecar-only). Sends an\r\nemail to one or more client logins. Wrapper signature:\r\n`ResultCode MailSend(MailBox mail, ICollection<int> logins)`."
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4MailSendRequest"
+                  }
+                ],
+                "description": "v2 request DTO for `POST MailSend` (sidecar-only). Sends an\r\nemail to one or more client logins. Wrapper signature:\r\n`ResultCode MailSend(MailBox mail, ICollection<int> logins)`."
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4MailSendRequest"
+                  }
+                ],
+                "description": "v2 request DTO for `POST MailSend` (sidecar-only). Sends an\r\nemail to one or more client logins. Wrapper signature:\r\n`ResultCode MailSend(MailBox mail, ICollection<int> logins)`."
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4MailSendRequest"
+                  }
+                ],
+                "description": "v2 request DTO for `POST MailSend` (sidecar-only). Sends an\r\nemail to one or more client logins. Wrapper signature:\r\n`ResultCode MailSend(MailBox mail, ICollection<int> logins)`."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/MT4/{tradePlatform}/MailsRequest": {
+      "get": {
+        "tags": [
+          "MT4 v2 :: Sidecar - Messaging"
+        ],
+        "summary": "List server mail",
+        "description": "List all mail messages currently stored on the MT4 server.\r\n            \r\nManager (live) call to the wrapper's `MailsRequest()`.\r\nReturns the server-side mailbox store as a flat list of\r\n`MT4MailBox` entries. Read-only; no batching parameters\r\n(the wrapper has no native pagination).",
+        "parameters": [
+          {
+            "name": "tradePlatform",
+            "in": "path",
+            "description": "Trade platform id (GUID)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MT4MailBoxListApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/MT4/{tradePlatform}/PluginsGet": {
+      "get": {
+        "tags": [
+          "MT4 v2 :: Sidecar - Plugins"
+        ],
+        "summary": "List plugins (cached)",
+        "description": "List MT4 server plugins currently configured (pump-side cache).\r\n            \r\nManager-pump call to the wrapper's `PluginsGet()`. The\r\nwrapper marks this `[Obsolete]` on x64 (mtmanapi64.dll has\r\nsilently-changing plugin layouts); the x86 sidecar process loads\r\nmtmanapi.dll where the layout is stable, so the call is safe.",
+        "parameters": [
+          {
+            "name": "tradePlatform",
+            "in": "path",
+            "description": "Trade platform id (GUID)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MT4PluginListApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/MT4/{tradePlatform}/PluginParamGet/{pos}": {
+      "get": {
+        "tags": [
+          "MT4 v2 :: Sidecar - Plugins"
+        ],
+        "summary": "Get plugin parameters",
+        "description": "Get a single plugin's parameters by position in the `PluginsGet` list.\r\n            \r\nManager-pump call to the wrapper's `PluginParamGet(pos, out ConPluginParam)`.\r\nThe `ConPluginParam.Params` auto-dereferences a 32-bit pointer —\r\nsafe on x86, sign-extension hazard on x64. Sidecar-only.",
+        "parameters": [
+          {
+            "name": "tradePlatform",
+            "in": "path",
+            "description": "Trade platform id (GUID)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "pos",
+            "in": "path",
+            "description": "Zero-based plugin index from `PluginsGet`",
+            "required": true,
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MT4PluginParamApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/MT4/{tradePlatform}/PluginUpdate": {
+      "post": {
+        "tags": [
+          "MT4 v2 :: Sidecar - Plugins"
+        ],
+        "summary": "Update plugin parameter",
+        "description": "Apply a plugin parameter update via the pump-side wrapper. Requires admin rights.\r\n            \r\nManager-live call to the wrapper's `PluginUpdate(ConPluginParam cpp)`.\r\nBody is `MT4PluginParam` (the same shape `PluginParamGet` returns).",
+        "parameters": [
+          {
+            "name": "tradePlatform",
+            "in": "path",
+            "description": "Trade platform id (GUID)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Plugin + parameter set to apply",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4PluginParam"
+                  }
+                ],
+                "description": "v2 DTO for an MT4 plugin together with its parameter set (sidecar-only).\r\nMirrors wrapper's `ConPluginParam`."
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4PluginParam"
+                  }
+                ],
+                "description": "v2 DTO for an MT4 plugin together with its parameter set (sidecar-only).\r\nMirrors wrapper's `ConPluginParam`."
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4PluginParam"
+                  }
+                ],
+                "description": "v2 DTO for an MT4 plugin together with its parameter set (sidecar-only).\r\nMirrors wrapper's `ConPluginParam`."
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4PluginParam"
+                  }
+                ],
+                "description": "v2 DTO for an MT4 plugin together with its parameter set (sidecar-only).\r\nMirrors wrapper's `ConPluginParam`."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/MT4/{tradePlatform}/CfgRequestPlugin": {
+      "get": {
+        "tags": [
+          "MT4 v2 :: Sidecar - Plugins"
+        ],
+        "summary": "Get plugin config (live)",
+        "description": "Read the plugin configuration (Manager-live).\r\n            \r\nManager (live) call to the wrapper's `CfgRequestPlugin()`.\r\nReturns the full plugin set with their parameter arrays — the\r\nManager-side equivalent of `PluginsGet` + per-plugin\r\n`PluginParamGet` in one round-trip.",
+        "parameters": [
+          {
+            "name": "tradePlatform",
+            "in": "path",
+            "description": "Trade platform id (GUID)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MT4PluginParamListApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/MT4/{tradePlatform}/CfgUpdatePlugin": {
+      "post": {
+        "tags": [
+          "MT4 v2 :: Sidecar - Plugins"
+        ],
+        "summary": "Update plugin config",
+        "description": "Update plugin configuration (Manager-live).\r\n            \r\nManager (live) call to the wrapper's\r\n`CfgUpdatePlugin(ConPlugin cp, PluginCfg[] cfgs)`. Body is\r\n`MT4PluginParam` — the plugin metadata plus its parameter\r\narray. Returns a bare-bool envelope.",
+        "parameters": [
+          {
+            "name": "tradePlatform",
+            "in": "path",
+            "description": "Trade platform id (GUID)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Plugin metadata + parameters to apply",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4PluginParam"
+                  }
+                ],
+                "description": "v2 DTO for an MT4 plugin together with its parameter set (sidecar-only).\r\nMirrors wrapper's `ConPluginParam`."
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4PluginParam"
+                  }
+                ],
+                "description": "v2 DTO for an MT4 plugin together with its parameter set (sidecar-only).\r\nMirrors wrapper's `ConPluginParam`."
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4PluginParam"
+                  }
+                ],
+                "description": "v2 DTO for an MT4 plugin together with its parameter set (sidecar-only).\r\nMirrors wrapper's `ConPluginParam`."
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4PluginParam"
+                  }
+                ],
+                "description": "v2 DTO for an MT4 plugin together with its parameter set (sidecar-only).\r\nMirrors wrapper's `ConPluginParam`."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BooleanApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/MT4/{tradePlatform}/UsersSnapshot": {
+      "get": {
+        "tags": [
+          "MT4 v2 :: Sidecar - Batch reads"
+        ],
+        "summary": "Snapshot all users",
+        "description": "Atomic snapshot of all registered users on the MT4 server.\r\n            \r\nManager (live) call to the wrapper's `UsersSnapshot()`.\r\nIterates `UnpackObject<UserRecord>(i)` over the native\r\narray — on mtmanapi64.dll the per-struct cost combined with\r\nASLR alignment triggers access violations after some iterations,\r\nso this endpoint is sidecar-only.",
+        "parameters": [
+          {
+            "name": "tradePlatform",
+            "in": "path",
+            "description": "Trade platform id (GUID)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Optional server-side response cap (1..1000000, default 100000)",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 100000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MT4UserListApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/MT4/{tradePlatform}/UsersSyncRead": {
+      "get": {
+        "tags": [
+          "MT4 v2 :: Sidecar - Batch reads"
+        ],
+        "summary": "Read user-records sync",
+        "description": "Read user records buffered by a prior `UsersSyncStart` call.\r\n            \r\nManager (live) call to the wrapper's `UsersSyncRead()`.\r\nMust be preceded by `POST UsersSyncStart` on the main x64\r\nAPI to seed the server-side snapshot. Same UnpackObject hazard\r\nas `UsersSnapshot` — sidecar-only.",
+        "parameters": [
+          {
+            "name": "tradePlatform",
+            "in": "path",
+            "description": "Trade platform id (GUID)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Optional server-side response cap (1..1000000, default 100000)",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 100000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MT4UserListApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/MT4/{tradePlatform}/TradesSnapshot": {
+      "get": {
+        "tags": [
+          "MT4 v2 :: Sidecar - Batch reads"
+        ],
+        "summary": "Snapshot all trades",
+        "description": "Atomic snapshot of all open/pending trades on the MT4 server.\r\n            \r\nManager (live) call to the wrapper's `TradesSnapshot()`.\r\nSame UnpackObject-loop hazard as the user batch reads. Sidecar-only.",
+        "parameters": [
+          {
+            "name": "tradePlatform",
+            "in": "path",
+            "description": "Trade platform id (GUID)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Optional server-side response cap (1..1000000, default 100000)",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 100000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MT4TradeListApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/MT4/{tradePlatform}/TradesSyncRead": {
+      "get": {
+        "tags": [
+          "MT4 v2 :: Sidecar - Batch reads"
+        ],
+        "summary": "Read trade-records sync",
+        "description": "Read trade records buffered by a prior `TradesSyncStart` call.\r\n            \r\nManager (live) call to the wrapper's `TradesSyncRead()`.\r\nMust be preceded by `POST TradesSyncStart` on the main x64\r\nAPI. Same UnpackObject hazard — sidecar-only.",
+        "parameters": [
+          {
+            "name": "tradePlatform",
+            "in": "path",
+            "description": "Trade platform id (GUID)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Optional server-side response cap (1..1000000, default 100000)",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 100000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MT4TradeListApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/MT4/{tradePlatform}/ExternalCommandBinary": {
+      "post": {
+        "tags": [
+          "MT4 v2 :: Sidecar - ExternalCommand"
+        ],
+        "summary": "Send plugin command (binary)",
+        "description": "Pass arbitrary binary payload to the MT4 server's plugin pipeline.\r\n            \r\n<br>\r\nManager (live) call via the wrapper's\r\n`ExternalCommandCustom<byte[], byte[]>` overload with a\r\npass-through byte-array marshaller. The first installed plugin\r\nthat returns `RET_OK` wins; its response bytes become the\r\npayload's `Data` field.\r\n<br>\r\nWire format: `byte[]` serializes as base64 in JSON. Clients\r\nagree with the plugin author on the binary layout.\r\n<br><b>Why sidecar-only:</b> the wrapper's binary variants rely on\r\n`Marshal.SizeOf` + native `ExternalCommand` dispatch.\r\nOn `mtmanapi64.dll` the signed/unsigned marshalling\r\ndiverges from `mtmanapi.dll` — same payload byte-for-byte\r\ncan decode differently on x64. The x86 sidecar process loads the\r\n32-bit DLL where the marshalling is the original one.\r\n<br>\r\nThe wrapper's third `ExternalCommandCustom` overload that\r\ntakes an `ICustomSerializer` interface is genuinely not\r\nREST-translatable — it requires the caller to provide C#\r\nserialization logic in-process. Not exposed.\r\n",
+        "parameters": [
+          {
+            "name": "tradePlatform",
+            "in": "path",
+            "description": "Trade platform id (GUID)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Binary payload",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4ExternalCommandBinaryRequest"
+                  }
+                ],
+                "description": "v2 DTO for binary `ExternalCommand` roundtrips (sidecar-only).\r\nThe MT4 server's plugin API has no enforced wire-format — clients\r\nagree with their plugin on the binary layout and pass arbitrary\r\nbytes through this endpoint."
+              }
+            },
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4ExternalCommandBinaryRequest"
+                  }
+                ],
+                "description": "v2 DTO for binary `ExternalCommand` roundtrips (sidecar-only).\r\nThe MT4 server's plugin API has no enforced wire-format — clients\r\nagree with their plugin on the binary layout and pass arbitrary\r\nbytes through this endpoint."
+              }
+            },
+            "text/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4ExternalCommandBinaryRequest"
+                  }
+                ],
+                "description": "v2 DTO for binary `ExternalCommand` roundtrips (sidecar-only).\r\nThe MT4 server's plugin API has no enforced wire-format — clients\r\nagree with their plugin on the binary layout and pass arbitrary\r\nbytes through this endpoint."
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/MT4ExternalCommandBinaryRequest"
+                  }
+                ],
+                "description": "v2 DTO for binary `ExternalCommand` roundtrips (sidecar-only).\r\nThe MT4 server's plugin API has no enforced wire-format — clients\r\nagree with their plugin on the binary layout and pass arbitrary\r\nbytes through this endpoint."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MT4ExternalCommandBinaryResponseApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -17780,6 +18485,373 @@
         ],
         "type": "string",
         "description": "Transport-level error classification for v2 responses. Stable across MT4\r\nwrapper versions — clients can branch on this without knowing MT-specific\r\ncodes. When ErrorCode == MT4Error, see ManagerCode for the underlying\r\nMT4 ResultCode value."
+      },
+      "MT4ExternalCommandBinaryRequest": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "description": "Binary payload to send to the plugin (base64-encoded)",
+            "format": "byte",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "v2 DTO for binary `ExternalCommand` roundtrips (sidecar-only).\r\nThe MT4 server's plugin API has no enforced wire-format — clients\r\nagree with their plugin on the binary layout and pass arbitrary\r\nbytes through this endpoint."
+      },
+      "MT4ExternalCommandBinaryResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "description": "Binary payload received from the first plugin that returned RET_OK (base64-encoded)",
+            "format": "byte",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "v2 DTO for the response of `ExternalCommandBinary` (sidecar-only)."
+      },
+      "MT4ExternalCommandBinaryResponseApiResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT4ExternalCommandBinaryResponse"
+              }
+            ],
+            "description": "v2 DTO for the response of `ExternalCommandBinary` (sidecar-only).",
+            "nullable": true
+          },
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            ],
+            "description": "v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4\r\nResultCode (serialized as a string for a known enum member, or as a number for an\r\nunrecognised value returned by MT4); Message is a human-readable description.",
+            "nullable": true
+          },
+          "meta": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiMeta"
+              }
+            ],
+            "description": "Response metadata. ActivityId is the W3C trace-id for correlation in Seq/SigNoz.\r\nPaging is present only on paginated list responses; otherwise it is omitted —\r\nthe global JSON context policy serialises null fields, so we override that here\r\nwith System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Unified v2 response envelope: data is the payload (null on error); error is the\r\nerror object (null on success, always serialised); meta contains response metadata\r\n(activityId and optional paging). HTTP status is always 200."
+      },
+      "MT4MailBox": {
+        "type": "object",
+        "properties": {
+          "time": {
+            "type": "string",
+            "description": "Receive time (UTC)",
+            "format": "date-time"
+          },
+          "senderLogin": {
+            "type": "integer",
+            "description": "Sender login (0 when sent by anonymous source)",
+            "format": "int32"
+          },
+          "senderName": {
+            "type": "string",
+            "description": "Sender display name",
+            "nullable": true
+          },
+          "subject": {
+            "type": "string",
+            "description": "Subject line",
+            "nullable": true
+          },
+          "body": {
+            "type": "string",
+            "description": "Body text",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "v2 DTO for a single mailbox entry returned by `GET MailsRequest`\r\n(sidecar-only). Curated subset of the wrapper's `MailBox` —\r\nkeeps the consumer-facing fields, drops the internal\r\n`ReceiversCount` bookkeeping."
+      },
+      "MT4MailBoxListApiResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MT4MailBox"
+            },
+            "nullable": true
+          },
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            ],
+            "description": "v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4\r\nResultCode (serialized as a string for a known enum member, or as a number for an\r\nunrecognised value returned by MT4); Message is a human-readable description.",
+            "nullable": true
+          },
+          "meta": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiMeta"
+              }
+            ],
+            "description": "Response metadata. ActivityId is the W3C trace-id for correlation in Seq/SigNoz.\r\nPaging is present only on paginated list responses; otherwise it is omitted —\r\nthe global JSON context policy serialises null fields, so we override that here\r\nwith System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Unified v2 response envelope: data is the payload (null on error); error is the\r\nerror object (null on success, always serialised); meta contains response metadata\r\n(activityId and optional paging). HTTP status is always 200."
+      },
+      "MT4MailSendRequest": {
+        "type": "object",
+        "properties": {
+          "senderLogin": {
+            "type": "integer",
+            "description": "Sender login (0 = no reply allowed; otherwise valid manager login)",
+            "format": "int32"
+          },
+          "senderName": {
+            "type": "string",
+            "description": "Sender display name (optional, up to 64 chars)",
+            "nullable": true
+          },
+          "subject": {
+            "type": "string",
+            "description": "Email subject line (up to 128 chars)",
+            "nullable": true
+          },
+          "body": {
+            "type": "string",
+            "description": "Email body (required, non-empty)",
+            "nullable": true
+          },
+          "logins": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "description": "Recipient logins (at least 1, batch cap 10000)",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "v2 request DTO for `POST MailSend` (sidecar-only). Sends an\r\nemail to one or more client logins. Wrapper signature:\r\n`ResultCode MailSend(MailBox mail, ICollection<int> logins)`."
+      },
+      "MT4NewsSendRequest": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string",
+            "description": "News headline (required, up to 256 chars)",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "description": "News category (optional, up to 64 chars)",
+            "nullable": true
+          },
+          "body": {
+            "type": "string",
+            "description": "News body text (required)",
+            "nullable": true
+          },
+          "highPriority": {
+            "type": "boolean",
+            "description": "High-priority flag (`true` = priority 1, `false` = priority 0)"
+          }
+        },
+        "additionalProperties": false,
+        "description": "v2 request DTO for `POST NewsSend` — pushes a single news item\r\nto the MT4 server, which fans it out to all connected client\r\nterminals. Wrapper signature: `ResultCode NewsSend(NewsTopic news)`."
+      },
+      "MT4Plugin": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "description": "Plugin DLL filename (max 256 chars on the wrapper side)",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "Plugin display name (from `PluginInfo.Name`)",
+            "nullable": true
+          },
+          "version": {
+            "type": "integer",
+            "description": "Plugin version (from `PluginInfo.Version`)",
+            "format": "int32"
+          },
+          "copyright": {
+            "type": "string",
+            "description": "Plugin copyright string",
+            "nullable": true
+          },
+          "enabled": {
+            "type": "integer",
+            "description": "Enabled flag (raw int — 0 = disabled, non-zero = enabled)",
+            "format": "int32"
+          },
+          "configurable": {
+            "type": "integer",
+            "description": "Configurable flag (plugin exposes editable parameters)",
+            "format": "int32"
+          },
+          "managerAccess": {
+            "type": "integer",
+            "description": "Manager-terminal-accessible flag",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false,
+        "description": "v2 DTO for MT4 plugin metadata (sidecar-only). Mirrors wrapper's\r\n`ConPlugin` with its embedded `PluginInfo` flattened."
+      },
+      "MT4PluginConfig": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Parameter name",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "description": "Parameter value (free-form string)",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "v2 DTO for a single plugin parameter pair (sidecar-only).\r\nMirrors wrapper's `PluginCfg`."
+      },
+      "MT4PluginListApiResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MT4Plugin"
+            },
+            "nullable": true
+          },
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            ],
+            "description": "v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4\r\nResultCode (serialized as a string for a known enum member, or as a number for an\r\nunrecognised value returned by MT4); Message is a human-readable description.",
+            "nullable": true
+          },
+          "meta": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiMeta"
+              }
+            ],
+            "description": "Response metadata. ActivityId is the W3C trace-id for correlation in Seq/SigNoz.\r\nPaging is present only on paginated list responses; otherwise it is omitted —\r\nthe global JSON context policy serialises null fields, so we override that here\r\nwith System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Unified v2 response envelope: data is the payload (null on error); error is the\r\nerror object (null on success, always serialised); meta contains response metadata\r\n(activityId and optional paging). HTTP status is always 200."
+      },
+      "MT4PluginParam": {
+        "type": "object",
+        "properties": {
+          "plugin": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT4Plugin"
+              }
+            ],
+            "description": "Plugin metadata",
+            "nullable": true
+          },
+          "params": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MT4PluginConfig"
+            },
+            "description": "Plugin parameter array (name/value pairs)",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "v2 DTO for an MT4 plugin together with its parameter set (sidecar-only).\r\nMirrors wrapper's `ConPluginParam`."
+      },
+      "MT4PluginParamApiResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT4PluginParam"
+              }
+            ],
+            "description": "v2 DTO for an MT4 plugin together with its parameter set (sidecar-only).\r\nMirrors wrapper's `ConPluginParam`.",
+            "nullable": true
+          },
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            ],
+            "description": "v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4\r\nResultCode (serialized as a string for a known enum member, or as a number for an\r\nunrecognised value returned by MT4); Message is a human-readable description.",
+            "nullable": true
+          },
+          "meta": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiMeta"
+              }
+            ],
+            "description": "Response metadata. ActivityId is the W3C trace-id for correlation in Seq/SigNoz.\r\nPaging is present only on paginated list responses; otherwise it is omitted —\r\nthe global JSON context policy serialises null fields, so we override that here\r\nwith System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Unified v2 response envelope: data is the payload (null on error); error is the\r\nerror object (null on success, always serialised); meta contains response metadata\r\n(activityId and optional paging). HTTP status is always 200."
+      },
+      "MT4PluginParamListApiResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MT4PluginParam"
+            },
+            "nullable": true
+          },
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            ],
+            "description": "v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4\r\nResultCode (serialized as a string for a known enum member, or as a number for an\r\nunrecognised value returned by MT4); Message is a human-readable description.",
+            "nullable": true
+          },
+          "meta": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiMeta"
+              }
+            ],
+            "description": "Response metadata. ActivityId is the W3C trace-id for correlation in Seq/SigNoz.\r\nPaging is present only on paginated list responses; otherwise it is omitted —\r\nthe global JSON context policy serialises null fields, so we override that here\r\nwith System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Unified v2 response envelope: data is the payload (null on error); error is the\r\nerror object (null on success, always serialised); meta contains response metadata\r\n(activityId and optional paging). HTTP status is always 200."
       }
     },
     "securitySchemes": {

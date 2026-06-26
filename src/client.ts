@@ -73,6 +73,14 @@ import * as mt4Trades from './generated/mt4-v2-trades';
 import * as mt4Users from './generated/mt4-v2-users';
 
 // ---------------------------------------------------------------------------
+// Generated per-tag endpoint modules — MT4 x86 sidecar (WINE 32-bit process)
+// ---------------------------------------------------------------------------
+import * as mt4SidecarMessaging from './generated/mt4-v2-sidecar-messaging';
+import * as mt4SidecarPlugins from './generated/mt4-v2-sidecar-plugins';
+import * as mt4SidecarBatchReads from './generated/mt4-v2-sidecar-batch-reads';
+import * as mt4SidecarExternalCommand from './generated/mt4-v2-sidecar-externalcommand';
+
+// ---------------------------------------------------------------------------
 // Generated per-tag endpoint modules — MT5
 // ---------------------------------------------------------------------------
 import * as mt5Common from './generated/mt5-v2-common';
@@ -167,7 +175,11 @@ type MT4Namespace = CleanNamespace<
   BoundModule<typeof mt4ServerAdmin> &
   BoundModule<typeof mt4Symbols> &
   BoundModule<typeof mt4Trades> &
-  BoundModule<typeof mt4Users>,
+  BoundModule<typeof mt4Users> &
+  BoundModule<typeof mt4SidecarMessaging> &
+  BoundModule<typeof mt4SidecarPlugins> &
+  BoundModule<typeof mt4SidecarBatchReads> &
+  BoundModule<typeof mt4SidecarExternalCommand>,
   'MT4'
 >;
 
@@ -348,6 +360,10 @@ export class CPluginWebApiClient {
       ...bind(mt4Symbols, this.base, 'MT4'),
       ...bind(mt4Trades, this.base, 'MT4'),
       ...bind(mt4Users, this.base, 'MT4'),
+      ...bind(mt4SidecarMessaging, this.base, 'MT4'),
+      ...bind(mt4SidecarPlugins, this.base, 'MT4'),
+      ...bind(mt4SidecarBatchReads, this.base, 'MT4'),
+      ...bind(mt4SidecarExternalCommand, this.base, 'MT4'),
     } as MT4Namespace;
 
     this.mt5 = {
