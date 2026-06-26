@@ -1,0 +1,38 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / getCfgRequestGatewayMarkup
+
+# Function: getCfgRequestGatewayMarkup()
+
+> **getCfgRequestGatewayMarkup**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getCfgRequestGatewayMarkupResponseSuccess`](../types/mt4-v2-config.getCfgRequestGatewayMarkupResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:1107
+
+All MT4 gateway-markup rules (per-symbol bid/ask spread adjustments applied to STP-routed quotes), paginated.
+
+Manager-live read (round-trip). Each entry maps an external Source
+(symbol/mask/group) onto a local Symbol with per-side pip markups
+(BidMarkup/AskMarkup). Ordering: by (Source, Symbol) ascending.
+Cursor is an opaque base64 string holding the composite key
+"{Source}|{Symbol}" — MT4 symbol wildcards use `*` and `?`
+(not `|`), so the delimiter is safe.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetCfgRequestGatewayMarkupParams`](../types/model.GetCfgRequestGatewayMarkupParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getCfgRequestGatewayMarkupResponseSuccess`](../types/mt4-v2-config.getCfgRequestGatewayMarkupResponseSuccess.html)\>

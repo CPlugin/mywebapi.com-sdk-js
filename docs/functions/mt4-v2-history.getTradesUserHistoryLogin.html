@@ -1,0 +1,41 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-history](../modules/mt4-v2-history.html) / getTradesUserHistoryLogin
+
+# Function: getTradesUserHistoryLogin()
+
+> **getTradesUserHistoryLogin**(`tradePlatform`, `login`, `params?`, `options?`): `Promise`\<[`getTradesUserHistoryLoginResponseSuccess`](../types/mt4-v2-history.getTradesUserHistoryLoginResponseSuccess.html)\>
+
+Defined in: mt4-v2-history.ts:55
+
+Closed trades history for a single account in a time range.
+
+Manager (live) call — round-trips to MT4 server. Default time range
+is "everything" (epoch → MaxValue) when query params are omitted.
+Returns an empty list if the account has no closed trades in the
+window. Trades are mapped to the curated `MT4Trade` DTO; same
+shape as live `TradesGetByMarket` / `TradesGetBySymbol`.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### login
+
+`number`
+
+### params?
+
+[`GetTradesUserHistoryLoginParams`](../types/model.GetTradesUserHistoryLoginParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getTradesUserHistoryLoginResponseSuccess`](../types/mt4-v2-history.getTradesUserHistoryLoginResponseSuccess.html)\>

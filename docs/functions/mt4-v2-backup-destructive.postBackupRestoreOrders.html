@@ -1,0 +1,44 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-backup-destructive](../modules/mt4-v2-backup-destructive.html) / postBackupRestoreOrders
+
+# Function: postBackupRestoreOrders()
+
+> **postBackupRestoreOrders**(`tradePlatform`, `mT4TradeRestoreInput?`, `params?`, `options?`): `Promise`\<[`postBackupRestoreOrdersResponseSuccess`](../types/mt4-v2-backup-destructive.postBackupRestoreOrdersResponseSuccess.html)\>
+
+Defined in: mt4-v2-backup-destructive.ts:119
+
+Restore order records into the live MT4 database. Destructive — requires `?confirm=true`.
+
+Manager (live) call to the wrapper's
+`BackupRestoreOrders(TradeRecord[] trades)`. Returns
+`MT4TradeRestoreResult[]` — one entry per input trade, with
+`Order` (ticket) and `Res` (0 = error, 1 = restored).
+Position in the response array matches position in the request.
+<br>
+Idempotency-Key header is <b>strongly recommended</b>. Batch cap:
+10000 records per call.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### mT4TradeRestoreInput?
+
+[`MT4TradeRestoreInput`](../interfaces/model.MT4TradeRestoreInput.html)[]
+
+### params?
+
+[`PostBackupRestoreOrdersParams`](../types/model.PostBackupRestoreOrdersParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postBackupRestoreOrdersResponseSuccess`](../types/mt4-v2-backup-destructive.postBackupRestoreOrdersResponseSuccess.html)\>

@@ -1,0 +1,36 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-news](../modules/mt4-v2-news.html) / getNewsTopicGetPos
+
+# Function: getNewsTopicGetPos()
+
+> **getNewsTopicGetPos**(`tradePlatform`, `pos`, `options?`): `Promise`\<[`getNewsTopicGetPosResponseSuccess`](../types/mt4-v2-news.getNewsTopicGetPosResponseSuccess.html)\>
+
+Defined in: mt4-v2-news.ts:171
+
+Single cached news topic header by zero-based index.
+
+Pump-cached read — useful for paginating news without re-marshalling
+the whole array. Pair with `NewsTotal` to bound the index.
+Returns a wrapper-failure envelope when pos is
+out of range.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### pos
+
+`number`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getNewsTopicGetPosResponseSuccess`](../types/mt4-v2-news.getNewsTopicGetPosResponseSuccess.html)\>

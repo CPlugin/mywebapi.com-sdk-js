@@ -1,0 +1,166 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / MT4GatewayRule
+
+# Interface: MT4GatewayRule
+
+Defined in: model/mT4GatewayRule.ts:19
+
+v2 DTO for a single MT4 gateway-rule entry (STP execution routing
+policy). Curated subset of the wrapper's ConGatewayRule — drops the
+internal RequestRreserved/ExeReserved padding blocks.
+<br>
+Each rule selects orders by RequestSymbol and RequestGroup (each can
+be an exact name, a wildcard mask, or a group identifier), then
+routes them to ExeAccount (named externally), with execution limits
+expressed in pips and lots.
+
+## Properties
+
+### enable?
+
+> `optional` **enable?**: `boolean`
+
+Defined in: model/mT4GatewayRule.ts:21
+
+Whether the rule is active
+
+***
+
+### exeAccountId?
+
+> `optional` **exeAccountId?**: `number`
+
+Defined in: model/mT4GatewayRule.ts:43
+
+Execution gateway-account internal id
+
+***
+
+### exeAccountName?
+
+> `optional` **exeAccountName?**: `string` \| `null`
+
+Defined in: model/mT4GatewayRule.ts:41
+
+Execution gateway-account name
+
+#### Nullable
+
+***
+
+### exeAccountPos?
+
+> `optional` **exeAccountPos?**: `number`
+
+Defined in: model/mT4GatewayRule.ts:55
+
+Current open position on the execution account
+
+***
+
+### exeFlags?
+
+> `optional` **exeFlags?**: `number`
+
+Defined in: model/mT4GatewayRule.ts:59
+
+Execution flags bitmap (raw wrapper int)
+
+***
+
+### exeMaxDeviation?
+
+> `optional` **exeMaxDeviation?**: `number`
+
+Defined in: model/mT4GatewayRule.ts:45
+
+Maximum allowed deviation (pips) between requested and executed price
+
+***
+
+### exeMaxLosingSlippage?
+
+> `optional` **exeMaxLosingSlippage?**: `number`
+
+Defined in: model/mT4GatewayRule.ts:51
+
+Maximum slippage in pips on losing-side execution
+
+***
+
+### exeMaxLosingSlippageLots?
+
+> `optional` **exeMaxLosingSlippageLots?**: `number`
+
+Defined in: model/mT4GatewayRule.ts:53
+
+Maximum slippage volume in lots on losing-side execution
+
+***
+
+### exeMaxProfitSlippage?
+
+> `optional` **exeMaxProfitSlippage?**: `number`
+
+Defined in: model/mT4GatewayRule.ts:47
+
+Maximum slippage in pips on profit-side execution
+
+***
+
+### exeMaxProfitSlippageLots?
+
+> `optional` **exeMaxProfitSlippageLots?**: `number`
+
+Defined in: model/mT4GatewayRule.ts:49
+
+Maximum slippage volume in lots on profit-side execution
+
+***
+
+### exeVolumePercent?
+
+> `optional` **exeVolumePercent?**: `number`
+
+Defined in: model/mT4GatewayRule.ts:57
+
+Coverage percentage (volume routed externally vs. internal book)
+
+***
+
+### name?
+
+> `optional` **name?**: `string` \| `null`
+
+Defined in: model/mT4GatewayRule.ts:26
+
+Public name of the rule (assumed unique within the rules table — used as cursor key)
+
+#### Nullable
+
+***
+
+### requestGroup?
+
+> `optional` **requestGroup?**: `string` \| `null`
+
+Defined in: model/mT4GatewayRule.ts:36
+
+Order-matching account group name or group mask
+
+#### Nullable
+
+***
+
+### requestSymbol?
+
+> `optional` **requestSymbol?**: `string` \| `null`
+
+Defined in: model/mT4GatewayRule.ts:31
+
+Order-matching symbol name, mask, or symbol-group identifier
+
+#### Nullable

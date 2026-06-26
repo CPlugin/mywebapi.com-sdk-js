@@ -1,0 +1,41 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / postCfgUpdateBackup
+
+# Function: postCfgUpdateBackup()
+
+> **postCfgUpdateBackup**(`tradePlatform`, `mT4Backup?`, `options?`): `Promise`\<[`postCfgUpdateBackupResponseSuccess`](../types/mt4-v2-config.postCfgUpdateBackupResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:503
+
+Update server backup configuration — Type 1 mutator.
+
+Manager (live) call. Reads the current `ConBackup`, overlays
+the fields in `MT4Backup` onto it, and writes back via
+`CfgUpdateBackup`. Two classes of preserved fields:
+<list type="bullet"><item><b>Slave-server credential</b> — `WatchPassword` stays
+        whatever the wrapper read live. It is unreachable from the
+        v2 request body (DTO does not expose it).</item><item><b>Last-completion timestamps</b> — `FullBackupLastTime`,
+        `ArchiveLastTime`, `ExportLastTime`, `WatchTimestamp`.
+        Server-derived runtime state that clients must not overwrite.</item></list>
+Echoes the merged `MT4Backup` in the response.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### mT4Backup?
+
+[`MT4Backup`](../interfaces/model.MT4Backup.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postCfgUpdateBackupResponseSuccess`](../types/mt4-v2-config.postCfgUpdateBackupResponseSuccess.html)\>

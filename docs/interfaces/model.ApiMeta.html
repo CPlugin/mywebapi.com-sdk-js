@@ -1,0 +1,36 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / ApiMeta
+
+# Interface: ApiMeta
+
+Defined in: model/apiMeta.ts:16
+
+Response metadata. ActivityId is the W3C trace-id for correlation in Seq/SigNoz.
+Paging is present only on paginated list responses; otherwise it is omitted —
+the global JSON context policy serialises null fields, so we override that here
+with System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull.
+
+## Properties
+
+### activityId?
+
+> `optional` **activityId?**: `string` \| `null`
+
+Defined in: model/apiMeta.ts:21
+
+W3C trace id for correlating this response in logs and tracing (Seq/SigNoz).
+
+#### Nullable
+
+***
+
+### paging?
+
+> `optional` **paging?**: [`PagingMeta`](model.PagingMeta.html) \| `null`
+
+Defined in: model/apiMeta.ts:23
+
+Pagination info; present only on list responses, omitted otherwise.

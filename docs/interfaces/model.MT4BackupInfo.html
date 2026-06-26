@@ -1,0 +1,47 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / MT4BackupInfo
+
+# Interface: MT4BackupInfo
+
+Defined in: model/mT4BackupInfo.ts:14
+
+v2 DTO for a single MT4 backup file descriptor. Curated subset of
+the wrapper's `BackupInfo` — drops the 6-int reserved blob and
+keeps only the three consumer-facing fields.
+
+## Properties
+
+### file?
+
+> `optional` **file?**: `string` \| `null`
+
+Defined in: model/mT4BackupInfo.ts:19
+
+Backup file name (basename, server-relative)
+
+#### Nullable
+
+***
+
+### size?
+
+> `optional` **size?**: `number`
+
+Defined in: model/mT4BackupInfo.ts:25
+
+File size in bytes. Source field is a 32-bit signed int —
+widened to `long` here to give the client JSON-safe
+numeric range without re-shaping after a future wrapper fix.
+
+***
+
+### time?
+
+> `optional` **time?**: `string`
+
+Defined in: model/mT4BackupInfo.ts:27
+
+File modification time (UTC, from MetaQuotes `__time32_t`)

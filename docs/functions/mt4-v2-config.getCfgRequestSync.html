@@ -1,0 +1,38 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / getCfgRequestSync
+
+# Function: getCfgRequestSync()
+
+> **getCfgRequestSync**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getCfgRequestSyncResponseSuccess`](../types/mt4-v2-config.getCfgRequestSyncResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:1364
+
+All chart-history synchronization rules configured on the MT4 server, paginated by Server name.
+
+Manager-live read (round-trip). Each rule pulls historical bars
+from an upstream source — Server (cursor key) + Login identify
+the source, Mode/From/To/Securities define the sync scope, and
+TimeCorrection (minutes) adjusts incoming bar timestamps. The
+wrapper's `Password` (replication credentials) is
+intentionally excluded from the v2 contract.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetCfgRequestSyncParams`](../types/model.GetCfgRequestSyncParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getCfgRequestSyncResponseSuccess`](../types/mt4-v2-config.getCfgRequestSyncResponseSuccess.html)\>

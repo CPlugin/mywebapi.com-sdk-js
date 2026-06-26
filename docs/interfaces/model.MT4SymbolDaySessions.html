@@ -1,0 +1,66 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / MT4SymbolDaySessions
+
+# Interface: MT4SymbolDaySessions
+
+Defined in: model/mT4SymbolDaySessions.ts:14
+
+v2 DTO bundling the Quote and Trade sessions for one weekday on a symbol.
+`DayOfWeek` follows the .NET convention: 0=Sunday, 1=Monday, ..., 6=Saturday.
+
+## Properties
+
+### dayOfWeek?
+
+> `optional` **dayOfWeek?**: `number`
+
+Defined in: model/mT4SymbolDaySessions.ts:16
+
+Day of week: 0=Sunday ... 6=Saturday (.NET DayOfWeek numeric)
+
+***
+
+### quote?
+
+> `optional` **quote?**: [`MT4SymbolSession`](model.MT4SymbolSession.html)[] \| `null`
+
+Defined in: model/mT4SymbolDaySessions.ts:25
+
+Up to three quote (price) session windows for the day
+
+#### Nullable
+
+***
+
+### quoteOvernight?
+
+> `optional` **quoteOvernight?**: `number`
+
+Defined in: model/mT4SymbolDaySessions.ts:18
+
+Whether quote sessions roll over midnight
+
+***
+
+### trade?
+
+> `optional` **trade?**: [`MT4SymbolSession`](model.MT4SymbolSession.html)[] \| `null`
+
+Defined in: model/mT4SymbolDaySessions.ts:30
+
+Up to three trade (order acceptance) session windows for the day
+
+#### Nullable
+
+***
+
+### tradeOvernight?
+
+> `optional` **tradeOvernight?**: `number`
+
+Defined in: model/mT4SymbolDaySessions.ts:20
+
+Whether trade sessions roll over midnight

@@ -1,0 +1,39 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / MT4SymbolGroup
+
+# Interface: MT4SymbolGroup
+
+Defined in: model/mT4SymbolGroup.ts:16
+
+v2 DTO describing a single MT4 symbol group (security category).
+Mirrors the wrapper's ConSymbolGroup — which only carries Name and
+Description as fixed-size ANSI fields. There is no ProfitCurrency on
+the MT4-side group struct (that lives on per-symbol settings, not on
+the group level), so the DTO faithfully exposes only what exists.
+
+## Properties
+
+### description?
+
+> `optional` **description?**: `string` \| `null`
+
+Defined in: model/mT4SymbolGroup.ts:26
+
+Human-readable description of the group
+
+#### Nullable
+
+***
+
+### name?
+
+> `optional` **name?**: `string` \| `null`
+
+Defined in: model/mT4SymbolGroup.ts:21
+
+Group name (e.g. "Forex", "CFD", "Metals")
+
+#### Nullable

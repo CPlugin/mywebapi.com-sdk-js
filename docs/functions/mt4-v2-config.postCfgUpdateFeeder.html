@@ -1,0 +1,37 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / postCfgUpdateFeeder
+
+# Function: postCfgUpdateFeeder()
+
+> **postCfgUpdateFeeder**(`tradePlatform`, `mT4Feeder?`, `options?`): `Promise`\<[`postCfgUpdateFeederResponseSuccess`](../types/mt4-v2-config.postCfgUpdateFeederResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:592
+
+Update a quote/news feeder configuration — Type 1 mutator.
+
+Manager (live) call. Feeder configurations are paged on the read
+side (see `CfgRequestFeeder`); the v2 contract identifies a
+feeder by its `Name`. Same read-modify-write flow as
+`CfgUpdateSync`; the datafeed credential (`Password`)
+is preserved server-side.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### mT4Feeder?
+
+[`MT4Feeder`](../interfaces/model.MT4Feeder.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postCfgUpdateFeederResponseSuccess`](../types/mt4-v2-config.postCfgUpdateFeederResponseSuccess.html)\>

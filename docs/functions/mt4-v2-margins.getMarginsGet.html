@@ -1,0 +1,32 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-margins](../modules/mt4-v2-margins.html) / getMarginsGet
+
+# Function: getMarginsGet()
+
+> **getMarginsGet**(`tradePlatform`, `options?`): `Promise`\<[`getMarginsGetResponseSuccess`](../types/mt4-v2-margins.getMarginsGetResponseSuccess.html)\>
+
+Defined in: mt4-v2-margins.ts:45
+
+Margin levels for all accounts from the pump cache.
+
+Pump-cached snapshot of margin/equity/free margin per login. Use this
+for bulk monitoring of account health (margin calls / stop-out
+proximity). For a single account, prefer the existing
+MarginLevelGet/MarginLevelRequest endpoints.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getMarginsGetResponseSuccess`](../types/mt4-v2-margins.getMarginsGetResponseSuccess.html)\>

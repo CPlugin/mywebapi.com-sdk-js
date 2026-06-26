@@ -1,0 +1,152 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / MT4DailyReport
+
+# Interface: MT4DailyReport
+
+Defined in: model/mT4DailyReport.ts:19
+
+v2 DTO mirroring the wrapper's `DailyReport`: one end-of-day
+balance/equity/PnL snapshot for a single account. Used by the broker
+daily-report family (per-login query, bulk pull, incremental sync).
+Internal underscore-prefixed unix-time field, the `Next` pointer
+chain, and the 3-int `Reserved` padding are intentionally excluded.
+Note: `Ctm` is reported by the MT4 server in its local time zone,
+not UTC — clients should treat it as "broker day boundary" and convert
+as appropriate.
+
+## Properties
+
+### balance?
+
+> `optional` **balance?**: `number`
+
+Defined in: model/mT4DailyReport.ts:37
+
+Balance at the end of the reporting day
+
+***
+
+### balancePrev?
+
+> `optional` **balancePrev?**: `number`
+
+Defined in: model/mT4DailyReport.ts:35
+
+Balance at the start of the reporting day
+
+***
+
+### bank?
+
+> `optional` **bank?**: `string` \| `null`
+
+Defined in: model/mT4DailyReport.ts:33
+
+Free-form bank/payment identifier recorded with the day's deposits
+
+#### Nullable
+
+***
+
+### credit?
+
+> `optional` **credit?**: `number`
+
+Defined in: model/mT4DailyReport.ts:41
+
+Credit balance at end-of-day
+
+***
+
+### ctm?
+
+> `optional` **ctm?**: `string`
+
+Defined in: model/mT4DailyReport.ts:23
+
+Day boundary timestamp (wrapper internal: __time32_t, server-local time)
+
+***
+
+### deposit?
+
+> `optional` **deposit?**: `number`
+
+Defined in: model/mT4DailyReport.ts:39
+
+Net deposits credited within the day (positive = inflow)
+
+***
+
+### equity?
+
+> `optional` **equity?**: `number`
+
+Defined in: model/mT4DailyReport.ts:47
+
+Equity at end-of-day (Balance + Credit + Profit)
+
+***
+
+### group?
+
+> `optional` **group?**: `string` \| `null`
+
+Defined in: model/mT4DailyReport.ts:28
+
+Trading group the account was in on that day
+
+#### Nullable
+
+***
+
+### login?
+
+> `optional` **login?**: `number`
+
+Defined in: model/mT4DailyReport.ts:21
+
+Account login the report belongs to
+
+***
+
+### margin?
+
+> `optional` **margin?**: `number`
+
+Defined in: model/mT4DailyReport.ts:49
+
+Used margin at end-of-day
+
+***
+
+### marginFree?
+
+> `optional` **marginFree?**: `number`
+
+Defined in: model/mT4DailyReport.ts:51
+
+Free margin at end-of-day (Equity - Margin)
+
+***
+
+### profit?
+
+> `optional` **profit?**: `number`
+
+Defined in: model/mT4DailyReport.ts:45
+
+Floating (open-position) profit/loss at end-of-day
+
+***
+
+### profitClosed?
+
+> `optional` **profitClosed?**: `number`
+
+Defined in: model/mT4DailyReport.ts:43
+
+Closed-position profit/loss realised within the day

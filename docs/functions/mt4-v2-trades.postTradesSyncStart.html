@@ -1,0 +1,37 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-trades](../modules/mt4-v2-trades.html) / postTradesSyncStart
+
+# Function: postTradesSyncStart()
+
+> **postTradesSyncStart**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`postTradesSyncStartResponseSuccess`](../types/mt4-v2-trades.postTradesSyncStartResponseSuccess.html)\>
+
+Defined in: mt4-v2-trades.ts:806
+
+Opens a server-side incremental sync session for trade records modified at or after timestamp.
+
+Manager-live POST (modifies server-side session state). The
+follow-up `TradesSyncRead` drain is deferred under wine x64
+(see deferral note in the Users section above). Pass
+`timestamp=0` to request all trades. The timestamp is Unix
+epoch seconds (int32) in MT4 server-local time, not UTC.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`PostTradesSyncStartParams`](../types/model.PostTradesSyncStartParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postTradesSyncStartResponseSuccess`](../types/mt4-v2-trades.postTradesSyncStartResponseSuccess.html)\>

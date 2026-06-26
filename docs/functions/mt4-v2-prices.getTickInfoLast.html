@@ -1,0 +1,32 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-prices](../modules/mt4-v2-prices.html) / getTickInfoLast
+
+# Function: getTickInfoLast()
+
+> **getTickInfoLast**(`tradePlatform`, `options?`): `Promise`\<[`getTickInfoLastResponseSuccess`](../types/mt4-v2-prices.getTickInfoLastResponseSuccess.html)\>
+
+Defined in: mt4-v2-prices.ts:419
+
+Last known bid/ask tick for ALL symbols in the pump cache.
+
+Snapshot of every symbol the pump has received quotes for. Empty list
+when no quotes have been received yet. For sub-second updates use the
+SignalR tick stream — this endpoint is intended for one-shot snapshots
+(warm-up, monitoring dashboards, idempotent cache scenarios).
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getTickInfoLastResponseSuccess`](../types/mt4-v2-prices.getTickInfoLastResponseSuccess.html)\>

@@ -1,0 +1,39 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / getCfgRequestGatewayAccount
+
+# Function: getCfgRequestGatewayAccount()
+
+> **getCfgRequestGatewayAccount**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getCfgRequestGatewayAccountResponseSuccess`](../types/mt4-v2-config.getCfgRequestGatewayAccountResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:1055
+
+All STP gateway-account configuration entries on the MT4 server, paginated by stable internal Id.
+
+Manager-live read (round-trip). Each entry describes an external
+MT4 server connection used for STP order routing: public Name, an
+internal Id (stable identifier — used as the cursor key), the
+external server Login + Address, a NotifyLogins fixed-size array
+of 8 broker-side recipients, and a Flags bitmap. The wrapper's
+`Password` field (STP MT4 credential) is intentionally
+excluded from the v2 contract.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetCfgRequestGatewayAccountParams`](../types/model.GetCfgRequestGatewayAccountParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getCfgRequestGatewayAccountResponseSuccess`](../types/mt4-v2-config.getCfgRequestGatewayAccountResponseSuccess.html)\>

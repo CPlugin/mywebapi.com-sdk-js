@@ -1,0 +1,143 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / MT4Feeder
+
+# Interface: MT4Feeder
+
+Defined in: model/mT4Feeder.ts:15
+
+v2 DTO for a single MT4 quote/news feeder configuration. Curated
+subset of the wrapper's ConFeeder — drops the wrapper's Unused
+reserved blob AND the `Password` field (datafeed credentials).
+
+## Properties
+
+### attempsSleep?
+
+> `optional` **attempsSleep?**: `number`
+
+Defined in: model/mT4Feeder.ts:52
+
+Reconnect count before switching to sleep timeout
+
+***
+
+### dataFeedMode?
+
+> `optional` **dataFeedMode?**: [`DataFeedMode`](../types/model.DataFeedMode.html)
+
+Defined in: model/mT4Feeder.ts:44
+
+Feed mode (quotes / news / both — wrapper enum)
+
+***
+
+### enable?
+
+> `optional` **enable?**: `number`
+
+Defined in: model/mT4Feeder.ts:42
+
+Enable flag (0 = disabled, 1 = enabled — raw wrapper int)
+
+***
+
+### file?
+
+> `optional` **file?**: `string` \| `null`
+
+Defined in: model/mT4Feeder.ts:25
+
+Datafeed loader filename (DLL or script path)
+
+#### Nullable
+
+***
+
+### keywords?
+
+> `optional` **keywords?**: `string` \| `null`
+
+Defined in: model/mT4Feeder.ts:40
+
+Keywords for news filtering
+
+#### Nullable
+
+***
+
+### login?
+
+> `optional` **login?**: `string` \| `null`
+
+Defined in: model/mT4Feeder.ts:35
+
+Datafeed login (upstream credential identifier)
+
+#### Nullable
+
+***
+
+### name?
+
+> `optional` **name?**: `string` \| `null`
+
+Defined in: model/mT4Feeder.ts:20
+
+Feeder name (used as cursor key — assumed unique)
+
+#### Nullable
+
+***
+
+### newsLangId?
+
+> `optional` **newsLangId?**: `number`
+
+Defined in: model/mT4Feeder.ts:54
+
+News language id
+
+***
+
+### server?
+
+> `optional` **server?**: `string` \| `null`
+
+Defined in: model/mT4Feeder.ts:30
+
+Upstream feeder server address
+
+#### Nullable
+
+***
+
+### timeout?
+
+> `optional` **timeout?**: `number`
+
+Defined in: model/mT4Feeder.ts:46
+
+Maximum freeze time in seconds before considered stalled (default ~120)
+
+***
+
+### timeoutReconnect?
+
+> `optional` **timeoutReconnect?**: `number`
+
+Defined in: model/mT4Feeder.ts:48
+
+Reconnect delay before "sleep" attempts threshold (default ~5s)
+
+***
+
+### timeoutSleep?
+
+> `optional` **timeoutSleep?**: `number`
+
+Defined in: model/mT4Feeder.ts:50
+
+Reconnect delay after "sleep" attempts threshold (default ~60s)

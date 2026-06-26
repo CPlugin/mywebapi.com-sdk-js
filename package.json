@@ -1,0 +1,51 @@
+{
+  "name": "@cplugin/saas-webapi-client",
+  "version": "0.1.0",
+  "license": "MIT",
+  "description": "TypeScript client for the SaaS WebAPI v2 (MT4/MT5 management). Auto-generated types + thin fetch wrapper.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PLACEHOLDER_ORG/PLACEHOLDER_REPO.git"
+  },
+  "homepage": "https://github.com/PLACEHOLDER_ORG/PLACEHOLDER_REPO#readme",
+  "bugs": {
+    "url": "https://github.com/PLACEHOLDER_ORG/PLACEHOLDER_REPO/issues"
+  },
+  "scripts": {
+    "generate": "orval --config orval.config.ts",
+    "build": "rm -rf dist && bun build src/index.ts --outdir dist --target browser --format esm && tsc -p tsconfig.build.json --emitDeclarationOnly --declaration",
+    "test": "bun test",
+    "test:e2e": "WEBAPI_E2E=1 bun test e2e",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "@microsoft/signalr": "^9.0.0 || ^10.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@microsoft/signalr": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@microsoft/signalr": "^10.0.0",
+    "@types/bun": "latest",
+    "orval": "8.19.0",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  }
+}

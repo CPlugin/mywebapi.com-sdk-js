@@ -1,0 +1,42 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-trades](../modules/mt4-v2-trades.html) / postAdmTradesDelete
+
+# Function: postAdmTradesDelete()
+
+> **postAdmTradesDelete**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`postAdmTradesDeleteResponseSuccess`](../types/mt4-v2-trades.postAdmTradesDeleteResponseSuccess.html)\>
+
+Defined in: mt4-v2-trades.ts:755
+
+Bulk-deletes a list of trade tickets (administrative scope). Used for cleanup after reconciliation mistakes, simulator state reset, or compliance-mandated removal.
+
+Manager-live POST. The wrapper accepts a flat `int[]` of order
+tickets and a count; we mirror the existing batched-int pattern
+(repeat `?orders=` per ticket — same convention as
+`UserRecordsRequest`'s `?logins=`). Empty arrays are
+rejected with Validation.
+
+**Destructive.** Each ticket in the array is removed from the
+server's trade table; this is not reversible from the API side.
+Pair with `Idempotency-Key` so retries don't re-process partial
+failures.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`PostAdmTradesDeleteParams`](../types/model.PostAdmTradesDeleteParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postAdmTradesDeleteResponseSuccess`](../types/mt4-v2-trades.postAdmTradesDeleteResponseSuccess.html)\>

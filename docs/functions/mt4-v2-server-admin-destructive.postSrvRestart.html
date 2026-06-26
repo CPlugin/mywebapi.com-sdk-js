@@ -1,0 +1,41 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-server-admin-destructive](../modules/mt4-v2-server-admin-destructive.html) / postSrvRestart
+
+# Function: postSrvRestart()
+
+> **postSrvRestart**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`postSrvRestartResponseSuccess`](../types/mt4-v2-server-admin-destructive.postSrvRestartResponseSuccess.html)\>
+
+Defined in: mt4-v2-server-admin-destructive.ts:61
+
+Soft-restart of the MT4 server process. Destructive — requires `?confirm=true`.
+
+Manager (live) call to the wrapper's `SrvRestart()`. The current
+manager connection is dropped during the restart cycle — clients
+should expect the next request to surface a fresh login. Audit lines
+are emitted on both sides of the wrapper call (independently of the
+HTTP response).
+<br>
+The `?confirm=true` guard rejects calls without the literal
+query string. It is a deliberateness signal, NOT an authorization
+mechanism — admin rights are still enforced separately.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`PostSrvRestartParams`](../types/model.PostSrvRestartParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postSrvRestartResponseSuccess`](../types/mt4-v2-server-admin-destructive.postSrvRestartResponseSuccess.html)\>

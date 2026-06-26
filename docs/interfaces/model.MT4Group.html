@@ -1,0 +1,386 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / MT4Group
+
+# Interface: MT4Group
+
+Defined in: model/mT4Group.ts:40
+
+v2 DTO describing a trading group configuration. Curated subset of the
+wrapper's `ConGroup` — exposes the configuration fields that callers
+need to inspect margin/leverage/rights settings.
+
+Deliberately omitted from v2 (vs v1's full ConGroup shape):
+  * `SmtpServer`, `SmtpLogin`, `SmtpPassword` — SMTP
+    credentials must never cross the v2 boundary regardless of access
+    level. `SmtpServer` alone is dropped too because a server name
+    is rarely useful without its credentials and exposes infra topology.
+  * `Templates` — server-side filesystem path, irrelevant to API
+    consumers and a minor information-disclosure risk.
+  * `SecuritiesHash` — opaque byte[], wrapper bookkeeping.
+  * `Reserved`, `UnusedRights`, `SecGroups[32]`,
+    `SecMargins[128]` — reserved/internal arrays. The two nested
+    arrays (SecGroups, SecMargins) deserve their own dedicated v2
+    endpoints (`GroupSecGroupsGet/{group}`, `GroupSecMarginsGet/{group}`)
+    planned for Wave 3 — including them here would balloon the DTO.
+  * `NewsLanguages` (uint[]) and `NewsLanguagesTotal` —
+    rarely consumed; can be added later once the use case is clear.
+
+Enums (`OTPMode`, `MarginMode`, `NewsMode`,
+`GroupRights`, `MarginControllingType`) serialize as strings
+because CPlugin.SaaSWebApps.WebAPI.Code.Json.V2JsonContext enables
+`UseStringEnumConverter`.
+
+## Properties
+
+### archiveMaxBalance?
+
+> `optional` **archiveMaxBalance?**: `number`
+
+Defined in: model/mT4Group.ts:122
+
+Maximum balance under which an account is eligible for archiving
+
+***
+
+### archivePendingPeriod?
+
+> `optional` **archivePendingPeriod?**: `number`
+
+Defined in: model/mT4Group.ts:126
+
+Pending orders clean-up period (days)
+
+***
+
+### archivePeriod?
+
+> `optional` **archivePeriod?**: `number`
+
+Defined in: model/mT4Group.ts:120
+
+Inactivity period (days) before account moves to archive
+
+***
+
+### checkIEPrices?
+
+> `optional` **checkIEPrices?**: `number`
+
+Defined in: model/mT4Group.ts:106
+
+0 = no IE check, non-zero = check Instant Execution prices
+
+***
+
+### closeFIFO?
+
+> `optional` **closeFIFO?**: `number`
+
+Defined in: model/mT4Group.ts:114
+
+0 = LIFO, non-zero = FIFO close rule
+
+***
+
+### closeReopen?
+
+> `optional` **closeReopen?**: `number`
+
+Defined in: model/mT4Group.ts:110
+
+0 = standard close, non-zero = close-and-reopen mode
+
+***
+
+### company?
+
+> `optional` **company?**: `string` \| `null`
+
+Defined in: model/mT4Group.ts:56
+
+Company name shown on statements
+
+#### Nullable
+
+***
+
+### copies?
+
+> `optional` **copies?**: `number`
+
+Defined in: model/mT4Group.ts:73
+
+Number of statement copies sent to support address
+
+***
+
+### credit?
+
+> `optional` **credit?**: `number`
+
+Defined in: model/mT4Group.ts:90
+
+Virtual credit applied to the group's accounts
+
+***
+
+### currency?
+
+> `optional` **currency?**: `string` \| `null`
+
+Defined in: model/mT4Group.ts:88
+
+Deposit currency (e.g. "USD")
+
+#### Nullable
+
+***
+
+### defaultDeposit?
+
+> `optional` **defaultDeposit?**: `number`
+
+Defined in: model/mT4Group.ts:79
+
+Default deposit applied when an account omits its own balance
+
+***
+
+### defaultLeverage?
+
+> `optional` **defaultLeverage?**: `number`
+
+Defined in: model/mT4Group.ts:77
+
+Default leverage applied when an account omits its own leverage
+
+***
+
+### enable?
+
+> `optional` **enable?**: `number`
+
+Defined in: model/mT4Group.ts:47
+
+0 = group disabled, non-zero = enabled (accounts in this group can log in)
+
+***
+
+### group?
+
+> `optional` **group?**: `string` \| `null`
+
+Defined in: model/mT4Group.ts:45
+
+Group name (unique per platform, max 16 chars)
+
+#### Nullable
+
+***
+
+### groupRights?
+
+> `optional` **groupRights?**: [`GroupRights`](../types/model.GroupRights.html)
+
+Defined in: model/mT4Group.ts:104
+
+Permissions bit mask for this group
+
+***
+
+### hedgeLargeLeg?
+
+> `optional` **hedgeLargeLeg?**: `number`
+
+Defined in: model/mT4Group.ts:116
+
+0 = standard hedge, non-zero = treat large hedged leg specially
+
+***
+
+### hedgeProhibited?
+
+> `optional` **hedgeProhibited?**: `number`
+
+Defined in: model/mT4Group.ts:112
+
+0 = hedging allowed, non-zero = hedging prohibited
+
+***
+
+### interestRate?
+
+> `optional` **interestRate?**: `number`
+
+Defined in: model/mT4Group.ts:98
+
+Annual interest rate (percent)
+
+***
+
+### marginCall?
+
+> `optional` **marginCall?**: `number`
+
+Defined in: model/mT4Group.ts:92
+
+Margin call threshold (percent of equity)
+
+***
+
+### marginControllingType?
+
+> `optional` **marginControllingType?**: [`MarginControllingType`](../types/model.MarginControllingType.html)
+
+Defined in: model/mT4Group.ts:118
+
+Margin controlling unit (percent vs deposit currency)
+
+***
+
+### marginMode?
+
+> `optional` **marginMode?**: [`MarginMode`](../types/model.MarginMode.html)
+
+Defined in: model/mT4Group.ts:94
+
+Margin calculation mode (don't use / use all / use profit / use loss)
+
+***
+
+### marginStopout?
+
+> `optional` **marginStopout?**: `number`
+
+Defined in: model/mT4Group.ts:96
+
+Stop-out threshold
+
+***
+
+### maxPositions?
+
+> `optional` **maxPositions?**: `number`
+
+Defined in: model/mT4Group.ts:108
+
+Maximum simultaneous orders and open positions
+
+***
+
+### maxSecurities?
+
+> `optional` **maxSecurities?**: `number`
+
+Defined in: model/mT4Group.ts:81
+
+Max simultaneously open securities
+
+***
+
+### newsMode?
+
+> `optional` **newsMode?**: [`NewsMode`](../types/model.NewsMode.html)
+
+Defined in: model/mT4Group.ts:102
+
+News delivery mode
+
+***
+
+### otpMode?
+
+> `optional` **otpMode?**: [`OTPMode`](../types/model.OTPMode.html)
+
+Defined in: model/mT4Group.ts:51
+
+One-time password requirement mode
+
+***
+
+### reports?
+
+> `optional` **reports?**: `number`
+
+Defined in: model/mT4Group.ts:75
+
+0 = statements disabled, non-zero = nightly statements enabled
+
+***
+
+### secMarginsTotal?
+
+> `optional` **secMarginsTotal?**: `number`
+
+Defined in: model/mT4Group.ts:83
+
+Count of special securities settings (SecMargins) in use
+
+***
+
+### signature?
+
+> `optional` **signature?**: `string` \| `null`
+
+Defined in: model/mT4Group.ts:61
+
+Statement signature line
+
+#### Nullable
+
+***
+
+### stopoutSkipHedged?
+
+> `optional` **stopoutSkipHedged?**: `number`
+
+Defined in: model/mT4Group.ts:124
+
+0 = include hedged accounts in stop-out checks, non-zero = skip them
+
+***
+
+### supportEmail?
+
+> `optional` **supportEmail?**: `string` \| `null`
+
+Defined in: model/mT4Group.ts:71
+
+Support email shown to clients
+
+#### Nullable
+
+***
+
+### supportPage?
+
+> `optional` **supportPage?**: `string` \| `null`
+
+Defined in: model/mT4Group.ts:66
+
+Support page URL shown to clients
+
+#### Nullable
+
+***
+
+### timeout?
+
+> `optional` **timeout?**: `number`
+
+Defined in: model/mT4Group.ts:49
+
+Trade confirmation timeout, seconds
+
+***
+
+### useSwap?
+
+> `optional` **useSwap?**: `number`
+
+Defined in: model/mT4Group.ts:100
+
+0 = no rollovers, non-zero = use rollovers and interest rate

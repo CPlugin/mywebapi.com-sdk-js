@@ -1,0 +1,43 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-reports](../modules/mt4-v2-reports.html) / postDailySyncStart
+
+# Function: postDailySyncStart()
+
+> **postDailySyncStart**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`postDailySyncStartResponseSuccess`](../types/mt4-v2-reports.postDailySyncStartResponseSuccess.html)\>
+
+Defined in: mt4-v2-reports.ts:304
+
+Opens a server-side incremental sync session for daily reports modified at or after timestamp. Follow up with `DailySyncRead` to retrieve the snapshot.
+
+Manager-live POST (modifies server-side session state). The two-call
+cycle `DailySyncStart → DailySyncRead` is the broker pattern for
+pulling only-changed-since-last-poll daily reports; pass
+`timestamp=0` to request all records.
+
+`timestamp` is a Unix epoch second (int32) in MT4 server-local
+time, not UTC. Wrapper marshals it directly to `__time32_t` —
+pre-1970 / post-2038 values are out of range.
+
+Returns a bare success envelope (no payload); the actual data comes
+from a subsequent `DailySyncRead` call.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`PostDailySyncStartParams`](../types/model.PostDailySyncStartParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postDailySyncStartResponseSuccess`](../types/mt4-v2-reports.postDailySyncStartResponseSuccess.html)\>

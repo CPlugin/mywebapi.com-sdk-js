@@ -1,0 +1,254 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / MT4ManagerRights
+
+# Interface: MT4ManagerRights
+
+Defined in: model/mT4ManagerRights.ts:17
+
+v2 DTO for an MT4 manager-account configuration entry. Curated subset
+of the wrapper's ConManager struct — exposes Login/Name/Groups/MailBox,
+the 19 boolean permission rights, IP-filter fields, and InfoDepth.
+Drops internal fields: SecGroups, ExpTime, Unused, Reserved blocks.
+IPFrom/IPTo are widened from uint to long so the JSON-serialized value
+fits inside JS Number safely (no precision loss).
+
+## Properties
+
+### admin?
+
+> `optional` **admin?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:42
+
+***
+
+### broker?
+
+> `optional` **broker?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:41
+
+***
+
+### email?
+
+> `optional` **email?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:47
+
+***
+
+### groups?
+
+> `optional` **groups?**: `string` \| `null`
+
+Defined in: model/mT4ManagerRights.ts:29
+
+Comma-separated list of managed group names (wildcard '*' allowed)
+
+#### Nullable
+
+***
+
+### infoDepth?
+
+> `optional` **infoDepth?**: `number`
+
+Defined in: model/mT4ManagerRights.ts:36
+
+Maximum reportable history depth, in days
+
+***
+
+### ipFilter?
+
+> `optional` **ipFilter?**: `number`
+
+Defined in: model/mT4ManagerRights.ts:57
+
+IP filtering mode (0 = disabled; non-zero = enabled — raw MT4 wrapper value, semantics preserved)
+
+***
+
+### ipFrom?
+
+> `optional` **ipFrom?**: `number`
+
+Defined in: model/mT4ManagerRights.ts:59
+
+IP range start (uint widened to long for safe JSON numeric serialization)
+
+***
+
+### ipTo?
+
+> `optional` **ipTo?**: `number`
+
+Defined in: model/mT4ManagerRights.ts:61
+
+IP range end (uint widened to long for safe JSON numeric serialization)
+
+***
+
+### login?
+
+> `optional` **login?**: `number`
+
+Defined in: model/mT4ManagerRights.ts:19
+
+Manager account login (read-only)
+
+***
+
+### logs?
+
+> `optional` **logs?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:43
+
+***
+
+### mailBox?
+
+> `optional` **mailBox?**: `string` \| `null`
+
+Defined in: model/mT4ManagerRights.ts:34
+
+Internal mailbox name used for manager mail
+
+#### Nullable
+
+***
+
+### manager?
+
+> `optional` **manager?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:37
+
+***
+
+### market?
+
+> `optional` **market?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:52
+
+***
+
+### marketWatch?
+
+> `optional` **marketWatch?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:46
+
+***
+
+### money?
+
+> `optional` **money?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:38
+
+***
+
+### name?
+
+> `optional` **name?**: `string` \| `null`
+
+Defined in: model/mT4ManagerRights.ts:24
+
+Display name of the manager (read-only on the wrapper side)
+
+#### Nullable
+
+***
+
+### news?
+
+> `optional` **news?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:50
+
+***
+
+### notifications?
+
+> `optional` **notifications?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:53
+
+***
+
+### online?
+
+> `optional` **online?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:39
+
+***
+
+### plugins?
+
+> `optional` **plugins?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:51
+
+***
+
+### reports?
+
+> `optional` **reports?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:44
+
+***
+
+### riskMan?
+
+> `optional` **riskMan?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:40
+
+***
+
+### seeTrades?
+
+> `optional` **seeTrades?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:49
+
+***
+
+### serverReports?
+
+> `optional` **serverReports?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:54
+
+***
+
+### techSupport?
+
+> `optional` **techSupport?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:55
+
+***
+
+### trades?
+
+> `optional` **trades?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:45
+
+***
+
+### userDetails?
+
+> `optional` **userDetails?**: `boolean`
+
+Defined in: model/mT4ManagerRights.ts:48

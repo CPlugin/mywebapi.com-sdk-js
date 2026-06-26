@@ -1,0 +1,36 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-margins](../modules/mt4-v2-margins.html) / getMarginLevelRequestLogin
+
+# Function: getMarginLevelRequestLogin()
+
+> **getMarginLevelRequestLogin**(`tradePlatform`, `login`, `options?`): `Promise`\<[`getMarginLevelRequestLoginResponseSuccess`](../types/mt4-v2-margins.getMarginLevelRequestLoginResponseSuccess.html)\>
+
+Defined in: mt4-v2-margins.ts:130
+
+Margin level for a single account — live round-trip to MT4 server.
+
+Manager variant — bypasses the pump cache and asks the MT4 server
+directly. Slower than `MarginLevelGet` but always fresh. Cost-
+equivalent to other live Manager calls (billed per request, unlike
+pump reads).
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### login
+
+`number`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getMarginLevelRequestLoginResponseSuccess`](../types/mt4-v2-margins.getMarginLevelRequestLoginResponseSuccess.html)\>

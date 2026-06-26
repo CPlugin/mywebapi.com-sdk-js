@@ -1,0 +1,39 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-trades](../modules/mt4-v2-trades.html) / postTradeClearRollbackOrder
+
+# Function: postTradeClearRollbackOrder()
+
+> **postTradeClearRollbackOrder**(`tradePlatform`, `order`, `options?`): `Promise`\<[`postTradeClearRollbackOrderResponseSuccess`](../types/mt4-v2-trades.postTradeClearRollbackOrderResponseSuccess.html)\>
+
+Defined in: mt4-v2-trades.ts:385
+
+Roll back an in-flight trade transaction by ticket.
+
+Pump-cached call. Cancels a pending trade transaction that the
+MT4 server is still holding in the rollback buffer (e.g. an
+instant-execution requote that has not yet been confirmed). Has
+no effect once the transaction has been committed; returns the
+wrapper's `ResultCode` as part of the envelope on failure.
+
+Idempotent on already-committed/already-rolled-back tickets.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### order
+
+`number`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postTradeClearRollbackOrderResponseSuccess`](../types/mt4-v2-trades.postTradeClearRollbackOrderResponseSuccess.html)\>

@@ -1,0 +1,371 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / MT4User
+
+# Interface: MT4User
+
+Defined in: model/mT4User.ts:26
+
+v2 DTO describing a trading account. Curated subset of the wrapper's
+`UserRecord` — exposes identity, contact, financial and flag fields
+that callers actually need.
+
+Deliberately omitted from v2 (vs v1's full UserRecord shape):
+  * Password / PasswordInvestor / PasswordPhone / OtpSecret / ApiData /
+    SecureReserved — credentials and secrets must never cross the v2
+    boundary regardless of access level.
+  * Unused / Reserved2 / EnableReserved / TimeStamp — wrapper bookkeeping
+    with no caller-visible semantics.
+
+Account flags are exposed as a single CPlugin.SaaSWebApps.WebAPI.DTOs.MT4.v2.MT4User.EnableFlags bitfield
+(the wrapper's native representation). Bit semantics are documented under
+that property — splitting it into separate booleans would hide the fact
+that MetaQuotes occasionally reuses bit positions across builds.
+
+## Properties
+
+### address?
+
+> `optional` **address?**: `string` \| `null`
+
+Defined in: model/mT4User.ts:77
+
+Street address
+
+#### Nullable
+
+***
+
+### agentAccount?
+
+> `optional` **agentAccount?**: `number`
+
+Defined in: model/mT4User.ts:101
+
+IB / agent account number that referred this client
+
+***
+
+### balance?
+
+> `optional` **balance?**: `number`
+
+Defined in: model/mT4User.ts:105
+
+Current balance
+
+***
+
+### city?
+
+> `optional` **city?**: `string` \| `null`
+
+Defined in: model/mT4User.ts:62
+
+City
+
+#### Nullable
+
+***
+
+### comment?
+
+> `optional` **comment?**: `string` \| `null`
+
+Defined in: model/mT4User.ts:97
+
+Free-form back-office comment
+
+#### Nullable
+
+***
+
+### country?
+
+> `optional` **country?**: `string` \| `null`
+
+Defined in: model/mT4User.ts:57
+
+Country (free text per broker's enrolment workflow)
+
+#### Nullable
+
+***
+
+### credit?
+
+> `optional` **credit?**: `number`
+
+Defined in: model/mT4User.ts:107
+
+Credit on the account
+
+***
+
+### email?
+
+> `optional` **email?**: `string` \| `null`
+
+Defined in: model/mT4User.ts:92
+
+Contact email
+
+#### Nullable
+
+***
+
+### enableFlags?
+
+> `optional` **enableFlags?**: `number`
+
+Defined in: model/mT4User.ts:129
+
+Account flag bitfield (wrapper's `EnableFlags`). Documented bits:
+  * 0x01 = account enabled (login allowed)
+  * 0x02 = client may change password
+  * 0x04 = account is read-only (no trading)
+  * 0x08 = OTP enrolment required at login
+Bit positions reflect MT4 build 1455. Verify against the current MT4
+Manager docs if pinning behaviour to a specific bit.
+
+***
+
+### externalId?
+
+> `optional` **externalId?**: `string` \| `null`
+
+Defined in: model/mT4User.ts:47
+
+External customer identifier (e.g. CRM/KYC link). Wrapper's `Id` field.
+
+#### Nullable
+
+***
+
+### group?
+
+> `optional` **group?**: `string` \| `null`
+
+Defined in: model/mT4User.ts:33
+
+Group name the account belongs to
+
+#### Nullable
+
+***
+
+### interestRate?
+
+> `optional` **interestRate?**: `number`
+
+Defined in: model/mT4User.ts:117
+
+Interest rate (broker-defined, often used for swaps)
+
+***
+
+### lastDate?
+
+> `optional` **lastDate?**: `string`
+
+Defined in: model/mT4User.ts:42
+
+UTC timestamp of the last MT4 server interaction
+
+***
+
+### lastIP?
+
+> `optional` **lastIP?**: `number`
+
+Defined in: model/mT4User.ts:103
+
+Last connection IP as raw int (use platform helpers to format)
+
+***
+
+### leadSource?
+
+> `optional` **leadSource?**: `string` \| `null`
+
+Defined in: model/mT4User.ts:82
+
+Lead source / referral channel tag
+
+#### Nullable
+
+***
+
+### leverage?
+
+> `optional` **leverage?**: `number`
+
+Defined in: model/mT4User.ts:99
+
+Account leverage (e.g. 100 means 1:100)
+
+***
+
+### login?
+
+> `optional` **login?**: `number`
+
+Defined in: model/mT4User.ts:28
+
+Trading account number (login)
+
+***
+
+### mqid?
+
+> `optional` **mqid?**: `number`
+
+Defined in: model/mT4User.ts:139
+
+MetaQuotes ID for mobile push notifications (0 if not linked).
+Typed as `long` in v2 even though current builds store it in
+32 bits — the wrapper exposes a wider underlying type and a checked
+narrowing cast would crash for accounts whose mqid sits above
+Int32.MaxValue. Future-proofs the contract against MQ widening.
+
+***
+
+### name?
+
+> `optional` **name?**: `string` \| `null`
+
+Defined in: model/mT4User.ts:38
+
+Display name of the account holder
+
+#### Nullable
+
+***
+
+### phone?
+
+> `optional` **phone?**: `string` \| `null`
+
+Defined in: model/mT4User.ts:87
+
+Contact phone
+
+#### Nullable
+
+***
+
+### prevBalance?
+
+> `optional` **prevBalance?**: `number`
+
+Defined in: model/mT4User.ts:111
+
+Balance at the previous reporting close
+
+***
+
+### prevEquity?
+
+> `optional` **prevEquity?**: `number`
+
+Defined in: model/mT4User.ts:115
+
+Equity at the previous reporting close
+
+***
+
+### prevMonthBalance?
+
+> `optional` **prevMonthBalance?**: `number`
+
+Defined in: model/mT4User.ts:109
+
+Balance at the start of the previous calendar month
+
+***
+
+### prevMonthEquity?
+
+> `optional` **prevMonthEquity?**: `number`
+
+Defined in: model/mT4User.ts:113
+
+Equity at the start of the previous calendar month
+
+***
+
+### registrationDate?
+
+> `optional` **registrationDate?**: `string`
+
+Defined in: model/mT4User.ts:40
+
+UTC timestamp when the account was created
+
+***
+
+### sendReports?
+
+> `optional` **sendReports?**: `number`
+
+Defined in: model/mT4User.ts:131
+
+0 = no reports, non-zero = nightly email reports enabled
+
+***
+
+### state?
+
+> `optional` **state?**: `string` \| `null`
+
+Defined in: model/mT4User.ts:67
+
+State / region
+
+#### Nullable
+
+***
+
+### status?
+
+> `optional` **status?**: `string` \| `null`
+
+Defined in: model/mT4User.ts:52
+
+MT4-internal status string (e.g. live/demo state)
+
+#### Nullable
+
+***
+
+### taxes?
+
+> `optional` **taxes?**: `number`
+
+Defined in: model/mT4User.ts:119
+
+Tax rate applied to the account
+
+***
+
+### userColor?
+
+> `optional` **userColor?**: `number`
+
+Defined in: model/mT4User.ts:141
+
+UI tint color in terminal client lists
+
+***
+
+### zipCode?
+
+> `optional` **zipCode?**: `string` \| `null`
+
+Defined in: model/mT4User.ts:72
+
+Postal / ZIP code
+
+#### Nullable

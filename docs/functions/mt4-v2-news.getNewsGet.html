@@ -1,0 +1,33 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-news](../modules/mt4-v2-news.html) / getNewsGet
+
+# Function: getNewsGet()
+
+> **getNewsGet**(`tradePlatform`, `options?`): `Promise`\<[`getNewsGetResponseSuccess`](../types/mt4-v2-news.getNewsGetResponseSuccess.html)\>
+
+Defined in: mt4-v2-news.ts:129
+
+All cached news topic headers (no body — fetch separately).
+
+Pump-cached read — returns the full news topic table held by the
+pumping connection. Each entry is a header (Key, Time, Topic,
+Category, Keywords, Priority, LangId). Body text is fetched via
+`NewsBodyGet(key)` after asking the pump to populate it via
+`NewsBodyRequest(key)`.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getNewsGetResponseSuccess`](../types/mt4-v2-news.getNewsGetResponseSuccess.html)\>

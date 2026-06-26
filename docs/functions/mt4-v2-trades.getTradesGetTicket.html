@@ -1,0 +1,38 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-trades](../modules/mt4-v2-trades.html) / getTradesGetTicket
+
+# Function: getTradesGetTicket()
+
+> **getTradesGetTicket**(`tradePlatform`, `ticket`, `options?`): `Promise`\<[`getTradesGetTicketResponseSuccess`](../types/mt4-v2-trades.getTradesGetTicketResponseSuccess.html)\>
+
+Defined in: mt4-v2-trades.ts:105
+
+Open trade by ticket from the pump cache (dictionary lookup variant).
+
+Counterpart to `TradeRecordGet/{order}` — both are pump reads,
+but the wrapper exposes two distinct call paths: `TradeRecordGet`
+uses a dedicated single-record method, while this endpoint looks the
+trade up in the open-trades dictionary. Behaviourally equivalent for
+open trades; `TradeRecordGet` can also resolve recently closed
+trades that linger in cache.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### ticket
+
+`number`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getTradesGetTicketResponseSuccess`](../types/mt4-v2-trades.getTradesGetTicketResponseSuccess.html)\>

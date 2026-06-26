@@ -1,0 +1,292 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / MT4UserUpdate
+
+# Interface: MT4UserUpdate
+
+Defined in: model/mT4UserUpdate.ts:37
+
+Type 1 mutator input — full-replace shape for `UserRecordUpdate`.
+Client submits every non-secret, non-read-only, non-computed field; the
+handler reads the current record from MT4 server, copies the secrets and
+read-only fields off it, applies this DTO over the rest, and writes the
+modified structure back.
+
+Read-only fields that do NOT appear here (preserved by the server-side
+read step):
+  * `Login` — passed as a path parameter, immutable identity.
+  * `RegistrationDate` — set once on creation, never updated.
+  * `LastDate`, `LastIP` — assigned by MT4 server during login.
+  * `PrevMonthBalance`, `PrevBalance`, `PrevMonthEquity`,
+    `PrevEquity` — derived server-side at reporting close.
+
+Secret fields that do NOT appear here (preserved by the server-side
+read step; use dedicated endpoints to change them):
+  * `Password`, `PasswordInvestor`, `PasswordPhone` —
+    change via `POST UserPasswordSet`.
+  * `OTPSecret` — provisioned via separate admin flow.
+  * `APIData` — wrapper-internal blob, never client-controlled.
+
+<br><b>Note on Balance/Credit:</b> these fields ARE accepted here because the
+wrapper `UserRecordUpdate` writes them directly. However, the audit-
+trail-preserving way to move money is the dedicated balance operation
+endpoints (forthcoming) — submitting Balance via this DTO bypasses the
+audit log on MT4 server side.
+
+## Properties
+
+### address?
+
+> `optional` **address?**: `string` \| `null`
+
+Defined in: model/mT4UserUpdate.ts:82
+
+Street address
+
+#### Nullable
+
+***
+
+### agentAccount?
+
+> `optional` **agentAccount?**: `number`
+
+Defined in: model/mT4UserUpdate.ts:106
+
+IB / agent account number that referred this client
+
+***
+
+### balance?
+
+> `optional` **balance?**: `number`
+
+Defined in: model/mT4UserUpdate.ts:108
+
+Current balance (prefer dedicated balance ops for audit trail)
+
+***
+
+### city?
+
+> `optional` **city?**: `string` \| `null`
+
+Defined in: model/mT4UserUpdate.ts:67
+
+City
+
+#### Nullable
+
+***
+
+### comment?
+
+> `optional` **comment?**: `string` \| `null`
+
+Defined in: model/mT4UserUpdate.ts:102
+
+Free-form back-office comment
+
+#### Nullable
+
+***
+
+### country?
+
+> `optional` **country?**: `string` \| `null`
+
+Defined in: model/mT4UserUpdate.ts:62
+
+Country
+
+#### Nullable
+
+***
+
+### credit?
+
+> `optional` **credit?**: `number`
+
+Defined in: model/mT4UserUpdate.ts:110
+
+Credit on the account
+
+***
+
+### email?
+
+> `optional` **email?**: `string` \| `null`
+
+Defined in: model/mT4UserUpdate.ts:97
+
+Contact email
+
+#### Nullable
+
+***
+
+### enableFlags?
+
+> `optional` **enableFlags?**: `number`
+
+Defined in: model/mT4UserUpdate.ts:116
+
+Account flag bitfield — see MT4User.EnableFlags for bit semantics
+
+***
+
+### externalId?
+
+> `optional` **externalId?**: `string` \| `null`
+
+Defined in: model/mT4UserUpdate.ts:52
+
+External customer identifier (CRM/KYC link)
+
+#### Nullable
+
+***
+
+### group?
+
+> `optional` **group?**: `string` \| `null`
+
+Defined in: model/mT4UserUpdate.ts:42
+
+Group name the account belongs to
+
+#### Nullable
+
+***
+
+### interestRate?
+
+> `optional` **interestRate?**: `number`
+
+Defined in: model/mT4UserUpdate.ts:112
+
+Interest rate
+
+***
+
+### leadSource?
+
+> `optional` **leadSource?**: `string` \| `null`
+
+Defined in: model/mT4UserUpdate.ts:87
+
+Lead source / referral channel tag
+
+#### Nullable
+
+***
+
+### leverage?
+
+> `optional` **leverage?**: `number`
+
+Defined in: model/mT4UserUpdate.ts:104
+
+Account leverage (e.g. 100 means 1:100)
+
+***
+
+### mqid?
+
+> `optional` **mqid?**: `number`
+
+Defined in: model/mT4UserUpdate.ts:120
+
+MetaQuotes ID for mobile push notifications
+
+***
+
+### name?
+
+> `optional` **name?**: `string` \| `null`
+
+Defined in: model/mT4UserUpdate.ts:47
+
+Display name of the account holder
+
+#### Nullable
+
+***
+
+### phone?
+
+> `optional` **phone?**: `string` \| `null`
+
+Defined in: model/mT4UserUpdate.ts:92
+
+Contact phone
+
+#### Nullable
+
+***
+
+### sendReports?
+
+> `optional` **sendReports?**: `number`
+
+Defined in: model/mT4UserUpdate.ts:118
+
+0 = no reports, non-zero = nightly email reports enabled
+
+***
+
+### state?
+
+> `optional` **state?**: `string` \| `null`
+
+Defined in: model/mT4UserUpdate.ts:72
+
+State / region
+
+#### Nullable
+
+***
+
+### status?
+
+> `optional` **status?**: `string` \| `null`
+
+Defined in: model/mT4UserUpdate.ts:57
+
+MT4-internal status string
+
+#### Nullable
+
+***
+
+### taxes?
+
+> `optional` **taxes?**: `number`
+
+Defined in: model/mT4UserUpdate.ts:114
+
+Tax rate
+
+***
+
+### userColor?
+
+> `optional` **userColor?**: `number`
+
+Defined in: model/mT4UserUpdate.ts:122
+
+UI tint color in terminal client lists
+
+***
+
+### zipCode?
+
+> `optional` **zipCode?**: `string` \| `null`
+
+Defined in: model/mT4UserUpdate.ts:77
+
+Postal / ZIP code
+
+#### Nullable

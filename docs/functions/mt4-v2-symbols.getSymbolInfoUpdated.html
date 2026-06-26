@@ -1,0 +1,35 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-symbols](../modules/mt4-v2-symbols.html) / getSymbolInfoUpdated
+
+# Function: getSymbolInfoUpdated()
+
+> **getSymbolInfoUpdated**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getSymbolInfoUpdatedResponseSuccess`](../types/mt4-v2-symbols.getSymbolInfoUpdatedResponseSuccess.html)\>
+
+Defined in: mt4-v2-symbols.ts:112
+
+Snapshot of all symbols that have been updated since the last pump flush, keyed by symbol name (values-only on the wire).
+
+Pump-cached read — instant local lookup, no MT4 round-trip. Useful for
+bulk refresh of a quote panel or watchlist. Sort key is the symbol
+name; cursors are opaque base64 strings.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetSymbolInfoUpdatedParams`](../types/model.GetSymbolInfoUpdatedParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getSymbolInfoUpdatedResponseSuccess`](../types/mt4-v2-symbols.getSymbolInfoUpdatedResponseSuccess.html)\>

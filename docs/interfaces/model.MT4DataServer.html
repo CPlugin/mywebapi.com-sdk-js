@@ -1,0 +1,99 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / MT4DataServer
+
+# Interface: MT4DataServer
+
+Defined in: model/mT4DataServer.ts:16
+
+v2 DTO for a single MT4 access-server (DataServer) configuration entry.
+Curated subset of the wrapper's ConDataServer — drops the internal
+Reserved1/Reserved2 padding and the Next pointer chain. Loading and
+IpInternal are widened from uint to long for JSON-safe numeric
+serialization.
+
+## Properties
+
+### description?
+
+> `optional` **description?**: `string` \| `null`
+
+Defined in: model/mT4DataServer.ts:28
+
+Free-form server description
+
+#### Nullable
+
+***
+
+### ip?
+
+> `optional` **ip?**: `number`
+
+Defined in: model/mT4DataServer.ts:23
+
+Server IP (raw wrapper int — sign-preserved; high-bit IPs may serialize as negative)
+
+***
+
+### ipInternal?
+
+> `optional` **ipInternal?**: `number`
+
+Defined in: model/mT4DataServer.ts:36
+
+Internal IP address (widened uint → long)
+
+***
+
+### isProxy?
+
+> `optional` **isProxy?**: `number`
+
+Defined in: model/mT4DataServer.ts:30
+
+Whether the server can act as a proxy (0/1; raw wrapper int preserved)
+
+***
+
+### isWitness?
+
+> `optional` **isWitness?**: `number`
+
+Defined in: model/mT4DataServer.ts:38
+
+Failover-witness flag (0 / 1)
+
+***
+
+### loading?
+
+> `optional` **loading?**: `number`
+
+Defined in: model/mT4DataServer.ts:34
+
+Reported server load (UINT_MAX = no information reported)
+
+***
+
+### priority?
+
+> `optional` **priority?**: `number`
+
+Defined in: model/mT4DataServer.ts:32
+
+Connection priority: 0-7 base, 255 = idle
+
+***
+
+### server?
+
+> `optional` **server?**: `string` \| `null`
+
+Defined in: model/mT4DataServer.ts:21
+
+Server address as "host:port" or "host"
+
+#### Nullable

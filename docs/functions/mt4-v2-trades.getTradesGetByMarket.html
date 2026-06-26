@@ -1,0 +1,31 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-trades](../modules/mt4-v2-trades.html) / getTradesGetByMarket
+
+# Function: getTradesGetByMarket()
+
+> **getTradesGetByMarket**(`tradePlatform`, `options?`): `Promise`\<[`getTradesGetByMarketResponseSuccess`](../types/mt4-v2-trades.getTradesGetByMarketResponseSuccess.html)\>
+
+Defined in: mt4-v2-trades.ts:240
+
+All market-condition (non-pending) open trades from the pump cache.
+
+Pump-cached snapshot of every open market order across all accounts.
+Pending orders (limits/stops) are excluded — for those query per-symbol
+or per-account. Empty array is a legitimate result on idle servers.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getTradesGetByMarketResponseSuccess`](../types/mt4-v2-trades.getTradesGetByMarketResponseSuccess.html)\>

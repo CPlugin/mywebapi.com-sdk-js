@@ -1,0 +1,47 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / postCfgUpdateCommon
+
+# Function: postCfgUpdateCommon()
+
+> **postCfgUpdateCommon**(`tradePlatform`, `mT4CommonUpdate?`, `options?`): `Promise`\<[`postCfgUpdateCommonResponseSuccess`](../types/mt4-v2-config.postCfgUpdateCommonResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:158
+
+Update server-wide common settings — Type 1 mutator.
+
+Manager (live) call. Reads the current `ConCommon` from the
+MT4 server, overlays the fields in `MT4CommonUpdate` onto it
+(secret-preservation: fields not in the DTO keep their server
+value), and writes the merged struct back via
+`CfgUpdateCommon`.
+
+Preserved fields the DTO does not touch:
+<list type="bullet"><item>Runtime counters (LastOrder, LastLogin, LostLogin,
+        optimization timestamps, overnight rollover state).</item><item>Protocol identity (ServerVersion, ServerBuild).</item><item>Bind / web address arrays (variable-length nested
+        collections — own endpoints planned).</item><item>Demo-account subsystem, paths, rollover/statement modes
+        (sensitive admin areas with separate endpoints).</item></list>
+
+Wine x64 safe: wrapper uses `cpp.AllocSafe()` (single struct
+pack, no UnpackObject loop). Idempotency-Key strongly recommended
+— overwriting common settings affects every connected client.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### mT4CommonUpdate?
+
+[`MT4CommonUpdate`](../interfaces/model.MT4CommonUpdate.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postCfgUpdateCommonResponseSuccess`](../types/mt4-v2-config.postCfgUpdateCommonResponseSuccess.html)\>

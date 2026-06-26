@@ -1,0 +1,37 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / getCfgRequestManager
+
+# Function: getCfgRequestManager()
+
+> **getCfgRequestManager**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getCfgRequestManagerResponseSuccess`](../types/mt4-v2-config.getCfgRequestManagerResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:266
+
+All MT4 manager-account configurations on the connected server, paginated by Login.
+
+Manager-live read (round-trip). Each entry surfaces the manager's
+Login/Name/Groups/MailBox, the 19 boolean permission rights (Manager,
+Money, Broker, Admin, Reports, Trades, MarketWatch, etc.), IP-filter
+range, and InfoDepth. Internal wrapper fields (SecGroups, Unused,
+ExpTime, Reserved) are dropped from the v2 contract.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetCfgRequestManagerParams`](../types/model.GetCfgRequestManagerParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getCfgRequestManagerResponseSuccess`](../types/mt4-v2-config.getCfgRequestManagerResponseSuccess.html)\>

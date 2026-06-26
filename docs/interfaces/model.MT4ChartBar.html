@@ -1,0 +1,74 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / MT4ChartBar
+
+# Interface: MT4ChartBar
+
+Defined in: model/mT4ChartBar.ts:15
+
+v2 DTO for one OHLC chart bar. Curated from the wrapper's `RateInfoEx`;
+drops the internal `SymbolMultiply`/`Digits` scaling helpers
+(callers don't need them — the wrapper's `buildRI` already
+normalised Open/High/Low/Close from raw int prices into floating point).
+
+## Properties
+
+### close?
+
+> `optional` **close?**: `number`
+
+Defined in: model/mT4ChartBar.ts:25
+
+Close price
+
+***
+
+### high?
+
+> `optional` **high?**: `number`
+
+Defined in: model/mT4ChartBar.ts:21
+
+High price during the bar
+
+***
+
+### low?
+
+> `optional` **low?**: `number`
+
+Defined in: model/mT4ChartBar.ts:23
+
+Low price during the bar
+
+***
+
+### open?
+
+> `optional` **open?**: `number`
+
+Defined in: model/mT4ChartBar.ts:19
+
+Open price
+
+***
+
+### time?
+
+> `optional` **time?**: `string`
+
+Defined in: model/mT4ChartBar.ts:17
+
+Bar timestamp (UTC, start of the bar's period)
+
+***
+
+### volume?
+
+> `optional` **volume?**: `number`
+
+Defined in: model/mT4ChartBar.ts:27
+
+Trading volume during the bar (lots × 100 in MT4 convention)

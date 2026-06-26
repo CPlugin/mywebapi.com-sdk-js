@@ -1,0 +1,37 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / getCfgRequestGatewayRule
+
+# Function: getCfgRequestGatewayRule()
+
+> **getCfgRequestGatewayRule**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getCfgRequestGatewayRuleResponseSuccess`](../types/mt4-v2-config.getCfgRequestGatewayRuleResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:1158
+
+All MT4 gateway-rule entries (STP execution routing policies), paginated by Name.
+
+Manager-live read (round-trip). Each rule matches incoming orders
+by RequestSymbol + RequestGroup and routes them to a configured
+execution gateway-account (ExeAccountName/ExeAccountId) with
+per-rule slippage and volume limits. Name is assumed unique
+within the rules table and serves as the cursor key.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetCfgRequestGatewayRuleParams`](../types/model.GetCfgRequestGatewayRuleParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getCfgRequestGatewayRuleResponseSuccess`](../types/mt4-v2-config.getCfgRequestGatewayRuleResponseSuccess.html)\>

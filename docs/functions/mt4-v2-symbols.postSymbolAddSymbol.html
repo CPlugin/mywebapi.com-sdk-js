@@ -1,0 +1,41 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-symbols](../modules/mt4-v2-symbols.html) / postSymbolAddSymbol
+
+# Function: postSymbolAddSymbol()
+
+> **postSymbolAddSymbol**(`tradePlatform`, `symbol`, `options?`): `Promise`\<[`postSymbolAddSymbolResponseSuccess`](../types/mt4-v2-symbols.postSymbolAddSymbolResponseSuccess.html)\>
+
+Defined in: mt4-v2-symbols.ts:417
+
+Add a symbol to the platform's active set — Type 1 mutator.
+
+Promotes a configured symbol into the platform's currently-pumping
+set so it starts receiving ticks and accepting orders. Reversible via
+`SymbolHide`.
+
+v1 exposes this as `GET /api/MT4/{tp}/SymbolAdd/{symbol}` — that
+is a historical REST violation (GET should be safe/idempotent). v2
+corrects the verb to POST without changing the wrapper behaviour. The
+path stays the same to keep traceability with the underlying wrapper
+method name; only the HTTP verb changes.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### symbol
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postSymbolAddSymbolResponseSuccess`](../types/mt4-v2-symbols.postSymbolAddSymbolResponseSuccess.html)\>

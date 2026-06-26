@@ -1,0 +1,39 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / getCfgRequestAccess
+
+# Function: getCfgRequestAccess()
+
+> **getCfgRequestAccess**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getCfgRequestAccessResponseSuccess`](../types/mt4-v2-config.getCfgRequestAccessResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:413
+
+All firewall (IP access) rules configured on the MT4 server, paginated.
+
+Manager-live read (round-trip). Each entry describes an IP range
+(IpFrom..IpTo, widened uint→long for JSON safety) with an Action
+flag and a free-form Comment. Ordering: by (IpFrom, IpTo) ascending.
+Cursor is an opaque base64 string holding the composite key
+"{IpFrom:D10}|{IpTo:D10}" — D10 width matches uint range (max
+4_294_967_295 = 10 digits) so lexicographic compare matches
+numeric compare, and the '|' delimiter cannot appear in IP values.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetCfgRequestAccessParams`](../types/model.GetCfgRequestAccessParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getCfgRequestAccessResponseSuccess`](../types/mt4-v2-config.getCfgRequestAccessResponseSuccess.html)\>

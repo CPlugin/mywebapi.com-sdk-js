@@ -1,0 +1,32 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-groups](../modules/mt4-v2-groups.html) / getGroupsGet
+
+# Function: getGroupsGet()
+
+> **getGroupsGet**(`tradePlatform`, `options?`): `Promise`\<[`getGroupsGetResponseSuccess`](../types/mt4-v2-groups.getGroupsGetResponseSuccess.html)\>
+
+Defined in: mt4-v2-groups.ts:50
+
+All trading groups configured on the MT4 server from the pump cache.
+
+Pump-cached read. Curated DTO drops SMTP credentials, template paths,
+and nested SecGroups/SecMargins arrays (those get dedicated v2
+endpoints in a later wave). Typical group counts are small (dozens),
+so no pagination is needed.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getGroupsGetResponseSuccess`](../types/mt4-v2-groups.getGroupsGetResponseSuccess.html)\>

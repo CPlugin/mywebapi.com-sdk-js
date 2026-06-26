@@ -1,0 +1,43 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-symbols](../modules/mt4-v2-symbols.html) / postSymbolChange
+
+# Function: postSymbolChange()
+
+> **postSymbolChange**(`tradePlatform`, `mT4SymbolChangeRequest?`, `options?`): `Promise`\<[`postSymbolChangeResponseSuccess`](../types/mt4-v2-symbols.postSymbolChangeResponseSuccess.html)\>
+
+Defined in: mt4-v2-symbols.ts:548
+
+Adjusts the per-symbol trading attributes that dealers manage from the MT4 Manager UI — spread, stops-level, smoothing, quote color, execution mode.
+
+Manager-live POST. Maps 1:1 to the wrapper's `SymbolChange`
+call which marshals an entire `SymbolProperties` struct down
+to the native server. Only the seven editable fields are exposed
+on the v2 contract — the wrapper's 8-int reserved padding is
+filled with zeros by Mapperly automatically.
+
+This is intentionally separate from the heavier `CfgUpdateSymbol`
+Type 1 mutator: `SymbolChange` is the dealer-tier adjustment
+path; `CfgUpdateSymbol` changes structural symbol configuration
+(currency, calc mode, margin, swap) that requires admin privileges
+and broker-side coordination.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### mT4SymbolChangeRequest?
+
+[`MT4SymbolChangeRequest`](../interfaces/model.MT4SymbolChangeRequest.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postSymbolChangeResponseSuccess`](../types/mt4-v2-symbols.postSymbolChangeResponseSuccess.html)\>

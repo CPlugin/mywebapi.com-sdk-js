@@ -1,0 +1,68 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / MT4TickRecord
+
+# Interface: MT4TickRecord
+
+Defined in: model/mT4TickRecord.ts:16
+
+v2 DTO for one historical tick from `TicksRequest`. Same fields as the
+wrapper's `TickRecord`; `Ctm` is renamed to `Time` at the API
+boundary (consistent with CPlugin.SaaSWebApps.WebAPI.DTOs.MT4.v2.MT4TickInfo). The wrapper's
+`TickRequestFlags` enum is exposed as a string to avoid the leaf-enum
+nested-generic serialization issue documented in feedback-stj-enum-leaf-nested.
+
+## Properties
+
+### ask?
+
+> `optional` **ask?**: `number`
+
+Defined in: model/mT4TickRecord.ts:22
+
+Ask price
+
+***
+
+### bid?
+
+> `optional` **bid?**: `number`
+
+Defined in: model/mT4TickRecord.ts:20
+
+Bid price
+
+***
+
+### dataFeed?
+
+> `optional` **dataFeed?**: `number`
+
+Defined in: model/mT4TickRecord.ts:24
+
+Index of the data feed source
+
+***
+
+### flags?
+
+> `optional` **flags?**: `string` \| `null`
+
+Defined in: model/mT4TickRecord.ts:30
+
+Tick flags as string — combination of `Raw`, `Normal`, `All`.
+String-typed for the same STJ source-gen reason as CPlugin.SaaSWebApps.WebAPI.DTOs.MT4.v2.MT4ServerLog.Code.
+
+#### Nullable
+
+***
+
+### time?
+
+> `optional` **time?**: `string`
+
+Defined in: model/mT4TickRecord.ts:18
+
+Server-side tick timestamp (UTC)

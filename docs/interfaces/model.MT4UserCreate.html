@@ -1,0 +1,228 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / MT4UserCreate
+
+# Interface: MT4UserCreate
+
+Defined in: model/mT4UserCreate.ts:23
+
+Type 1 mutator input — full create shape for `UserRecordNew`.
+Same writable fields as CPlugin.SaaSWebApps.WebAPI.DTOs.MT4.v2.MT4UserUpdate minus the explicit
+`Balance`/`Credit` (those should come through dedicated balance
+operations after the account exists). The wrapper allocates the next free
+login id when `Login = 0`; clients may also request a specific id by
+setting `Login > 0` (the server rejects collisions).
+
+Password / OTP / API-data fields are NOT on this DTO. After successful
+creation, set the initial password via a separate
+`POST UserPasswordSet/{login}` call. The wrapper accepts the new
+account with empty password bytes; the password endpoint lifts it to
+usable credentials.
+
+## Properties
+
+### address?
+
+> `optional` **address?**: `string` \| `null`
+
+Defined in: model/mT4UserCreate.ts:47
+
+#### Nullable
+
+***
+
+### agentAccount?
+
+> `optional` **agentAccount?**: `number`
+
+Defined in: model/mT4UserCreate.ts:57
+
+***
+
+### city?
+
+> `optional` **city?**: `string` \| `null`
+
+Defined in: model/mT4UserCreate.ts:41
+
+#### Nullable
+
+***
+
+### comment?
+
+> `optional` **comment?**: `string` \| `null`
+
+Defined in: model/mT4UserCreate.ts:55
+
+#### Nullable
+
+***
+
+### country?
+
+> `optional` **country?**: `string` \| `null`
+
+Defined in: model/mT4UserCreate.ts:39
+
+#### Nullable
+
+***
+
+### email?
+
+> `optional` **email?**: `string` \| `null`
+
+Defined in: model/mT4UserCreate.ts:53
+
+#### Nullable
+
+***
+
+### enableFlags?
+
+> `optional` **enableFlags?**: `number`
+
+Defined in: model/mT4UserCreate.ts:60
+
+***
+
+### externalId?
+
+> `optional` **externalId?**: `string` \| `null`
+
+Defined in: model/mT4UserCreate.ts:35
+
+#### Nullable
+
+***
+
+### group?
+
+> `optional` **group?**: `string` \| `null`
+
+Defined in: model/mT4UserCreate.ts:31
+
+#### Nullable
+
+***
+
+### interestRate?
+
+> `optional` **interestRate?**: `number`
+
+Defined in: model/mT4UserCreate.ts:58
+
+***
+
+### leadSource?
+
+> `optional` **leadSource?**: `string` \| `null`
+
+Defined in: model/mT4UserCreate.ts:49
+
+#### Nullable
+
+***
+
+### leverage?
+
+> `optional` **leverage?**: `number`
+
+Defined in: model/mT4UserCreate.ts:56
+
+***
+
+### login?
+
+> `optional` **login?**: `number`
+
+Defined in: model/mT4UserCreate.ts:29
+
+Optional preferred login. `0` = let server assign the next free
+id. `> 0` = request this exact id (server rejects collisions
+via wrapper error code).
+
+***
+
+### mqid?
+
+> `optional` **mqid?**: `number`
+
+Defined in: model/mT4UserCreate.ts:62
+
+***
+
+### name?
+
+> `optional` **name?**: `string` \| `null`
+
+Defined in: model/mT4UserCreate.ts:33
+
+#### Nullable
+
+***
+
+### phone?
+
+> `optional` **phone?**: `string` \| `null`
+
+Defined in: model/mT4UserCreate.ts:51
+
+#### Nullable
+
+***
+
+### sendReports?
+
+> `optional` **sendReports?**: `number`
+
+Defined in: model/mT4UserCreate.ts:61
+
+***
+
+### state?
+
+> `optional` **state?**: `string` \| `null`
+
+Defined in: model/mT4UserCreate.ts:43
+
+#### Nullable
+
+***
+
+### status?
+
+> `optional` **status?**: `string` \| `null`
+
+Defined in: model/mT4UserCreate.ts:37
+
+#### Nullable
+
+***
+
+### taxes?
+
+> `optional` **taxes?**: `number`
+
+Defined in: model/mT4UserCreate.ts:59
+
+***
+
+### userColor?
+
+> `optional` **userColor?**: `number`
+
+Defined in: model/mT4UserCreate.ts:63
+
+***
+
+### zipCode?
+
+> `optional` **zipCode?**: `string` \| `null`
+
+Defined in: model/mT4UserCreate.ts:45
+
+#### Nullable

@@ -1,0 +1,43 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-symbols](../modules/mt4-v2-symbols.html) / postSymbolSendTick
+
+# Function: postSymbolSendTick()
+
+> **postSymbolSendTick**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`postSymbolSendTickResponseSuccess`](../types/mt4-v2-symbols.postSymbolSendTickResponseSuccess.html)\>
+
+Defined in: mt4-v2-symbols.ts:605
+
+Injects a synthetic tick into the MT4 server for the given symbol — used to keep the feed alive on instruments where the upstream datafeed is paused, or to drive simulator tooling.
+
+Manager-live POST. The wrapper requires the manager account to hold
+the `Market Watch` permission; without it the server typically
+drops the connection rather than returning an error. The API-side
+`ResourceAccessAuthorize` on this endpoint guards against API
+callers without the appropriate platform-level permission, but
+broker-side mis-configuration of the underlying manager rights
+remains the consumer's responsibility.
+
+`bid` and `ask` are absolute prices, not deltas. Pass
+the symbol's last-known bid/ask if you only need to refresh the
+timestamp; pass adjusted prices to actually move the quote.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`PostSymbolSendTickParams`](../types/model.PostSymbolSendTickParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postSymbolSendTickResponseSuccess`](../types/mt4-v2-symbols.postSymbolSendTickResponseSuccess.html)\>

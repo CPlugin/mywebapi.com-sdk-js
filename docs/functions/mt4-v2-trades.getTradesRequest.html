@@ -1,0 +1,39 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-trades](../modules/mt4-v2-trades.html) / getTradesRequest
+
+# Function: getTradesRequest()
+
+> **getTradesRequest**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getTradesRequestResponseSuccess`](../types/mt4-v2-trades.getTradesRequestResponseSuccess.html)\>
+
+Defined in: mt4-v2-trades.ts:484
+
+Broad Manager-live trade query. Returns every trade visible to the authenticated manager, paged by ticket ascending.
+
+Manager (live) — each call hits the MT4 server. Designed as the
+"scan from scratch" counterpart to the pump variants
+(`TradesGetByMarket`, `TradesGetBySymbol`): pump reads are
+instant but limited to currently-open trades visible to the pump;
+this endpoint returns the full server-side set the manager can see.
+Heavy — paginate aggressively, prefer pump variants when freshness
+is not critical.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetTradesRequestParams`](../types/model.GetTradesRequestParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getTradesRequestResponseSuccess`](../types/mt4-v2-trades.getTradesRequestResponseSuccess.html)\>

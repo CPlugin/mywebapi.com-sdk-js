@@ -1,0 +1,31 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / postCfgDeleteSymbolPos
+
+# Function: postCfgDeleteSymbolPos()
+
+> **postCfgDeleteSymbolPos**(`tradePlatform`, `pos`, `options?`): `Promise`\<[`postCfgDeleteSymbolPosResponseSuccess`](../types/mt4-v2-config.postCfgDeleteSymbolPosResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:1749
+
+Deletes a symbol configuration entry by zero-based row position. This permanently removes the symbol from the server — pair with `Idempotency-Key` and prefer `SymbolHide` when you only want to suspend visibility.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### pos
+
+`number`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postCfgDeleteSymbolPosResponseSuccess`](../types/mt4-v2-config.postCfgDeleteSymbolPosResponseSuccess.html)\>

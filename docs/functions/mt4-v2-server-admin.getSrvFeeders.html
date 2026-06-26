@@ -1,0 +1,40 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-server-admin](../modules/mt4-v2-server-admin.html) / getSrvFeeders
+
+# Function: getSrvFeeders()
+
+> **getSrvFeeders**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getSrvFeedersResponseSuccess`](../types/mt4-v2-server-admin.getSrvFeedersResponseSuccess.html)\>
+
+Defined in: mt4-v2-server-admin.ts:60
+
+List of running data feeders on the MT4 server (admin-only read).
+
+Manager (live) call to the wrapper's `SrvFeeders`. Returns the
+current set of running feeder configurations as opposed to
+`CfgRequestFeeder` which returns the static configuration. The
+data shape is the same as `CfgRequestFeeder` — `MT4Feeder`
+— and the credential (`Password`) is intentionally excluded.
+<br>
+Sorted by `Name` ascending. Paged with the same cursor codec as
+the rest of the v2 paged endpoints (`Name` is the cursor key).
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetSrvFeedersParams`](../types/model.GetSrvFeedersParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getSrvFeedersResponseSuccess`](../types/mt4-v2-server-admin.getSrvFeedersResponseSuccess.html)\>

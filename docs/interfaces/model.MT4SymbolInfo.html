@@ -1,0 +1,134 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [model](../modules/model.html) / MT4SymbolInfo
+
+# Interface: MT4SymbolInfo
+
+Defined in: model/mT4SymbolInfo.ts:21
+
+v2 DTO describing a single symbol's market data and metadata as held in
+the wrapper's pumping cache. Curated subset of the wrapper's SymbolInfo:
+covers what clients monitoring tick feeds / building a quote panel
+actually need — current Bid/Ask, session High/Low, tick precision
+(Digits, Point), current Spread (in points), last-tick direction, and
+the last-tick timestamp. Internal bookkeeping (Count, UpdateFlag,
+Visible, SpreadBalance, Commission, CommType) is intentionally omitted:
+those are pump-side cache mechanics or broker-side commission config
+that don't belong on a real-time market-data wire.
+
+## Properties
+
+### ask?
+
+> `optional` **ask?**: `number`
+
+Defined in: model/mT4SymbolInfo.ts:40
+
+Current ask price
+
+***
+
+### bid?
+
+> `optional` **bid?**: `number`
+
+Defined in: model/mT4SymbolInfo.ts:38
+
+Current bid price
+
+***
+
+### digits?
+
+> `optional` **digits?**: `number`
+
+Defined in: model/mT4SymbolInfo.ts:28
+
+Number of digits after decimal point for prices on this symbol
+
+***
+
+### direction?
+
+> `optional` **direction?**: [`SymbolPriceDirection`](../types/model.SymbolPriceDirection.html)
+
+Defined in: model/mT4SymbolInfo.ts:36
+
+Direction of the last tick (Up/Down/Flat) — useful for UI flash highlights
+
+***
+
+### high?
+
+> `optional` **high?**: `number`
+
+Defined in: model/mT4SymbolInfo.ts:42
+
+Session high price
+
+***
+
+### lastTime?
+
+> `optional` **lastTime?**: `string` \| `null`
+
+Defined in: model/mT4SymbolInfo.ts:50
+
+Timestamp of the last tick; null when the pump has not yet
+            observed a tick for this symbol since connect.
+
+#### Nullable
+
+***
+
+### low?
+
+> `optional` **low?**: `number`
+
+Defined in: model/mT4SymbolInfo.ts:44
+
+Session low price
+
+***
+
+### point?
+
+> `optional` **point?**: `number`
+
+Defined in: model/mT4SymbolInfo.ts:32
+
+Point size (e.g. 0.00001 for 5-digit FX); price increment per point
+
+***
+
+### spread?
+
+> `optional` **spread?**: `number`
+
+Defined in: model/mT4SymbolInfo.ts:34
+
+Current spread, in points
+
+***
+
+### symbol?
+
+> `optional` **symbol?**: `string` \| `null`
+
+Defined in: model/mT4SymbolInfo.ts:26
+
+Symbol name (e.g. "EURUSD")
+
+#### Nullable
+
+***
+
+### type?
+
+> `optional` **type?**: `number`
+
+Defined in: model/mT4SymbolInfo.ts:30
+
+Security group index this symbol belongs to (refers to ConGroupSec)

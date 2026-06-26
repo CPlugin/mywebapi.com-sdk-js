@@ -1,0 +1,36 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-reports](../modules/mt4-v2-reports.html) / postDailySyncRead
+
+# Function: postDailySyncRead()
+
+> **postDailySyncRead**(`tradePlatform`, `options?`): `Promise`\<[`postDailySyncReadResponseSuccess`](../types/mt4-v2-reports.postDailySyncReadResponseSuccess.html)\>
+
+Defined in: mt4-v2-reports.ts:350
+
+Drains the daily-report snapshot opened by the most recent `DailySyncStart` call. Returns every record reserved by the server in that sync session.
+
+Manager-live POST (consumes server-side session state — the snapshot
+is dropped after a successful read). Empty payload (`[]`) is a
+valid response when the snapshot held no records; this is NOT an
+error.
+
+Call `DailySyncStart` first; calling `DailySyncRead` without
+a prior `DailySyncStart` may return an empty list or a non-Ok
+`managerAPICode` depending on server build.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postDailySyncReadResponseSuccess`](../types/mt4-v2-reports.postDailySyncReadResponseSuccess.html)\>

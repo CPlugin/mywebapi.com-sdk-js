@@ -1,0 +1,35 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-trades](../modules/mt4-v2-trades.html) / getTradesGetBySymbol
+
+# Function: getTradesGetBySymbol()
+
+> **getTradesGetBySymbol**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getTradesGetBySymbolResponseSuccess`](../types/mt4-v2-trades.getTradesGetBySymbolResponseSuccess.html)\>
+
+Defined in: mt4-v2-trades.ts:199
+
+Open and pending orders for a specific symbol from the pump cache.
+
+Pump-cached snapshot — instant local lookup, no MT4 round-trip. Useful
+for per-instrument risk monitoring. Empty array is a legitimate result
+(no live trades on that symbol).
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetTradesGetBySymbolParams`](../types/model.GetTradesGetBySymbolParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getTradesGetBySymbolResponseSuccess`](../types/mt4-v2-trades.getTradesGetBySymbolResponseSuccess.html)\>

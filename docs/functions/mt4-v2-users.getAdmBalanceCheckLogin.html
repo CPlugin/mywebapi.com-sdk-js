@@ -1,0 +1,41 @@
+[**@cplugin/saas-webapi-client**](../README.md)
+
+***
+
+[@cplugin/saas-webapi-client](../index.html) / [mt4-v2-users](../modules/mt4-v2-users.html) / getAdmBalanceCheckLogin
+
+# Function: getAdmBalanceCheckLogin()
+
+> **getAdmBalanceCheckLogin**(`tradePlatform`, `login`, `options?`): `Promise`\<[`getAdmBalanceCheckLoginResponseSuccess`](../types/mt4-v2-users.getAdmBalanceCheckLoginResponseSuccess.html)\>
+
+Defined in: mt4-v2-users.ts:204
+
+Admin balance integrity check for a single account.
+
+Manager (live) call. Returns the difference between the recorded
+account balance and what the MT4 server recomputes from closed
+orders + balance operations. `diff = 0` → balance is intact;
+non-zero → admin tooling can run `AdmBalanceFix` to recompute
+(forthcoming Wave 3 endpoint).
+
+Read-only operation despite the wrapper's "Adm" prefix (the prefix
+signals the elevated authorization requirement, not a write side
+effect).
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### login
+
+`number`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getAdmBalanceCheckLoginResponseSuccess`](../types/mt4-v2-users.getAdmBalanceCheckLoginResponseSuccess.html)\>
