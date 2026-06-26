@@ -3,7 +3,7 @@
 ## Before the first release
 
 1. **Package name** — `@mywebapi.com/sdk` (npm org `mywebapi.com` must exist).
-2. **Update repository URLs** — replace `PLACEHOLDER_ORG/PLACEHOLDER_REPO` in
+2. **Update repository URLs** — replace `CPlugin/mywebapi.com-sdk-js` in
    `package.json` (`repository.url`, `homepage`, `bugs.url`) with the real
    GitHub org and repo name.
 3. **Authentication: npm Trusted Publishing (OIDC) — no token to store or rotate.**

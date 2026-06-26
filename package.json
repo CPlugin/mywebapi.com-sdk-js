@@ -18,11 +18,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PLACEHOLDER_ORG/PLACEHOLDER_REPO.git"
+    "url": "git+https://github.com/CPlugin/mywebapi.com-sdk-js.git"
   },
-  "homepage": "https://github.com/PLACEHOLDER_ORG/PLACEHOLDER_REPO#readme",
+  "homepage": "https://github.com/CPlugin/mywebapi.com-sdk-js#readme",
   "bugs": {
-    "url": "https://github.com/PLACEHOLDER_ORG/PLACEHOLDER_REPO/issues"
+    "url": "https://github.com/CPlugin/mywebapi.com-sdk-js/issues"
   },
   "scripts": {
     "generate": "orval --config orval.config.ts",
