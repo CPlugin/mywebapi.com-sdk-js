@@ -2,14 +2,19 @@
 
 ## Before the first release
 
-1. **Finalize the package name and scope** in `package.json` (`"name"` field).
-   The current value `@mywebapi.com/sdk` is a working placeholder.
+1. **Package name** — `@mywebapi.com/sdk` (npm org `mywebapi.com` must exist).
 2. **Update repository URLs** — replace `PLACEHOLDER_ORG/PLACEHOLDER_REPO` in
    `package.json` (`repository.url`, `homepage`, `bugs.url`) with the real
    GitHub org and repo name.
-3. **Add the `NPM_TOKEN` secret** to the GitHub repository:
-   _Settings → Secrets and variables → Actions → New repository secret_
-   Generate an Automation token at `https://www.npmjs.com/settings/<user>/tokens`.
+3. **Authentication: npm Trusted Publishing (OIDC) — no token to store or rotate.**
+   - First publish is a one-time bootstrap (npm needs the package to exist before
+     a Trusted Publisher can be attached): publish `v0.1.0` once using a short-lived
+     npm automation token, or run `npm publish --access public` from your machine.
+   - Then on npmjs.com: _Package → Settings → Trusted Publisher → GitHub Actions_,
+     set the GitHub org/repo and workflow file `publish.yml`.
+   - Every later release publishes via the workflow's OIDC id-token — **no
+     `NPM_TOKEN` secret, nothing to rotate** (granular write tokens otherwise
+     expire in ≤90 days).
 
 ## Releasing a version
 
