@@ -222,12 +222,30 @@ bun run build         # outputs dist/index.js + dist/*.d.ts
 
 ## SignalR (real-time streams)
 
-Real-time streams are available via a separate `@cplugin/saas-webapi-signalr` package (peer dependency on `@microsoft/signalr`). See the SignalR documentation for usage and setup.
+Real-time streaming is **built into this package** — there is no separate SignalR package. The only extra is the optional peer dependency `@microsoft/signalr`, installed **only if you use real-time** (the REST surface works without it):
+
+```sh
+bun add @microsoft/signalr   # or: npm install @microsoft/signalr
+```
+
+Open a hub from the same client — it reuses the client's environment and OAuth token:
+
+```ts
+const rt = client.realtime.mt4(tradePlatform);   // or client.realtime.mt5(tradePlatform)
+rt.onConnectionStatus((s) => console.log('connected:', s.connected));
+await rt.start();
+for await (const tick of rt.streamTicks('EURUSD')) {
+  console.log(tick.symbol, tick.bid, tick.ask);
+}
+await rt.stop();
+```
+
+MT4 hubs expose ticks, trades, margin-call, user and symbol streams; MT5 hubs expose connection status and margin-call updates.
 
 ## What's next
 
 - Add typed convenience wrappers for every v2 endpoint as usage patterns crystallise.
-- Publish to the private npm registry once the version stabilises.
+- Tag a release (`vX.Y.Z`) to publish `@mywebapi.com/sdk` to npm via the GitHub Actions workflow.
 
 ## License
 
