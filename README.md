@@ -1,6 +1,6 @@
 # @mywebapi.com/sdk
 
-TypeScript client for the SaaS WebAPI v2 (MT4/MT5 trading platform management).
+TypeScript client for the CPlugin WebAPI v2 — a management API for trading-platform servers.
 
 **Status:** Published on the public npm registry as [`@mywebapi.com/sdk`](https://www.npmjs.com/package/@mywebapi.com/sdk) (early access, current version `0.1.0`). The API shape is stable; while the package is at `0.x`, minor releases may introduce breaking changes, so pin a version in production. Versioning follows [semver](https://semver.org/).
 
