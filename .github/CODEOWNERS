@@ -1,0 +1,35 @@
+# This file governs who is automatically requested for review
+# when a pull request touches specific paths.
+#
+# Each line maps a file pattern to one or more owners.
+# More info: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+* @BobBoba
+
+# SDK core source code
+/src/ @BobBoba
+
+# CI/CD pipelines (security-critical)
+/.github/workflows/ @BobBoba
+
+# Package configuration (controls dependency supply chain)
+/package.json @BobBoba
+/bun.lock @BobBoba
+
+# Build and code generation configuration
+/tsconfig.json @BobBoba
+/tsconfig.build.json @BobBoba
+/orval.config.ts @BobBoba
+
+# OpenAPI specification (defines the SDK surface)
+/spec/ @BobBoba
+
+# npm publish configuration
+/PUBLISHING.md @BobBoba
+
+# E2E tests
+/e2e/ @BobBoba
+
+# Environment configuration
+/.env.example @BobBoba
