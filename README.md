@@ -1,8 +1,10 @@
 # @mywebapi.com/sdk
 
+> *Typed TypeScript SDK for the CPlugin WebAPI v2 — manage MT4 and MT5 servers from Node.js and browsers. OAuth2, retries, pagination and SignalR real-time included; types regenerated from the OpenAPI spec so they never drift.*
+
 TypeScript client for the SaaS WebAPI v2 (MT4/MT5 trading platform management).
 
-**Status:** Develop-only (not yet published). API shape is stable; package will be released to the private npm registry once the v2 API reaches production maturity.
+**Status:** Public, stable. v0.1.1 published to npm. API shape is stable; types are auto-generated from the live OpenAPI spec.
 
 - **Auto-generated types** from the live OpenAPI spec — all endpoints, DTOs, and enums are exact and stay in sync with the server.
 - **Unified entry point** — `CPluginWebApiClient` with `mt4` and `mt5` namespaces; credentials and token management configured once at instantiation.
