@@ -1,0 +1,32 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-sidecar-messaging](../modules/mt4-v2-sidecar-messaging.html) / getMailsRequest
+
+# Function: getMailsRequest()
+
+> **getMailsRequest**(`tradePlatform`, `options?`): `Promise`\<[`getMailsRequestResponseSuccess`](../types/mt4-v2-sidecar-messaging.getMailsRequestResponseSuccess.html)\>
+
+Defined in: mt4-v2-sidecar-messaging.ts:131
+
+List all mail messages currently stored on the MT4 server.
+
+Manager (live) call to the wrapper's `MailsRequest()`.
+Returns the server-side mailbox store as a flat list of
+`MT4MailBox` entries. Read-only; no batching parameters
+(the wrapper has no native pagination).
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getMailsRequestResponseSuccess`](../types/mt4-v2-sidecar-messaging.getMailsRequestResponseSuccess.html)\>

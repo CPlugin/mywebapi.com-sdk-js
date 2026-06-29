@@ -1,0 +1,101 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4GatewayAccount
+
+# Interface: MT4GatewayAccount
+
+Defined in: model/mT4GatewayAccount.ts:17
+
+v2 DTO for a single MT4 STP gateway-account configuration entry.
+Curated subset of the wrapper's ConGatewayAccount — drops the
+23-int Reserved block AND the `Password` field (STP MT4
+credential to the external server). NotifyLogins is preserved
+as int[8] because the wrapper exposes a fixed-size 8-slot array.
+
+## Properties
+
+### address?
+
+> `optional` **address?**: `string` \| `null`
+
+Defined in: model/mT4GatewayAccount.ts:35
+
+External MT4 server address (host:port string)
+
+#### Nullable
+
+***
+
+### enable?
+
+> `optional` **enable?**: `boolean`
+
+Defined in: model/mT4GatewayAccount.ts:19
+
+Whether the gateway-account entry is active
+
+***
+
+### flags?
+
+> `optional` **flags?**: [`EnGatewayAccountFlags`](../types/model.EnGatewayAccountFlags.html)
+
+Defined in: model/mT4GatewayAccount.ts:42
+
+Gateway-account flag bitmap (wrapper enum, serialized as string)
+
+***
+
+### id?
+
+> `optional` **id?**: `number`
+
+Defined in: model/mT4GatewayAccount.ts:26
+
+Internal id (stable identifier)
+
+***
+
+### login?
+
+> `optional` **login?**: `number`
+
+Defined in: model/mT4GatewayAccount.ts:30
+
+STP MT4 login (account number on the external server)
+
+***
+
+### name?
+
+> `optional` **name?**: `string` \| `null`
+
+Defined in: model/mT4GatewayAccount.ts:24
+
+Public name of the gateway account
+
+#### Nullable
+
+***
+
+### notifyLogins?
+
+> `optional` **notifyLogins?**: `number`[] \| `null`
+
+Defined in: model/mT4GatewayAccount.ts:40
+
+Logins of broker managers receiving internal-email gateway notifications (fixed-size 8 slots)
+
+#### Nullable
+
+***
+
+### type?
+
+> `optional` **type?**: `number`
+
+Defined in: model/mT4GatewayAccount.ts:28
+
+Gateway type (obsolete in modern MT4 builds — preserved for API completeness)

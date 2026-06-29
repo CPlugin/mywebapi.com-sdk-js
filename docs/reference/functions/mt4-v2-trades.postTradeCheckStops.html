@@ -1,0 +1,46 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-trades](../modules/mt4-v2-trades.html) / postTradeCheckStops
+
+# Function: postTradeCheckStops()
+
+> **postTradeCheckStops**(`tradePlatform`, `mT4TradeTransaction?`, `params?`, `options?`): `Promise`\<[`postTradeCheckStopsResponseSuccess`](../types/mt4-v2-trades.postTradeCheckStopsResponseSuccess.html)\>
+
+Defined in: mt4-v2-trades.ts:338
+
+Validate an order's SL/TP/pending-open levels against the symbol's administrator-set `stops_level`.
+
+Pump-cached call. The MT4 server verifies that the supplied SL/TP
+(and, for pending orders, the open price) sit at least
+`stops_level` away from the current market and that pending
+expiration is at least ten minutes in the future. Returns a bare
+boolean envelope: `true` when the wrapper's `ResultCode`
+is `Ok`.
+
+Useful for client-side pre-flight before submitting a real
+`TradeTransaction` — saves a server round-trip for invalid
+orders.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### mT4TradeTransaction?
+
+[`MT4TradeTransaction`](../interfaces/model.MT4TradeTransaction.html)
+
+### params?
+
+[`PostTradeCheckStopsParams`](../types/model.PostTradeCheckStopsParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postTradeCheckStopsResponseSuccess`](../types/mt4-v2-trades.postTradeCheckStopsResponseSuccess.html)\>

@@ -1,0 +1,41 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-reports](../modules/mt4-v2-reports.html) / getDailyReportsRequestEx
+
+# Function: getDailyReportsRequestEx()
+
+> **getDailyReportsRequestEx**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getDailyReportsRequestExResponseSuccess`](../types/mt4-v2-reports.getDailyReportsRequestExResponseSuccess.html)\>
+
+Defined in: mt4-v2-reports.ts:247
+
+Same data set as `DailyReportsRequest`, but server-side grouped by login. Convenience shape for clients that pivot the data per-account (per-day rollups, account dashboards).
+
+Manager-live read — single round-trip to MT4 server, identical billing
+cost to `DailyReportsRequest`. The wrapper returns a sorted-list
+of sorted-lists (by login, then by date); the v2 envelope flattens
+the inner list to a chronologically-ordered `MT4DailyReport`
+array, leaving the outer keying by login.
+
+JSON shape: `{ "817542": [ ... ], "1001": [ ... ] }` — JSON
+object keys are strings, so int logins are stringified. Clients
+should parse keys back to int if needed.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetDailyReportsRequestExParams`](../types/model.GetDailyReportsRequestExParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getDailyReportsRequestExResponseSuccess`](../types/mt4-v2-reports.getDailyReportsRequestExResponseSuccess.html)\>

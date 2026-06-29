@@ -1,0 +1,34 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-news](../modules/mt4-v2-news.html) / getNewsBodyGetKey
+
+# Function: getNewsBodyGetKey()
+
+> **getNewsBodyGetKey**(`tradePlatform`, `key`, `options?`): `Promise`\<[`getNewsBodyGetKeyResponseSuccess`](../types/mt4-v2-news.getNewsBodyGetKeyResponseSuccess.html)\>
+
+Defined in: mt4-v2-news.ts:86
+
+Body text of a cached news item by its key.
+
+Pump-cached read — pair with `NewsTotal` and `NewsGet` (later)
+to enumerate cached news. The key is the news item id known to MT4.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### key
+
+`number`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getNewsBodyGetKeyResponseSuccess`](../types/mt4-v2-news.getNewsBodyGetKeyResponseSuccess.html)\>

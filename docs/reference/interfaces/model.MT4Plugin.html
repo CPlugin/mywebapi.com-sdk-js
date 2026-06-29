@@ -1,0 +1,88 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4Plugin
+
+# Interface: MT4Plugin
+
+Defined in: model/mT4Plugin.ts:13
+
+v2 DTO for MT4 plugin metadata (sidecar-only). Mirrors wrapper's
+`ConPlugin` with its embedded `PluginInfo` flattened.
+
+## Properties
+
+### configurable?
+
+> `optional` **configurable?**: `number`
+
+Defined in: model/mT4Plugin.ts:34
+
+Configurable flag (plugin exposes editable parameters)
+
+***
+
+### copyright?
+
+> `optional` **copyright?**: `string` \| `null`
+
+Defined in: model/mT4Plugin.ts:30
+
+Plugin copyright string
+
+#### Nullable
+
+***
+
+### enabled?
+
+> `optional` **enabled?**: `number`
+
+Defined in: model/mT4Plugin.ts:32
+
+Enabled flag (raw int — 0 = disabled, non-zero = enabled)
+
+***
+
+### file?
+
+> `optional` **file?**: `string` \| `null`
+
+Defined in: model/mT4Plugin.ts:18
+
+Plugin DLL filename (max 256 chars on the wrapper side)
+
+#### Nullable
+
+***
+
+### managerAccess?
+
+> `optional` **managerAccess?**: `number`
+
+Defined in: model/mT4Plugin.ts:36
+
+Manager-terminal-accessible flag
+
+***
+
+### name?
+
+> `optional` **name?**: `string` \| `null`
+
+Defined in: model/mT4Plugin.ts:23
+
+Plugin display name (from `PluginInfo.Name`)
+
+#### Nullable
+
+***
+
+### version?
+
+> `optional` **version?**: `number`
+
+Defined in: model/mT4Plugin.ts:25
+
+Plugin version (from `PluginInfo.Version`)

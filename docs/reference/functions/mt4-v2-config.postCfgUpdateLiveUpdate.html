@@ -1,0 +1,39 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / postCfgUpdateLiveUpdate
+
+# Function: postCfgUpdateLiveUpdate()
+
+> **postCfgUpdateLiveUpdate**(`tradePlatform`, `mT4LiveUpdate?`, `options?`): `Promise`\<[`postCfgUpdateLiveUpdateResponseSuccess`](../types/mt4-v2-config.postCfgUpdateLiveUpdateResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:770
+
+Update a LiveUpdate service configuration — Type 1 mutator.
+
+Manager (live) call. LiveUpdate entries are paged on the read side
+(see `CfgRequestLiveUpdate`); the v2 contract identifies an
+entry by its `Company` field (same cursor key the read
+endpoint uses). Flow: read live list → match by `Company` →
+overlay → write back. The 128-element `Files` descriptor
+table and the runtime `Connections` counter are preserved
+server-side.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### mT4LiveUpdate?
+
+[`MT4LiveUpdate`](../interfaces/model.MT4LiveUpdate.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postCfgUpdateLiveUpdateResponseSuccess`](../types/mt4-v2-config.postCfgUpdateLiveUpdateResponseSuccess.html)\>

@@ -1,0 +1,51 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4SyncApiResponse
+
+# Interface: MT4SyncApiResponse
+
+Defined in: model/mT4SyncApiResponse.ts:17
+
+Unified v2 response envelope: data is the payload (null on error); error is the
+error object (null on success, always serialised); meta contains response metadata
+(activityId and optional paging). HTTP status is always 200.
+
+## Properties
+
+### data?
+
+> `optional` **data?**: [`MT4Sync`](model.MT4Sync.html) \| `null`
+
+Defined in: model/mT4SyncApiResponse.ts:24
+
+v2 DTO for a single MT4 chart-history synchronization rule. Curated
+subset of the wrapper's ConSync — drops the Reserved padding, the
+Next pointer chain, the unused port slot, AND the `Password`
+field (replication credentials to the upstream sync source).
+
+***
+
+### error?
+
+> `optional` **error?**: [`ApiError`](model.ApiError.html) \| `null`
+
+Defined in: model/mT4SyncApiResponse.ts:30
+
+v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4
+ResultCode (serialized as a string for a known enum member, or as a number for an
+unrecognised value returned by MT4); Message is a human-readable description.
+
+***
+
+### meta?
+
+> `optional` **meta?**: [`ApiMeta`](model.ApiMeta.html) \| `null`
+
+Defined in: model/mT4SyncApiResponse.ts:37
+
+Response metadata. ActivityId is the W3C trace-id for correlation in Seq/SigNoz.
+Paging is present only on paginated list responses; otherwise it is omitted —
+the global JSON context policy serialises null fields, so we override that here
+with System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull.

@@ -1,0 +1,71 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4MailSendRequest
+
+# Interface: MT4MailSendRequest
+
+Defined in: model/mT4MailSendRequest.ts:14
+
+v2 request DTO for `POST MailSend` (sidecar-only). Sends an
+email to one or more client logins. Wrapper signature:
+`ResultCode MailSend(MailBox mail, ICollection<int> logins)`.
+
+## Properties
+
+### body?
+
+> `optional` **body?**: `string` \| `null`
+
+Defined in: model/mT4MailSendRequest.ts:31
+
+Email body (required, non-empty)
+
+#### Nullable
+
+***
+
+### logins?
+
+> `optional` **logins?**: `number`[] \| `null`
+
+Defined in: model/mT4MailSendRequest.ts:36
+
+Recipient logins (at least 1, batch cap 10000)
+
+#### Nullable
+
+***
+
+### senderLogin?
+
+> `optional` **senderLogin?**: `number`
+
+Defined in: model/mT4MailSendRequest.ts:16
+
+Sender login (0 = no reply allowed; otherwise valid manager login)
+
+***
+
+### senderName?
+
+> `optional` **senderName?**: `string` \| `null`
+
+Defined in: model/mT4MailSendRequest.ts:21
+
+Sender display name (optional, up to 64 chars)
+
+#### Nullable
+
+***
+
+### subject?
+
+> `optional` **subject?**: `string` \| `null`
+
+Defined in: model/mT4MailSendRequest.ts:26
+
+Email subject line (up to 128 chars)
+
+#### Nullable

@@ -1,0 +1,30 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-news](../modules/mt4-v2-news.html) / getNewsTotal
+
+# Function: getNewsTotal()
+
+> **getNewsTotal**(`tradePlatform`, `options?`): `Promise`\<[`getNewsTotalResponseSuccess`](../types/mt4-v2-news.getNewsTotalResponseSuccess.html)\>
+
+Defined in: mt4-v2-news.ts:46
+
+Total number of news items currently held in the pumping cache.
+
+Pump-cached read — instant local lookup, no round-trip to MT4 server.
+Useful as a cheap polling probe before fetching news bodies.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getNewsTotalResponseSuccess`](../types/mt4-v2-news.getNewsTotalResponseSuccess.html)\>

@@ -1,0 +1,52 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4MarginLevelApiResponse
+
+# Interface: MT4MarginLevelApiResponse
+
+Defined in: model/mT4MarginLevelApiResponse.ts:17
+
+Unified v2 response envelope: data is the payload (null on error); error is the
+error object (null on success, always serialised); meta contains response metadata
+(activityId and optional paging). HTTP status is always 200.
+
+## Properties
+
+### data?
+
+> `optional` **data?**: [`MT4MarginLevel`](model.MT4MarginLevel.html) \| `null`
+
+Defined in: model/mT4MarginLevelApiResponse.ts:25
+
+v2 DTO mirroring the wrapper's MarginLevel record. All fields are kept
+because clients monitoring margin call / stop-out conditions need the
+complete state. ControllingType and LevelType remain as MT4 enums and
+serialize as string names via the V2JsonContext UseStringEnumConverter
+option (e.g. "Percent" rather than 0).
+
+***
+
+### error?
+
+> `optional` **error?**: [`ApiError`](model.ApiError.html) \| `null`
+
+Defined in: model/mT4MarginLevelApiResponse.ts:31
+
+v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4
+ResultCode (serialized as a string for a known enum member, or as a number for an
+unrecognised value returned by MT4); Message is a human-readable description.
+
+***
+
+### meta?
+
+> `optional` **meta?**: [`ApiMeta`](model.ApiMeta.html) \| `null`
+
+Defined in: model/mT4MarginLevelApiResponse.ts:38
+
+Response metadata. ActivityId is the W3C trace-id for correlation in Seq/SigNoz.
+Paging is present only on paginated list responses; otherwise it is omitted —
+the global JSON context policy serialises null fields, so we override that here
+with System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull.

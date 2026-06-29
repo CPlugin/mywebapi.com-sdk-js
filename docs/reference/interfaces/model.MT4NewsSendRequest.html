@@ -1,0 +1,59 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4NewsSendRequest
+
+# Interface: MT4NewsSendRequest
+
+Defined in: model/mT4NewsSendRequest.ts:14
+
+v2 request DTO for `POST NewsSend` — pushes a single news item
+to the MT4 server, which fans it out to all connected client
+terminals. Wrapper signature: `ResultCode NewsSend(NewsTopic news)`.
+
+## Properties
+
+### body?
+
+> `optional` **body?**: `string` \| `null`
+
+Defined in: model/mT4NewsSendRequest.ts:29
+
+News body text (required)
+
+#### Nullable
+
+***
+
+### category?
+
+> `optional` **category?**: `string` \| `null`
+
+Defined in: model/mT4NewsSendRequest.ts:24
+
+News category (optional, up to 64 chars)
+
+#### Nullable
+
+***
+
+### highPriority?
+
+> `optional` **highPriority?**: `boolean`
+
+Defined in: model/mT4NewsSendRequest.ts:31
+
+High-priority flag (`true` = priority 1, `false` = priority 0)
+
+***
+
+### topic?
+
+> `optional` **topic?**: `string` \| `null`
+
+Defined in: model/mT4NewsSendRequest.ts:19
+
+News headline (required, up to 256 chars)
+
+#### Nullable

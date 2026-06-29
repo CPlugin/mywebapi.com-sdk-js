@@ -1,0 +1,47 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-prices](../modules/mt4-v2-prices.html) / postChartAddSymbol
+
+# Function: postChartAddSymbol()
+
+> **postChartAddSymbol**(`tradePlatform`, `symbol`, `mT4ChartWriteRequest?`, `params?`, `options?`): `Promise`\<[`postChartAddSymbolResponseSuccess`](../types/mt4-v2-prices.postChartAddSymbolResponseSuccess.html)\>
+
+Defined in: mt4-v2-prices.ts:120
+
+Append OHLC bars to a symbol's chart history — POST destructive.
+
+Manager (live) call that appends the provided bars to the symbol's
+historical chart for the given `period`. The wrapper looks up the
+symbol's scale (`Multiply`/`Digits`) internally to encode the
+float OHLC values back into native integer prices.
+
+Idempotency-Key strongly recommended — duplicate writes can corrupt the
+historical data series.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### symbol
+
+`string`
+
+### mT4ChartWriteRequest?
+
+[`MT4ChartWriteRequest`](../interfaces/model.MT4ChartWriteRequest.html)
+
+### params?
+
+[`PostChartAddSymbolParams`](../types/model.PostChartAddSymbolParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postChartAddSymbolResponseSuccess`](../types/mt4-v2-prices.postChartAddSymbolResponseSuccess.html)\>

@@ -1,0 +1,40 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-users](../modules/mt4-v2-users.html) / postUsersSyncStart
+
+# Function: postUsersSyncStart()
+
+> **postUsersSyncStart**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`postUsersSyncStartResponseSuccess`](../types/mt4-v2-users.postUsersSyncStartResponseSuccess.html)\>
+
+Defined in: mt4-v2-users.ts:618
+
+Opens a server-side incremental sync session for user records modified at or after timestamp.
+
+Manager-live POST (modifies server-side session state). The wrapper
+supports a follow-up `UsersSyncRead` call that drains the
+snapshot, but the read-side endpoint is currently deferred under
+wine x64 (see deferral note above this method). Pass
+`timestamp=0` to request all user records.
+
+`timestamp` is Unix epoch seconds (int32) in MT4 server-local
+time, not UTC. Returns a bare success envelope.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`PostUsersSyncStartParams`](../types/model.PostUsersSyncStartParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postUsersSyncStartResponseSuccess`](../types/mt4-v2-users.postUsersSyncStartResponseSuccess.html)\>

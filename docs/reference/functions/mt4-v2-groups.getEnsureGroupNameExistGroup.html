@@ -1,0 +1,42 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-groups](../modules/mt4-v2-groups.html) / getEnsureGroupNameExistGroup
+
+# Function: getEnsureGroupNameExistGroup()
+
+> **getEnsureGroupNameExistGroup**(`tradePlatform`, `group`, `options?`): `Promise`\<[`getEnsureGroupNameExistGroupResponseSuccess`](../types/mt4-v2-groups.getEnsureGroupNameExistGroupResponseSuccess.html)\>
+
+Defined in: mt4-v2-groups.ts:364
+
+Checks whether a trading group exists on the connected MT4 server. Useful as a validation pre-flight before creating users, moving users between groups, or wiring up automated provisioning.
+
+Manager-live read. The wrapper's `EnsureGroupNameExist` helper
+is internal/private, so this v2 endpoint re-implements the check
+directly: enumerate the full group catalog via
+`GroupsRequest` and look up the key. The same Manager request
+is incurred either way; there is no cheaper "exists" call in the
+MT4 ManagerAPI surface.
+
+Returns `true` if the group is configured on the server,
+`false` otherwise. Group lookup is case-sensitive (MT4 group
+names are case-sensitive in the underlying API).
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### group
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getEnsureGroupNameExistGroupResponseSuccess`](../types/mt4-v2-groups.getEnsureGroupNameExistGroupResponseSuccess.html)\>

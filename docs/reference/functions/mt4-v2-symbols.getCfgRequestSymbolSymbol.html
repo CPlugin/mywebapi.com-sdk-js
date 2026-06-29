@@ -1,0 +1,35 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-symbols](../modules/mt4-v2-symbols.html) / getCfgRequestSymbolSymbol
+
+# Function: getCfgRequestSymbolSymbol()
+
+> **getCfgRequestSymbolSymbol**(`tradePlatform`, `symbol`, `options?`): `Promise`\<[`getCfgRequestSymbolSymbolResponseSuccess`](../types/mt4-v2-symbols.getCfgRequestSymbolSymbolResponseSuccess.html)\>
+
+Defined in: mt4-v2-symbols.ts:235
+
+Full server-side configuration for a single symbol by name.
+
+Manager (live) call. Returns NotFound envelope when the symbol is
+not configured on the server. Same DTO shape as `CfgRequestSymbol`'s
+list element.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### symbol
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getCfgRequestSymbolSymbolResponseSuccess`](../types/mt4-v2-symbols.getCfgRequestSymbolSymbolResponseSuccess.html)\>

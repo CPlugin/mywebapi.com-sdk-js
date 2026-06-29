@@ -1,0 +1,52 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-trades](../modules/mt4-v2-trades.html) / postAdmTradeRecordModifyTicket
+
+# Function: postAdmTradeRecordModifyTicket()
+
+> **postAdmTradeRecordModifyTicket**(`tradePlatform`, `ticket`, `mT4TradeUpdate?`, `options?`): `Promise`\<[`postAdmTradeRecordModifyTicketResponseSuccess`](../types/mt4-v2-trades.postAdmTradeRecordModifyTicketResponseSuccess.html)\>
+
+Defined in: mt4-v2-trades.ts:539
+
+Admin direct edit of a single trade record — Type 1 with read-first.
+
+<br>
+Low-level back-office override that writes directly to the trade
+record. For SL/TP edits prefer
+`POST TradeTransaction` with `tradeTransactionType=ModifyTrade`
+— that route goes through the wrapper's audited path. Use this
+endpoint for manual accounting corrections (commission/storage/taxes/
+profit, comment, magic) that the standard TradeTransaction path
+does not cover.
+<br>
+Flow: read existing trade via `TradeRecordsRequest`, patch the
+allow-listed fields in place, submit via `AdmTradeRecordModify`.
+Order/Login/Symbol/Volume/OpenPrice/OpenTime/CloseTime and gateway
+internals are preserved by virtue of not being on the input DTO.
+<br>
+Idempotency-Key strongly recommended. A retried edit without it can
+land twice — usually harmless, but generates audit log noise.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### ticket
+
+`number`
+
+### mT4TradeUpdate?
+
+[`MT4TradeUpdate`](../interfaces/model.MT4TradeUpdate.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postAdmTradeRecordModifyTicketResponseSuccess`](../types/mt4-v2-trades.postAdmTradeRecordModifyTicketResponseSuccess.html)\>

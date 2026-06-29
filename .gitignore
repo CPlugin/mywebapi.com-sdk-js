@@ -1,7 +1,8 @@
 node_modules/
 dist/
-# * orval generates a docs/ HTML reference alongside src/generated/ — not tracked
-docs/
+# * Tracked: docs/index.html (landing page), docs/reference/ (TypeDoc), docs/.nojekyll
+# * Ignored: nothing under docs/ is auto-generated anymore except reference/
+#   which is tracked intentionally (GitHub Pages needs it in-repo).
 *.tsbuildinfo
 .DS_Store
 bun.lockb

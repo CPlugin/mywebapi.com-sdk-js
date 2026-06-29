@@ -1,0 +1,26 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4ExternalCommandBinaryRequest
+
+# Interface: MT4ExternalCommandBinaryRequest
+
+Defined in: model/mT4ExternalCommandBinaryRequest.ts:15
+
+v2 DTO for binary `ExternalCommand` roundtrips (sidecar-only).
+The MT4 server's plugin API has no enforced wire-format — clients
+agree with their plugin on the binary layout and pass arbitrary
+bytes through this endpoint.
+
+## Properties
+
+### data?
+
+> `optional` **data?**: `string` \| `null`
+
+Defined in: model/mT4ExternalCommandBinaryRequest.ts:20
+
+Binary payload to send to the plugin (base64-encoded)
+
+#### Nullable

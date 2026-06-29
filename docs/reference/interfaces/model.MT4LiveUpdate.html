@@ -1,0 +1,112 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4LiveUpdate
+
+# Interface: MT4LiveUpdate
+
+Defined in: model/mT4LiveUpdate.ts:19
+
+v2 DTO for a single MT4 LiveUpdate configuration entry. Curated
+subset of the wrapper's ConLiveUpdate — exposes the metadata
+(Company, Path, Version/Build, connection limits and counters,
+Type, Enable, TotalFiles). The wrapper's `Files` array
+(128-element LiveInfoFile descriptor table) is intentionally
+deferred to a future endpoint to keep this payload tractable; v2
+callers needing per-file detail will get a separate
+`CfgRequestLiveUpdateFiles` in a later slice.
+
+## Properties
+
+### build?
+
+> `optional` **build?**: `number`
+
+Defined in: model/mT4LiveUpdate.ts:33
+
+Service build number
+
+***
+
+### company?
+
+> `optional` **company?**: `string` \| `null`
+
+Defined in: model/mT4LiveUpdate.ts:24
+
+Company name advertised by the LiveUpdate service (used as cursor key)
+
+#### Nullable
+
+***
+
+### connections?
+
+> `optional` **connections?**: `number`
+
+Defined in: model/mT4LiveUpdate.ts:37
+
+Currently active client connections (read-only counter)
+
+***
+
+### enable?
+
+> `optional` **enable?**: `number`
+
+Defined in: model/mT4LiveUpdate.ts:41
+
+Enable flag (0 = disabled, 1 = enabled — raw wrapper int)
+
+***
+
+### maxConnect?
+
+> `optional` **maxConnect?**: `number`
+
+Defined in: model/mT4LiveUpdate.ts:35
+
+Maximum simultaneous client connections allowed
+
+***
+
+### path?
+
+> `optional` **path?**: `string` \| `null`
+
+Defined in: model/mT4LiveUpdate.ts:29
+
+Filesystem path to the LiveUpdate files
+
+#### Nullable
+
+***
+
+### totalFiles?
+
+> `optional` **totalFiles?**: `number`
+
+Defined in: model/mT4LiveUpdate.ts:43
+
+Total files served
+
+***
+
+### type?
+
+> `optional` **type?**: `number`
+
+Defined in: model/mT4LiveUpdate.ts:39
+
+LiveUpdate kind/type (raw wrapper int — LIVE_UPDATE_* constants)
+
+***
+
+### version?
+
+> `optional` **version?**: `number`
+
+Defined in: model/mT4LiveUpdate.ts:31
+
+Service version number

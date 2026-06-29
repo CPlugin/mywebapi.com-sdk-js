@@ -1,0 +1,186 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4TradeRestoreInput
+
+# Interface: MT4TradeRestoreInput
+
+Defined in: model/mT4TradeRestoreInput.ts:14
+
+v2 narrow input DTO for `BackupRestoreOrders`. Carries the trade
+identity + economic state that a disaster-recovery flow needs.
+
+## Properties
+
+### closePrice?
+
+> `optional` **closePrice?**: `number`
+
+Defined in: model/mT4TradeRestoreInput.ts:35
+
+Close price (0 for still-open trades)
+
+***
+
+### closeTime?
+
+> `optional` **closeTime?**: `string`
+
+Defined in: model/mT4TradeRestoreInput.ts:45
+
+Close time (UTC; default for still-open)
+
+***
+
+### comment?
+
+> `optional` **comment?**: `string` \| `null`
+
+Defined in: model/mT4TradeRestoreInput.ts:54
+
+Free-form comment (max ~31 ASCII chars on the wrapper side)
+
+#### Nullable
+
+***
+
+### commission?
+
+> `optional` **commission?**: `number`
+
+Defined in: model/mT4TradeRestoreInput.ts:41
+
+Commission
+
+***
+
+### expiration?
+
+> `optional` **expiration?**: `string`
+
+Defined in: model/mT4TradeRestoreInput.ts:47
+
+Expiration time (UTC; default for non-pending orders)
+
+***
+
+### login?
+
+> `optional` **login?**: `number`
+
+Defined in: model/mT4TradeRestoreInput.ts:18
+
+Owner's login
+
+***
+
+### magic?
+
+> `optional` **magic?**: `number`
+
+Defined in: model/mT4TradeRestoreInput.ts:49
+
+Magic number (EA identifier)
+
+***
+
+### openPrice?
+
+> `optional` **openPrice?**: `number`
+
+Defined in: model/mT4TradeRestoreInput.ts:29
+
+Open price
+
+***
+
+### openTime?
+
+> `optional` **openTime?**: `string`
+
+Defined in: model/mT4TradeRestoreInput.ts:43
+
+Open time (UTC)
+
+***
+
+### order?
+
+> `optional` **order?**: `number`
+
+Defined in: model/mT4TradeRestoreInput.ts:16
+
+Order ticket (the input array position is the binding key for the result)
+
+***
+
+### profit?
+
+> `optional` **profit?**: `number`
+
+Defined in: model/mT4TradeRestoreInput.ts:37
+
+Trade profit/loss
+
+***
+
+### sl?
+
+> `optional` **sl?**: `number`
+
+Defined in: model/mT4TradeRestoreInput.ts:31
+
+Stop loss
+
+***
+
+### storage?
+
+> `optional` **storage?**: `number`
+
+Defined in: model/mT4TradeRestoreInput.ts:39
+
+Swap (rollover charge)
+
+***
+
+### symbol?
+
+> `optional` **symbol?**: `string` \| `null`
+
+Defined in: model/mT4TradeRestoreInput.ts:23
+
+Symbol (e.g. `EURUSD`; max 12 ASCII chars on the wrapper side)
+
+#### Nullable
+
+***
+
+### tp?
+
+> `optional` **tp?**: `number`
+
+Defined in: model/mT4TradeRestoreInput.ts:33
+
+Take profit
+
+***
+
+### tradeCommand?
+
+> `optional` **tradeCommand?**: [`TradeCommand`](../types/model.TradeCommand.html)
+
+Defined in: model/mT4TradeRestoreInput.ts:25
+
+Trade command (buy / sell / pending / balance / etc.)
+
+***
+
+### volume?
+
+> `optional` **volume?**: `number`
+
+Defined in: model/mT4TradeRestoreInput.ts:27
+
+Volume in 1/100 lots (15 = 0.15 lot)

@@ -1,0 +1,31 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-symbols](../modules/mt4-v2-symbols.html) / getCfgRequestSymbol
+
+# Function: getCfgRequestSymbol()
+
+> **getCfgRequestSymbol**(`tradePlatform`, `options?`): `Promise`\<[`getCfgRequestSymbolResponseSuccess`](../types/mt4-v2-symbols.getCfgRequestSymbolResponseSuccess.html)\>
+
+Defined in: mt4-v2-symbols.ts:194
+
+Full server-side configuration for every symbol on the platform.
+
+Manager (live) call. Heavy response — typical platforms have dozens
+to hundreds of symbols, each with a 50+ field `ConSymbol`
+structure. Pair with `Idempotency-Key` on retry.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getCfgRequestSymbolResponseSuccess`](../types/mt4-v2-symbols.getCfgRequestSymbolResponseSuccess.html)\>

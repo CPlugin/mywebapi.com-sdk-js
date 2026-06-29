@@ -1,0 +1,47 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-backup-destructive](../modules/mt4-v2-backup-destructive.html) / postBackupRestoreUsers
+
+# Function: postBackupRestoreUsers()
+
+> **postBackupRestoreUsers**(`tradePlatform`, `mT4UserRestoreInput?`, `params?`, `options?`): `Promise`\<[`postBackupRestoreUsersResponseSuccess`](../types/mt4-v2-backup-destructive.postBackupRestoreUsersResponseSuccess.html)\>
+
+Defined in: mt4-v2-backup-destructive.ts:64
+
+Restore user records into the live MT4 database. Destructive — requires `?confirm=true`.
+
+Manager (live) call to the wrapper's
+`BackupRestoreUsers(UserRecord[] users)`. Each input
+`MT4UserRestoreInput` is mapped to a fresh `UserRecord`
+with the narrow restore field set — secrets, OTP, server-managed
+timestamps, and reserved blobs are NOT carried (see DTO docs).
+<br>
+Idempotency-Key header is <b>strongly recommended</b>: a network
+blip during a multi-user restore can leave the client uncertain
+whether the write happened. Without the key, retry will double-write.
+<br>
+Batch cap: 10000 records per call. Larger restores must be split.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### mT4UserRestoreInput?
+
+[`MT4UserRestoreInput`](../interfaces/model.MT4UserRestoreInput.html)[]
+
+### params?
+
+[`PostBackupRestoreUsersParams`](../types/model.PostBackupRestoreUsersParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postBackupRestoreUsersResponseSuccess`](../types/mt4-v2-backup-destructive.postBackupRestoreUsersResponseSuccess.html)\>

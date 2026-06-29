@@ -1,0 +1,38 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-users](../modules/mt4-v2-users.html) / getAdmBalanceCheck
+
+# Function: getAdmBalanceCheck()
+
+> **getAdmBalanceCheck**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getAdmBalanceCheckResponseSuccess`](../types/mt4-v2-users.getAdmBalanceCheckResponseSuccess.html)\>
+
+Defined in: mt4-v2-users.ts:256
+
+Admin balance integrity check for a batch of accounts.
+
+Same semantics as the single-login variant but takes a list of logins
+via repeated query parameters: `?logins=1001&logins=1002`.
+One billed Manager request regardless of the array length. The response
+list contains entries only for accounts the server flagged with a
+non-zero diff — clean accounts are silently omitted. Clients should
+treat "missing from response" as "diff = 0".
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetAdmBalanceCheckParams`](../types/model.GetAdmBalanceCheckParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getAdmBalanceCheckResponseSuccess`](../types/mt4-v2-users.getAdmBalanceCheckResponseSuccess.html)\>

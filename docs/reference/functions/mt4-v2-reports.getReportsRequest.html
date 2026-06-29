@@ -1,0 +1,50 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-reports](../modules/mt4-v2-reports.html) / getReportsRequest
+
+# Function: getReportsRequest()
+
+> **getReportsRequest**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getReportsRequestResponseSuccess`](../types/mt4-v2-reports.getReportsRequestResponseSuccess.html)\>
+
+Defined in: mt4-v2-reports.ts:130
+
+Closed-trade reports for a batch of account logins within a time window — the data set that drives broker financial reporting (PnL, commissions, taxes) and customer trade-history exports.
+
+Manager-live read (round-trip to MT4 server). Pass logins as repeated
+query parameters: `?logins=1001&logins=1002&logins=1003`.
+Server-side billing counts this as one Manager request regardless of
+batch size — prefer one batched call over a per-login loop.
+
+The wrapper returns a dictionary keyed by order ticket; the v2 envelope
+flattens it to a list. Missing logins are silently omitted (no error
+envelope). The optional name parameter selects a
+server-defined report template — leave it null/empty to use the
+default `"RTL_report"` template (closed trades within the window).
+
+Pump cache is NOT consulted — data reflects authoritative server
+history. Note: the wrapper comment warns that asking for a window
+where the manager account lacks the `Reports` permission may
+cause MT4 to drop the manager connection; this endpoint guards that
+indirectly via the API-side `ResourceAccess` check, but a broker
+that mis-configured the underlying manager rights can still observe
+transient connection bounces.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetReportsRequestParams`](../types/model.GetReportsRequestParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getReportsRequestResponseSuccess`](../types/mt4-v2-reports.getReportsRequestResponseSuccess.html)\>

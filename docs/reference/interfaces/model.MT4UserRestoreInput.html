@@ -1,0 +1,121 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4UserRestoreInput
+
+# Interface: MT4UserRestoreInput
+
+Defined in: model/mT4UserRestoreInput.ts:14
+
+v2 narrow input DTO for `BackupRestoreUsers`. Carries the
+account identity + persistent metadata + money/leverage state that a
+disaster-recovery flow needs to recreate.
+
+## Properties
+
+### balance?
+
+> `optional` **balance?**: `number`
+
+Defined in: model/mT4UserRestoreInput.ts:40
+
+Account balance (broker base currency)
+
+***
+
+### country?
+
+> `optional` **country?**: `string` \| `null`
+
+Defined in: model/mT4UserRestoreInput.ts:36
+
+Country
+
+#### Nullable
+
+***
+
+### credit?
+
+> `optional` **credit?**: `number`
+
+Defined in: model/mT4UserRestoreInput.ts:42
+
+Account credit (e.g. promotional bonus)
+
+***
+
+### email?
+
+> `optional` **email?**: `string` \| `null`
+
+Defined in: model/mT4UserRestoreInput.ts:31
+
+Email address
+
+#### Nullable
+
+***
+
+### enable?
+
+> `optional` **enable?**: `number`
+
+Defined in: model/mT4UserRestoreInput.ts:44
+
+Account enabled flag (0 = disabled, 1 = enabled — raw wrapper int)
+
+***
+
+### enableReadOnly?
+
+> `optional` **enableReadOnly?**: `number`
+
+Defined in: model/mT4UserRestoreInput.ts:46
+
+Read-only flag (1 = cannot open positions)
+
+***
+
+### group?
+
+> `optional` **group?**: `string` \| `null`
+
+Defined in: model/mT4UserRestoreInput.ts:21
+
+Group name
+
+#### Nullable
+
+***
+
+### leverage?
+
+> `optional` **leverage?**: `number`
+
+Defined in: model/mT4UserRestoreInput.ts:38
+
+Trading leverage (e.g. 100 for 1:100)
+
+***
+
+### login?
+
+> `optional` **login?**: `number`
+
+Defined in: model/mT4UserRestoreInput.ts:16
+
+Account login (record key)
+
+***
+
+### name?
+
+> `optional` **name?**: `string` \| `null`
+
+Defined in: model/mT4UserRestoreInput.ts:26
+
+Account holder display name
+
+#### Nullable

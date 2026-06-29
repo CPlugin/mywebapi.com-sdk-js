@@ -1,0 +1,26 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4ChartWriteRequest
+
+# Interface: MT4ChartWriteRequest
+
+Defined in: model/mT4ChartWriteRequest.ts:16
+
+v2 request body for the `ChartAdd` / `ChartUpdate` / `ChartDelete`
+trio. Wraps the bars list so the request shape stays extensible — future
+metadata (e.g. `SkipIntegrityCheck`) can be added without a breaking
+change to clients that only sent `Rates`.
+
+## Properties
+
+### rates?
+
+> `optional` **rates?**: [`MT4ChartBar`](model.MT4ChartBar.html)[] \| `null`
+
+Defined in: model/mT4ChartWriteRequest.ts:21
+
+OHLC bars to add / update / delete. Must be non-empty.
+
+#### Nullable

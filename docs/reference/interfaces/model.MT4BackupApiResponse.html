@@ -1,0 +1,52 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4BackupApiResponse
+
+# Interface: MT4BackupApiResponse
+
+Defined in: model/mT4BackupApiResponse.ts:17
+
+Unified v2 response envelope: data is the payload (null on error); error is the
+error object (null on success, always serialised); meta contains response metadata
+(activityId and optional paging). HTTP status is always 200.
+
+## Properties
+
+### data?
+
+> `optional` **data?**: [`MT4Backup`](model.MT4Backup.html) \| `null`
+
+Defined in: model/mT4BackupApiResponse.ts:25
+
+v2 DTO for the MT4 server's backup configuration (wrapper's ConBackup).
+Curated subset — drops the WatchPassword field (slave-server credential)
+for security. All other wrapper public fields are preserved, enums are
+surfaced as enum types (V2JsonContext serializes them as strings via
+UseStringEnumConverter=true).
+
+***
+
+### error?
+
+> `optional` **error?**: [`ApiError`](model.ApiError.html) \| `null`
+
+Defined in: model/mT4BackupApiResponse.ts:31
+
+v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4
+ResultCode (serialized as a string for a known enum member, or as a number for an
+unrecognised value returned by MT4); Message is a human-readable description.
+
+***
+
+### meta?
+
+> `optional` **meta?**: [`ApiMeta`](model.ApiMeta.html) \| `null`
+
+Defined in: model/mT4BackupApiResponse.ts:38
+
+Response metadata. ActivityId is the W3C trace-id for correlation in Seq/SigNoz.
+Paging is present only on paginated list responses; otherwise it is omitted —
+the global JSON context policy serialises null fields, so we override that here
+with System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull.

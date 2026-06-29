@@ -1,0 +1,36 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-margins](../modules/mt4-v2-margins.html) / getMarginLevelGetLogin
+
+# Function: getMarginLevelGetLogin()
+
+> **getMarginLevelGetLogin**(`tradePlatform`, `login`, `options?`): `Promise`\<[`getMarginLevelGetLoginResponseSuccess`](../types/mt4-v2-margins.getMarginLevelGetLoginResponseSuccess.html)\>
+
+Defined in: mt4-v2-margins.ts:87
+
+Margin level for a single account from the pump cache.
+
+Pump variant — two-step lookup: `UserRecordGet` to resolve the
+account's group, then `MarginLevelGet(login, group)`. Returns
+NotFound envelope if the account is unknown or has no open trades.
+For a live round-trip use MarginLevelRequest.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### login
+
+`number`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getMarginLevelGetLoginResponseSuccess`](../types/mt4-v2-margins.getMarginLevelGetLoginResponseSuccess.html)\>

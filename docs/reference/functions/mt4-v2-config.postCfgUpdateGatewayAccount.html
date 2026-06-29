@@ -1,0 +1,40 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / postCfgUpdateGatewayAccount
+
+# Function: postCfgUpdateGatewayAccount()
+
+> **postCfgUpdateGatewayAccount**(`tradePlatform`, `mT4GatewayAccount?`, `options?`): `Promise`\<[`postCfgUpdateGatewayAccountResponseSuccess`](../types/mt4-v2-config.postCfgUpdateGatewayAccountResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:638
+
+Update an STP gateway-account entry — Type 1 mutator.
+
+Manager (live) call. Gateway-account entries are paged on the read
+side (see `CfgRequestGatewayAccount`); the v2 contract
+identifies an entry by its stable internal `Id`. Flow:
+<list type="number"><item>Read the current list via `CfgRequestGatewayAccount`.</item><item>Find the entry whose `Id` matches the body. Missing
+        entry → NotFound envelope.</item><item>Apply DTO overlay onto the matched entry — the STP MT4
+        credential (`Password`) carried by the live struct is
+        preserved.</item><item>Write the merged struct back.</item></list>
+Echoes the merged `MT4GatewayAccount` in the response.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### mT4GatewayAccount?
+
+[`MT4GatewayAccount`](../interfaces/model.MT4GatewayAccount.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postCfgUpdateGatewayAccountResponseSuccess`](../types/mt4-v2-config.postCfgUpdateGatewayAccountResponseSuccess.html)\>

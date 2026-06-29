@@ -1,0 +1,36 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt5-v2-trades](../modules/mt5-v2-trades.html) / getDealByGroupMask
+
+# Function: getDealByGroupMask()
+
+> **getDealByGroupMask**(`tradePlatform`, `mask`, `params?`, `options?`): `Promise`\<[`getDealByGroupMaskResponseSuccess`](../types/mt5-v2-trades.getDealByGroupMaskResponseSuccess.html)\>
+
+Defined in: mt5-v2-trades.ts:150
+
+Returns deals for all logins in groups matching the mask, ordered by Deal ID ascending.
+Returns the full history by default. Use the cursor for the next page.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### mask
+
+`string`
+
+### params?
+
+[`GetDealByGroupMaskParams`](../types/model.GetDealByGroupMaskParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getDealByGroupMaskResponseSuccess`](../types/mt5-v2-trades.getDealByGroupMaskResponseSuccess.html)\>

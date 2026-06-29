@@ -1,0 +1,48 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-reports](../modules/mt4-v2-reports.html) / getDailyReportsRequest
+
+# Function: getDailyReportsRequest()
+
+> **getDailyReportsRequest**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getDailyReportsRequestResponseSuccess`](../types/mt4-v2-reports.getDailyReportsRequestResponseSuccess.html)\>
+
+Defined in: mt4-v2-reports.ts:192
+
+End-of-day balance/equity/PnL snapshots for a batch of account logins within a date window — the broker daily-report data set, flat shape (one row per (login, day) pair).
+
+Manager-live read (round-trip to MT4 server). Pass logins as repeated
+query parameters: `?logins=1001&logins=1002&logins=1003`.
+Server-side billing counts this as one Manager request regardless of
+batch size — prefer one batched call over a per-login loop.
+
+Each row carries its own `Login` field, so the flat shape is
+joinable on the client side. The MT4 server returns dates in its
+local time zone, **not** UTC — clients should treat `Ctm` as
+"broker day boundary" and convert as appropriate.
+
+Note: the wrapper warns that asking for a window where the manager
+account lacks the `Automatic server reports` permission may
+cause MT4 to drop the manager connection. The API-side
+`ResourceAccess` check is an indirect guard; a broker that
+mis-configured the underlying manager rights can still observe
+transient connection bounces.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetDailyReportsRequestParams`](../types/model.GetDailyReportsRequestParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getDailyReportsRequestResponseSuccess`](../types/mt4-v2-reports.getDailyReportsRequestResponseSuccess.html)\>

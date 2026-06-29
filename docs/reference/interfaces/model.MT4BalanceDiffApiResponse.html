@@ -1,0 +1,52 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4BalanceDiffApiResponse
+
+# Interface: MT4BalanceDiffApiResponse
+
+Defined in: model/mT4BalanceDiffApiResponse.ts:17
+
+Unified v2 response envelope: data is the payload (null on error); error is the
+error object (null on success, always serialised); meta contains response metadata
+(activityId and optional paging). HTTP status is always 200.
+
+## Properties
+
+### data?
+
+> `optional` **data?**: [`MT4BalanceDiff`](model.MT4BalanceDiff.html) \| `null`
+
+Defined in: model/mT4BalanceDiffApiResponse.ts:25
+
+v2 DTO returned by `AdmBalanceCheck`. Reports the difference between
+the account's recorded balance and what the MT4 server recomputes from
+closed orders + balance operations. `Diff = 0` means the integrity
+check passed; non-zero means the recorded balance has drifted and would
+be set to `recorded + Diff` if `AdmBalanceFix` ran.
+
+***
+
+### error?
+
+> `optional` **error?**: [`ApiError`](model.ApiError.html) \| `null`
+
+Defined in: model/mT4BalanceDiffApiResponse.ts:31
+
+v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4
+ResultCode (serialized as a string for a known enum member, or as a number for an
+unrecognised value returned by MT4); Message is a human-readable description.
+
+***
+
+### meta?
+
+> `optional` **meta?**: [`ApiMeta`](model.ApiMeta.html) \| `null`
+
+Defined in: model/mT4BalanceDiffApiResponse.ts:38
+
+Response metadata. ActivityId is the W3C trace-id for correlation in Seq/SigNoz.
+Paging is present only on paginated list responses; otherwise it is omitted —
+the global JSON context policy serialises null fields, so we override that here
+with System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull.

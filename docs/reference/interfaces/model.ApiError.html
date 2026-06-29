@@ -1,0 +1,45 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / ApiError
+
+# Interface: ApiError
+
+Defined in: model/apiError.ts:16
+
+v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4
+ResultCode (serialized as a string for a known enum member, or as a number for an
+unrecognised value returned by MT4); Message is a human-readable description.
+
+## Properties
+
+### code?
+
+> `optional` **code?**: [`WebApiErrorCode`](../types/model.WebApiErrorCode.html)
+
+Defined in: model/apiError.ts:18
+
+Stable transport-level error code.
+
+***
+
+### managerCode?
+
+> `optional` **managerCode?**: [`ResultCode`](../types/model.ResultCode.html) \| `null`
+
+Defined in: model/apiError.ts:20
+
+Raw MT4/MT5 manager result code, when the error came from the trading platform; otherwise null.
+
+***
+
+### message?
+
+> `optional` **message?**: `string` \| `null`
+
+Defined in: model/apiError.ts:25
+
+Human-readable error description.
+
+#### Nullable

@@ -1,0 +1,37 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-sidecar-batch-reads](../modules/mt4-v2-sidecar-batch-reads.html) / getUsersSnapshot
+
+# Function: getUsersSnapshot()
+
+> **getUsersSnapshot**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getUsersSnapshotResponseSuccess`](../types/mt4-v2-sidecar-batch-reads.getUsersSnapshotResponseSuccess.html)\>
+
+Defined in: mt4-v2-sidecar-batch-reads.ts:58
+
+Atomic snapshot of all registered users on the MT4 server.
+
+Manager (live) call to the wrapper's `UsersSnapshot()`.
+Iterates `UnpackObject<UserRecord>(i)` over the native
+array — on mtmanapi64.dll the per-struct cost combined with
+ASLR alignment triggers access violations after some iterations,
+so this endpoint is sidecar-only.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetUsersSnapshotParams`](../types/model.GetUsersSnapshotParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getUsersSnapshotResponseSuccess`](../types/mt4-v2-sidecar-batch-reads.getUsersSnapshotResponseSuccess.html)\>

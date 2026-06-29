@@ -1,0 +1,35 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-sidecar-plugins](../modules/mt4-v2-sidecar-plugins.html) / getPluginParamGetPos
+
+# Function: getPluginParamGetPos()
+
+> **getPluginParamGetPos**(`tradePlatform`, `pos`, `options?`): `Promise`\<[`getPluginParamGetPosResponseSuccess`](../types/mt4-v2-sidecar-plugins.getPluginParamGetPosResponseSuccess.html)\>
+
+Defined in: mt4-v2-sidecar-plugins.ts:89
+
+Get a single plugin's parameters by position in the `PluginsGet` list.
+
+Manager-pump call to the wrapper's `PluginParamGet(pos, out ConPluginParam)`.
+The `ConPluginParam.Params` auto-dereferences a 32-bit pointer —
+safe on x86, sign-extension hazard on x64. Sidecar-only.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### pos
+
+`number`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getPluginParamGetPosResponseSuccess`](../types/mt4-v2-sidecar-plugins.getPluginParamGetPosResponseSuccess.html)\>

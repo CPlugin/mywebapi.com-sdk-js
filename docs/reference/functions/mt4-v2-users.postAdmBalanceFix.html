@@ -1,0 +1,43 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-users](../modules/mt4-v2-users.html) / postAdmBalanceFix
+
+# Function: postAdmBalanceFix()
+
+> **postAdmBalanceFix**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`postAdmBalanceFixResponseSuccess`](../types/mt4-v2-users.postAdmBalanceFixResponseSuccess.html)\>
+
+Defined in: mt4-v2-users.ts:313
+
+Admin balance fix — recompute balances for the given logins.
+
+POST mutator. Asks MT4 server to take the diffs reported by
+`AdmBalanceCheck` and write them onto the accounts. Empty body —
+the logins are submitted as repeated query parameters
+(`?logins=1001&logins=1002`) to keep the URL shape parallel
+with the read variant and avoid the awkward "POST with int[] body"
+pattern.
+
+This DOES modify account balances. Pair every retry with an
+`Idempotency-Key` header; otherwise a retried fix can double-
+apply on an account whose original fix happened to land but whose
+response was lost on the wire.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`PostAdmBalanceFixParams`](../types/model.PostAdmBalanceFixParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postAdmBalanceFixResponseSuccess`](../types/mt4-v2-users.postAdmBalanceFixResponseSuccess.html)\>

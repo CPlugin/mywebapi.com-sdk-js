@@ -1,0 +1,32 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-sidecar-plugins](../modules/mt4-v2-sidecar-plugins.html) / getCfgRequestPlugin
+
+# Function: getCfgRequestPlugin()
+
+> **getCfgRequestPlugin**(`tradePlatform`, `options?`): `Promise`\<[`getCfgRequestPluginResponseSuccess`](../types/mt4-v2-sidecar-plugins.getCfgRequestPluginResponseSuccess.html)\>
+
+Defined in: mt4-v2-sidecar-plugins.ts:171
+
+Read the plugin configuration (Manager-live).
+
+Manager (live) call to the wrapper's `CfgRequestPlugin()`.
+Returns the full plugin set with their parameter arrays — the
+Manager-side equivalent of `PluginsGet` + per-plugin
+`PluginParamGet` in one round-trip.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getCfgRequestPluginResponseSuccess`](../types/mt4-v2-sidecar-plugins.getCfgRequestPluginResponseSuccess.html)\>

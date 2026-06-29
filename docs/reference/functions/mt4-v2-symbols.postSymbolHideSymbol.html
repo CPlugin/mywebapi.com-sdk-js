@@ -1,0 +1,35 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-symbols](../modules/mt4-v2-symbols.html) / postSymbolHideSymbol
+
+# Function: postSymbolHideSymbol()
+
+> **postSymbolHideSymbol**(`tradePlatform`, `symbol`, `options?`): `Promise`\<[`postSymbolHideSymbolResponseSuccess`](../types/mt4-v2-symbols.postSymbolHideSymbolResponseSuccess.html)\>
+
+Defined in: mt4-v2-symbols.ts:459
+
+Hide a symbol from the platform's active set — Type 1 mutator.
+
+Removes the symbol from the active subscription set; ticks stop flowing
+and orders are no longer accepted for that symbol. Reversible via
+`SymbolAdd`. v1 exposes this as a GET — v2 fixes to POST.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### symbol
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postSymbolHideSymbolResponseSuccess`](../types/mt4-v2-symbols.postSymbolHideSymbolResponseSuccess.html)\>

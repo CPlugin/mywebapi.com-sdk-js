@@ -1,0 +1,36 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-trades](../modules/mt4-v2-trades.html) / getTradeRecordGetOrder
+
+# Function: getTradeRecordGetOrder()
+
+> **getTradeRecordGetOrder**(`tradePlatform`, `order`, `options?`): `Promise`\<[`getTradeRecordGetOrderResponseSuccess`](../types/mt4-v2-trades.getTradeRecordGetOrderResponseSuccess.html)\>
+
+Defined in: mt4-v2-trades.ts:282
+
+Single trade record by order ticket from the pump cache.
+
+Pump-cached lookup of one order. Wrapper-level failures (unknown
+ticket, cache miss) surface in the envelope's ManagerAPICode /
+ErrorCode pair — clients must branch on isError before dereferencing
+payload.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### order
+
+`number`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getTradeRecordGetOrderResponseSuccess`](../types/mt4-v2-trades.getTradeRecordGetOrderResponseSuccess.html)\>

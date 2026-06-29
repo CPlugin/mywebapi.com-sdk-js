@@ -1,0 +1,70 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4MailBox
+
+# Interface: MT4MailBox
+
+Defined in: model/mT4MailBox.ts:15
+
+v2 DTO for a single mailbox entry returned by `GET MailsRequest`
+(sidecar-only). Curated subset of the wrapper's `MailBox` —
+keeps the consumer-facing fields, drops the internal
+`ReceiversCount` bookkeeping.
+
+## Properties
+
+### body?
+
+> `optional` **body?**: `string` \| `null`
+
+Defined in: model/mT4MailBox.ts:34
+
+Body text
+
+#### Nullable
+
+***
+
+### senderLogin?
+
+> `optional` **senderLogin?**: `number`
+
+Defined in: model/mT4MailBox.ts:19
+
+Sender login (0 when sent by anonymous source)
+
+***
+
+### senderName?
+
+> `optional` **senderName?**: `string` \| `null`
+
+Defined in: model/mT4MailBox.ts:24
+
+Sender display name
+
+#### Nullable
+
+***
+
+### subject?
+
+> `optional` **subject?**: `string` \| `null`
+
+Defined in: model/mT4MailBox.ts:29
+
+Subject line
+
+#### Nullable
+
+***
+
+### time?
+
+> `optional` **time?**: `string`
+
+Defined in: model/mT4MailBox.ts:17
+
+Receive time (UTC)

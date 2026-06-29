@@ -1,0 +1,36 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-sidecar-plugins](../modules/mt4-v2-sidecar-plugins.html) / postCfgUpdatePlugin
+
+# Function: postCfgUpdatePlugin()
+
+> **postCfgUpdatePlugin**(`tradePlatform`, `mT4PluginParam?`, `options?`): `Promise`\<[`postCfgUpdatePluginResponseSuccess`](../types/mt4-v2-sidecar-plugins.postCfgUpdatePluginResponseSuccess.html)\>
+
+Defined in: mt4-v2-sidecar-plugins.ts:212
+
+Update plugin configuration (Manager-live).
+
+Manager (live) call to the wrapper's
+`CfgUpdatePlugin(ConPlugin cp, PluginCfg[] cfgs)`. Body is
+`MT4PluginParam` — the plugin metadata plus its parameter
+array. Returns a bare-bool envelope.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### mT4PluginParam?
+
+[`MT4PluginParam`](../interfaces/model.MT4PluginParam.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postCfgUpdatePluginResponseSuccess`](../types/mt4-v2-sidecar-plugins.postCfgUpdatePluginResponseSuccess.html)\>

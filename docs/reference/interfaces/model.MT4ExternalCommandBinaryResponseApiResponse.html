@@ -1,0 +1,48 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4ExternalCommandBinaryResponseApiResponse
+
+# Interface: MT4ExternalCommandBinaryResponseApiResponse
+
+Defined in: model/mT4ExternalCommandBinaryResponseApiResponse.ts:17
+
+Unified v2 response envelope: data is the payload (null on error); error is the
+error object (null on success, always serialised); meta contains response metadata
+(activityId and optional paging). HTTP status is always 200.
+
+## Properties
+
+### data?
+
+> `optional` **data?**: [`MT4ExternalCommandBinaryResponse`](model.MT4ExternalCommandBinaryResponse.html) \| `null`
+
+Defined in: model/mT4ExternalCommandBinaryResponseApiResponse.ts:19
+
+v2 DTO for the response of `ExternalCommandBinary` (sidecar-only).
+
+***
+
+### error?
+
+> `optional` **error?**: [`ApiError`](model.ApiError.html) \| `null`
+
+Defined in: model/mT4ExternalCommandBinaryResponseApiResponse.ts:25
+
+v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4
+ResultCode (serialized as a string for a known enum member, or as a number for an
+unrecognised value returned by MT4); Message is a human-readable description.
+
+***
+
+### meta?
+
+> `optional` **meta?**: [`ApiMeta`](model.ApiMeta.html) \| `null`
+
+Defined in: model/mT4ExternalCommandBinaryResponseApiResponse.ts:32
+
+Response metadata. ActivityId is the W3C trace-id for correlation in Seq/SigNoz.
+Paging is present only on paginated list responses; otherwise it is omitted —
+the global JSON context policy serialises null fields, so we override that here
+with System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull.

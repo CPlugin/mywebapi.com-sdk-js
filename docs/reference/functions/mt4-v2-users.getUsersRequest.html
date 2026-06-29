@@ -1,0 +1,36 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-users](../modules/mt4-v2-users.html) / getUsersRequest
+
+# Function: getUsersRequest()
+
+> **getUsersRequest**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getUsersRequestResponseSuccess`](../types/mt4-v2-users.getUsersRequestResponseSuccess.html)\>
+
+Defined in: mt4-v2-users.ts:363
+
+Manager (live) call returning a paged list of every account on the platform. When `?limit=` is omitted the response contains all users in one page (back-compat). Set `?limit=N` to bound page size; the response's `paging.nextCursor` drives the next call.
+
+Wrapper-side this still fetches the full users dictionary — paging
+reduces only the wire payload, not MT4 server load. Items are sorted
+by login ascending; pages are stable across concurrent inserts as
+long as the new login is greater than the previous page's last login.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetUsersRequestParams`](../types/model.GetUsersRequestParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getUsersRequestResponseSuccess`](../types/mt4-v2-users.getUsersRequestResponseSuccess.html)\>

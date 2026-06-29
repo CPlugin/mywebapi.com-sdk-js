@@ -1,0 +1,58 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4Access
+
+# Interface: MT4Access
+
+Defined in: model/mT4Access.ts:15
+
+v2 DTO for a single MT4 firewall (access) rule. Curated subset of
+the wrapper's ConAccess struct — drops the 17-int Reserved padding.
+IpFrom/IpTo are widened from uint to long so the JSON-serialized
+numeric value fits inside JS Number safely (no precision loss).
+
+## Properties
+
+### action?
+
+> `optional` **action?**: `number`
+
+Defined in: model/mT4Access.ts:21
+
+Firewall rule action — raw MT4 value preserved (FW_BLOCK / FW_PERMIT
+per the wrapper's enum encoding; surfaced as int because the wrapper
+itself surfaces it as int).
+
+***
+
+### comment?
+
+> `optional` **comment?**: `string` \| `null`
+
+Defined in: model/mT4Access.ts:30
+
+Free-form comment for the rule
+
+#### Nullable
+
+***
+
+### ipFrom?
+
+> `optional` **ipFrom?**: `number`
+
+Defined in: model/mT4Access.ts:23
+
+IP range start (uint widened to long for JSON safety)
+
+***
+
+### ipTo?
+
+> `optional` **ipTo?**: `number`
+
+Defined in: model/mT4Access.ts:25
+
+IP range end (uint widened to long for JSON safety)

@@ -1,0 +1,36 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / postCfgDeleteAccessPos
+
+# Function: postCfgDeleteAccessPos()
+
+> **postCfgDeleteAccessPos**(`tradePlatform`, `pos`, `options?`): `Promise`\<[`postCfgDeleteAccessPosResponseSuccess`](../types/mt4-v2-config.postCfgDeleteAccessPosResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:1407
+
+Deletes an entry from the server's IP firewall (Access) configuration table by zero-based row position.
+
+Manager-live POST. Maps to the wrapper's `CfgDeleteAccess(int pos)`.
+Read the current table via `CfgRequestAccess`, find the target
+row's index, then delete. Destructive — pair with `Idempotency-Key`
+on retry.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### pos
+
+`number`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postCfgDeleteAccessPosResponseSuccess`](../types/mt4-v2-config.postCfgDeleteAccessPosResponseSuccess.html)\>

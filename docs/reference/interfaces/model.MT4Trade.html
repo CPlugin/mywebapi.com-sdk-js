@@ -1,0 +1,284 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4Trade
+
+# Interface: MT4Trade
+
+Defined in: model/mT4Trade.ts:25
+
+v2 DTO mirroring the wrapper's TradeRecord. The set of fields is curated
+for typical client use-cases — order monitoring, P&L reporting, trade
+history reconciliation. Internal padding/reserved/gateway-internal/raw
+underscore-prefixed fields are intentionally excluded. Span<>-typed
+helpers (ConvRates, ConvReserv, APIData) are excluded because System.Text.Json
+cannot serialize ref-struct-backed properties — those would force callers
+onto a custom converter for marginal value.
+Enum members (TradeCommand, TradeRecordState, TradeRecordReason,
+ActivationType) serialize as string names via V2JsonContext
+UseStringEnumConverter — e.g. "Buy" rather than 0.
+
+## Properties
+
+### activationType?
+
+> `optional` **activationType?**: [`ActivationType`](../types/model.ActivationType.html)
+
+Defined in: model/mT4Trade.ts:79
+
+How a pending order was activated
+
+***
+
+### closePrice?
+
+> `optional` **closePrice?**: `number`
+
+Defined in: model/mT4Trade.ts:56
+
+Price at which the order was closed
+
+***
+
+### closeTime?
+
+> `optional` **closeTime?**: `string`
+
+Defined in: model/mT4Trade.ts:54
+
+Order close timestamp (default for still-open orders)
+
+***
+
+### comment?
+
+> `optional` **comment?**: `string` \| `null`
+
+Defined in: model/mT4Trade.ts:73
+
+Free-form order comment
+
+#### Nullable
+
+***
+
+### commission?
+
+> `optional` **commission?**: `number`
+
+Defined in: model/mT4Trade.ts:58
+
+Broker commission
+
+***
+
+### commissionAgent?
+
+> `optional` **commissionAgent?**: `number`
+
+Defined in: model/mT4Trade.ts:60
+
+Agent (IB) commission
+
+***
+
+### digits?
+
+> `optional` **digits?**: `number`
+
+Defined in: model/mT4Trade.ts:36
+
+Symbol precision (number of digits after the decimal point)
+
+***
+
+### expiration?
+
+> `optional` **expiration?**: `string`
+
+Defined in: model/mT4Trade.ts:75
+
+Expiration timestamp for pending orders
+
+***
+
+### login?
+
+> `optional` **login?**: `number`
+
+Defined in: model/mT4Trade.ts:29
+
+Owner account login
+
+***
+
+### magic?
+
+> `optional` **magic?**: `number`
+
+Defined in: model/mT4Trade.ts:68
+
+Expert advisor magic number — client-supplied tag
+
+***
+
+### marginRate?
+
+> `optional` **marginRate?**: `number`
+
+Defined in: model/mT4Trade.ts:83
+
+Margin conversion rate (margin currency → deposit currency)
+
+***
+
+### openPrice?
+
+> `optional` **openPrice?**: `number`
+
+Defined in: model/mT4Trade.ts:46
+
+Price at which the order was opened
+
+***
+
+### openTime?
+
+> `optional` **openTime?**: `string`
+
+Defined in: model/mT4Trade.ts:52
+
+Order open timestamp
+
+***
+
+### order?
+
+> `optional` **order?**: `number`
+
+Defined in: model/mT4Trade.ts:27
+
+Order ticket number
+
+***
+
+### profit?
+
+> `optional` **profit?**: `number`
+
+Defined in: model/mT4Trade.ts:64
+
+Realised / floating profit
+
+***
+
+### sl?
+
+> `optional` **sl?**: `number`
+
+Defined in: model/mT4Trade.ts:48
+
+Stop-loss price (0 if unset)
+
+***
+
+### storage?
+
+> `optional` **storage?**: `number`
+
+Defined in: model/mT4Trade.ts:62
+
+Accumulated swap / rollover charges
+
+***
+
+### symbol?
+
+> `optional` **symbol?**: `string` \| `null`
+
+Defined in: model/mT4Trade.ts:34
+
+Symbol traded (e.g. EURUSD)
+
+#### Nullable
+
+***
+
+### taxes?
+
+> `optional` **taxes?**: `number`
+
+Defined in: model/mT4Trade.ts:66
+
+Taxes withheld
+
+***
+
+### timeStamp?
+
+> `optional` **timeStamp?**: `string`
+
+Defined in: model/mT4Trade.ts:81
+
+Last modification timestamp of the trade record
+
+***
+
+### tp?
+
+> `optional` **tp?**: `number`
+
+Defined in: model/mT4Trade.ts:50
+
+Take-profit price (0 if unset)
+
+***
+
+### tradeCommand?
+
+> `optional` **tradeCommand?**: [`TradeCommand`](../types/model.TradeCommand.html)
+
+Defined in: model/mT4Trade.ts:38
+
+Trade direction / pending order type (Buy/Sell/BuyLimit/etc)
+
+***
+
+### tradeRecordReason?
+
+> `optional` **tradeRecordReason?**: [`TradeRecordReason`](../types/model.TradeRecordReason.html)
+
+Defined in: model/mT4Trade.ts:77
+
+Reason the trade record was created/modified (Client/Expert/Dealer/Stopout/etc)
+
+***
+
+### tradeRecordState?
+
+> `optional` **tradeRecordState?**: [`TradeRecordState`](../types/model.TradeRecordState.html)
+
+Defined in: model/mT4Trade.ts:44
+
+Lifecycle state of the trade record
+
+***
+
+### volume?
+
+> `optional` **volume?**: `number`
+
+Defined in: model/mT4Trade.ts:40
+
+Volume stored ×100 (e.g. 15 means 0.15 lots — see VolumeLots)
+
+***
+
+### volumeLots?
+
+> `optional` **volumeLots?**: `number`
+
+Defined in: model/mT4Trade.ts:42
+
+Volume expressed in lots, for human consumption (Volume / 100)

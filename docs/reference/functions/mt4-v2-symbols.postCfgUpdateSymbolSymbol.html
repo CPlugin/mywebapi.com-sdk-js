@@ -1,0 +1,46 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-symbols](../modules/mt4-v2-symbols.html) / postCfgUpdateSymbolSymbol
+
+# Function: postCfgUpdateSymbolSymbol()
+
+> **postCfgUpdateSymbolSymbol**(`tradePlatform`, `symbol`, `mT4SymbolConfigUpdate?`, `options?`): `Promise`\<[`postCfgUpdateSymbolSymbolResponseSuccess`](../types/mt4-v2-symbols.postCfgUpdateSymbolSymbolResponseSuccess.html)\>
+
+Defined in: mt4-v2-symbols.ts:330
+
+Update a symbol's full configuration — Type 1 mutator with secret-preservation read.
+
+Completes the User/Group/Symbol Type 1 mutator triad. Same flow as
+`UserRecordUpdate` and `GroupRecordUpdate`: read the existing
+`ConSymbol` from MT4 server, overlay the
+`MT4SymbolConfigUpdate` DTO over it, write the merged structure
+back. Preserves the `Sessions` nested array, reserved/unused
+padding, and server-derived fields (`Count`, `CountOriginal`,
+`FilterCounter`, `Point`, `Multiply`, tick-value pair)
+— those are `[MapperIgnoreTarget]`'d on the mapper.
+
+Idempotency-Key strongly recommended.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### symbol
+
+`string`
+
+### mT4SymbolConfigUpdate?
+
+[`MT4SymbolConfigUpdate`](../interfaces/model.MT4SymbolConfigUpdate.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postCfgUpdateSymbolSymbolResponseSuccess`](../types/mt4-v2-symbols.postCfgUpdateSymbolSymbolResponseSuccess.html)\>

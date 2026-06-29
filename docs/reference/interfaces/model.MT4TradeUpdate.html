@@ -1,0 +1,123 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4TradeUpdate
+
+# Interface: MT4TradeUpdate
+
+Defined in: model/mT4TradeUpdate.ts:22
+
+Type 1 mutator input for the admin direct-edit endpoint
+`AdmTradeRecordModify`. Only the fields a back-office tool would
+legitimately need to adjust are exposed; everything else (order id,
+login, symbol, volume, open/close times, gateway internals, conversion
+rates, API data blobs) is preserved from the server-side read.
+
+<br>
+For typical stop-loss / take-profit edits prefer
+`POST TradeTransaction` with `tradeTransactionType=ModifyTrade`
+— that goes through the wrapper's audited path. This endpoint is the
+low-level admin override for back-office corrections.
+
+## Properties
+
+### comment?
+
+> `optional` **comment?**: `string` \| `null`
+
+Defined in: model/mT4TradeUpdate.ts:35
+
+Comment (broker-visible)
+
+#### Nullable
+
+***
+
+### commission?
+
+> `optional` **commission?**: `number`
+
+Defined in: model/mT4TradeUpdate.ts:37
+
+Manual commission override
+
+***
+
+### commissionAgent?
+
+> `optional` **commissionAgent?**: `number`
+
+Defined in: model/mT4TradeUpdate.ts:39
+
+Manual agent-commission override
+
+***
+
+### magic?
+
+> `optional` **magic?**: `number`
+
+Defined in: model/mT4TradeUpdate.ts:30
+
+Magic number / EA tag
+
+***
+
+### order?
+
+> `optional` **order?**: `number`
+
+Defined in: model/mT4TradeUpdate.ts:24
+
+Order ticket to edit (path parameter is the source of truth)
+
+***
+
+### profit?
+
+> `optional` **profit?**: `number`
+
+Defined in: model/mT4TradeUpdate.ts:43
+
+Profit override (back-office correction only)
+
+***
+
+### sl?
+
+> `optional` **sl?**: `number`
+
+Defined in: model/mT4TradeUpdate.ts:26
+
+New stop-loss price (0 = remove SL)
+
+***
+
+### storage?
+
+> `optional` **storage?**: `number`
+
+Defined in: model/mT4TradeUpdate.ts:41
+
+Swap / storage override
+
+***
+
+### taxes?
+
+> `optional` **taxes?**: `number`
+
+Defined in: model/mT4TradeUpdate.ts:45
+
+Taxes override
+
+***
+
+### tp?
+
+> `optional` **tp?**: `number`
+
+Defined in: model/mT4TradeUpdate.ts:28
+
+New take-profit price (0 = remove TP)

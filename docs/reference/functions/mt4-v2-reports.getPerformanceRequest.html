@@ -1,0 +1,41 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-reports](../modules/mt4-v2-reports.html) / getPerformanceRequest
+
+# Function: getPerformanceRequest()
+
+> **getPerformanceRequest**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getPerformanceRequestResponseSuccess`](../types/mt4-v2-reports.getPerformanceRequestResponseSuccess.html)\>
+
+Defined in: mt4-v2-reports.ts:66
+
+Time series of MT4 server resource snapshots — CPU, memory, network, sockets, connected-users — captured at server-defined cadence.
+
+Manager-live read (round-trip to MT4 server). The MT4 server records
+these snapshots periodically (typically every five minutes, broker-
+configurable). Pass from as the earliest timestamp
+to include; the server returns every snapshot at or after that point
+up to the present, in ascending `Ctm` order. Useful for capacity
+dashboards, oncall incident timelines, and load investigations. Pump
+cache is NOT consulted — data reflects the authoritative server log.
+Returns an empty list (Ok envelope, not an error) when the window
+contains no snapshots.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetPerformanceRequestParams`](../types/model.GetPerformanceRequestParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getPerformanceRequestResponseSuccess`](../types/mt4-v2-reports.getPerformanceRequestResponseSuccess.html)\>

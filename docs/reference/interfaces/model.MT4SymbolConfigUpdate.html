@@ -1,0 +1,380 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4SymbolConfigUpdate
+
+# Interface: MT4SymbolConfigUpdate
+
+Defined in: model/mT4SymbolConfigUpdate.ts:35
+
+Type 1 mutator input for `CfgUpdateSymbol`. Same field set as the read
+DTO CPlugin.SaaSWebApps.WebAPI.DTOs.MT4.v2.MT4SymbolConfig minus:
+  * `Symbol` (path parameter, immutable identity);
+  * `Count`, `CountOriginal`, `FilterCounter` — server-side
+    counters, derived;
+  * Stringified enum fields are submitted as their original wrapper enum
+    types here (one-way deserialisation accepts JsonStringEnumConverter
+    via the existing global STJ options).
+
+Fields preserved by the server-side read step (NOT on this DTO):
+  * `Symbol` identity.
+  * `Sessions` nested array (own endpoint planned).
+  * `Unused`, `ExternalUnused`, `ProfitReserved`,
+    `FilterReserved` reserved arrays.
+  * `Count`, `CountOriginal`, `FilterCounter`,
+    `BidTickValue`, `AskTickValue`, `Point`, `Multiply`
+    — server-derived from other fields, writing them is a no-op or
+    overwrite-with-stale.
+
+## Properties
+
+### backgroundColor?
+
+> `optional` **backgroundColor?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:45
+
+***
+
+### contractSize?
+
+> `optional` **contractSize?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:62
+
+***
+
+### currency?
+
+> `optional` **currency?**: `string` \| `null`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:41
+
+#### Nullable
+
+***
+
+### description?
+
+> `optional` **description?**: `string` \| `null`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:37
+
+#### Nullable
+
+***
+
+### digits?
+
+> `optional` **digits?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:43
+
+***
+
+### expiration?
+
+> `optional` **expiration?**: `string`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:48
+
+***
+
+### filter?
+
+> `optional` **filter?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:50
+
+***
+
+### filterLimit?
+
+> `optional` **filterLimit?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:51
+
+***
+
+### filterSmoothing?
+
+> `optional` **filterSmoothing?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:52
+
+***
+
+### freezeLevel?
+
+> `optional` **freezeLevel?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:77
+
+***
+
+### gtcMode?
+
+> `optional` **gtcMode?**: [`GTCMode`](../types/model.GTCMode.html)
+
+Defined in: model/mT4SymbolConfigUpdate.ts:66
+
+***
+
+### instantMaxVolume?
+
+> `optional` **instantMaxVolume?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:74
+
+***
+
+### logging?
+
+> `optional` **logging?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:53
+
+***
+
+### longOnly?
+
+> `optional` **longOnly?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:73
+
+***
+
+### marginCalculationMode?
+
+> `optional` **marginCalculationMode?**: [`MarginCalculationMode`](../types/model.MarginCalculationMode.html)
+
+Defined in: model/mT4SymbolConfigUpdate.ts:67
+
+***
+
+### marginCurrency?
+
+> `optional` **marginCurrency?**: `string` \| `null`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:76
+
+#### Nullable
+
+***
+
+### marginDivider?
+
+> `optional` **marginDivider?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:71
+
+***
+
+### marginHedged?
+
+> `optional` **marginHedged?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:70
+
+***
+
+### marginHedgedStrong?
+
+> `optional` **marginHedgedStrong?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:78
+
+***
+
+### marginInitial?
+
+> `optional` **marginInitial?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:68
+
+***
+
+### marginMaintenance?
+
+> `optional` **marginMaintenance?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:69
+
+***
+
+### percentage?
+
+> `optional` **percentage?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:72
+
+***
+
+### profitCalculationMode?
+
+> `optional` **profitCalculationMode?**: [`ProfitCalculationMode`](../types/model.ProfitCalculationMode.html)
+
+Defined in: model/mT4SymbolConfigUpdate.ts:49
+
+***
+
+### quotesDelay?
+
+> `optional` **quotesDelay?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:80
+
+***
+
+### realtime?
+
+> `optional` **realtime?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:46
+
+***
+
+### source?
+
+> `optional` **source?**: `string` \| `null`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:39
+
+#### Nullable
+
+***
+
+### spread?
+
+> `optional` **spread?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:54
+
+***
+
+### spreadBalance?
+
+> `optional` **spreadBalance?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:55
+
+***
+
+### starting?
+
+> `optional` **starting?**: `string`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:47
+
+***
+
+### stopsLevel?
+
+> `optional` **stopsLevel?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:65
+
+***
+
+### swapEnable?
+
+> `optional` **swapEnable?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:57
+
+***
+
+### swapLong?
+
+> `optional` **swapLong?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:59
+
+***
+
+### swapOpenPrice?
+
+> `optional` **swapOpenPrice?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:81
+
+***
+
+### swapRollover3Days?
+
+> `optional` **swapRollover3Days?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:61
+
+***
+
+### swapShort?
+
+> `optional` **swapShort?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:60
+
+***
+
+### swapType?
+
+> `optional` **swapType?**: [`SwapType`](../types/model.SwapType.html)
+
+Defined in: model/mT4SymbolConfigUpdate.ts:58
+
+***
+
+### swapVariationMargin?
+
+> `optional` **swapVariationMargin?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:82
+
+***
+
+### symbolExecMode?
+
+> `optional` **symbolExecMode?**: [`SymbolExecMode`](../types/model.SymbolExecMode.html)
+
+Defined in: model/mT4SymbolConfigUpdate.ts:56
+
+***
+
+### tickSize?
+
+> `optional` **tickSize?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:64
+
+***
+
+### tickValue?
+
+> `optional` **tickValue?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:63
+
+***
+
+### tradeMode?
+
+> `optional` **tradeMode?**: [`TradeMode`](../types/model.TradeMode.html)
+
+Defined in: model/mT4SymbolConfigUpdate.ts:44
+
+***
+
+### type?
+
+> `optional` **type?**: `number`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:42
+
+***
+
+### valueDate?
+
+> `optional` **valueDate?**: `string`
+
+Defined in: model/mT4SymbolConfigUpdate.ts:79

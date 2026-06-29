@@ -1,0 +1,550 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4SymbolConfig
+
+# Interface: MT4SymbolConfig
+
+Defined in: model/mT4SymbolConfig.ts:19
+
+v2 DTO for a symbol's full server-side configuration. Curated from
+`ConSymbol`; drops reserved / unused arrays and the nested
+`Sessions` table (planned as its own endpoint).
+
+Seven wrapper enum fields (`TradeMode`, `ProfitCalculationMode`,
+`SymbolExecMode`, `SwapType`, `GTCMode`,
+`MarginCalculationMode`) are exposed as strings; see
+feedback-stj-enum-leaf-nested for why the conversion happens at the mapper.
+
+## Properties
+
+### askTickValue?
+
+> `optional` **askTickValue?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:133
+
+Ask tick value
+
+***
+
+### backgroundColor?
+
+> `optional` **backgroundColor?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:50
+
+Background colour for terminal client (BGR int)
+
+***
+
+### bidTickValue?
+
+> `optional` **bidTickValue?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:131
+
+Bid tick value
+
+***
+
+### contractSize?
+
+> `optional` **contractSize?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:99
+
+Contract size
+
+***
+
+### count?
+
+> `optional` **count?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:52
+
+Tick counter for the symbol (computed)
+
+***
+
+### countOriginal?
+
+> `optional` **countOriginal?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:54
+
+Original tick counter (computed)
+
+***
+
+### currency?
+
+> `optional` **currency?**: `string` \| `null`
+
+Defined in: model/mT4SymbolConfig.ts:39
+
+Quote currency code
+
+#### Nullable
+
+***
+
+### description?
+
+> `optional` **description?**: `string` \| `null`
+
+Defined in: model/mT4SymbolConfig.ts:29
+
+Human-readable description
+
+#### Nullable
+
+***
+
+### digits?
+
+> `optional` **digits?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:43
+
+Number of decimal digits in the quote
+
+***
+
+### expiration?
+
+> `optional` **expiration?**: `string`
+
+Defined in: model/mT4SymbolConfig.ts:60
+
+Symbol expiration date (UTC)
+
+***
+
+### filter?
+
+> `optional` **filter?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:67
+
+Tick filter type
+
+***
+
+### filterCounter?
+
+> `optional` **filterCounter?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:69
+
+Tick filter counter (computed)
+
+***
+
+### filterLimit?
+
+> `optional` **filterLimit?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:71
+
+Tick filter price-change limit
+
+***
+
+### filterSmoothing?
+
+> `optional` **filterSmoothing?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:73
+
+Tick filter smoothing factor
+
+***
+
+### freezeLevel?
+
+> `optional` **freezeLevel?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:144
+
+Freeze level (points before expiration to freeze trading)
+
+***
+
+### gtcMode?
+
+> `optional` **gtcMode?**: `string` \| `null`
+
+Defined in: model/mT4SymbolConfig.ts:110
+
+Pending order GTC mode
+
+#### Nullable
+
+***
+
+### instantMaxVolume?
+
+> `optional` **instantMaxVolume?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:137
+
+Max instant-execution volume (lots, 0 = unlimited)
+
+***
+
+### logging?
+
+> `optional` **logging?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:75
+
+0 = no logging, non-zero = log price changes
+
+***
+
+### longOnly?
+
+> `optional` **longOnly?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:135
+
+0 = long+short, non-zero = long-only
+
+***
+
+### marginCalculationMode?
+
+> `optional` **marginCalculationMode?**: `string` \| `null`
+
+Defined in: model/mT4SymbolConfig.ts:115
+
+Margin calculation mode (Forex / CFD / Futures / CFDIndex / CFDLeverage)
+
+#### Nullable
+
+***
+
+### marginCurrency?
+
+> `optional` **marginCurrency?**: `string` \| `null`
+
+Defined in: model/mT4SymbolConfig.ts:142
+
+Margin currency for non-deposit-currency symbols
+
+#### Nullable
+
+***
+
+### marginDivider?
+
+> `optional` **marginDivider?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:123
+
+Margin divider
+
+***
+
+### marginHedged?
+
+> `optional` **marginHedged?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:121
+
+Hedged margin per lot
+
+***
+
+### marginHedgedStrong?
+
+> `optional` **marginHedgedStrong?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:146
+
+Strong hedge margin per lot
+
+***
+
+### marginInitial?
+
+> `optional` **marginInitial?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:117
+
+Initial margin per lot
+
+***
+
+### marginMaintenance?
+
+> `optional` **marginMaintenance?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:119
+
+Maintenance margin per lot
+
+***
+
+### multiply?
+
+> `optional` **multiply?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:129
+
+Multiplier
+
+***
+
+### percentage?
+
+> `optional` **percentage?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:125
+
+Percentage
+
+***
+
+### point?
+
+> `optional` **point?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:127
+
+Point size
+
+***
+
+### profitCalculationMode?
+
+> `optional` **profitCalculationMode?**: `string` \| `null`
+
+Defined in: model/mT4SymbolConfig.ts:65
+
+Profit calculation mode (Forex / CFD / Futures)
+
+#### Nullable
+
+***
+
+### quotesDelay?
+
+> `optional` **quotesDelay?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:150
+
+Quotes delay in seconds (0 = real time)
+
+***
+
+### realtime?
+
+> `optional` **realtime?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:56
+
+0 = synthetic, non-zero = real-time feed
+
+***
+
+### source?
+
+> `optional` **source?**: `string` \| `null`
+
+Defined in: model/mT4SymbolConfig.ts:34
+
+Data feed source identifier
+
+#### Nullable
+
+***
+
+### spread?
+
+> `optional` **spread?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:77
+
+Spread in points (0 = floating)
+
+***
+
+### spreadBalance?
+
+> `optional` **spreadBalance?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:79
+
+Spread balance correction
+
+***
+
+### starting?
+
+> `optional` **starting?**: `string`
+
+Defined in: model/mT4SymbolConfig.ts:58
+
+Symbol activation date (UTC)
+
+***
+
+### stopsLevel?
+
+> `optional` **stopsLevel?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:105
+
+Minimum distance to current price for SL/TP (points)
+
+***
+
+### swapEnable?
+
+> `optional` **swapEnable?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:86
+
+0 = swaps disabled, non-zero = enabled
+
+***
+
+### swapLong?
+
+> `optional` **swapLong?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:93
+
+Swap value for long positions
+
+***
+
+### swapOpenPrice?
+
+> `optional` **swapOpenPrice?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:152
+
+0 = standard, non-zero = use open price for swaps
+
+***
+
+### swapRollover3Days?
+
+> `optional` **swapRollover3Days?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:97
+
+Day of week (1-7) when 3-day rollover applies
+
+***
+
+### swapShort?
+
+> `optional` **swapShort?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:95
+
+Swap value for short positions
+
+***
+
+### swapType?
+
+> `optional` **swapType?**: `string` \| `null`
+
+Defined in: model/mT4SymbolConfig.ts:91
+
+Swap type (Points / SymbolBase / SymbolMargin / CurrencyMargin)
+
+#### Nullable
+
+***
+
+### swapVariationMargin?
+
+> `optional` **swapVariationMargin?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:154
+
+0 = swap, non-zero = variation margin
+
+***
+
+### symbol?
+
+> `optional` **symbol?**: `string` \| `null`
+
+Defined in: model/mT4SymbolConfig.ts:24
+
+Symbol name (max 12 chars)
+
+#### Nullable
+
+***
+
+### symbolExecMode?
+
+> `optional` **symbolExecMode?**: `string` \| `null`
+
+Defined in: model/mT4SymbolConfig.ts:84
+
+Symbol execution mode
+
+#### Nullable
+
+***
+
+### tickSize?
+
+> `optional` **tickSize?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:103
+
+Tick size
+
+***
+
+### tickValue?
+
+> `optional` **tickValue?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:101
+
+Tick value in deposit currency
+
+***
+
+### tradeMode?
+
+> `optional` **tradeMode?**: `string` \| `null`
+
+Defined in: model/mT4SymbolConfig.ts:48
+
+Trading mode (Disabled / CloseOnly / Full)
+
+#### Nullable
+
+***
+
+### type?
+
+> `optional` **type?**: `number`
+
+Defined in: model/mT4SymbolConfig.ts:41
+
+Symbol type identifier
+
+***
+
+### valueDate?
+
+> `optional` **valueDate?**: `string`
+
+Defined in: model/mT4SymbolConfig.ts:148
+
+Value date (UTC)

@@ -1,0 +1,37 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-users](../modules/mt4-v2-users.html) / getUserRecordGetLogin
+
+# Function: getUserRecordGetLogin()
+
+> **getUserRecordGetLogin**(`tradePlatform`, `login`, `options?`): `Promise`\<[`getUserRecordGetLoginResponseSuccess`](../types/mt4-v2-users.getUserRecordGetLoginResponseSuccess.html)\>
+
+Defined in: mt4-v2-users.ts:58
+
+Account record for a single login from the pump cache.
+
+Pump-cached read of the wrapper's `UserRecord`, mapped to the v2
+`MT4User` DTO. Secrets (passwords, OTP secret, API blob) are
+stripped at the mapper level — they cannot be exposed via this endpoint
+regardless of caller permissions. Returns NotFound envelope when the
+pump cache does not contain the requested login.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### login
+
+`number`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getUserRecordGetLoginResponseSuccess`](../types/mt4-v2-users.getUserRecordGetLoginResponseSuccess.html)\>

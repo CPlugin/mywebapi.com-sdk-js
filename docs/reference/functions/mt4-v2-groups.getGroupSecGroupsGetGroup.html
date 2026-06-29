@@ -1,0 +1,36 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-groups](../modules/mt4-v2-groups.html) / getGroupSecGroupsGetGroup
+
+# Function: getGroupSecGroupsGetGroup()
+
+> **getGroupSecGroupsGetGroup**(`tradePlatform`, `group`, `options?`): `Promise`\<[`getGroupSecGroupsGetGroupResponseSuccess`](../types/mt4-v2-groups.getGroupSecGroupsGetGroupResponseSuccess.html)\>
+
+Defined in: mt4-v2-groups.ts:179
+
+Security-group entries (`SecGroups[32]`) for one trading group.
+
+Pump-cached read. Returns the full 32-element array; entries whose
+`Trade` and `Show` are both 0 are placeholders (the wrapper
+reserves the slot for the symbol-group regardless of whether the
+group is configured to trade it). Filter on the client side.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### group
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getGroupSecGroupsGetGroupResponseSuccess`](../types/mt4-v2-groups.getGroupSecGroupsGetGroupResponseSuccess.html)\>

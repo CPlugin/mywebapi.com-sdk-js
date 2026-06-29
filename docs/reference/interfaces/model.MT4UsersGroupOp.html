@@ -1,0 +1,58 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4UsersGroupOp
+
+# Interface: MT4UsersGroupOp
+
+Defined in: model/mT4UsersGroupOp.ts:13
+
+v2 request body for `UsersGroupOp` — bulk group-membership / leverage /
+enable-disable / delete operation across a list of account logins.
+
+## Properties
+
+### command?
+
+> `optional` **command?**: `string` \| `null`
+
+Defined in: model/mT4UsersGroupOp.ts:18
+
+Bulk operation: `"Delete"`, `"Enable"`, `"Disable"`, `"Leverage"`, or `"SetGroup"`.
+
+#### Nullable
+
+***
+
+### leverage?
+
+> `optional` **leverage?**: `number`
+
+Defined in: model/mT4UsersGroupOp.ts:25
+
+New leverage value (e.g. 100, 200, 500). Only used by `Leverage`.
+
+***
+
+### logins?
+
+> `optional` **logins?**: `number`[] \| `null`
+
+Defined in: model/mT4UsersGroupOp.ts:30
+
+List of account logins (account numbers) to apply the operation to. Must be non-empty.
+
+#### Nullable
+
+***
+
+### newGroup?
+
+> `optional` **newGroup?**: `string` \| `null`
+
+Defined in: model/mT4UsersGroupOp.ts:23
+
+Target group name (max 15 chars + NUL). Only used by `SetGroup`.
+
+#### Nullable

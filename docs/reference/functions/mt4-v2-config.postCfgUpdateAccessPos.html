@@ -1,0 +1,47 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / postCfgUpdateAccessPos
+
+# Function: postCfgUpdateAccessPos()
+
+> **postCfgUpdateAccessPos**(`tradePlatform`, `pos`, `mT4Access?`, `options?`): `Promise`\<[`postCfgUpdateAccessPosResponseSuccess`](../types/mt4-v2-config.postCfgUpdateAccessPosResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:870
+
+Update an IP firewall rule at a given list position — Type 1 mutator.
+
+Manager (live) call. The wrapper's `CfgUpdateAccess(cfg, pos)`
+signature requires a position rather than a unique-key lookup (the
+rule table has no stable identifiers — multiple rules can carry the
+same range/action/comment). The v2 endpoint exposes the position as
+a route parameter; callers must read the current list via
+`CfgRequestAccess` first and pass the index of the row to
+update. Flow:
+<list type="number"><item>Read the live list via `CfgRequestAccess`.</item><item>Bounds-check `pos` against the list length — out of
+        range yields a NotFound envelope.</item><item>Apply DTO overlay onto `list[pos]`.</item><item>Write back with `CfgUpdateAccess(merged, pos)`.</item></list>`IpFrom`/`IpTo` in the body must fit in `[0, uint.MaxValue]`
+— out-of-range values are rejected with `errorCode=Validation`
+before the Mapperly checked-narrowing cast can throw.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### pos
+
+`number`
+
+### mT4Access?
+
+[`MT4Access`](../interfaces/model.MT4Access.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postCfgUpdateAccessPosResponseSuccess`](../types/mt4-v2-config.postCfgUpdateAccessPosResponseSuccess.html)\>

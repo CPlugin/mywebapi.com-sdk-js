@@ -1,0 +1,36 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-backup](../modules/mt4-v2-backup.html) / getBackupInfoOrdersMode
+
+# Function: getBackupInfoOrdersMode()
+
+> **getBackupInfoOrdersMode**(`tradePlatform`, `mode`, `options?`): `Promise`\<[`getBackupInfoOrdersModeResponseSuccess`](../types/mt4-v2-backup.getBackupInfoOrdersModeResponseSuccess.html)\>
+
+Defined in: mt4-v2-backup.ts:95
+
+List backup order files available on the MT4 server for a given mode.
+
+Manager (live) call to the wrapper's
+`BackupInfoOrders(int mode)`. Order-side counterpart of
+`BackupInfoUsers` — same shape, different catalog.
+Read-only operation.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### mode
+
+`number`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getBackupInfoOrdersModeResponseSuccess`](../types/mt4-v2-backup.getBackupInfoOrdersModeResponseSuccess.html)\>

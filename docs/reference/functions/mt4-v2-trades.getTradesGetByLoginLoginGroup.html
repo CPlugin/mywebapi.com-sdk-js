@@ -1,0 +1,40 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-trades](../modules/mt4-v2-trades.html) / getTradesGetByLoginLoginGroup
+
+# Function: getTradesGetByLoginLoginGroup()
+
+> **getTradesGetByLoginLoginGroup**(`tradePlatform`, `login`, `group`, `options?`): `Promise`\<[`getTradesGetByLoginLoginGroupResponseSuccess`](../types/mt4-v2-trades.getTradesGetByLoginLoginGroupResponseSuccess.html)\>
+
+Defined in: mt4-v2-trades.ts:149
+
+Open trades for a single account from the pump cache.
+
+Pump-cached lookup, keyed by login + group. The group parameter is
+required because the wrapper organises trades by group internally —
+callers can fetch the group via `UserRecordGet/{login}` first.
+Empty list when the account has no open trades.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### login
+
+`number`
+
+### group
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getTradesGetByLoginLoginGroupResponseSuccess`](../types/mt4-v2-trades.getTradesGetByLoginLoginGroupResponseSuccess.html)\>

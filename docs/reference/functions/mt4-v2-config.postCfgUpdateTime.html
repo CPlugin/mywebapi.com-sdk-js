@@ -1,0 +1,45 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / postCfgUpdateTime
+
+# Function: postCfgUpdateTime()
+
+> **postCfgUpdateTime**(`tradePlatform`, `mT4ServerTime?`, `options?`): `Promise`\<[`postCfgUpdateTimeResponseSuccess`](../types/mt4-v2-config.postCfgUpdateTimeResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:360
+
+Update the 7×24 access-hour matrix — Type 1 mutator.
+
+Manager (live) call. Reads the current `ConTime`, replaces the
+168-hour access matrix with the supplied `AccessHours`, and
+writes back. The wrapper's internal `DaysControl` (server
+housekeeping) and `Reserved` (forward-compat padding) fields
+are preserved across the round-trip.
+
+`AccessHours` must be exactly 168 entries long; index =
+`day * 24 + hour` with day 0 = Sunday. Each value is
+`0` (denied) or `1` (allowed) — any other value is
+passed through verbatim (the wrapper does not validate, and
+MT4 may treat anything non-zero as allowed depending on build).
+
+Echoes the merged `MT4ServerTime` in the response.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### mT4ServerTime?
+
+[`MT4ServerTime`](../interfaces/model.MT4ServerTime.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postCfgUpdateTimeResponseSuccess`](../types/mt4-v2-config.postCfgUpdateTimeResponseSuccess.html)\>

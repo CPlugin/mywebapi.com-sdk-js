@@ -1,0 +1,37 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / PagingMeta
+
+# Interface: PagingMeta
+
+Defined in: model/pagingMeta.ts:16
+
+Paging metadata returned alongside a list-shaped payload.
+`NextCursor` is an opaque base64 string the client passes back as
+`?cursor=` to fetch the next page; null when there are no more items.
+`HasMore` is the explicit boolean form of the same signal so clients
+can avoid string-null checks.
+
+## Properties
+
+### hasMore?
+
+> `optional` **hasMore?**: `boolean`
+
+Defined in: model/pagingMeta.ts:23
+
+True if more items are available; explicit boolean form of NextCursor != null.
+
+***
+
+### nextCursor?
+
+> `optional` **nextCursor?**: `string` \| `null`
+
+Defined in: model/pagingMeta.ts:21
+
+Opaque token for the next page; pass it back as ?cursor=. Null when there are no more items.
+
+#### Nullable

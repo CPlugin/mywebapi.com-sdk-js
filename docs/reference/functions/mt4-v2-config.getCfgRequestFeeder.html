@@ -1,0 +1,38 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / getCfgRequestFeeder
+
+# Function: getCfgRequestFeeder()
+
+> **getCfgRequestFeeder**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getCfgRequestFeederResponseSuccess`](../types/mt4-v2-config.getCfgRequestFeederResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:1261
+
+All quote/news feeder configurations on the MT4 server, paginated by Name.
+
+Manager-live read (round-trip). Each entry: Name, File (loader
+path), Server (upstream), Login, Keywords (news filter),
+Enable flag, DataFeedMode (quotes/news/both), connection timeouts
+(Timeout, TimeoutReconnect, TimeoutSleep, AttempsSleep),
+NewsLangId. The wrapper's `Password` (datafeed credentials)
+is intentionally excluded from the v2 contract.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetCfgRequestFeederParams`](../types/model.GetCfgRequestFeederParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getCfgRequestFeederResponseSuccess`](../types/mt4-v2-config.getCfgRequestFeederResponseSuccess.html)\>

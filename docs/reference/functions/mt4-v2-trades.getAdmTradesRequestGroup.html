@@ -1,0 +1,40 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-trades](../modules/mt4-v2-trades.html) / getAdmTradesRequestGroup
+
+# Function: getAdmTradesRequestGroup()
+
+> **getAdmTradesRequestGroup**(`tradePlatform`, `group`, `params?`, `options?`): `Promise`\<[`getAdmTradesRequestGroupResponseSuccess`](../types/mt4-v2-trades.getAdmTradesRequestGroupResponseSuccess.html)\>
+
+Defined in: mt4-v2-trades.ts:698
+
+All trades belonging to accounts in a given group (admin scope).
+
+Manager (live) call. Returns trades for every account assigned to
+the given group. `openOnly=true` filters out closed trades on
+the server side. Pair with `Idempotency-Key` on retry — large
+groups can return substantial payloads.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### group
+
+`string`
+
+### params?
+
+[`GetAdmTradesRequestGroupParams`](../types/model.GetAdmTradesRequestGroupParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getAdmTradesRequestGroupResponseSuccess`](../types/mt4-v2-trades.getAdmTradesRequestGroupResponseSuccess.html)\>

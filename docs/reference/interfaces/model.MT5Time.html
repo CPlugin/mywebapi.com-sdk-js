@@ -1,0 +1,53 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT5Time
+
+# Interface: MT5Time
+
+Defined in: model/mT5Time.ts:12
+
+Server time configuration (MT5 CIMTConTime), v2 read DTO.
+
+## Properties
+
+### daylight?
+
+> `optional` **daylight?**: `boolean`
+
+Defined in: model/mT5Time.ts:21
+
+Daylight saving time mode enabled.
+
+***
+
+### daylightState?
+
+> `optional` **daylightState?**: `number`
+
+Defined in: model/mT5Time.ts:23
+
+Daylight saving state (0 = no DST in zone, non-zero otherwise).
+
+***
+
+### timeServer?
+
+> `optional` **timeServer?**: `string` \| `null`
+
+Defined in: model/mT5Time.ts:19
+
+Time synchronization server address (TIME/NTP).
+
+#### Nullable
+
+***
+
+### timeZone?
+
+> `optional` **timeZone?**: `number`
+
+Defined in: model/mT5Time.ts:14
+
+Server time zone, minutes from GMT (0 = GMT, 60 = GMT+1).

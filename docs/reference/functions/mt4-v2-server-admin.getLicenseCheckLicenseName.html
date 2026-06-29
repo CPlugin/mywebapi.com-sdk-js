@@ -1,0 +1,37 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-server-admin](../modules/mt4-v2-server-admin.html) / getLicenseCheckLicenseName
+
+# Function: getLicenseCheckLicenseName()
+
+> **getLicenseCheckLicenseName**(`tradePlatform`, `licenseName`, `options?`): `Promise`\<[`getLicenseCheckLicenseNameResponseSuccess`](../types/mt4-v2-server-admin.getLicenseCheckLicenseNameResponseSuccess.html)\>
+
+Defined in: mt4-v2-server-admin.ts:104
+
+Check a license name against the MT4 server's license registry — admin-only read.
+
+Manager (live) call to the wrapper's `LicenseCheck(name)`.
+Returns a bare `bool` payload: `true` when the wrapper's
+result code is `Ok`, indicating the license is recognized;
+`false` on any non-Ok code (covers both "license not found"
+and "manager lacks permission to query the license registry").
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### licenseName
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getLicenseCheckLicenseNameResponseSuccess`](../types/mt4-v2-server-admin.getLicenseCheckLicenseNameResponseSuccess.html)\>

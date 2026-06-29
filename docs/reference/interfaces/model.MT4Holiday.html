@@ -1,0 +1,99 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4Holiday
+
+# Interface: MT4Holiday
+
+Defined in: model/mT4Holiday.ts:16
+
+v2 DTO for a single MT4 holiday-calendar entry. Curated subset of the
+wrapper's ConHoliday struct — exposes the broker-facing fields and
+drops the internal Reserved/Next pointer block. Date is split into
+Year/Month/Day ints (wire-compatible with the wrapper, no DateTime
+conversion to avoid timezone ambiguity for date-only entries).
+
+## Properties
+
+### day?
+
+> `optional` **day?**: `number`
+
+Defined in: model/mT4Holiday.ts:22
+
+Day-of-month, 1..31
+
+***
+
+### description?
+
+> `optional` **description?**: `string` \| `null`
+
+Defined in: model/mT4Holiday.ts:36
+
+Free-form description of the holiday
+
+#### Nullable
+
+***
+
+### enable?
+
+> `optional` **enable?**: `boolean`
+
+Defined in: model/mT4Holiday.ts:38
+
+Whether the holiday entry is active
+
+***
+
+### from?
+
+> `optional` **from?**: `number`
+
+Defined in: model/mT4Holiday.ts:24
+
+Work-day start time, in minutes from midnight (0 if closed all day)
+
+***
+
+### month?
+
+> `optional` **month?**: `number`
+
+Defined in: model/mT4Holiday.ts:20
+
+Calendar month, 1..12
+
+***
+
+### symbol?
+
+> `optional` **symbol?**: `string` \| `null`
+
+Defined in: model/mT4Holiday.ts:31
+
+Symbol name, symbol group name, or "All" for global holiday
+
+#### Nullable
+
+***
+
+### to?
+
+> `optional` **to?**: `number`
+
+Defined in: model/mT4Holiday.ts:26
+
+Work-day end time, in minutes from midnight
+
+***
+
+### year?
+
+> `optional` **year?**: `number`
+
+Defined in: model/mT4Holiday.ts:18
+
+Calendar year of the holiday (e.g. 2026)

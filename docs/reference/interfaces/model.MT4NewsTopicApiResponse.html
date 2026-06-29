@@ -1,0 +1,56 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4NewsTopicApiResponse
+
+# Interface: MT4NewsTopicApiResponse
+
+Defined in: model/mT4NewsTopicApiResponse.ts:17
+
+Unified v2 response envelope: data is the payload (null on error); error is the
+error object (null on success, always serialised); meta contains response metadata
+(activityId and optional paging). HTTP status is always 200.
+
+## Properties
+
+### data?
+
+> `optional` **data?**: [`MT4NewsTopic`](model.MT4NewsTopic.html) \| `null`
+
+Defined in: model/mT4NewsTopicApiResponse.ts:29
+
+v2 DTO describing a single news topic header as held in the wrapper's
+pumping cache. Curated subset of the wrapper's NewsTopic: enough to render
+a list / browse view of broker-distributed news (Key for follow-up
+NewsBodyGet / NewsBodyRequest, Time, Topic, Category, Keywords, Priority,
+LangId). The wrapper's `Body` property is intentionally excluded —
+it is x86-only at the unmanaged layer (the MT4 ManagerAPI lays out the
+body pointer as a 32-bit field and the wrapper throws
+System.PlatformNotSupportedException on x64) and is fetched
+separately via `NewsBodyGet(key)`.
+
+***
+
+### error?
+
+> `optional` **error?**: [`ApiError`](model.ApiError.html) \| `null`
+
+Defined in: model/mT4NewsTopicApiResponse.ts:35
+
+v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4
+ResultCode (serialized as a string for a known enum member, or as a number for an
+unrecognised value returned by MT4); Message is a human-readable description.
+
+***
+
+### meta?
+
+> `optional` **meta?**: [`ApiMeta`](model.ApiMeta.html) \| `null`
+
+Defined in: model/mT4NewsTopicApiResponse.ts:42
+
+Response metadata. ActivityId is the W3C trace-id for correlation in Seq/SigNoz.
+Paging is present only on paginated list responses; otherwise it is omitted —
+the global JSON context policy serialises null fields, so we override that here
+with System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull.

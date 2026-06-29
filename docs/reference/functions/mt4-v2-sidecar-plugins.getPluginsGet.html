@@ -1,0 +1,32 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-sidecar-plugins](../modules/mt4-v2-sidecar-plugins.html) / getPluginsGet
+
+# Function: getPluginsGet()
+
+> **getPluginsGet**(`tradePlatform`, `options?`): `Promise`\<[`getPluginsGetResponseSuccess`](../types/mt4-v2-sidecar-plugins.getPluginsGetResponseSuccess.html)\>
+
+Defined in: mt4-v2-sidecar-plugins.ts:48
+
+List MT4 server plugins currently configured (pump-side cache).
+
+Manager-pump call to the wrapper's `PluginsGet()`. The
+wrapper marks this `[Obsolete]` on x64 (mtmanapi64.dll has
+silently-changing plugin layouts); the x86 sidecar process loads
+mtmanapi.dll where the layout is stable, so the call is safe.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getPluginsGetResponseSuccess`](../types/mt4-v2-sidecar-plugins.getPluginsGetResponseSuccess.html)\>

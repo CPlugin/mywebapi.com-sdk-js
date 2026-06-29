@@ -1,0 +1,36 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-server-admin-destructive](../modules/mt4-v2-server-admin-destructive.html) / postSrvChartsSync
+
+# Function: postSrvChartsSync()
+
+> **postSrvChartsSync**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`postSrvChartsSyncResponseSuccess`](../types/mt4-v2-server-admin-destructive.postSrvChartsSyncResponseSuccess.html)\>
+
+Defined in: mt4-v2-server-admin-destructive.ts:111
+
+Force chart-history resync across the plugin set. Destructive — requires `?confirm=true`.
+
+Manager (live) call to the wrapper's `SrvChartsSync()`. Forces
+the MT4 server to walk every plugin's chart-history feed and bring
+the local cache in sync. Idempotent — running twice is a no-op
+against an already-synced state.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`PostSrvChartsSyncParams`](../types/model.PostSrvChartsSyncParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postSrvChartsSyncResponseSuccess`](../types/mt4-v2-server-admin-destructive.postSrvChartsSyncResponseSuccess.html)\>

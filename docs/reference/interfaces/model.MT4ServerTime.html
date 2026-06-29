@@ -1,0 +1,32 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4ServerTime
+
+# Interface: MT4ServerTime
+
+Defined in: model/mT4ServerTime.ts:20
+
+v2 DTO for the MT4 server's per-hour access matrix (wrapper's
+`ConTime.Days` field). 168-element flat array; each element
+is `0` (denied) or `1` (allowed) for one hour of the
+week. Layout: `index = day * 24 + hour`, day-of-week 0..6
+matches MT4's native convention where day 0 = Sunday.
+<br>
+Example: `AccessHours[24..47]` covers Monday's 24 hours.
+Internal `DaysControl` and `Reserved` wrapper fields
+are not part of the v2 contract.
+
+## Properties
+
+### accessHours?
+
+> `optional` **accessHours?**: `number`[] \| `null`
+
+Defined in: model/mT4ServerTime.ts:26
+
+7×24 = 168 hourly access flags. Index = day*24 + hour;
+day 0 = Sunday (MT4 convention). 0 = denied, 1 = allowed.
+
+#### Nullable

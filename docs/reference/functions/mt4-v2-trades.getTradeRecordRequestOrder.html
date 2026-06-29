@@ -1,0 +1,39 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-trades](../modules/mt4-v2-trades.html) / getTradeRecordRequestOrder
+
+# Function: getTradeRecordRequestOrder()
+
+> **getTradeRecordRequestOrder**(`tradePlatform`, `order`, `options?`): `Promise`\<[`getTradeRecordRequestOrderResponseSuccess`](../types/mt4-v2-trades.getTradeRecordRequestOrderResponseSuccess.html)\>
+
+Defined in: mt4-v2-trades.ts:431
+
+Fresh-from-server fetch of a single trade record by ticket.
+
+Manager (live) counterpart to `TradeRecordGet`. Where the pump
+variant reads from local cache (may lag by milliseconds), this round-
+trips to the MT4 server every call — slower but authoritative.
+Useful for reconciliation, post-close ticket lookups (pump may have
+flushed), or any flow where the caller can tolerate the latency cost
+in exchange for guaranteed freshness. Returns NotFound envelope when
+the ticket does not exist on the server.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### order
+
+`number`
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getTradeRecordRequestOrderResponseSuccess`](../types/mt4-v2-trades.getTradeRecordRequestOrderResponseSuccess.html)\>

@@ -1,0 +1,33 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4TradeRestoreResult
+
+# Interface: MT4TradeRestoreResult
+
+Defined in: model/mT4TradeRestoreResult.ts:14
+
+v2 DTO for a single per-order result of a backup-restore operation.
+Mirrors the wrapper's `TradeRestoreResult` — order ticket plus
+a 1-byte status flag.
+
+## Properties
+
+### order?
+
+> `optional` **order?**: `number`
+
+Defined in: model/mT4TradeRestoreResult.ts:16
+
+Order ticket from the input array (matches by position)
+
+***
+
+### res?
+
+> `optional` **res?**: `number`
+
+Defined in: model/mT4TradeRestoreResult.ts:18
+
+Per-order restore status: `0` = error, `1` = restored

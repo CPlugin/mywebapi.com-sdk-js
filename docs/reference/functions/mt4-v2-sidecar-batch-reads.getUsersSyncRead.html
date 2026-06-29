@@ -1,0 +1,36 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-sidecar-batch-reads](../modules/mt4-v2-sidecar-batch-reads.html) / getUsersSyncRead
+
+# Function: getUsersSyncRead()
+
+> **getUsersSyncRead**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getUsersSyncReadResponseSuccess`](../types/mt4-v2-sidecar-batch-reads.getUsersSyncReadResponseSuccess.html)\>
+
+Defined in: mt4-v2-sidecar-batch-reads.ts:108
+
+Read user records buffered by a prior `UsersSyncStart` call.
+
+Manager (live) call to the wrapper's `UsersSyncRead()`.
+Must be preceded by `POST UsersSyncStart` on the main x64
+API to seed the server-side snapshot. Same UnpackObject hazard
+as `UsersSnapshot` — sidecar-only.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetUsersSyncReadParams`](../types/model.GetUsersSyncReadParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getUsersSyncReadResponseSuccess`](../types/mt4-v2-sidecar-batch-reads.getUsersSyncReadResponseSuccess.html)\>

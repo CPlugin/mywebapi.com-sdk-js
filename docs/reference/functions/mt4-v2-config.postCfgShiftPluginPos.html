@@ -1,0 +1,39 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-config](../modules/mt4-v2-config.html) / postCfgShiftPluginPos
+
+# Function: postCfgShiftPluginPos()
+
+> **postCfgShiftPluginPos**(`tradePlatform`, `pos`, `params?`, `options?`): `Promise`\<[`postCfgShiftPluginPosResponseSuccess`](../types/mt4-v2-config.postCfgShiftPluginPosResponseSuccess.html)\>
+
+Defined in: mt4-v2-config.ts:2307
+
+Reorders an entry in the plugins table by relative displacement.
+
+Unlike the deferred `CfgRequestPlugin` read endpoint, the shift
+call does not dereference `ConPluginParam.Params` — it only
+reorders existing rows by index. Safe under wine x64.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### pos
+
+`number`
+
+### params?
+
+[`PostCfgShiftPluginPosParams`](../types/model.PostCfgShiftPluginPosParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postCfgShiftPluginPosResponseSuccess`](../types/mt4-v2-config.postCfgShiftPluginPosResponseSuccess.html)\>

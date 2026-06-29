@@ -1,0 +1,35 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4BalanceDiff
+
+# Interface: MT4BalanceDiff
+
+Defined in: model/mT4BalanceDiff.ts:16
+
+v2 DTO returned by `AdmBalanceCheck`. Reports the difference between
+the account's recorded balance and what the MT4 server recomputes from
+closed orders + balance operations. `Diff = 0` means the integrity
+check passed; non-zero means the recorded balance has drifted and would
+be set to `recorded + Diff` if `AdmBalanceFix` ran.
+
+## Properties
+
+### diff?
+
+> `optional` **diff?**: `number`
+
+Defined in: model/mT4BalanceDiff.ts:20
+
+Difference (signed). Zero means balance integrity check passed.
+
+***
+
+### login?
+
+> `optional` **login?**: `number`
+
+Defined in: model/mT4BalanceDiff.ts:18
+
+Account login

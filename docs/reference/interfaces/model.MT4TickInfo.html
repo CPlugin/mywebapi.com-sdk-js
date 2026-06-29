@@ -1,0 +1,58 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4TickInfo
+
+# Interface: MT4TickInfo
+
+Defined in: model/mT4TickInfo.ts:17
+
+v2 DTO describing the last known tick for a trading symbol. Pump-cached
+snapshot of bid/ask quote — for sub-second updates, prefer the SignalR
+tick stream over polling this endpoint. The wrapper's `TickInfo`
+has no additional fields; the curated DTO is 1:1 on field semantics
+with the wrapper, only the timestamp source field is renamed for
+readability (`Ctm` → `Time`).
+
+## Properties
+
+### ask?
+
+> `optional` **ask?**: `number`
+
+Defined in: model/mT4TickInfo.ts:28
+
+Ask price (best price at which the broker is selling)
+
+***
+
+### bid?
+
+> `optional` **bid?**: `number`
+
+Defined in: model/mT4TickInfo.ts:26
+
+Bid price (best price at which the broker is buying)
+
+***
+
+### symbol?
+
+> `optional` **symbol?**: `string` \| `null`
+
+Defined in: model/mT4TickInfo.ts:22
+
+Symbol the tick applies to (e.g. "EURUSD")
+
+#### Nullable
+
+***
+
+### time?
+
+> `optional` **time?**: `string`
+
+Defined in: model/mT4TickInfo.ts:24
+
+Server-side tick timestamp (UTC)

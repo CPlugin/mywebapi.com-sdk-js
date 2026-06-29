@@ -1,0 +1,35 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-sidecar-messaging](../modules/mt4-v2-sidecar-messaging.html) / postNewsSend
+
+# Function: postNewsSend()
+
+> **postNewsSend**(`tradePlatform`, `mT4NewsSendRequest?`, `options?`): `Promise`\<[`postNewsSendResponseSuccess`](../types/mt4-v2-sidecar-messaging.postNewsSendResponseSuccess.html)\>
+
+Defined in: mt4-v2-sidecar-messaging.ts:46
+
+Push a news item to all connected client terminals. Requires 'Send news' admin right.
+
+Manager (live) call to the wrapper's `NewsSend(NewsTopic news)`.
+Sidecar-only because `mtmanapi64.dll` throws
+`PlatformNotSupportedException` on the body setter.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### mT4NewsSendRequest?
+
+[`MT4NewsSendRequest`](../interfaces/model.MT4NewsSendRequest.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postNewsSendResponseSuccess`](../types/mt4-v2-sidecar-messaging.postNewsSendResponseSuccess.html)\>

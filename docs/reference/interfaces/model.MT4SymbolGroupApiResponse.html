@@ -1,0 +1,52 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4SymbolGroupApiResponse
+
+# Interface: MT4SymbolGroupApiResponse
+
+Defined in: model/mT4SymbolGroupApiResponse.ts:17
+
+Unified v2 response envelope: data is the payload (null on error); error is the
+error object (null on success, always serialised); meta contains response metadata
+(activityId and optional paging). HTTP status is always 200.
+
+## Properties
+
+### data?
+
+> `optional` **data?**: [`MT4SymbolGroup`](model.MT4SymbolGroup.html) \| `null`
+
+Defined in: model/mT4SymbolGroupApiResponse.ts:25
+
+v2 DTO describing a single MT4 symbol group (security category).
+Mirrors the wrapper's ConSymbolGroup — which only carries Name and
+Description as fixed-size ANSI fields. There is no ProfitCurrency on
+the MT4-side group struct (that lives on per-symbol settings, not on
+the group level), so the DTO faithfully exposes only what exists.
+
+***
+
+### error?
+
+> `optional` **error?**: [`ApiError`](model.ApiError.html) \| `null`
+
+Defined in: model/mT4SymbolGroupApiResponse.ts:31
+
+v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4
+ResultCode (serialized as a string for a known enum member, or as a number for an
+unrecognised value returned by MT4); Message is a human-readable description.
+
+***
+
+### meta?
+
+> `optional` **meta?**: [`ApiMeta`](model.ApiMeta.html) \| `null`
+
+Defined in: model/mT4SymbolGroupApiResponse.ts:38
+
+Response metadata. ActivityId is the W3C trace-id for correlation in Seq/SigNoz.
+Paging is present only on paginated list responses; otherwise it is omitted —
+the global JSON context policy serialises null fields, so we override that here
+with System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull.

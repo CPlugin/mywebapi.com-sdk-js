@@ -1,0 +1,56 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [model](../modules/model.html) / MT4GroupMargin
+
+# Interface: MT4GroupMargin
+
+Defined in: model/mT4GroupMargin.ts:15
+
+v2 DTO for one of a group's "special securities" margin overrides. Curated
+from `ConGroupMargin` — the wrapper's per-symbol swap/margin overrides
+stored as a 128-element array on `ConGroup.SecMargins`. The
+`Reserved` int[7] padding is dropped.
+
+## Properties
+
+### marginDivider?
+
+> `optional` **marginDivider?**: `number`
+
+Defined in: model/mT4GroupMargin.ts:26
+
+Margin divider override (1.0 = use default)
+
+***
+
+### swapLong?
+
+> `optional` **swapLong?**: `number`
+
+Defined in: model/mT4GroupMargin.ts:22
+
+Swap charge for long positions
+
+***
+
+### swapShort?
+
+> `optional` **swapShort?**: `number`
+
+Defined in: model/mT4GroupMargin.ts:24
+
+Swap charge for short positions
+
+***
+
+### symbol?
+
+> `optional` **symbol?**: `string` \| `null`
+
+Defined in: model/mT4GroupMargin.ts:20
+
+Symbol the override applies to (max 12 chars)
+
+#### Nullable

@@ -1,0 +1,35 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-sidecar-batch-reads](../modules/mt4-v2-sidecar-batch-reads.html) / getTradesSyncRead
+
+# Function: getTradesSyncRead()
+
+> **getTradesSyncRead**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getTradesSyncReadResponseSuccess`](../types/mt4-v2-sidecar-batch-reads.getTradesSyncReadResponseSuccess.html)\>
+
+Defined in: mt4-v2-sidecar-batch-reads.ts:205
+
+Read trade records buffered by a prior `TradesSyncStart` call.
+
+Manager (live) call to the wrapper's `TradesSyncRead()`.
+Must be preceded by `POST TradesSyncStart` on the main x64
+API. Same UnpackObject hazard — sidecar-only.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetTradesSyncReadParams`](../types/model.GetTradesSyncReadParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getTradesSyncReadResponseSuccess`](../types/mt4-v2-sidecar-batch-reads.getTradesSyncReadResponseSuccess.html)\>

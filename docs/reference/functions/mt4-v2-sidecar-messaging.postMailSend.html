@@ -1,0 +1,37 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-sidecar-messaging](../modules/mt4-v2-sidecar-messaging.html) / postMailSend
+
+# Function: postMailSend()
+
+> **postMailSend**(`tradePlatform`, `mT4MailSendRequest?`, `options?`): `Promise`\<[`postMailSendResponseSuccess`](../types/mt4-v2-sidecar-messaging.postMailSendResponseSuccess.html)\>
+
+Defined in: mt4-v2-sidecar-messaging.ts:89
+
+Send an email to one or more client logins. Requires 'Email' admin right.
+
+Manager (live) call to the wrapper's
+`MailSend(MailBox mail, ICollection<int> logins)`.
+The wrapper itself refuses to run on x64 (
+`throw new WrapperException("MailSend cannot be called in x64 environment")`),
+so this endpoint exists only in the sidecar build.
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### mT4MailSendRequest?
+
+[`MT4MailSendRequest`](../interfaces/model.MT4MailSendRequest.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`postMailSendResponseSuccess`](../types/mt4-v2-sidecar-messaging.postMailSendResponseSuccess.html)\>

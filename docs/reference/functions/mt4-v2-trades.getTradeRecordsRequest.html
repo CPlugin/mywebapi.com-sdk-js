@@ -1,0 +1,41 @@
+[**@mywebapi.com/sdk**](../README.md)
+
+***
+
+[@mywebapi.com/sdk](../index.html) / [mt4-v2-trades](../modules/mt4-v2-trades.html) / getTradeRecordsRequest
+
+# Function: getTradeRecordsRequest()
+
+> **getTradeRecordsRequest**(`tradePlatform`, `params?`, `options?`): `Promise`\<[`getTradeRecordsRequestResponseSuccess`](../types/mt4-v2-trades.getTradeRecordsRequestResponseSuccess.html)\>
+
+Defined in: mt4-v2-trades.ts:647
+
+Trade records for a batch of order tickets — live round-trip.
+
+Manager (live) call. Pass tickets as repeated query parameters:
+`?orders=12345&orders=67890`. Server-side billing counts this
+as one Manager request regardless of array length — prefer this over
+looping single `TradeRecordGet` calls.
+
+Returns the trade records the server has for the requested tickets.
+Order in the response is NOT guaranteed to match the request order;
+missing tickets are silently omitted (the envelope is not an error
+envelope in that case — match by `order` field on the client).
+
+## Parameters
+
+### tradePlatform
+
+`string`
+
+### params?
+
+[`GetTradeRecordsRequestParams`](../types/model.GetTradeRecordsRequestParams.html)
+
+### options?
+
+`RequestInit`
+
+## Returns
+
+`Promise`\<[`getTradeRecordsRequestResponseSuccess`](../types/mt4-v2-trades.getTradeRecordsRequestResponseSuccess.html)\>
