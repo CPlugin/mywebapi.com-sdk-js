@@ -16,7 +16,7 @@ release before reporting an issue.
 **Please do not report security vulnerabilities through public GitHub issues,
 pull requests, or discussions.**
 
-Instead, report them privately by email to **security@cplugin.com**.
+Instead, report them privately by email to **info@cplugin.com**.
 
 Include as much of the following as you can — it helps us triage faster:
 
@@ -46,7 +46,7 @@ and aim to resolve confirmed vulnerabilities promptly.
 
 This policy covers the `@mywebapi.com/sdk` JavaScript/TypeScript client library
 in this repository. Vulnerabilities in the underlying WebAPI service itself, or
-in third-party dependencies, should still be reported to security@cplugin.com so
+in third-party dependencies, should still be reported to info@cplugin.com so
 we can route them to the right team.
 
 ## Handling credentials safely
