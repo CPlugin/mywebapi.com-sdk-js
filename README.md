@@ -257,6 +257,14 @@ Contributions are welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md) for the d
 
 To report a security vulnerability, please follow the responsible-disclosure process in [SECURITY.md](./SECURITY.md). Do not open public issues for security reports.
 
+## Trademarks
+
+MetaTrader, MT4, MT5, and MetaQuotes are trademarks or registered trademarks of MetaQuotes Ltd.
+This project is an independent, community-oriented SDK for the WebAPI service.
+It is **not affiliated with, endorsed by, or sponsored by MetaQuotes Ltd.**
+
+All other trademarks are the property of their respective owners.
+
 ## License
 
 MIT — see [LICENSE](./LICENSE).

@@ -100,6 +100,14 @@ such as `feat:`, `fix:`, `docs:`, `chore:`, and `test:`.
 Releases are cut by maintainers. The process — version bump, tag, and the
 OIDC-based npm publish workflow — is documented in [PUBLISHING.md](./PUBLISHING.md).
 
+## Trademarks
+
+MetaTrader, MT4, MT5, and MetaQuotes are trademarks or registered trademarks of MetaQuotes Ltd.
+This project is an independent, community-oriented SDK for the WebAPI service.
+It is **not affiliated with, endorsed by, or sponsored by MetaQuotes Ltd.**
+
+All other trademarks are the property of their respective owners.
+
 ## License
 
 By contributing, you agree that your contributions will be licensed under the
