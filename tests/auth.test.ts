@@ -5,7 +5,7 @@ import {
   StaticTokenProvider,
 } from '../src/auth';
 
-const OIDC_FIXTURE_PATH = '/code/web/webapi/clients/_shared/fixtures/openid-configuration.json';
+const OIDC_FIXTURE_PATH = import.meta.dir + '/fixtures/openid-configuration.json';
 
 async function loadDiscoveryDoc(): Promise<unknown> {
   return await Bun.file(OIDC_FIXTURE_PATH).json();
