@@ -1,7 +1,12 @@
 node_modules/
 dist/
-# * orval generates a docs/ HTML reference alongside src/generated/ — not tracked
-docs/
+# * TypeDoc-generated reference docs tracked for GitHub Pages deployment.
+# * Negated pattern: ignore everything directly under docs/, then un-ignore ^
+# * reference/ subtree and .nojekyll so they are committed.
+docs/*
+!docs/reference/
+!docs/reference/**
+!docs/.nojekyll
 *.tsbuildinfo
 .DS_Store
 bun.lockb

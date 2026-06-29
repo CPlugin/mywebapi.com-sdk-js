@@ -1,0 +1,15 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "@mywebapi.com/sdk",
+  "entryPoints": ["./src/index.ts"],
+  "out": "./docs/reference",
+  "tsconfig": "./tsconfig.build.json",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeExternals": true,
+  "excludeInternal": true,
+  "readme": "none",
+  "categorizeByGroup": true,
+  "searchInComments": true,
+  "plugin": []
+}
