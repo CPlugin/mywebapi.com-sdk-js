@@ -1,8 +1,8 @@
 # @mywebapi.com/sdk
 
-TypeScript client for the SaaS WebAPI v2 (MT4/MT5 trading platform management).
+TypeScript client for the CPlugin WebAPI v2 — a management API for trading-platform servers.
 
-**Status:** Develop-only (not yet published). API shape is stable; package will be released to the private npm registry once the v2 API reaches production maturity.
+**Status:** Published on the public npm registry as [`@mywebapi.com/sdk`](https://www.npmjs.com/package/@mywebapi.com/sdk) (early access, current version `0.1.1`). The API shape is stable; while the package is at `0.x`, minor releases may introduce breaking changes, so pin a version in production. Versioning follows [semver](https://semver.org/).
 
 - **Auto-generated types** from the live OpenAPI spec — all endpoints, DTOs, and enums are exact and stay in sync with the server.
 - **Unified entry point** — `CPluginWebApiClient` with `mt4` and `mt5` namespaces; credentials and token management configured once at instantiation.
@@ -245,7 +245,25 @@ MT4 hubs expose ticks, trades, margin-call, user and symbol streams; MT5 hubs ex
 ## What's next
 
 - Add typed convenience wrappers for every v2 endpoint as usage patterns crystallise.
-- Tag a release (`vX.Y.Z`) to publish `@mywebapi.com/sdk` to npm via the GitHub Actions workflow.
+- Progress toward a stable `1.0.0` once the v2 API reaches production maturity.
+
+New versions are cut by tagging a release (`vX.Y.Z`), which publishes `@mywebapi.com/sdk` to npm via the GitHub Actions workflow — see [PUBLISHING.md](./PUBLISHING.md).
+
+## Contributing
+
+Contributions are welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md) for the development setup, the generated-code workflow, and PR guidelines.
+
+## Security
+
+To report a security vulnerability, please follow the responsible-disclosure process in [SECURITY.md](./SECURITY.md). Do not open public issues for security reports.
+
+## Trademarks
+
+MetaTrader, MT4, MT5, and MetaQuotes are trademarks or registered trademarks of MetaQuotes Ltd.
+This project is an independent, community-oriented SDK for the WebAPI service.
+It is **not affiliated with, endorsed by, or sponsored by MetaQuotes Ltd.**
+
+All other trademarks are the property of their respective owners.
 
 ## License
 
