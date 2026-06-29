@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@mywebapi.com/sdk — Typed TypeScript SDK for the CPlugin WebAPI v2</title>
+  <meta name="description" content="Typed TypeScript SDK for the CPlugin WebAPI v2 — manage MT4 and MT5 servers from Node.js and browsers. OAuth2, retries, pagination and SignalR real-time included.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ---- Reset & Base ---- */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --color-bg: #0d1117;
+      --color-surface: #161b22;
+      --color-surface-hover: #1c2333;
+      --color-border: #30363d;
+      --color-text: #e6edf3;
+      --color-text-secondary: #8b949e;
+      --color-accent: #58a6ff;
+      --color-accent-hover: #79b8ff;
+      --color-green: #3fb950;
+      --color-code-bg: #1c2128;
+      --color-card-bg: #161b22;
+      --color-button-primary: #238636;
+      --color-button-primary-hover: #2ea043;
+      --color-button-primary-text: #ffffff;
+      --color-button-secondary-border: #30363d;
+      --color-button-secondary-text: #c9d1d9;
+      --color-button-secondary-hover: #30363d;
+      --focus-ring: 0 0 0 3px rgba(88, 166, 255, 0.4);
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+      --font-mono: "IBM Plex Mono", "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+      --content-max: 1040px;
+      --gap-section: 5rem;
+      --gap-card: 2rem;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+    }
+
+    /* ---- Focus ---- */
+    a:focus-visible,
+    button:focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+      border-radius: 6px;
+    }
+
+    /* ---- Layout ---- */
+    .container {
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ---- Header / Nav ---- */
+    .topnav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(13, 17, 23, 0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .topnav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 3.5rem;
+    }
+
+    .topnav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: var(--color-text);
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .topnav-brand svg {
+      flex-shrink: 0;
+    }
+
+    .topnav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .topnav-links a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+
+    .topnav-links a:hover {
+      color: var(--color-text);
+    }
+
+    /* ---- Sections ---- */
+    section,
+    footer {
+      padding: 4rem 0;
+    }
+
+    section:first-of-type {
+      padding-top: 5rem;
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--color-text-secondary);
+      max-width: 640px;
+      margin-bottom: 2rem;
+    }
+
+    /* ---- Hero ---- */
+    .hero {
+      text-align: center;
+      padding: 6rem 0 4rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.75rem, 4.5vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      max-width: 820px;
+      margin: 0 auto 1rem;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--color-text-secondary);
+      max-width: 640px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ---- Buttons ---- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      padding: 0.65rem 1.5rem;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      border: 1px solid transparent;
+      line-height: 1.4;
+    }
+
+    .btn-primary {
+      background: var(--color-button-primary);
+      color: var(--color-button-primary-text);
+      border-color: var(--color-button-primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--color-button-primary-hover);
+      border-color: var(--color-button-primary-hover);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--color-button-secondary-text);
+      border-color: var(--color-button-secondary-border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-button-secondary-hover);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--color-text-secondary);
+      border-color: transparent;
+      padding: 0.65rem 1rem;
+    }
+
+    .btn-ghost:hover {
+      color: var(--color-text);
+      background: var(--color-surface);
+      border-color: var(--color-border);
+    }
+
+    /* ---- Code block with copy ---- */
+    .install-block {
+      max-width: 580px;
+      margin: 0 auto 2.5rem;
+      position: relative;
+    }
+
+    .code-block {
+      position: relative;
+      background: var(--color-code-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .code-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 0.75rem;
+      color: var(--color-text-secondary);
+      background: var(--color-surface);
+    }
+
+    .code-block-header-lang {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+
+    .code-block-header-lang svg {
+      flex-shrink: 0;
+    }
+
+    .code-block-header-copy {
+      background: none;
+      border: none;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .code-block-header-copy:hover {
+      color: var(--color-text);
+      background: var(--color-surface-hover);
+    }
+
+    .code-block-header-copy.copied {
+      color: var(--color-green);
+    }
+
+    .code-block pre {
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      line-height: 1.5;
+      color: var(--color-text);
+      tab-size: 2;
+    }
+
+    .code-block pre code {
+      font-family: inherit;
+    }
+
+    /* ---- Grids ---- */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--gap-card);
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--gap-card);
+    }
+
+    .card {
+      background: var(--color-card-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--color-text-secondary);
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .card p {
+      font-size: 0.9375rem;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    /* ---- Quickstart, SignalR ---- */
+    .snippet-section .section-subtitle {
+      margin-bottom: 1.5rem;
+    }
+
+    .callout {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.9375rem;
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+
+    .callout a {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    .callout a:hover {
+      text-decoration: underline;
+    }
+
+    /* ---- CTA sections ---- */
+    .cta-section {
+      text-align: center;
+    }
+
+    .cta-section .section-title {
+      margin-bottom: 0.75rem;
+    }
+
+    .cta-section .section-subtitle {
+      margin: 0 auto 2rem;
+    }
+
+    .cta-section .hero-actions {
+      margin-bottom: 0;
+    }
+
+    .cta-note {
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+      margin-top: 1rem;
+    }
+
+    /* ---- Footer ---- */
+    footer {
+      border-top: 1px solid var(--color-border);
+      padding: 2rem 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+    }
+
+    .footer-inner a {
+      color: var(--color-accent);
+      text-decoration: none;
+    }
+
+    .footer-inner a:hover {
+      text-decoration: underline;
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 820px) {
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-4 {
+        grid-template-columns: 1fr;
+      }
+
+      section,
+      footer {
+        padding: 3rem 0;
+      }
+
+      section:first-of-type {
+        padding-top: 3rem;
+      }
+
+      .hero {
+        padding: 4rem 0 2.5rem;
+      }
+
+      :root {
+        --gap-section: 3rem;
+      }
+
+      .topnav-links {
+        gap: 0.75rem;
+      }
+
+      .topnav-links a:not(:first-child) {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .hero-actions .btn {
+        justify-content: center;
+      }
+
+      .container {
+        padding: 0 1rem;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    /* ---- Visually hidden for screen readers ---- */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ---- Copy button SVG icon ---- */
+    .copy-icon {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .copy-icon-check {
+      display: none;
+    }
+
+    .code-block-header-copy.copied .copy-icon-default {
+      display: none;
+    }
+
+    .code-block-header-copy.copied .copy-icon-check {
+      display: inline;
+    }
+
+    /* ---- Snippet code blocks ---- */
+    .snippet-block {
+      margin-bottom: 2rem;
+    }
+
+    .snippet-block:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ---- Scrollbar ---- */
+    .code-block pre::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .code-block pre::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .code-block pre::-webkit-scrollbar-thumb {
+      background: var(--color-border);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ Topnav ============ -->
+  <nav class="topnav" aria-label="Site navigation">
+    <div class="container">
+      <a href="#" class="topnav-brand" aria-label="SDK home">
+        <!-- Brand SVG: simple hexagon + S -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 2L20 7V17L12 22L4 17V7L12 2Z" stroke="#58a6ff" stroke-width="1.5" fill="none"/>
+          <text x="12" y="13" text-anchor="middle" fill="#58a6ff" font-size="10" font-weight="bold" font-family="system-ui">S</text>
+        </svg>
+        <span>@mywebapi.com/sdk</span>
+      </a>
+      <div class="topnav-links">
+        <a href="#quickstart">Get started</a>
+        <a href="reference/">API reference</a>
+        <a href="https://github.com/CPlugin/mywebapi.com-sdk-js" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============ Main ============ -->
+  <main>
+
+    <!-- ===== Section 1 — Hero ===== -->
+    <section aria-labelledby="hero-title">
+      <div class="container hero">
+        <h1 id="hero-title">Typed TypeScript SDK for the CPlugin WebAPI v2 — manage MT4 and MT5 servers from Node.js and browsers.</h1>
+        <p>OAuth2, retries, pagination and SignalR real-time included; types regenerated from the OpenAPI spec so they never drift.</p>
+
+        <!-- Install command -->
+        <div class="install-block">
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-block-header-lang">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="2" y="3" width="20" height="18" rx="3" stroke="#8b949e" stroke-width="1.5" fill="none"/>
+                  <path d="M9 10L12 13L15 10" stroke="#8b949e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                bash
+              </span>
+              <button class="code-block-header-copy" data-copy="npm install @mywebapi.com/sdk" aria-label="Copy install command">
+                <svg class="copy-icon copy-icon-default" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path d="M4 4V1a1 1 0 011-1h9a1 1 0 011 1v10a1 1 0 01-1 1h-3v3a1 1 0 01-1 1H1a1 1 0 01-1-1V5a1 1 0 011-1h3zm0 2H2v8h6v-2H4V6zm2-4v8h6V2H6z"/>
+                </svg>
+                <svg class="copy-icon copy-icon-check" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                  <path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/>
+                </svg>
+                <span>Copy</span>
+              </button>
+            </div>
+            <pre><code>npm install @mywebapi.com/sdk</code></pre>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#quickstart" class="btn btn-primary">
+            Get started
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8.22 2.97a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06l2.97-2.97H3.75a.75.75 0 010-1.5h7.44L8.22 4.03a.75.75 0 010-1.06z"/>
+            </svg>
+          </a>
+          <a href="reference/" class="btn btn-secondary">
+            API reference
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8.22 2.97a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06l2.97-2.97H3.75a.75.75 0 010-1.5h7.44L8.22 4.03a.75.75 0 010-1.06z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Section 2 — Why this SDK ===== -->
+    <section aria-labelledby="why-title">
+      <div class="container">
+        <h2 class="section-title" id="why-title">Why this SDK</h2>
+        <div class="grid-3">
+
+          <article class="card">
+            <h3>Always-in-sync types</h3>
+            <p>Types are auto-generated from the live OpenAPI spec — no hand-maintained mirror. Run <code>bun run generate</code> after a server-side DTO change and your IDE is up-to-date the same day.</p>
+          </article>
+
+          <article class="card">
+            <h3>Batteries-included reliability</h3>
+            <p>OAuth2 client-credentials flow with auto-refresh; idempotent retries on 408/429/502/503/504 with exponential backoff; v2 envelope unwrap; structured <code>ApiError</code> with <code>code</code> / <code>description</code> / <code>activityId</code> for log correlation.</p>
+          </article>
+
+          <article class="card">
+            <h3>REST + SignalR in one package</h3>
+            <p>One client object exposes <code>client.mt4</code> / <code>client.mt5</code> for REST and <code>client.realtime.mt4(tp)</code> for streaming — same token, same env, no second handshake.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Section 3 — Quickstart ===== -->
+    <section aria-labelledby="quickstart-title" id="quickstart">
+      <div class="container snippet-section">
+        <h2 class="section-title" id="quickstart-title">Quickstart</h2>
+        <p class="section-subtitle">Copy this snippet, set your environment variables, and you are up and running in under a minute.</p>
+
+        <div class="callout">
+          <strong>Need credentials?</strong> Create API keys in the Toolbox: <a href="https://toolbox.cplugin.com" target="_blank" rel="noopener noreferrer">toolbox.cplugin.com</a> (production) <span aria-hidden="true">·</span> <a href="https://pre.toolbox.cplugin.com" target="_blank" rel="noopener noreferrer">pre.toolbox.cplugin.com</a> (staging).
+        </div>
+
+        <div class="code-block snippet-block">
+          <div class="code-block-header">
+            <span class="code-block-header-lang">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="2" y="3" width="20" height="18" rx="3" stroke="#8b949e" stroke-width="1.5" fill="none"/>
+                <path d="M9 10L12 13L15 10" stroke="#8b949e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              TypeScript
+            </span>
+            <button class="code-block-header-copy" data-copy-block="quickstart-snippet" aria-label="Copy quickstart code">
+              <svg class="copy-icon copy-icon-default" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path d="M4 4V1a1 1 0 011-1h9a1 1 0 011 1v10a1 1 0 01-1 1h-3v3a1 1 0 01-1 1H1a1 1 0 01-1-1V5a1 1 0 011-1h3zm0 2H2v8h6v-2H4V6zm2-4v8h6V2H6z"/>
+              </svg>
+              <svg class="copy-icon copy-icon-check" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <pre><code id="quickstart-snippet">import { CPluginWebApiClient } from '@mywebapi.com/sdk';
+
+const client = CPluginWebApiClient.fromEnvironment();
+// or: new CPluginWebApiClient({ env: 'prod', clientId: '...', clientSecret: '...' });
+
+const tp = '3029d415-d0a6-4710-a9c1-8cb063ef872f';
+const time = await client.mt4.getServerTime(tp);
+console.log('MT4 server time:', time.data.timestamp);</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Section 4 — Real-time (SignalR) ===== -->
+    <section aria-labelledby="realtime-title">
+      <div class="container snippet-section">
+        <h2 class="section-title" id="realtime-title">Real-time streaming (SignalR)</h2>
+        <p class="section-subtitle">Built into the same package — no separate install. The optional peer dependency <code>@microsoft/signalr</code> is required only when you use real-time.</p>
+
+        <div class="callout">
+          Install the peer dependency: <code>npm install @microsoft/signalr</code> (only if you use real-time). The REST surface works without it.
+        </div>
+
+        <div class="code-block snippet-block">
+          <div class="code-block-header">
+            <span class="code-block-header-lang">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="2" y="3" width="20" height="18" rx="3" stroke="#8b949e" stroke-width="1.5" fill="none"/>
+                <path d="M9 10L12 13L15 10" stroke="#8b949e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              TypeScript
+            </span>
+            <button class="code-block-header-copy" data-copy-block="realtime-snippet" aria-label="Copy real-time streaming code">
+              <svg class="copy-icon copy-icon-default" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path d="M4 4V1a1 1 0 011-1h9a1 1 0 011 1v10a1 1 0 01-1 1h-3v3a1 1 0 01-1 1H1a1 1 0 01-1-1V5a1 1 0 011-1h3zm0 2H2v8h6v-2H4V6zm2-4v8h6V2H6z"/>
+              </svg>
+              <svg class="copy-icon copy-icon-check" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                <path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+          <pre><code id="realtime-snippet">const rt = client.realtime.mt4(tp);   // or .mt5
+rt.onConnectionStatus((s) => console.log('connected:', s.connected));
+await rt.start();
+for await (const tick of rt.streamTicks('EURUSD')) {
+  console.log(tick.symbol, tick.bid, tick.ask);
+}
+await rt.stop();</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Section 5 — Recipes ===== -->
+    <section aria-labelledby="recipes-title">
+      <div class="container">
+        <h2 class="section-title" id="recipes-title">Recipes</h2>
+        <p class="section-subtitle">Jump-start your integration with ready-to-run examples from the repository.</p>
+
+        <div class="grid-4">
+
+          <a href="https://github.com/CPlugin/mywebapi.com-sdk-js/blob/main/examples/01-hello.ts" target="_blank" rel="noopener noreferrer" class="card card-link">
+            <h3>Discover platforms and read server state</h3>
+            <p>List your trade platforms and read MT4/MT5 server time, version, and connection status.</p>
+          </a>
+
+          <a href="https://github.com/CPlugin/mywebapi.com-sdk-js/blob/main/examples/02-live-prices.ts" target="_blank" rel="noopener noreferrer" class="card card-link">
+            <h3>Stream live tick prices via SignalR</h3>
+            <p>Subscribe to real-time price streams for any symbol using the built-in SignalR client.</p>
+          </a>
+
+          <a href="https://github.com/CPlugin/mywebapi.com-sdk-js/blob/main/examples/03-trading-terminal.ts" target="_blank" rel="noopener noreferrer" class="card card-link">
+            <h3>Build a trading terminal</h3>
+            <p>Combine REST endpoints and real-time streams to display positions, orders, and market data.</p>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Section 6 — Credentials CTA ===== -->
+    <section aria-labelledby="credentials-title">
+      <div class="container cta-section">
+        <h2 class="section-title" id="credentials-title">Get API credentials</h2>
+        <p class="section-subtitle">API keys (<code>clientId</code> / <code>clientSecret</code>) and trade-platform IDs are managed in the CPlugin Toolbox. Toolbox provisions your WebAPI access; the SDK is the client.</p>
+        <div class="hero-actions">
+          <a href="https://toolbox.cplugin.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            Open Toolbox (production)
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8.22 2.97a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06l2.97-2.97H3.75a.75.75 0 010-1.5h7.44L8.22 4.03a.75.75 0 010-1.06z"/>
+            </svg>
+          </a>
+          <a href="https://pre.toolbox.cplugin.com" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+            Open Toolbox (staging)
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8.22 2.97a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06l2.97-2.97H3.75a.75.75 0 010-1.5h7.44L8.22 4.03a.75.75 0 010-1.06z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Section 7 — API Reference CTA ===== -->
+    <section aria-labelledby="reference-title">
+      <div class="container cta-section">
+        <h2 class="section-title" id="reference-title">Full TypeDoc reference</h2>
+        <p class="section-subtitle">Browse every class, interface, function, and type — auto-generated from the OpenAPI spec and always up-to-date.</p>
+        <div class="hero-actions">
+          <a href="reference/" class="btn btn-primary">
+            Browse API reference
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8.22 2.97a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06l2.97-2.97H3.75a.75.75 0 010-1.5h7.44L8.22 4.03a.75.75 0 010-1.06z"/>
+            </svg>
+          </a>
+        </div>
+        <p class="cta-note">29 modules, auto-generated from the OpenAPI spec.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============ Section 8 — Footer ============ -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <span>MIT licensed &middot; source on <a href="https://github.com/CPlugin/mywebapi.com-sdk-js" target="_blank" rel="noopener noreferrer">GitHub</a></span>
+        <span>v0.1.1 &mdash; types regenerated from the live OpenAPI spec</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // ---- Copy-to-clipboard ----
+      function setupCopyButtons() {
+        var buttons = document.querySelectorAll('.code-block-header-copy');
+        buttons.forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var text;
+            var copyAttr = btn.getAttribute('data-copy');
+            var copyBlockId = btn.getAttribute('data-copy-block');
+
+            if (copyAttr !== null) {
+              text = copyAttr;
+            } else if (copyBlockId !== null) {
+              var el = document.getElementById(copyBlockId);
+              if (el) {
+                text = el.textContent;
+              }
+            }
+
+            if (!text) return;
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(text).then(function() {
+                showCopied(btn);
+              }).catch(function() {
+                fallbackCopy(btn, text);
+              });
+            } else {
+              fallbackCopy(btn, text);
+            }
+          });
+        });
+      }
+
+      function fallbackCopy(btn, text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        ta.style.pointerEvents = 'none';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          showCopied(btn);
+        } catch (e) {
+          // silently fail
+        }
+        document.body.removeChild(ta);
+      }
+
+      function showCopied(btn) {
+        var span = btn.querySelector('span');
+        var originalText = span ? span.textContent : 'Copy';
+        btn.classList.add('copied');
+        if (span) span.textContent = 'Copied!';
+        setTimeout(function() {
+          btn.classList.remove('copied');
+          if (span) span.textContent = originalText;
+        }, 2000);
+      }
+
+      // ---- Init ----
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupCopyButtons);
+      } else {
+        setupCopyButtons();
+      }
+    })();
+  </script>
+
+</body>
+</html>
