@@ -2,7 +2,7 @@
 
 TypeScript client for the CPlugin WebAPI v2 — a management API for trading-platform servers.
 
-**Status:** Published on the public npm registry as [`@mywebapi.com/sdk`](https://www.npmjs.com/package/@mywebapi.com/sdk) (early access, current version `0.1.0`). The API shape is stable; while the package is at `0.x`, minor releases may introduce breaking changes, so pin a version in production. Versioning follows [semver](https://semver.org/).
+**Status:** Published on the public npm registry as [`@mywebapi.com/sdk`](https://www.npmjs.com/package/@mywebapi.com/sdk) (early access, current version `0.1.1`). The API shape is stable; while the package is at `0.x`, minor releases may introduce breaking changes, so pin a version in production. Versioning follows [semver](https://semver.org/).
 
 - **Auto-generated types** from the live OpenAPI spec — all endpoints, DTOs, and enums are exact and stay in sync with the server.
 - **Unified entry point** — `CPluginWebApiClient` with `mt4` and `mt5` namespaces; credentials and token management configured once at instantiation.
