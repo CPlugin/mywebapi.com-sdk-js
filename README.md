@@ -247,6 +247,14 @@ MT4 hubs expose ticks, trades, margin-call, user and symbol streams; MT5 hubs ex
 - Add typed convenience wrappers for every v2 endpoint as usage patterns crystallise.
 - Tag a release (`vX.Y.Z`) to publish `@mywebapi.com/sdk` to npm via the GitHub Actions workflow.
 
+## Trademarks
+
+MetaTrader, MT4, MT5, and MetaQuotes are trademarks or registered trademarks of MetaQuotes Ltd.
+This project is an independent, community-oriented SDK for the WebAPI service.
+It is **not affiliated with, endorsed by, or sponsored by MetaQuotes Ltd.**
+
+All other trademarks are the property of their respective owners.
+
 ## License
 
 MIT — see [LICENSE](./LICENSE).
