@@ -32,14 +32,14 @@ const client = new CPluginWebApiClient({
   clientSecret: process.env.CPLUGIN_WEBAPI_CLIENT_SECRET!,
 });
 
-// MT4 server time
+// server time (mt4 namespace)
 const tp = '3029d415-d0a6-4710-a9c1-8cb063ef872f';
 const time = await client.mt4.getServerTime(tp);
-console.log('MT4 server time:', time.data.timestamp);
+console.log('server time (mt4):', time.data.timestamp);
 
-// MT5 server time
+// server time (mt5 namespace)
 const mt5Time = await client.mt5.getServerTime(tp);
-console.log('MT5 server time:', mt5Time.data.timestamp);
+console.log('server time (mt5):', mt5Time.data.timestamp);
 
 // Pagination — single page with cursor capture
 const page = await client.paged(() =>
@@ -240,7 +240,7 @@ for await (const tick of rt.streamTicks('EURUSD')) {
 await rt.stop();
 ```
 
-MT4 hubs expose ticks, trades, margin-call, user and symbol streams; MT5 hubs expose connection status and margin-call updates.
+The `mt4` hubs expose ticks, trades, margin-call, user and symbol streams; the `mt5` hubs expose connection status and margin-call updates.
 
 ## What's next
 
