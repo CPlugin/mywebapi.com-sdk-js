@@ -1,8 +1,8 @@
 {
   "name": "@mywebapi.com/sdk",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
-  "description": "Typed TypeScript SDK for the CPlugin WebAPI v2 — manage MT4 and MT5 servers from Node.js and browsers. OAuth2, retries, pagination and SignalR real-time included; types regenerated from the OpenAPI spec so they never drift.",
+  "description": "Typed TypeScript SDK for the CPlugin WebAPI v2 — manage trading-platform servers from Node.js and browsers. OAuth2, retries, pagination and SignalR real-time included; types regenerated from the OpenAPI spec so they never drift.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -12,7 +12,11 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -22,20 +26,20 @@
   },
   "homepage": "https://cplugin.github.io/mywebapi.com-sdk-js/",
   "keywords": [
-    "mt4",
-    "mt5",
-    "metatrader",
-    "forex",
-    "trading",
-    "broker",
     "cplugin",
     "webapi",
-    "typescript",
+    "trading",
+    "trading-platform",
+    "broker",
+    "forex",
     "sdk",
+    "typescript",
+    "api-client",
+    "rest-api",
+    "openapi",
     "signalr",
     "real-time",
-    "rest-api",
-    "openapi"
+    "oauth2"
   ],
   "bugs": {
     "url": "https://github.com/CPlugin/mywebapi.com-sdk-js/issues"
