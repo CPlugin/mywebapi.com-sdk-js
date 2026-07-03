@@ -4,6 +4,7 @@ dist/
 # * Negated pattern: ignore everything directly under docs/, then un-ignore ^
 # * reference/ subtree and .nojekyll so they are committed.
 docs/*
+!docs/index.html
 !docs/reference/
 !docs/reference/**
 !docs/.nojekyll
