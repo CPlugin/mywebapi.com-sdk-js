@@ -2,7 +2,7 @@
 
 TypeScript client for the CPlugin WebAPI v2 — a management API for trading-platform servers.
 
-**Status:** Version `0.2.0` release candidate. The package keeps the generated REST catalog and typed MT4/MT5 realtime clients in one entry point; minor releases may introduce breaking changes while the package remains at `0.x`. Pin a version in production.
+**Status:** Version `0.2.1`. The package keeps the generated REST catalog and typed MT4/MT5 realtime clients in one entry point; minor releases may introduce breaking changes while the package remains at `0.x`. Pin a version in production.
 
 - **Auto-generated types** from the live OpenAPI spec — all endpoints, DTOs, and enums are exact and stay in sync with the server.
 - **Unified entry point** — `CPluginWebApiClient` with `mt4` and `mt5` namespaces; credentials and token management configured once at instantiation.

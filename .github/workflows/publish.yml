@@ -62,7 +62,7 @@ jobs:
           rm -rf "$pack_dir"
           mkdir -p "$pack_dir"
           npm pack --json --pack-destination "$pack_dir" > "$pack_dir/pack.json"
-          tarball="$(node - "$pack_dir/pack.json" <<'NODE'
+          tarball="$(node - "$pack_dir" <<'NODE'
           const fs = require('node:fs');
           const path = require('node:path');
           const packDir = process.argv[2];

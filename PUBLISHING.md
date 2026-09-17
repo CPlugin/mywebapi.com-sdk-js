@@ -22,8 +22,8 @@
 2. Commit and push the version bump to `main`.
 3. Tag the commit and push the tag:
    ```sh
-   git tag v0.2.0
-   git push origin v0.2.0
+   git tag v0.2.1
+   git push origin v0.2.1
    ```
 4. The `publish.yml` workflow triggers automatically, builds the package, and
    publishes it to npm with provenance attestation.
