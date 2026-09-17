@@ -43,7 +43,7 @@ export const getGetPositionByGroupMaskUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT5/${tradePlatform}/PositionByGroup/${mask}?${stringifiedParams}` : `/api/v2/MT5/${tradePlatform}/PositionByGroup/${mask}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/PositionByGroup/${encodeURIComponent(String(mask))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/PositionByGroup/${encodeURIComponent(String(mask))}`
 }
 
 /**
@@ -91,7 +91,7 @@ export const getGetOrderByGroupMaskUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT5/${tradePlatform}/OrderByGroup/${mask}?${stringifiedParams}` : `/api/v2/MT5/${tradePlatform}/OrderByGroup/${mask}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderByGroup/${encodeURIComponent(String(mask))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderByGroup/${encodeURIComponent(String(mask))}`
 }
 
 /**
@@ -139,7 +139,7 @@ export const getGetDealByGroupMaskUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT5/${tradePlatform}/DealByGroup/${mask}?${stringifiedParams}` : `/api/v2/MT5/${tradePlatform}/DealByGroup/${mask}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealByGroup/${encodeURIComponent(String(mask))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealByGroup/${encodeURIComponent(String(mask))}`
 }
 
 /**

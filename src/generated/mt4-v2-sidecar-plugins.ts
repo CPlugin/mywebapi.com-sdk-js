@@ -33,7 +33,7 @@ export const getGetPluginsGetUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/PluginsGet`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/PluginsGet`
 }
 
 /**
@@ -75,7 +75,7 @@ export const getGetPluginParamGetPosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/PluginParamGet/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/PluginParamGet/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -116,7 +116,7 @@ export const getPostPluginUpdateUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/PluginUpdate`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/PluginUpdate`
 }
 
 /**
@@ -156,7 +156,7 @@ export const getGetCfgRequestPluginUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgRequestPlugin`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestPlugin`
 }
 
 /**
@@ -197,7 +197,7 @@ export const getPostCfgUpdatePluginUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdatePlugin`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdatePlugin`
 }
 
 /**

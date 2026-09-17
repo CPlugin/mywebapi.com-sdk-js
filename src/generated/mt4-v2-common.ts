@@ -32,7 +32,7 @@ export const getGetServerTimeMT4Url = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/ServerTime`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ServerTime`
 }
 
 /**
@@ -71,7 +71,7 @@ export const getGetManagerCommonUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/ManagerCommon`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ManagerCommon`
 }
 
 /**
@@ -119,7 +119,7 @@ export const getGetJournalRequestUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/JournalRequest?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/JournalRequest`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/JournalRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/JournalRequest`
 }
 
 /**

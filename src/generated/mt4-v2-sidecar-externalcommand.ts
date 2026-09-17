@@ -30,7 +30,7 @@ export const getPostExternalCommandBinaryUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/ExternalCommandBinary`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ExternalCommandBinary`
 }
 
 /**

@@ -4,27 +4,134 @@ on:
   push:
   pull_request:
 
-jobs:
-  test:
-    name: Typecheck & Test
-    runs-on: ubuntu-latest
+permissions:
+  contents: read
 
+jobs:
+  verify:
+    name: Build, test & packed consumer gates
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
+      - name: Set temporary directory for CI helpers
+        shell: bash
+        run: printf 'TMPDIR=%s\n' "$RUNNER_TEMP" >> "$GITHUB_ENV"
 
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@v2.0.2
         with:
-          bun-version: latest
+          bun-version: 1.3.14
+
+      - name: Setup Node
+        uses: actions/setup-node@v4.4.0
+        with:
+          node-version: '22'
+
+      - name: Pin npm for reproducible audit tooling
+        run: npm install --global npm@11.6.0
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Typecheck
-        run: bunx tsc --noEmit -p tsconfig.json
+      - name: Typecheck source
+        run: bun run typecheck
 
       - name: Run tests
-        # * E2E tests require a live WebAPI instance (WEBAPI_E2E=1). They are
-        #   skipped automatically when the env variable is absent, so unit tests
-        #   run cleanly in CI without any additional setup.
         run: bun test
+
+      - name: Build dual distributions
+        run: bun run build
+
+      - name: Pack one immutable artifact
+        id: pack
+        shell: bash
+        run: |
+          set -euo pipefail
+          pack_dir="$RUNNER_TEMP/sdk-pack"
+          rm -rf "$pack_dir"
+          mkdir -p "$pack_dir"
+          npm pack --json --pack-destination "$pack_dir" > "$pack_dir/pack.json"
+          tarball="$(node - "$pack_dir/pack.json" <<'NODE'
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const packDir = process.argv[2];
+          const entries = JSON.parse(fs.readFileSync(path.join(packDir, 'pack.json'), 'utf8'));
+          if (!Array.isArray(entries) || entries.length !== 1 || typeof entries[0]?.filename !== 'string') {
+            throw new Error('npm pack must produce exactly one tarball');
+          }
+          const tarball = path.resolve(packDir, path.basename(entries[0].filename));
+          const stat = fs.statSync(tarball);
+          if (!stat.isFile() || stat.size <= 0) throw new Error('npm pack produced an empty artifact');
+          process.stdout.write(tarball);
+          NODE
+          )"
+          sha256sum "$tarball" | tee "$pack_dir/sdk.tgz.sha256"
+          printf 'SDK_TARBALL=%s\n' "$tarball" >> "$GITHUB_ENV"
+          printf 'SDK_PACK_DIR=%s\n' "$pack_dir" >> "$GITHUB_ENV"
+
+      - name: Match source package identity and version
+        run: |
+          set -euo pipefail
+          version="$(node -p "JSON.parse(require('node:fs').readFileSync('package.json', 'utf8')).version")"
+          node ci/check-version.mjs "$version"
+          printf 'SDK_VERSION=%s\n' "$version" >> "$GITHUB_ENV"
+
+      - name: Verify packed metadata and safely extract artifact
+        run: |
+          set -euo pipefail
+          python3 ci/verify-artifact.py \
+            --artifact "$SDK_TARBALL" \
+            --expected-package '@mywebapi.com/sdk' \
+            --expected-version "$SDK_VERSION" \
+            --extract-dir "$RUNNER_TEMP/sdk-packed-extract" \
+            | tee "$RUNNER_TEMP/sdk-artifact-info.json"
+          test "$(node -p "JSON.parse(require('node:fs').readFileSync('$RUNNER_TEMP/sdk-artifact-info.json', 'utf8')).artifact_bytes")" -gt 0
+          test "$(node -p "JSON.parse(require('node:fs').readFileSync('$RUNNER_TEMP/sdk-artifact-info.json', 'utf8')).extracted_bytes")" -gt 0
+          sha256sum -c "$SDK_PACK_DIR/sdk.tgz.sha256"
+
+      - name: Setup Chromium for browser consumer
+        uses: browser-actions/setup-chrome@v2.1.0
+        with:
+          chrome-version: 131
+
+      - name: Consumer smoke against packed artifact (Node, Bun, browser, declarations)
+        run: ci/package-consumer.sh "$SDK_TARBALL" "$RUNNER_TEMP/sdk-consumer" --browser
+
+      - name: Production dependency audit (packed consumer only)
+        id: audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          report="$RUNNER_TEMP/npm-audit.json"
+          if (cd "$RUNNER_TEMP/sdk-consumer" && npm audit --omit=dev --audit-level=low --json > "$report"); then
+            printf 'production dependency audit is clean\n'
+          else
+            cat "$report"
+            exit 1
+          fi
+
+      - name: Install pinned gitleaks CLI
+        run: ci/install-gitleaks.sh "$RUNNER_TEMP/gitleaks-bin"
+
+      - name: Secret scan of extracted packed artifact
+        run: ci/scan-packed-artifact.sh "$RUNNER_TEMP/gitleaks-bin/gitleaks" "$RUNNER_TEMP/sdk-packed-extract"
+
+      - name: SBOM for packed consumer dependency graph
+        uses: anchore/sbom-action@v0.17.0
+        with:
+          path: ${{ runner.temp }}/sdk-consumer
+          artifact-name: sdk-consumer-sbom.spdx.json
+          output-file: sdk-consumer-sbom.spdx.json
+
+      - name: Upload release gate evidence
+        if: always()
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: sdk-release-gate-evidence
+          path: |
+            ${{ env.SDK_TARBALL }}
+            ${{ env.SDK_PACK_DIR }}/sdk.tgz.sha256
+            ${{ runner.temp }}/sdk-artifact-info.json
+            ${{ runner.temp }}/npm-audit.json
+            sdk-consumer-sbom.spdx.json
+          if-no-files-found: error

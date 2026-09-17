@@ -35,7 +35,7 @@ export const getGetGroupsGetUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/GroupsGet`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/GroupsGet`
 }
 
 /**
@@ -77,7 +77,7 @@ export const getGetGroupRecordGetGroupUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/GroupRecordGet/${group}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/GroupRecordGet/${encodeURIComponent(String(group))}`
 }
 
 /**
@@ -126,7 +126,7 @@ export const getGetGroupsRequestUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/GroupsRequest?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/GroupsRequest`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/GroupsRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/GroupsRequest`
 }
 
 /**
@@ -164,7 +164,7 @@ export const getGetGroupSecGroupsGetGroupUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/GroupSecGroupsGet/${group}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/GroupSecGroupsGet/${encodeURIComponent(String(group))}`
 }
 
 /**
@@ -207,7 +207,7 @@ export const getGetGroupSecMarginsGetGroupUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/GroupSecMarginsGet/${group}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/GroupSecMarginsGet/${encodeURIComponent(String(group))}`
 }
 
 /**
@@ -250,7 +250,7 @@ export const getPostGroupRecordUpdateGroupUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/GroupRecordUpdate/${group}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/GroupRecordUpdate/${encodeURIComponent(String(group))}`
 }
 
 /**
@@ -305,7 +305,7 @@ export const getPatchGroupRecordGroupMT4Url = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/GroupRecord/${group}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/GroupRecord/${encodeURIComponent(String(group))}`
 }
 
 /**
@@ -343,7 +343,7 @@ export const getGetEnsureGroupNameExistGroupUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/EnsureGroupNameExist/${group}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/EnsureGroupNameExist/${encodeURIComponent(String(group))}`
 }
 
 /**

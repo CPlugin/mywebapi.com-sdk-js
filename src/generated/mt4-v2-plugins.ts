@@ -29,7 +29,7 @@ export const getPostExternalCommandJSONUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/ExternalCommandJSON`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ExternalCommandJSON`
 }
 
 /**

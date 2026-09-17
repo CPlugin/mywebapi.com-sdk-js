@@ -42,7 +42,7 @@ export const getGetUsersSnapshotUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/UsersSnapshot?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/UsersSnapshot`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersSnapshot?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersSnapshot`
 }
 
 /**
@@ -93,7 +93,7 @@ export const getGetUsersSyncReadUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/UsersSyncRead?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/UsersSyncRead`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersSyncRead?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersSyncRead`
 }
 
 /**
@@ -143,7 +143,7 @@ export const getGetTradesSnapshotUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/TradesSnapshot?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/TradesSnapshot`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesSnapshot?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesSnapshot`
 }
 
 /**
@@ -191,7 +191,7 @@ export const getGetTradesSyncReadUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/TradesSyncRead?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/TradesSyncRead`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesSyncRead?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesSyncRead`
 }
 
 /**

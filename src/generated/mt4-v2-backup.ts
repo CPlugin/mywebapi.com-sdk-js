@@ -34,7 +34,7 @@ export const getGetBackupInfoUsersModeUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/BackupInfoUsers/${mode}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupInfoUsers/${encodeURIComponent(String(mode))}`
 }
 
 /**
@@ -80,7 +80,7 @@ export const getGetBackupInfoOrdersModeUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/BackupInfoOrders/${mode}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupInfoOrders/${encodeURIComponent(String(mode))}`
 }
 
 /**
@@ -131,7 +131,7 @@ export const getGetBackupRequestUsersFileUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/BackupRequestUsers/${file}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/BackupRequestUsers/${file}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRequestUsers/${encodeURIComponent(String(file))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRequestUsers/${encodeURIComponent(String(file))}`
 }
 
 /**
@@ -193,7 +193,7 @@ export const getGetBackupRequestOrdersFileUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/BackupRequestOrders/${file}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/BackupRequestOrders/${file}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRequestOrders/${encodeURIComponent(String(file))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRequestOrders/${encodeURIComponent(String(file))}`
 }
 
 /**

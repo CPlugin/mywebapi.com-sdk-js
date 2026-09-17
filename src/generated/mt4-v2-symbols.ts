@@ -48,7 +48,7 @@ export const getGetSymbolInfoGetUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/SymbolInfoGet?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/SymbolInfoGet`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolInfoGet?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolInfoGet`
 }
 
 /**
@@ -98,7 +98,7 @@ export const getGetSymbolInfoUpdatedUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/SymbolInfoUpdated?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/SymbolInfoUpdated`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolInfoUpdated?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolInfoUpdated`
 }
 
 /**
@@ -139,7 +139,7 @@ export const getGetSymbolsGroupsGetUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/SymbolsGroupsGet`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolsGroupsGet`
 }
 
 /**
@@ -180,7 +180,7 @@ export const getGetCfgRequestSymbolUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgRequestSymbol`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestSymbol`
 }
 
 /**
@@ -221,7 +221,7 @@ export const getGetCfgRequestSymbolSymbolUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgRequestSymbol/${symbol}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestSymbol/${encodeURIComponent(String(symbol))}`
 }
 
 /**
@@ -263,7 +263,7 @@ export const getGetSymbolSessionsGetSymbolUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/SymbolSessionsGet/${symbol}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolSessionsGet/${encodeURIComponent(String(symbol))}`
 }
 
 /**
@@ -309,7 +309,7 @@ export const getPostCfgUpdateSymbolSymbolUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdateSymbol/${symbol}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateSymbol/${encodeURIComponent(String(symbol))}`
 }
 
 /**
@@ -359,7 +359,7 @@ export const getPatchSymbolConfigSymbolUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/SymbolConfig/${symbol}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolConfig/${encodeURIComponent(String(symbol))}`
 }
 
 /**
@@ -397,7 +397,7 @@ export const getPostSymbolAddSymbolUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/SymbolAdd/${symbol}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolAdd/${encodeURIComponent(String(symbol))}`
 }
 
 /**
@@ -445,7 +445,7 @@ export const getPostSymbolHideSymbolUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/SymbolHide/${symbol}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolHide/${encodeURIComponent(String(symbol))}`
 }
 
 /**
@@ -486,7 +486,7 @@ export const getPostSymbolsRefreshUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/SymbolsRefresh`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolsRefresh`
 }
 
 /**
@@ -526,7 +526,7 @@ export const getPostSymbolChangeUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/SymbolChange`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolChange`
 }
 
 /**
@@ -583,7 +583,7 @@ export const getPostSymbolSendTickUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/SymbolSendTick?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/SymbolSendTick`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolSendTick?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolSendTick`
 }
 
 /**

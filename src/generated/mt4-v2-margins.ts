@@ -30,7 +30,7 @@ export const getGetMarginsGetUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/MarginsGet`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/MarginsGet`
 }
 
 /**
@@ -72,7 +72,7 @@ export const getGetMarginLevelGetLoginUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/MarginLevelGet/${login}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/MarginLevelGet/${encodeURIComponent(String(login))}`
 }
 
 /**
@@ -115,7 +115,7 @@ export const getGetMarginLevelRequestLoginUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/MarginLevelRequest/${login}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/MarginLevelRequest/${encodeURIComponent(String(login))}`
 }
 
 /**

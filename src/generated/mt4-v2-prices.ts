@@ -49,7 +49,7 @@ export const getGetChartRequestSymbolUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/ChartRequest/${symbol}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/ChartRequest/${symbol}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartRequest/${encodeURIComponent(String(symbol))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartRequest/${encodeURIComponent(String(symbol))}`
 }
 
 /**
@@ -102,7 +102,7 @@ export const getPostChartAddSymbolUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/ChartAdd/${symbol}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/ChartAdd/${symbol}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartAdd/${encodeURIComponent(String(symbol))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartAdd/${encodeURIComponent(String(symbol))}`
 }
 
 /**
@@ -158,7 +158,7 @@ export const getPostChartUpdateSymbolUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/ChartUpdate/${symbol}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/ChartUpdate/${symbol}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartUpdate/${encodeURIComponent(String(symbol))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartUpdate/${encodeURIComponent(String(symbol))}`
 }
 
 /**
@@ -212,7 +212,7 @@ export const getPostChartDeleteSymbolUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/ChartDelete/${symbol}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/ChartDelete/${symbol}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartDelete/${encodeURIComponent(String(symbol))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartDelete/${encodeURIComponent(String(symbol))}`
 }
 
 /**
@@ -260,7 +260,7 @@ export const getPostHistoryCorrectSymbolUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/HistoryCorrect/${symbol}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/HistoryCorrect/${encodeURIComponent(String(symbol))}`
 }
 
 /**
@@ -317,7 +317,7 @@ export const getGetTicksRequestSymbolUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/TicksRequest/${symbol}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/TicksRequest/${symbol}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TicksRequest/${encodeURIComponent(String(symbol))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TicksRequest/${encodeURIComponent(String(symbol))}`
 }
 
 /**
@@ -361,7 +361,7 @@ export const getGetTickInfoLastSymbolUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/TickInfoLast/${symbol}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TickInfoLast/${encodeURIComponent(String(symbol))}`
 }
 
 /**
@@ -404,7 +404,7 @@ export const getGetTickInfoLastUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/TickInfoLast`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TickInfoLast`
 }
 
 /**

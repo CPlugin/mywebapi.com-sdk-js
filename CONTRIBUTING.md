@@ -51,7 +51,6 @@ via [orval](https://orval.dev/) — **do not edit generated files by hand**. To
 refresh them after a spec change:
 
 ```bash
-bun run fetch-spec    # download swagger.json from a running WebAPI (WEBAPI_BASE_URL)
 bun run generate      # regenerate src/generated/ from the spec
 bun run typecheck     # confirm nothing broke
 ```

@@ -31,7 +31,7 @@ export const getPostUserPasswordCheckLoginUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/UserPasswordCheck/${login}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserPasswordCheck/${encodeURIComponent(String(login))}`
 }
 
 /**
@@ -88,7 +88,7 @@ export const getPostUserPasswordSetLoginUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/UserPasswordSet/${login}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/UserPasswordSet/${login}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserPasswordSet/${encodeURIComponent(String(login))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserPasswordSet/${encodeURIComponent(String(login))}`
 }
 
 /**

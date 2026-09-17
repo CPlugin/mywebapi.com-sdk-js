@@ -39,7 +39,7 @@ export const getGetOnlineGetUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/OnlineGet?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/OnlineGet`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/OnlineGet?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/OnlineGet`
 }
 
 /**
@@ -91,7 +91,7 @@ export const getGetOnlineRequestUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/OnlineRequest?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/OnlineRequest`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/OnlineRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/OnlineRequest`
 }
 
 /**

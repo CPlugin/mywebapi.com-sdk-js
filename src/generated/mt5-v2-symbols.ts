@@ -30,7 +30,7 @@ export const getGetSymbolGetSymbolUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT5/${tradePlatform}/SymbolGet/${symbol}`
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/SymbolGet/${encodeURIComponent(String(symbol))}`
 }
 
 /**
@@ -67,7 +67,7 @@ export const getPatchSymbolRecordSymbolUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT5/${tradePlatform}/SymbolRecord/${symbol}`
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/SymbolRecord/${encodeURIComponent(String(symbol))}`
 }
 
 /**

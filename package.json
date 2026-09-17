@@ -1,15 +1,18 @@
 {
   "name": "@mywebapi.com/sdk",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "license": "MIT",
   "description": "Typed TypeScript SDK for the CPlugin WebAPI v2 — manage trading-platform servers from Node.js and browsers. OAuth2, retries, pagination and SignalR real-time included; types regenerated from the OpenAPI spec so they never drift.",
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./dist/node/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "browser": "./dist/browser/index.js",
+      "node": "./dist/node/index.js",
+      "import": "./dist/node/index.js",
+      "default": "./dist/node/index.js"
     }
   },
   "files": [
@@ -46,22 +49,13 @@
   },
   "scripts": {
     "generate": "orval --config orval.config.ts",
-    "build": "rm -rf dist && bun build src/index.ts --outdir dist --target browser --format esm && tsc -p tsconfig.build.json --emitDeclarationOnly --declaration",
+    "build": "rm -rf dist && mkdir -p dist/node dist/browser && bun build src/index.ts --outdir dist/node --target node --format esm --external @microsoft/signalr && bun build src/index.ts --outdir dist/browser --target browser --format esm --external @microsoft/signalr && tsc -p tsconfig.build.json --emitDeclarationOnly --declaration",
     "test": "bun test",
     "test:e2e": "WEBAPI_E2E=1 bun test e2e",
     "docs": "typedoc",
     "typecheck": "tsc --noEmit"
   },
-  "peerDependencies": {
-    "@microsoft/signalr": "^9.0.0 || ^10.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@microsoft/signalr": {
-      "optional": true
-    }
-  },
   "devDependencies": {
-    "@microsoft/signalr": "^10.0.0",
     "@types/bun": "latest",
     "orval": "8.19.0",
     "typedoc": "^0.28.19",
@@ -69,5 +63,8 @@
   },
   "engines": {
     "bun": ">=1.0.0"
+  },
+  "dependencies": {
+    "@microsoft/signalr": "10.0.0"
   }
 }

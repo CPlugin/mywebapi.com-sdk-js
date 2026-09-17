@@ -41,7 +41,7 @@ export const getGetSrvFeedersUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/SrvFeeders?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/SrvFeeders`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvFeeders?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvFeeders`
 }
 
 /**
@@ -88,7 +88,7 @@ export const getGetLicenseCheckLicenseNameUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/LicenseCheck/${licenseName}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/LicenseCheck/${encodeURIComponent(String(licenseName))}`
 }
 
 /**
@@ -131,7 +131,7 @@ export const getPostNotificationsSendUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/NotificationsSend`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/NotificationsSend`
 }
 
 export const postNotificationsSend = async (tradePlatform: string,
@@ -165,7 +165,7 @@ export const getGetSrvFeederLogNameUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/SrvFeederLog/${name}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvFeederLog/${encodeURIComponent(String(name))}`
 }
 
 /**

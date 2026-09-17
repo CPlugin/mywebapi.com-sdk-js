@@ -16,10 +16,10 @@ import { MT5V2SignalRClient } from './signalr.mt5';
 import type { RetryPolicy } from './retry';
 import { defaultPolicy } from './retry';
 import { resolveEnvironment, type EnvironmentSelector } from './environments';
-import { withContext, currentContextOrNull, type RequestContext } from './mutator.context';
-import { type UnwrapEnvelope } from './mutator';
+import { withRequestContext, type RequestContext } from './mutator.context';
+import { authenticatedFetch, pagingFromResult, type UnwrapEnvelope } from './mutator';
 import type { PagedResult } from './pagination';
-import { ApiError, type ApiErrorBody } from './errors';
+import { ApiError, codeForHttpStatus } from './errors';
 
 // ---------------------------------------------------------------------------
 // TradePlatform — discovery type for GET /api/TradePlatforms
@@ -127,6 +127,8 @@ export interface CPluginWebApiClientOptions {
   fetch?: typeof fetch;
   /** Override individual retry-policy fields. */
   retry?: Partial<RetryPolicy>;
+  /** Per-request deadline in milliseconds. Defaults to 30 seconds. */
+  timeoutMs?: number;
 }
 
 /** Combine environment selector with client credentials. */
@@ -203,11 +205,9 @@ type MT5Namespace = CleanNamespace<
 // resolves through UnwrapEnvelope twice (orval outer + v2 inner) — matching
 // what callers actually receive.
 //
-// * Per-call isolation: each top-level call gets a fresh RequestContext so that
-//   concurrent calls (e.g. two paged() at once) never share a mutable lastMeta
-//   slot. Nested calls that already run inside a withContext scope (e.g. the
-//   generated call inside paged()) reuse the outer context so that customFetch
-//   writes lastMeta into the scope that paged() will read.
+// Each generated operation receives a fresh explicit RequestContext through its
+// final RequestInit argument; concurrent browser calls never share mutable state.
+// Pagination metadata travels on the returned payload rather than a global slot.
 // ---------------------------------------------------------------------------
 
 // * Maps a generated module type: every async function has its resolved return
@@ -222,13 +222,10 @@ type BoundModule<M> = {
     : M[K];
 };
 
-type AnyFn = (...args: never[]) => Promise<unknown>;
 
-// * base holds the immutable connection config shared by all calls from this
-//   client instance. lastMeta is intentionally ABSENT — it lives only on the
-//   per-call context created inside bind() and paged(), so concurrent calls
-//   can never overwrite each other's cursor.
-type BaseContext = Omit<RequestContext, 'lastMeta'>;
+
+// Immutable connection config shared by this client instance.
+type BaseContext = RequestContext;
 
 // * Bind a generated module to a base context, optionally stripping a trailing
 //   platform suffix (e.g. 'MT4') from exported function names. This keeps the
@@ -256,30 +253,24 @@ function bind<M extends Record<string, unknown>>(
 ): BoundModule<M> {
   const out: Record<string, unknown> = {};
   for (const [name, value] of Object.entries(mod)) {
-    // * Compute the exposed key: strip the trailing platform token if present.
-    const key =
-      platformSuffix && name.endsWith(platformSuffix)
-        ? name.slice(0, -platformSuffix.length)
-        : name;
-
+    const key = platformSuffix && name.endsWith(platformSuffix)
+      ? name.slice(0, -platformSuffix.length)
+      : name;
     if (typeof value !== 'function') {
       out[key] = value;
       continue;
     }
     out[key] = (...args: never[]) => {
-      // * If already inside a withContext scope (nested call, e.g. inside
-      //   paged()), reuse it so customFetch writes into the same lastMeta slot
-      //   that the outer paged() scope will read.
-      const active = currentContextOrNull();
-      if (active) return (value as AnyFn)(...args);
-      // * Top-level call: allocate a fresh per-call context with its own
-      //   lastMeta slot to prevent concurrent calls from crossing.
-      const perCall: RequestContext = { ...base, lastMeta: null };
-      return withContext(perCall, () => (value as AnyFn)(...args));
+      const callArgs = [...args] as unknown[];
+      const optionsIndex = value.length - 1;
+      while (callArgs.length < optionsIndex) callArgs.push(undefined);
+      callArgs[optionsIndex] = withRequestContext(callArgs[optionsIndex] as RequestInit | undefined, base);
+      return (value as (...values: unknown[]) => Promise<unknown>)(...callArgs);
     };
   }
   return out as BoundModule<M>;
 }
+
 
 // ---------------------------------------------------------------------------
 // CPluginWebApiClient
@@ -313,8 +304,7 @@ export class CPluginWebApiClient {
     mt5(tradePlatform: string, extras?: SignalRClientExtras): MT5V2SignalRClient;
   };
 
-  // * Immutable connection config — no mutable lastMeta here. Each call
-  //   (via bind or paged) creates its own fresh per-call context.
+  // Immutable connection config; each operation gets context through RequestInit.
   private readonly base: BaseContext;
 
   constructor(init: CPluginWebApiClientInit) {
@@ -328,6 +318,8 @@ export class CPluginWebApiClient {
       identityUrl: env.authority,
       ...(init.scopes ? { scopes: init.scopes } : {}),
       ...(init.fetch ? { fetch: init.fetch } : {}),
+      ...(init.timeoutMs !== undefined ? { timeoutMs: init.timeoutMs } : {}),
+      ...(env.allowInsecureLoopback ? { allowInsecureLoopback: true } : {}),
     });
 
     this.base = {
@@ -335,7 +327,11 @@ export class CPluginWebApiClient {
       tokenProvider,
       fetchImpl: init.fetch ?? globalThis.fetch.bind(globalThis),
       retryPolicy: { ...defaultPolicy, ...(init.retry ?? {}) },
+      timeoutMs: init.timeoutMs ?? 30_000,
     };
+    if (!Number.isFinite(this.base.timeoutMs) || this.base.timeoutMs <= 0) {
+      throw new TypeError('timeoutMs must be a positive finite number');
+    }
 
     // * Build each namespace by spreading all bound tag modules together.
     //   Pass the platform suffix so bind() strips it from the 3 cross-platform
@@ -397,25 +393,13 @@ export class CPluginWebApiClient {
   }
 
   // * Run a generated paged endpoint and surface { items, paging } by reading
-  //   lastMeta written by customFetch into the per-call context scope.
-  //   Each paged() invocation creates its own fresh context so that concurrent
-  //   paged() calls never share a lastMeta slot.
-  //   BoundModule wraps every generated function via UnwrapEnvelope so the
-  //   parameter type is Promise<T[]> — no caller cast needed for MT4/MT5 methods
-  //   that return list types; mock-only tests still cast when the mock fixture
-  //   type does not match the resolved generated type.
+  // Metadata is carried on the array payload, so concurrent paged calls remain isolated.
   async paged<T>(call: () => Promise<T[]>): Promise<PagedResult<T>> {
-    // * Allocate a fresh per-call context; bind() detects the active scope via
-    //   currentContextOrNull() and reuses this same context for the inner
-    //   generated call, so customFetch writes lastMeta here.
-    const perCall: RequestContext = { ...this.base, lastMeta: null };
-    return withContext(perCall, async () => {
-      const items = await call();
-      return {
-        items: Array.isArray(items) ? (items as T[]) : [],
-        paging: perCall.lastMeta?.paging ?? null,
-      };
-    });
+    const items = await call();
+    return {
+      items: Array.isArray(items) ? (items as T[]) : [],
+      paging: pagingFromResult(items)?.paging ?? null,
+    };
   }
 
   // ---------------------------------------------------------------------------
@@ -442,41 +426,33 @@ export class CPluginWebApiClient {
    * @throws ApiError if authentication fails or the API request returns an error.
    */
   async listTradePlatforms(): Promise<TradePlatform[]> {
-    const url = `${this.base.apiBaseUrl}/api/TradePlatforms`;
-
-    const doFetch = async (forceRefresh: boolean): Promise<Response> => {
-      const token = await this.base.tokenProvider.getToken({ forceRefresh });
-      return this.base.fetchImpl(url, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: 'application/json',
-        },
-      });
-    };
-
-    let res = await doFetch(false);
-
-    // * Single retry after a 401 — token may have expired mid-flight.
-    if (res.status === 401) {
-      res = await doFetch(true);
-    }
-
-    if (!res.ok) {
-      // * Map well-known status codes to typed WebApiErrorCode values.
-      const code: ApiErrorBody['code'] =
-        res.status === 401 || res.status === 403
-          ? 'Forbidden'
-          : res.status === 404
-            ? 'NotFound'
-            : 'Internal';
-      throw new ApiError(
-        { code, message: `GET /api/TradePlatforms failed: HTTP ${res.status}` },
-        null,
-        res.status,
-      );
-    }
-
-    return res.json() as Promise<TradePlatform[]>;
+    return authenticatedFetch(this.base, '/api/TradePlatforms', { method: 'GET' }, async (response, signal) => {
+      if (!response.ok) {
+        throw new ApiError(
+          { code: codeForHttpStatus(response.status), message: 'GET /api/TradePlatforms returned HTTP ' + response.status },
+          null,
+          response.status,
+        );
+      }
+      let payload: unknown;
+      try {
+        payload = await response.json();
+      } catch (error) {
+        if (signal.aborted) throw signal.reason ?? error;
+        throw new ApiError(
+          { code: 'Internal', message: 'GET /api/TradePlatforms returned malformed JSON' },
+          null,
+          response.status,
+        );
+      }
+      if (!Array.isArray(payload)) {
+        throw new ApiError(
+          { code: 'Internal', message: 'GET /api/TradePlatforms returned an invalid payload' },
+          null,
+          response.status,
+        );
+      }
+      return payload as TradePlatform[];
+    });
   }
 }

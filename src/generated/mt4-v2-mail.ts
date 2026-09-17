@@ -29,7 +29,7 @@ export const getGetMailLastUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/MailLast`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/MailLast`
 }
 
 /**

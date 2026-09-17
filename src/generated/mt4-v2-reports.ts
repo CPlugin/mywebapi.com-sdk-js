@@ -46,7 +46,7 @@ export const getGetPerformanceRequestUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/PerformanceRequest?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/PerformanceRequest`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/PerformanceRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/PerformanceRequest`
 }
 
 /**
@@ -101,7 +101,7 @@ export const getGetReportsRequestUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/ReportsRequest?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/ReportsRequest`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ReportsRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ReportsRequest`
 }
 
 /**
@@ -165,7 +165,7 @@ export const getGetDailyReportsRequestUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/DailyReportsRequest?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/DailyReportsRequest`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/DailyReportsRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/DailyReportsRequest`
 }
 
 /**
@@ -227,7 +227,7 @@ export const getGetDailyReportsRequestExUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/DailyReportsRequestEx?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/DailyReportsRequestEx`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/DailyReportsRequestEx?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/DailyReportsRequestEx`
 }
 
 /**
@@ -282,7 +282,7 @@ export const getPostDailySyncStartUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/DailySyncStart?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/DailySyncStart`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/DailySyncStart?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/DailySyncStart`
 }
 
 /**
@@ -331,7 +331,7 @@ export const getPostDailySyncReadUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/DailySyncRead`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/DailySyncRead`
 }
 
 /**

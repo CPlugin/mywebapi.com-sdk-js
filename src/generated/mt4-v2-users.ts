@@ -42,7 +42,7 @@ export const getGetUserRecordGetLoginUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/UserRecordGet/${login}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordGet/${encodeURIComponent(String(login))}`
 }
 
 /**
@@ -86,7 +86,7 @@ export const getGetUserRecordRequestLoginUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/UserRecordRequest/${login}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordRequest/${encodeURIComponent(String(login))}`
 }
 
 /**
@@ -137,7 +137,7 @@ export const getGetUserRecordsRequestUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/UserRecordsRequest?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/UserRecordsRequest`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordsRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordsRequest`
 }
 
 /**
@@ -184,7 +184,7 @@ export const getGetAdmBalanceCheckLoginUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/AdmBalanceCheck/${login}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmBalanceCheck/${encodeURIComponent(String(login))}`
 }
 
 /**
@@ -239,7 +239,7 @@ export const getGetAdmBalanceCheckUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/AdmBalanceCheck?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/AdmBalanceCheck`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmBalanceCheck?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmBalanceCheck`
 }
 
 /**
@@ -291,7 +291,7 @@ export const getPostAdmBalanceFixUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/AdmBalanceFix?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/AdmBalanceFix`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmBalanceFix?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmBalanceFix`
 }
 
 /**
@@ -348,7 +348,7 @@ export const getGetUsersRequestUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/UsersRequest?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/UsersRequest`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersRequest`
 }
 
 /**
@@ -390,7 +390,7 @@ export const getPostUserRecordNewUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/UserRecordNew`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordNew`
 }
 
 /**
@@ -441,7 +441,7 @@ export const getPostUserRecordUpdateLoginUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/UserRecordUpdate/${login}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordUpdate/${encodeURIComponent(String(login))}`
 }
 
 /**
@@ -499,7 +499,7 @@ export const getPatchUserRecordLoginMT4Url = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/UserRecord/${login}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecord/${encodeURIComponent(String(login))}`
 }
 
 /**
@@ -543,7 +543,7 @@ export const getGetAdmUsersRequestSafeGroupUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/AdmUsersRequestSafe/${group}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmUsersRequestSafe/${encodeURIComponent(String(group))}`
 }
 
 /**
@@ -599,7 +599,7 @@ export const getPostUsersSyncStartUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/UsersSyncStart?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/UsersSyncStart`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersSyncStart?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersSyncStart`
 }
 
 /**
@@ -645,7 +645,7 @@ export const getPostUsersGroupOpUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/UsersGroupOp`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersGroupOp`
 }
 
 /**

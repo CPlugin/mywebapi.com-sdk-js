@@ -30,7 +30,7 @@ export const getGetGroupGetGroupUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT5/${tradePlatform}/GroupGet/${group}`
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/GroupGet/${encodeURIComponent(String(group))}`
 }
 
 /**
@@ -67,7 +67,7 @@ export const getPatchGroupRecordGroupMT5Url = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT5/${tradePlatform}/GroupRecord/${group}`
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/GroupRecord/${encodeURIComponent(String(group))}`
 }
 
 /**

@@ -46,6 +46,12 @@ export interface ApiEnvelope<T> {
   meta?: ApiMeta | null;
 }
 
+export function codeForHttpStatus(status: number): Exclude<WebApiErrorCode, 'Ok'> {
+  if (status === 401 || status === 403) return 'Forbidden';
+  if (status === 404) return 'NotFound';
+  return 'Internal';
+}
+
 // * Thrown when the envelope carries a non-null error. Public surface is
 //   { code, description, activityId } per design; managerCode/status are extras.
 export class ApiError extends Error {

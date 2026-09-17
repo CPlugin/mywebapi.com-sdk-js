@@ -74,10 +74,13 @@ export default defineConfig({
       mode: 'tags',
       target: './src/generated/endpoints.ts',
       schemas: './src/generated/model',
+      // Encode every OpenAPI path parameter; query values remain URLSearchParams encoded.
+      urlEncodeParameters: true,
       client: 'fetch',
       httpClient: 'fetch',
-      // * Carry OpenAPI summary/description into generated JSDoc.
-      docs: true,
+      // OpenAPI descriptions stay in source JSDoc; TypeDoc HTML is generated
+      // separately by `bun run docs`, avoiding Orval's implicit markdown plugin.
+      docs: false,
       clean: true,
       prettier: false,
       override: {

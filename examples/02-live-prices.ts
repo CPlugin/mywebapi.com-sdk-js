@@ -11,8 +11,7 @@
 //      Each TickPayload carries: symbol, bid, ask, lastTime.
 //   4. Break the loop on Ctrl-C and stop the connection cleanly.
 //
-// Peer dependency required (already in package.json devDependencies):
-//   bun add @microsoft/signalr   (or: npm install @microsoft/signalr)
+// @microsoft/signalr is installed automatically with the SDK.
 //
 // Run:
 //   bun examples/02-live-prices.ts

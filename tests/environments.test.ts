@@ -16,7 +16,7 @@ describe('resolveEnvironment', () => {
   });
   test('custom passes through and strips trailing slashes', () => {
     expect(
-      resolveEnvironment({ env: 'custom', apiBaseUrl: 'http://localhost:5002/', authority: 'http://localhost:5001/' }),
-    ).toEqual({ apiBaseUrl: 'http://localhost:5002', authority: 'http://localhost:5001' });
+      resolveEnvironment({ env: 'custom', apiBaseUrl: 'http://localhost:5002/', authority: 'http://localhost:5001/', allowInsecureLoopback: true }),
+    ).toEqual({ apiBaseUrl: 'http://localhost:5002', authority: 'http://localhost:5001', allowInsecureLoopback: true });
   });
 });

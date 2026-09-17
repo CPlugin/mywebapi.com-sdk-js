@@ -4,19 +4,15 @@
   "workspaces": {
     "": {
       "name": "@cplugin/saas-webapi-client",
+      "dependencies": {
+        "@microsoft/signalr": "10.0.0",
+      },
       "devDependencies": {
-        "@microsoft/signalr": "^10.0.0",
         "@types/bun": "latest",
         "orval": "8.19.0",
         "typedoc": "^0.28.19",
         "typescript": "^5.4.0",
       },
-      "peerDependencies": {
-        "@microsoft/signalr": "^9.0.0 || ^10.0.0",
-      },
-      "optionalPeers": [
-        "@microsoft/signalr",
-      ],
     },
   },
   "packages": {

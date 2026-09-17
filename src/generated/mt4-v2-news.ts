@@ -33,7 +33,7 @@ export const getGetNewsTotalUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/NewsTotal`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/NewsTotal`
 }
 
 /**
@@ -73,7 +73,7 @@ export const getGetNewsBodyGetKeyUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/NewsBodyGet/${key}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/NewsBodyGet/${encodeURIComponent(String(key))}`
 }
 
 /**
@@ -113,7 +113,7 @@ export const getGetNewsGetUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/NewsGet`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/NewsGet`
 }
 
 /**
@@ -156,7 +156,7 @@ export const getGetNewsTopicGetPosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/NewsTopicGet/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/NewsTopicGet/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -199,7 +199,7 @@ export const getPostNewsBodyRequestKeyUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/NewsBodyRequest/${key}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/NewsBodyRequest/${encodeURIComponent(String(key))}`
 }
 
 /**

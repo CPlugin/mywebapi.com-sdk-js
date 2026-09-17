@@ -42,7 +42,7 @@ export const getPostBackupRestoreUsersUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/BackupRestoreUsers?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/BackupRestoreUsers`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRestoreUsers?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRestoreUsers`
 }
 
 /**
@@ -100,7 +100,7 @@ export const getPostBackupRestoreOrdersUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/BackupRestoreOrders?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/BackupRestoreOrders`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRestoreOrders?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRestoreOrders`
 }
 
 /**

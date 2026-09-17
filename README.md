@@ -2,7 +2,7 @@
 
 TypeScript client for the CPlugin WebAPI v2 — a management API for trading-platform servers.
 
-**Status:** Published on the public npm registry as [`@mywebapi.com/sdk`](https://www.npmjs.com/package/@mywebapi.com/sdk) (early access, current version `0.1.2`). The API shape is stable; while the package is at `0.x`, minor releases may introduce breaking changes, so pin a version in production. Versioning follows [semver](https://semver.org/).
+**Status:** Version `0.2.0` release candidate. The package keeps the generated REST catalog and typed MT4/MT5 realtime clients in one entry point; minor releases may introduce breaking changes while the package remains at `0.x`. Pin a version in production.
 
 - **Auto-generated types** from the live OpenAPI spec — all endpoints, DTOs, and enums are exact and stay in sync with the server.
 - **Unified entry point** — `CPluginWebApiClient` with `mt4` and `mt5` namespaces; credentials and token management configured once at instantiation.
@@ -27,7 +27,7 @@ The SDK manages OAuth2 access tokens for you — pass `clientId` / `clientSecret
 import { CPluginWebApiClient, ApiError, collectAll } from '@mywebapi.com/sdk';
 
 const client = new CPluginWebApiClient({
-  env: 'prod',  // or 'staging' or { baseUrl, authUrl }
+  env: 'prod',  // or 'staging' or { env: 'custom', apiBaseUrl, authority }
   clientId: 'your-client-id',
   clientSecret: process.env.CPLUGIN_WEBAPI_CLIENT_SECRET!,
 });
@@ -35,12 +35,11 @@ const client = new CPluginWebApiClient({
 // server time (mt4 namespace)
 const tp = '3029d415-d0a6-4710-a9c1-8cb063ef872f';
 const time = await client.mt4.getServerTime(tp);
-console.log('server time (mt4):', time.data.timestamp);
+console.log('server time (mt4):', time);
 
 // server time (mt5 namespace)
 const mt5Time = await client.mt5.getServerTime(tp);
-console.log('server time (mt5):', mt5Time.data.timestamp);
-
+console.log('server time (mt5):', mt5Time);
 // Pagination — single page with cursor capture
 const page = await client.paged(() =>
   client.mt4.getOnlineGet(tp, { limit: 50 }),
@@ -81,38 +80,57 @@ try {
 }
 ```
 
-### From environment variables
+### Configuration from environment variables
 
-`CPluginWebApiClient.fromEnvironment()` builds a client from `CPLUGIN_WEBAPI_ENV` (or `CPLUGIN_WEBAPI_BASE_URL` + `CPLUGIN_WEBAPI_AUTH_URL`), `CPLUGIN_WEBAPI_CLIENT_ID`, and `CPLUGIN_WEBAPI_CLIENT_SECRET`. Missing variables raise an `Error` that names the missing key.
+The client constructor is the single configuration API. Read environment variables in the application and pass the supported fields explicitly; there is no `fromEnvironment()` factory.
 
 ```typescript
-const client = CPluginWebApiClient.fromEnvironment();
-const tp = process.env.CPLUGIN_WEBAPI_TRADE_PLATFORM!;
-const time = await client.mt4.getServerTime(tp);
+const client = new CPluginWebApiClient({
+  env: (process.env.CPLUGIN_WEBAPI_ENV === 'staging' ? 'staging' : 'prod'),
+  clientId: process.env.CPLUGIN_WEBAPI_CLIENT_ID!,
+  clientSecret: process.env.CPLUGIN_WEBAPI_CLIENT_SECRET!,
+});
 ```
 
-### Static token (advanced / testing)
+### Request deadlines and cancellation
 
-For scenarios with a pre-issued JWT (CI fixtures, short-lived service-account tokens, test rigs), pass a `token` instead of `clientId` / `clientSecret`. No refresh is performed — when the token expires, the API returns errors.
+REST operations and each OAuth discovery/token request have a bounded deadline. Configure the REST deadline with `timeoutMs` (the default is 30 seconds):
 
 ```typescript
 const client = new CPluginWebApiClient({
   env: 'prod',
-  token: 'eyJhbGc...',
+  clientId: process.env.CPLUGIN_WEBAPI_CLIENT_ID!,
+  clientSecret: process.env.CPLUGIN_WEBAPI_CLIENT_SECRET!,
+  timeoutMs: 10_000,
 });
+```
 
-const tp = '3029d415-d0a6-4710-a9c1-8cb063ef872f';
-const time = await client.mt4.getServerTime(tp);
+The deadline covers token acquisition, the API request, and response-body decoding. Cancellation and timeout errors are propagated rather than being reported as malformed JSON.
+
+### Static token (advanced realtime/testing)
+
+The unified REST client uses client credentials. For a pre-issued JWT in a test rig or a direct realtime client, use the exported `StaticTokenProvider`; no refresh is performed.
+
+```typescript
+import { MT4V2SignalRClient, StaticTokenProvider } from '@mywebapi.com/sdk';
+
+const rt = new MT4V2SignalRClient({
+  baseUrl: 'https://cloud.mywebapi.com',
+  tradePlatform: process.env.CPLUGIN_WEBAPI_TRADE_PLATFORM!,
+  tokenProvider: new StaticTokenProvider(process.env.CPLUGIN_WEBAPI_ACCESS_TOKEN!),
+});
 ```
 
 ## Retries
 
-Idempotent requests retry automatically on transient errors (`429`, `502`, `503`, `504`, and `408`). Retry-eligible:
 
-- `GET` and `HEAD` — always idempotent per HTTP spec.
-- `POST` / `PATCH` / `PUT` / `DELETE` — only when you supply an `Idempotency-Key` header via method options.
+Only requests that are safe to replay retry automatically on transient errors (`408`, `429`, `502`, `503`, `504`) and retryable network failures:
 
-Backoff is exponential (default 3 attempts, base 500 ms, factor 2, ±25% jitter) with `Retry-After` honoured (both `delta-seconds` and HTTP-date forms). Override per-client:
+- `GET`, `HEAD`, and `OPTIONS` — safe by definition.
+- `PUT` and `DELETE` — treated as idempotent by the transport.
+- `POST` and `PATCH` — never repeated automatically, even when an `Idempotency-Key` header is present.
+
+An aborted request is never retried. Backoff is exponential (default 3 attempts, base 500 ms, factor 2, ±25% jitter) with `Retry-After` honoured (both `delta-seconds` and HTTP-date forms). Override per-client:
 
 ```typescript
 const client = new CPluginWebApiClient({
@@ -149,7 +167,7 @@ try {
 
 ## Idempotency
 
-Mutating endpoints (POST / PATCH / PUT / DELETE) accept an optional `Idempotency-Key` header for safe retries. Pass it in the options object:
+Mutating endpoints accept an optional `Idempotency-Key` header, which is forwarded to the server for its own deduplication. The SDK does not treat this header as permission to replay `POST` or `PATCH`.
 
 ```typescript
 const tp = '3029d415-d0a6-4710-a9c1-8cb063ef872f';
@@ -162,7 +180,7 @@ await client.mt4.patchUserRecordLogin(
 );
 ```
 
-Any string ≤255 chars is valid. Two calls with the same key within the server's `cacheTimeout` window return the cached response. Supplying a key also marks the request as idempotent for the retry layer, enabling automatic retry on transient failures.
+The server may return a cached response for a repeated key within its configured window; this is independent of the SDK transport retry policy.
 
 ## Pagination helpers
 
@@ -208,8 +226,7 @@ for await (const pageItems of paginate((cursor) =>
 
 ```bash
 bun install
-bun run fetch-spec    # download swagger.json from running WebAPI (WEBAPI_BASE_URL env)
-bun run generate      # regenerate src/generated/api.d.ts
+bun run generate      # regenerate src/generated/
 bun run typecheck
 
 # Integration tests against the live WebAPI — needs env vars (or a .env file):
@@ -222,11 +239,8 @@ bun run build         # outputs dist/index.js + dist/*.d.ts
 
 ## SignalR (real-time streams)
 
-Real-time streaming is **built into this package** — there is no separate SignalR package. The only extra is the optional peer dependency `@microsoft/signalr`, installed **only if you use real-time** (the REST surface works without it):
+Real-time streaming clients are exported from this package. `@microsoft/signalr` is a required runtime dependency and is installed with the SDK; the build keeps the official package external so consumers can use their normal bundler/runtime.
 
-```sh
-bun add @microsoft/signalr   # or: npm install @microsoft/signalr
-```
 
 Open a hub from the same client — it reuses the client's environment and OAuth token:
 

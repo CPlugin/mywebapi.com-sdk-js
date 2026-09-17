@@ -30,7 +30,7 @@ export const getGetUserGetLoginUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT5/${tradePlatform}/UserGet/${login}`
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/UserGet/${encodeURIComponent(String(login))}`
 }
 
 /**
@@ -67,7 +67,7 @@ export const getPatchUserRecordLoginMT5Url = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT5/${tradePlatform}/UserRecord/${login}`
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/UserRecord/${encodeURIComponent(String(login))}`
 }
 
 /**

@@ -90,7 +90,7 @@ export const getGetCfgRequestCommonUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgRequestCommon`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestCommon`
 }
 
 /**
@@ -132,7 +132,7 @@ export const getPostCfgUpdateCommonUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdateCommon`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateCommon`
 }
 
 /**
@@ -193,7 +193,7 @@ export const getGetCfgRequestHolidayUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgRequestHoliday?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgRequestHoliday`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestHoliday?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestHoliday`
 }
 
 /**
@@ -250,7 +250,7 @@ export const getGetCfgRequestManagerUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgRequestManager?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgRequestManager`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestManager?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestManager`
 }
 
 /**
@@ -293,7 +293,7 @@ export const getGetCfgRequestTimeUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgRequestTime`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestTime`
 }
 
 /**
@@ -336,7 +336,7 @@ export const getPostCfgUpdateTimeUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdateTime`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateTime`
 }
 
 /**
@@ -395,7 +395,7 @@ export const getGetCfgRequestAccessUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgRequestAccess?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgRequestAccess`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestAccess?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestAccess`
 }
 
 /**
@@ -440,7 +440,7 @@ export const getGetCfgRequestBackupUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgRequestBackup`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestBackup`
 }
 
 /**
@@ -483,7 +483,7 @@ export const getPostCfgUpdateBackupUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdateBackup`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateBackup`
 }
 
 /**
@@ -530,7 +530,7 @@ export const getPostCfgUpdateSyncUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdateSync`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateSync`
 }
 
 /**
@@ -576,7 +576,7 @@ export const getPostCfgUpdateFeederUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdateFeeder`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateFeeder`
 }
 
 /**
@@ -619,7 +619,7 @@ export const getPostCfgUpdateGatewayAccountUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdateGatewayAccount`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateGatewayAccount`
 }
 
 /**
@@ -665,7 +665,7 @@ export const getPostCfgUpdateGatewayMarkupUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdateGatewayMarkup`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateGatewayMarkup`
 }
 
 /**
@@ -709,7 +709,7 @@ export const getPostCfgUpdateGatewayRuleUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdateGatewayRule`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateGatewayRule`
 }
 
 /**
@@ -752,7 +752,7 @@ export const getPostCfgUpdateLiveUpdateUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdateLiveUpdate`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateLiveUpdate`
 }
 
 /**
@@ -797,7 +797,7 @@ export const getPostCfgUpdateManagerUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdateManager`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateManager`
 }
 
 /**
@@ -848,7 +848,7 @@ export const getPostCfgUpdateAccessPosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdateAccess/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateAccess/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -899,7 +899,7 @@ export const getPostCfgUpdateDataServerPosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdateDataServer/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateDataServer/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -944,7 +944,7 @@ export const getPostCfgUpdateHolidayPosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdateHoliday/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateHoliday/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -988,7 +988,7 @@ export const getPostCfgUpdateSymbolGroupPosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgUpdateSymbolGroup/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateSymbolGroup/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -1037,7 +1037,7 @@ export const getGetCfgRequestGatewayAccountUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgRequestGatewayAccount?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgRequestGatewayAccount`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayAccount?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayAccount`
 }
 
 /**
@@ -1090,7 +1090,7 @@ export const getGetCfgRequestGatewayMarkupUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgRequestGatewayMarkup?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgRequestGatewayMarkup`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayMarkup?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayMarkup`
 }
 
 /**
@@ -1142,7 +1142,7 @@ export const getGetCfgRequestGatewayRuleUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgRequestGatewayRule?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgRequestGatewayRule`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayRule?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayRule`
 }
 
 /**
@@ -1193,7 +1193,7 @@ export const getGetCfgRequestDataServerUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgRequestDataServer?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgRequestDataServer`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestDataServer?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestDataServer`
 }
 
 /**
@@ -1244,7 +1244,7 @@ export const getGetCfgRequestFeederUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgRequestFeeder?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgRequestFeeder`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestFeeder?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestFeeder`
 }
 
 /**
@@ -1296,7 +1296,7 @@ export const getGetCfgRequestLiveUpdateUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgRequestLiveUpdate?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgRequestLiveUpdate`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestLiveUpdate?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestLiveUpdate`
 }
 
 /**
@@ -1347,7 +1347,7 @@ export const getGetCfgRequestSyncUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgRequestSync?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgRequestSync`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestSync?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestSync`
 }
 
 /**
@@ -1392,7 +1392,7 @@ export const getPostCfgDeleteAccessPosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgDeleteAccess/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgDeleteAccess/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -1435,7 +1435,7 @@ export const getPostCfgDeleteDataServerPosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgDeleteDataServer/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgDeleteDataServer/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -1473,7 +1473,7 @@ export const getPostCfgDeleteFeederPosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgDeleteFeeder/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgDeleteFeeder/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -1511,7 +1511,7 @@ export const getPostCfgDeleteGatewayAccountPosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgDeleteGatewayAccount/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgDeleteGatewayAccount/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -1549,7 +1549,7 @@ export const getPostCfgDeleteGatewayMarkupPosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgDeleteGatewayMarkup/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgDeleteGatewayMarkup/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -1587,7 +1587,7 @@ export const getPostCfgDeleteGatewayRulePosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgDeleteGatewayRule/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgDeleteGatewayRule/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -1625,7 +1625,7 @@ export const getPostCfgDeleteHolidayPosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgDeleteHoliday/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgDeleteHoliday/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -1663,7 +1663,7 @@ export const getPostCfgDeleteLiveUpdatePosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgDeleteLiveUpdate/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgDeleteLiveUpdate/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -1701,7 +1701,7 @@ export const getPostCfgDeleteManagerPosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgDeleteManager/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgDeleteManager/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -1739,7 +1739,7 @@ export const getPostCfgDeleteSymbolPosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgDeleteSymbol/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgDeleteSymbol/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -1777,7 +1777,7 @@ export const getPostCfgDeleteSyncPosUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/CfgDeleteSync/${pos}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgDeleteSync/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -1823,7 +1823,7 @@ export const getPostCfgShiftAccessPosUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgShiftAccess/${pos}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgShiftAccess/${pos}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftAccess/${encodeURIComponent(String(pos))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftAccess/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -1870,7 +1870,7 @@ export const getPostCfgShiftDataServerPosUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgShiftDataServer/${pos}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgShiftDataServer/${pos}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftDataServer/${encodeURIComponent(String(pos))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftDataServer/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -1917,7 +1917,7 @@ export const getPostCfgShiftFeederPosUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgShiftFeeder/${pos}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgShiftFeeder/${pos}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftFeeder/${encodeURIComponent(String(pos))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftFeeder/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -1964,7 +1964,7 @@ export const getPostCfgShiftGatewayAccountPosUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgShiftGatewayAccount/${pos}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgShiftGatewayAccount/${pos}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftGatewayAccount/${encodeURIComponent(String(pos))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftGatewayAccount/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -2011,7 +2011,7 @@ export const getPostCfgShiftGatewayMarkupPosUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgShiftGatewayMarkup/${pos}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgShiftGatewayMarkup/${pos}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftGatewayMarkup/${encodeURIComponent(String(pos))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftGatewayMarkup/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -2058,7 +2058,7 @@ export const getPostCfgShiftGatewayRulePosUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgShiftGatewayRule/${pos}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgShiftGatewayRule/${pos}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftGatewayRule/${encodeURIComponent(String(pos))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftGatewayRule/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -2105,7 +2105,7 @@ export const getPostCfgShiftGroupPosUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgShiftGroup/${pos}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgShiftGroup/${pos}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftGroup/${encodeURIComponent(String(pos))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftGroup/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -2152,7 +2152,7 @@ export const getPostCfgShiftHolidayPosUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgShiftHoliday/${pos}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgShiftHoliday/${pos}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftHoliday/${encodeURIComponent(String(pos))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftHoliday/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -2199,7 +2199,7 @@ export const getPostCfgShiftLiveUpdatePosUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgShiftLiveUpdate/${pos}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgShiftLiveUpdate/${pos}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftLiveUpdate/${encodeURIComponent(String(pos))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftLiveUpdate/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -2246,7 +2246,7 @@ export const getPostCfgShiftManagerPosUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgShiftManager/${pos}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgShiftManager/${pos}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftManager/${encodeURIComponent(String(pos))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftManager/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -2293,7 +2293,7 @@ export const getPostCfgShiftPluginPosUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgShiftPlugin/${pos}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgShiftPlugin/${pos}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftPlugin/${encodeURIComponent(String(pos))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftPlugin/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -2344,7 +2344,7 @@ export const getPostCfgShiftSymbolPosUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgShiftSymbol/${pos}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgShiftSymbol/${pos}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftSymbol/${encodeURIComponent(String(pos))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftSymbol/${encodeURIComponent(String(pos))}`
 }
 
 /**
@@ -2391,7 +2391,7 @@ export const getPostCfgShiftSyncPosUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/CfgShiftSync/${pos}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/CfgShiftSync/${pos}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftSync/${encodeURIComponent(String(pos))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgShiftSync/${encodeURIComponent(String(pos))}`
 }
 
 /**

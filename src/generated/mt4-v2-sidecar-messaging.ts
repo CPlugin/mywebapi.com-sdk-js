@@ -32,7 +32,7 @@ export const getPostNewsSendUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/NewsSend`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/NewsSend`
 }
 
 /**
@@ -73,7 +73,7 @@ export const getPostMailSendUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/MailSend`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/MailSend`
 }
 
 /**
@@ -116,7 +116,7 @@ export const getGetMailsRequestUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/MailsRequest`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/MailsRequest`
 }
 
 /**

@@ -30,7 +30,7 @@ export const getGetServerTimeMT5Url = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT5/${tradePlatform}/ServerTime`
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ServerTime`
 }
 
 /**
@@ -65,7 +65,7 @@ export const getGetTimeGetUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT5/${tradePlatform}/TimeGet`
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/TimeGet`
 }
 
 /**

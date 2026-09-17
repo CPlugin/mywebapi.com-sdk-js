@@ -50,7 +50,7 @@ export const getGetTradesGetUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/TradesGet?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/TradesGet`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesGet?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesGet`
 }
 
 /**
@@ -88,7 +88,7 @@ export const getGetTradesGetTicketUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/TradesGet/${ticket}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesGet/${encodeURIComponent(String(ticket))}`
 }
 
 /**
@@ -134,7 +134,7 @@ export const getGetTradesGetByLoginLoginGroupUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/TradesGetByLogin/${login}/${group}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesGetByLogin/${encodeURIComponent(String(login))}/${encodeURIComponent(String(group))}`
 }
 
 /**
@@ -185,7 +185,7 @@ export const getGetTradesGetBySymbolUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/TradesGetBySymbol?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/TradesGetBySymbol`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesGetBySymbol?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesGetBySymbol`
 }
 
 /**
@@ -226,7 +226,7 @@ export const getGetTradesGetByMarketUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/TradesGetByMarket`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesGetByMarket`
 }
 
 /**
@@ -267,7 +267,7 @@ export const getGetTradeRecordGetOrderUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/TradeRecordGet/${order}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeRecordGet/${encodeURIComponent(String(order))}`
 }
 
 /**
@@ -317,7 +317,7 @@ export const getPostTradeCheckStopsUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/TradeCheckStops?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/TradeCheckStops`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeCheckStops?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeCheckStops`
 }
 
 /**
@@ -367,7 +367,7 @@ export const getPostTradeClearRollbackOrderUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/TradeClearRollback/${order}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeClearRollback/${encodeURIComponent(String(order))}`
 }
 
 /**
@@ -413,7 +413,7 @@ export const getGetTradeRecordRequestOrderUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/TradeRecordRequest/${order}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeRecordRequest/${encodeURIComponent(String(order))}`
 }
 
 /**
@@ -466,7 +466,7 @@ export const getGetTradesRequestUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/TradesRequest?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/TradesRequest`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesRequest`
 }
 
 /**
@@ -512,7 +512,7 @@ export const getPostAdmTradeRecordModifyTicketUrl = (tradePlatform: string,
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/AdmTradeRecordModify/${ticket}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmTradeRecordModify/${encodeURIComponent(String(ticket))}`
 }
 
 /**
@@ -567,7 +567,7 @@ export const getPostTradeTransactionUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${tradePlatform}/TradeTransaction`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeTransaction`
 }
 
 /**
@@ -627,7 +627,7 @@ export const getGetTradeRecordsRequestUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/TradeRecordsRequest?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/TradeRecordsRequest`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeRecordsRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeRecordsRequest`
 }
 
 /**
@@ -683,7 +683,7 @@ export const getGetAdmTradesRequestGroupUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/AdmTradesRequest/${group}?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/AdmTradesRequest/${group}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmTradesRequest/${encodeURIComponent(String(group))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmTradesRequest/${encodeURIComponent(String(group))}`
 }
 
 /**
@@ -734,7 +734,7 @@ export const getPostAdmTradesDeleteUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/AdmTradesDelete?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/AdmTradesDelete`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmTradesDelete?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmTradesDelete`
 }
 
 /**
@@ -790,7 +790,7 @@ export const getPostTradesSyncStartUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/TradesSyncStart?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/TradesSyncStart`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesSyncStart?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesSyncStart`
 }
 
 /**

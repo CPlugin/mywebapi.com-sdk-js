@@ -36,8 +36,8 @@ function makeFullMock(handler: (url: string, init?: RequestInit) => Response): t
 
     if (url.includes('/.well-known/openid-configuration')) {
       return json({
-        token_endpoint: 'https://auth.example/connect/token',
-        issuer: 'https://auth.example',
+        token_endpoint: 'https://pre.auth.cplugin.net/connect/token',
+        issuer: 'https://pre.auth.cplugin.net',
       });
     }
     if (url.endsWith('/connect/token')) {
@@ -69,6 +69,58 @@ describe('CPluginWebApiClient.listTradePlatforms — happy path', () => {
     expect(first?.name).toBe('Demo MT4');
     expect(first?.type).toBe('MT4');
     expect(first?.login).toBe(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Test 1b: timeout survives token single-flight listener cleanup
+// ---------------------------------------------------------------------------
+describe('CPluginWebApiClient.listTradePlatforms — timeout deadline', () => {
+  test('aborts a delayed API response after token acquisition completes', async () => {
+    let apiAborted = false;
+    const fetchMock = (async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url =
+        typeof input === 'string'
+          ? input
+          : input instanceof URL
+            ? input.toString()
+            : (input as Request).url;
+      if (url.includes('/.well-known/openid-configuration')) {
+        return json({
+          token_endpoint: 'https://pre.auth.cplugin.net/connect/token',
+          issuer: 'https://pre.auth.cplugin.net',
+        });
+      }
+      if (url.endsWith('/connect/token')) return json({ access_token: 'tok-1', expires_in: 3600 });
+      return new Promise<Response>((resolve, reject) => {
+        const timer = setTimeout(() => resolve(json(PLATFORMS)), 30);
+        const onAbort = (): void => {
+          apiAborted = true;
+          clearTimeout(timer);
+          reject(init?.signal?.reason ?? new DOMException('The operation timed out.', 'TimeoutError'));
+        };
+        init?.signal?.addEventListener('abort', onAbort, { once: true });
+        if (init?.signal?.aborted) onAbort();
+      });
+    }) as unknown as typeof fetch;
+
+    const client = new CPluginWebApiClient({
+      env: 'staging',
+      clientId: 'cid',
+      clientSecret: 'csec',
+      timeoutMs: 10,
+      fetch: fetchMock,
+    });
+
+    let caught: unknown = null;
+    try {
+      await client.listTradePlatforms();
+    } catch (error) {
+      caught = error;
+    }
+
+    expect(apiAborted).toBe(true);
+    expect((caught as { name?: string } | null)?.name).toBe('TimeoutError');
   });
 });
 
@@ -121,8 +173,8 @@ describe('CPluginWebApiClient.listTradePlatforms — 401 retry', () => {
 
       if (url.includes('/.well-known/openid-configuration')) {
         return json({
-          token_endpoint: 'https://auth.example/connect/token',
-          issuer: 'https://auth.example',
+        token_endpoint: 'https://pre.auth.cplugin.net/connect/token',
+        issuer: 'https://pre.auth.cplugin.net',
         });
       }
       if (url.endsWith('/connect/token')) {

@@ -1,8 +1,7 @@
 // SignalR client for the MT4 v2 hub at `/hubs/mt4/v2`.
 //
-// `@microsoft/signalr` is an **optional peer dependency** — consumers who only use
-// the REST surface don't need to install it. This file imports the package lazily
-// at construction time and surfaces a clear error if it isn't available.
+// `@microsoft/signalr` is a required runtime dependency and is externalized
+// from the SDK bundle so applications can pin the official implementation.
 //
 // Why a sibling class instead of bolting onto `MT4V2Client`:
 //   - SignalR holds a long-lived `HubConnection` object and a reconnect loop;
@@ -26,6 +25,7 @@ import {
   type TokenProvider,
 } from './auth';
 import type { MT4V2ClientOptions } from './client';
+import { validateServiceUrl } from './environments';
 
 // * --- Payload types (server contract) ---------------------------------------------
 // * Names and shapes mirror `WebAPI/Hubs/MT4/v2/MT4V2Payloads.cs` exactly.
@@ -120,7 +120,6 @@ export interface SymbolUpdatePayload {
 }
 
 // * --- Options & errors ------------------------------------------------------------
-
 /** SignalR-specific overrides layered on top of the REST-client options shape. */
 export interface SignalRClientExtras {
   /** Defaults to `${baseUrl}/hubs/mt4/v2`. Override only for non-standard deployments. */
@@ -131,8 +130,11 @@ export interface SignalRClientExtras {
   /** Reconnect intervals in milliseconds. Pass `false` to disable auto-reconnect.
    * Default: `[0, 2000, 10_000, 30_000]` then give up. */
   reconnect?: number[] | false;
+  /** OAuth and transport deadline in milliseconds. Defaults to 30 seconds. */
+  timeoutMs?: number;
+  /** Only tests may use plain HTTP for loopback endpoints. */
+  allowInsecureLoopback?: boolean;
 }
-
 // * MT4V2ClientOptions is a discriminated union (`{token}` vs `{clientId,…}`);
 // *   TypeScript forbids `interface extends` on union types, so we union the
 // *   intersection of each branch with the extras.
@@ -210,6 +212,8 @@ export class MT4V2SignalRClient {
         clientSecret: opts.clientSecret,
         identityUrl:  opts.identityUrl,
         ...(opts.scopes ? { scopes: opts.scopes } : {}),
+        ...(opts.timeoutMs !== undefined ? { timeoutMs: opts.timeoutMs } : {}),
+        ...(opts.allowInsecureLoopback ? { allowInsecureLoopback: true } : {}),
       };
       this.tokenProvider = new ClientCredentialsTokenProvider(cco);
     } else {
@@ -220,11 +224,12 @@ export class MT4V2SignalRClient {
     // * Build the hub URL with tradePlatform query parameter pre-baked. SignalR
     // *   will additionally append `access_token=…` for WebSocket negotiate — the
     // *   server accepts that under the standard JwtBearer events pipeline.
-    const base = opts.hubUrl ?? `${opts.baseUrl.replace(/\/+$/, '')}/hubs/mt4/v2`;
+    const allowInsecureLoopback = opts.allowInsecureLoopback === true;
+    const serviceBase = validateServiceUrl(opts.baseUrl, 'baseUrl', allowInsecureLoopback);
+    const base = validateServiceUrl(opts.hubUrl ?? `${serviceBase}/hubs/mt4/v2`, 'hubUrl', allowInsecureLoopback);
     const sep  = base.includes('?') ? '&' : '?';
     this.hubUrl =
       `${base}${sep}tradePlatform=${encodeURIComponent(opts.tradePlatform)}`;
-
     this.reconnect = opts.reconnect ?? [0, 2_000, 10_000, 30_000];
     this.logger    = opts.logger;
   }
@@ -264,7 +269,7 @@ export class MT4V2SignalRClient {
       return await import('@microsoft/signalr');
     } catch (e) {
       throw new MT4V2SignalRError(
-        '`@microsoft/signalr` peer dependency is not installed. ' +
+        'The required `@microsoft/signalr` dependency could not be loaded. ' +
         'Run `npm install @microsoft/signalr` (or `bun add @microsoft/signalr`) and retry.',
         e);
     }
@@ -396,38 +401,60 @@ export class MT4V2SignalRClient {
   private toAsyncIterable<T>(stream: IStreamResult<T>): AsyncIterable<T> {
     return {
       [Symbol.asyncIterator]() {
-        const queue:    T[]                                                = [];
-        let   waiter:   ((v: IteratorResult<T>) => void) | null            = null;
-        let   error:    unknown                                            = null;
-        let   done                                                          = false;
+        const queue: T[] = [];
+        let waiter: { resolve: (value: IteratorResult<T>) => void; reject: (reason: unknown) => void } | null = null;
+        let error: unknown = null;
+        let done = false;
+        let sub: { dispose(): void } | null = null;
 
-        const sub = stream.subscribe({
+        sub = stream.subscribe({
           next: (item) => {
-            if (waiter) { const w = waiter; waiter = null; w({ value: item, done: false }); }
-            else queue.push(item);
+            if (done) return;
+            if (waiter) {
+              const current = waiter;
+              waiter = null;
+              current.resolve({ value: item, done: false });
+            } else {
+              queue.push(item);
+            }
           },
           complete: () => {
+            if (done) return;
             done = true;
-            if (waiter) { const w = waiter; waiter = null; w({ value: undefined as never, done: true }); }
+            if (waiter) {
+              const current = waiter;
+              waiter = null;
+              current.resolve({ value: undefined as never, done: true });
+            }
           },
-          error: (e) => {
-            error = e;
-            done  = true;
-            if (waiter) { const w = waiter; waiter = null; w({ value: undefined as never, done: true }); }
+          error: (reason) => {
+            if (done) return;
+            error = reason;
+            done = true;
+            sub?.dispose();
+            if (waiter) {
+              const current = waiter;
+              waiter = null;
+              current.reject(reason);
+            }
           },
         });
 
         return {
           next(): Promise<IteratorResult<T>> {
-            if (error) return Promise.reject(error);
+            if (error !== null) return Promise.reject(error);
             if (queue.length) return Promise.resolve({ value: queue.shift()!, done: false });
             if (done) return Promise.resolve({ value: undefined as never, done: true });
-            return new Promise<IteratorResult<T>>((resolve) => { waiter = resolve; });
+            return new Promise<IteratorResult<T>>((resolve, reject) => { waiter = { resolve, reject }; });
           },
           return(): Promise<IteratorResult<T>> {
-            // * Caller broke out of the for-await loop — cancel the server stream.
-            try { sub.dispose(); } catch { /* best effort */ }
+            try { sub?.dispose(); } catch { /* best effort */ }
             done = true;
+            if (waiter) {
+              const current = waiter;
+              waiter = null;
+              current.resolve({ value: undefined as never, done: true });
+            }
             return Promise.resolve({ value: undefined as never, done: true });
           },
         };

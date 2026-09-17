@@ -41,7 +41,7 @@ export const getPostSrvRestartUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/SrvRestart?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/SrvRestart`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvRestart?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvRestart`
 }
 
 /**
@@ -96,7 +96,7 @@ export const getPostSrvChartsSyncUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/SrvChartsSync?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/SrvChartsSync`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvChartsSync?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvChartsSync`
 }
 
 /**
@@ -146,7 +146,7 @@ export const getPostSrvLiveUpdateStartUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/SrvLiveUpdateStart?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/SrvLiveUpdateStart`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvLiveUpdateStart?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvLiveUpdateStart`
 }
 
 /**
@@ -195,7 +195,7 @@ export const getPostSrvFeedsRestartUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${tradePlatform}/SrvFeedsRestart?${stringifiedParams}` : `/api/v2/MT4/${tradePlatform}/SrvFeedsRestart`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvFeedsRestart?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvFeedsRestart`
 }
 
 /**

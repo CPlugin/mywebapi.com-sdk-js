@@ -29,7 +29,7 @@ export const getGetManagerCurrentUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT5/${tradePlatform}/ManagerCurrent`
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ManagerCurrent`
 }
 
 /**
