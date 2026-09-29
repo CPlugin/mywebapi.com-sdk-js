@@ -21,14 +21,14 @@ export const REQUEST_TIMEOUT_APPLIED_HEADER = 'X-Request-Timeout-Applied';
 export const REQUEST_OUTCOME_HEADER = 'X-Request-Outcome';
 
 /**
- * Time the client waits beyond the server timeout for the server's answer to arrive:
- * response transfer, queueing in front of the API, clock granularity.
+ * Time the client waits beyond the server timeout for the server's answer to arrive.
  *
- * ! The server may additionally extend its own deadline by the time it spends opening
- *   the trading platform connection for this very request (cold start). Callers who
- *   need the server's verdict even then should raise `timeoutMs`.
+ * ! The server extends its own deadline by the time it spends opening the trading
+ *   platform connection for this very request, up to 20 s (cold start); the remaining
+ *   10 s cover response transfer and queueing in front of the API. Same margin as the
+ *   other CPlugin WebAPI SDKs.
  */
-export const SERVER_ANSWER_MARGIN_MS = 10_000;
+export const SERVER_ANSWER_MARGIN_MS = 30_000;
 
 /** Per-call options accepted by every generated endpoint method as its last argument. */
 export interface RequestOptions extends RequestInit {

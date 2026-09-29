@@ -21014,6 +21014,5 @@
       "name": "MT5ControllerV",
       "description": "MT5 Manager API v2 \u2014 clean envelope, structured errors, Idempotency-Key\r\nheader support, cache-hit billing exemption, path-based versioning.\r\nSee history.md for the customer-facing migration guide."
     }
-  ],
-  "servers": null
+  ]
 }

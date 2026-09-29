@@ -9,7 +9,7 @@ Support for server-side request timeouts. Servers released before this feature d
 ### Added
 
 - `requestTimeout` (seconds, 1–300) — per call in the options argument of every generated method, and client-wide in `CPluginWebApiClient` options. Sent as `X-Request-Timeout`; out-of-range values throw a `TypeError` before anything is sent.
-- The client deadline is extended automatically to `server timeout + 10 s` (requested value, or the operation's default from the spec), so the server's own answer is received instead of a local abort. `timeoutMs` is now the minimum deadline.
+- The client deadline is extended automatically to `server timeout + 30 s` (requested value, or the operation's default from the spec; the margin covers the up to 20 s the server may spend opening the platform connection), so the server's own answer is received instead of a local abort. `timeoutMs` is now the minimum deadline: reads now wait up to 40 s instead of 30 s.
 - Error codes `Timeout`, `OutcomeUnknown` and `Busy` in `WebApiErrorCode`.
 - `ApiError.outcome` (`X-Request-Outcome`: `timeout`, `unknown`, `not-started`, `in-progress`) and `ApiError.appliedTimeout` (`X-Request-Timeout-Applied`).
 - `isOutcomeUnknown(err)` and `isRetryable(err)` helpers; `RequestOptions`, `RequestOutcome`, `REQUEST_TIMEOUT_MIN_SECONDS`, `REQUEST_TIMEOUT_MAX_SECONDS`, `SERVER_ANSWER_MARGIN_MS` exports.

@@ -131,7 +131,7 @@ export interface CPluginWebApiClientOptions {
   /**
    * Minimum client deadline per request in milliseconds, covering token acquisition,
    * the request and the response body. Defaults to 30 seconds. For operations with a
-   * server timeout the deadline is extended automatically to that timeout plus 10 s,
+   * server timeout the deadline is extended automatically to that timeout plus 30 s,
    * so the server's `Timeout` / `OutcomeUnknown` / `Busy` answer is received rather
    * than cut off by a local abort.
    */

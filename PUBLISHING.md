@@ -39,8 +39,8 @@ bun test           # verify nothing broke
 bun run build      # confirm the build still succeeds
 ```
 
-`orval.config.ts` normalises the spec in memory before generation (`servers: null`
-is dropped; em dashes in tags become hyphens so module file names stay stable), so
+`orval.config.ts` normalises the spec in memory before generation (em dashes in
+tags become hyphens so module file names stay stable), so
 `spec/v2.json` stays byte-identical to what the server publishes.
 `src/request-timeouts.generated.ts` holds each operation's server timeout from the
 `X-Request-Timeout` parameter; a test fails when it is out of date.

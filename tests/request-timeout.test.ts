@@ -202,6 +202,10 @@ describe('client deadline outlasts the server timeout', () => {
       ...extra,
     });
 
+  test('margin covers the server connect allowance (20 s) plus transfer, as in the other SDKs', () => {
+    expect(SERVER_ANSWER_MARGIN_MS).toBe(30_000);
+  });
+
   test('requested timeout + margin when longer than timeoutMs', () => {
     expect(plan('POST', '/api/v2/MT4/tp-1/TradeTransaction', { perCall: 120 }).deadlineMs).toBe(120_000 + SERVER_ANSWER_MARGIN_MS);
     expect(plan('GET', '/api/v2/MT4/tp-1/ServerTime', { clientDefault: 45 }).deadlineMs).toBe(45_000 + SERVER_ANSWER_MARGIN_MS);
@@ -215,14 +219,14 @@ describe('client deadline outlasts the server timeout', () => {
   });
 
   test('timeoutMs stays the floor', () => {
-    expect(plan('GET', '/api/v2/MT4/tp-1/ServerTime').deadlineMs).toBe(30_000);
+    expect(plan('GET', '/api/v2/MT4/tp-1/ServerTime', { timeoutMs: 90_000 }).deadlineMs).toBe(90_000);
     expect(plan('GET', '/api/v2/MT4/tp-1/ServerTime', { perCall: 1, timeoutMs: 90_000 }).deadlineMs).toBe(90_000);
     expect(plan('GET', '/api/TradePlatforms', { timeoutMs: 5_000 }).deadlineMs).toBe(5_000);
   });
 
   test('hand-set header or query value is honoured for the deadline', () => {
-    expect(plan('GET', '/api/v2/MT4/tp-1/ServerTime', { headers: { 'X-Request-Timeout': '100' } }).deadlineMs).toBe(110_000);
-    expect(plan('GET', '/api/v2/MT4/tp-1/ServerTime?requestTimeout=50').deadlineMs).toBe(60_000);
+    expect(plan('GET', '/api/v2/MT4/tp-1/ServerTime', { headers: { 'X-Request-Timeout': '100' } }).deadlineMs).toBe(100_000 + SERVER_ANSWER_MARGIN_MS);
+    expect(plan('GET', '/api/v2/MT4/tp-1/ServerTime?requestTimeout=50').deadlineMs).toBe(50_000 + SERVER_ANSWER_MARGIN_MS);
   });
 
   test('a slow answer inside the server timeout is not cut off by a short timeoutMs', async () => {

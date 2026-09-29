@@ -151,7 +151,7 @@ await client.mt4.getTradesUserHistoryLogin(tp, 817542, { fromTime, toTime }, { r
 
 A per-call value overrides the client-wide one; a value outside 1–300 throws a `TypeError` before anything is sent. The client-wide value is not sent to the few operations that have no server timeout.
 
-The client deadline is kept longer than the server timeout: `max(timeoutMs, server timeout + 10 s)`, where the server timeout is the requested one or the operation's default. The server's own answer therefore arrives instead of a local abort. When this request is the one that opens the trading platform connection, the server may extend its deadline by the connection time as well; raise `timeoutMs` if you need the server's answer even then.
+The client deadline is kept longer than the server timeout: `max(timeoutMs, server timeout + 30 s)`, where the server timeout is the requested one or the operation's default. The margin covers the up to 20 s the server may add while it opens the trading platform connection for this request, plus transfer time, so the server's own answer arrives instead of a local abort. A short `requestTimeout` therefore does not make the client give up sooner than about 30 s; use an `AbortSignal` in the options for a hard local limit.
 
 ### Error codes
 
