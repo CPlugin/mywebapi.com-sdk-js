@@ -28,7 +28,7 @@ const ok = <T>(data: T) => json({ data, error: null, meta: { activityId: 'a1' } 
 const failure = (code: WebApiErrorCode, headers: Record<string, string> = {}) =>
   json({ data: null, error: { code, managerCode: null, message: `${code} message` }, meta: { activityId: 'trace-1' } }, headers);
 
-interface Captured { method: string; url: string; headers: Record<string, string> }
+interface Captured { method: string; url: string; headers: Record<string, string>; body?: unknown }
 
 function recorder(respond: (call: Captured) => Response | Promise<Response>) {
   const calls: Captured[] = [];
@@ -85,6 +85,7 @@ function clientWith(api: (call: Captured) => Response, init: { requestTimeout?: 
       method: reqInit?.method ?? 'GET',
       url,
       headers: { ...(reqInit?.headers as Record<string, string> | undefined) },
+      body: reqInit?.body,
     };
     apiCalls.push(captured);
     return api(captured);
@@ -164,6 +165,16 @@ describe('X-Request-Timeout header', () => {
     await client.mt4.getServerTime('tp-1');
     expect(header(apiCalls[0]!, 'X-Request-Timeout')).toBe('3');
     expect(header(apiCalls[1]!, 'X-Request-Timeout')).toBe('20');
+  });
+
+  test('PATCH sends the patch object as JSON together with the timeout header', async () => {
+    const { client, apiCalls } = clientWith(() => ok({ login: 817542 }));
+    await client.mt4.patchUserRecordLogin('tp-1', 817542, { comment: 'updated' }, { requestTimeout: 20 });
+    const sent = apiCalls[0]!;
+    expect(sent.method).toBe('PATCH');
+    expect(header(sent, 'Content-Type')).toBe('application/json');
+    expect(header(sent, 'X-Request-Timeout')).toBe('20');
+    expect(JSON.parse(String(sent.body))).toEqual({ comment: 'updated' });
   });
 
   test('client default is not sent to operations without a server timeout', async () => {

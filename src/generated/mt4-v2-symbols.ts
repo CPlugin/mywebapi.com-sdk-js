@@ -17,6 +17,7 @@ import type {
   MT4SymbolGroupListApiResponse,
   MT4SymbolInfoApiResponse,
   MT4SymbolInfoListApiResponse,
+  PatchSymbolConfigSymbolBody,
   PostSymbolSendTickParams
 } from './model';
 
@@ -383,14 +384,15 @@ export const getPatchSymbolConfigSymbolUrl = (tradePlatform: string,
  * @summary Patch symbol config
  */
 export const patchSymbolConfigSymbol = async (tradePlatform: string,
-    symbol: string, options?: RequestInit): Promise<patchSymbolConfigSymbolResponse> => {
+    symbol: string,
+    patchSymbolConfigSymbolBody: PatchSymbolConfigSymbolBody, options?: RequestInit): Promise<patchSymbolConfigSymbolResponse> => {
 
   return customFetch<patchSymbolConfigSymbolResponse>(getPatchSymbolConfigSymbolUrl(tradePlatform,symbol),
   {
     ...options,
-    method: 'PATCH'
-
-
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(patchSymbolConfigSymbolBody)
   }
 );}
 

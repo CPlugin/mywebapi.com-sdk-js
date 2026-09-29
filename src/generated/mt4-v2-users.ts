@@ -17,6 +17,7 @@ import type {
   MT4UserListApiResponse,
   MT4UserUpdate,
   MT4UsersGroupOp,
+  PatchUserRecordLoginMT4Body,
   PostAdmBalanceFixParams,
   PostUsersSyncStartParams
 } from './model';
@@ -534,14 +535,15 @@ export const getPatchUserRecordLoginMT4Url = (tradePlatform: string,
  * @summary Patch account
  */
 export const patchUserRecordLoginMT4 = async (tradePlatform: string,
-    login: number, options?: RequestInit): Promise<patchUserRecordLoginMT4Response> => {
+    login: number,
+    patchUserRecordLoginMT4Body: PatchUserRecordLoginMT4Body, options?: RequestInit): Promise<patchUserRecordLoginMT4Response> => {
 
   return customFetch<patchUserRecordLoginMT4Response>(getPatchUserRecordLoginMT4Url(tradePlatform,login),
   {
     ...options,
-    method: 'PATCH'
-
-
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(patchUserRecordLoginMT4Body)
   }
 );}
 

@@ -5954,6 +5954,24 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "JSON Merge Patch: an object with only the fields to change.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Only the fields to change; the rest of the record stays as it is."
+              }
+            },
+            "application/merge-patch+json": {
+              "schema": {
+                "type": "object",
+                "description": "Only the fields to change; the rest of the record stays as it is."
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -6434,6 +6452,24 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "JSON Merge Patch: an object with only the fields to change.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Only the fields to change; the rest of the record stays as it is."
+              }
+            },
+            "application/merge-patch+json": {
+              "schema": {
+                "type": "object",
+                "description": "Only the fields to change; the rest of the record stays as it is."
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -7429,6 +7465,24 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "JSON Merge Patch: an object with only the fields to change.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Only the fields to change; the rest of the record stays as it is."
+              }
+            },
+            "application/merge-patch+json": {
+              "schema": {
+                "type": "object",
+                "description": "Only the fields to change; the rest of the record stays as it is."
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -8187,6 +8241,17 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "The command as JSON, passed to the server plugin verbatim.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "Any JSON value."
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -9942,6 +10007,24 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "JSON Merge Patch: an object with only the fields to change.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Only the fields to change; the rest of the record stays as it is."
+              }
+            },
+            "application/merge-patch+json": {
+              "schema": {
+                "type": "object",
+                "description": "Only the fields to change; the rest of the record stays as it is."
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -10054,6 +10137,24 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "JSON Merge Patch: an object with only the fields to change.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Only the fields to change; the rest of the record stays as it is."
+              }
+            },
+            "application/merge-patch+json": {
+              "schema": {
+                "type": "object",
+                "description": "Only the fields to change; the rest of the record stays as it is."
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Success",
@@ -10162,6 +10263,24 @@
             }
           }
         ],
+        "requestBody": {
+          "description": "JSON Merge Patch: an object with only the fields to change.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "description": "Only the fields to change; the rest of the record stays as it is."
+              }
+            },
+            "application/merge-patch+json": {
+              "schema": {
+                "type": "object",
+                "description": "Only the fields to change; the rest of the record stays as it is."
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
             "description": "Success",

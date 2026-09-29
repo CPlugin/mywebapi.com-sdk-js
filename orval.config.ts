@@ -70,13 +70,24 @@ function cleanOperationName(_op: unknown, route: string, verb: string): string {
 //   - Sidecar tags use an em dash ("MT4 v2 :: Sidecar — Plugins"). orval derives
 //     file names from tags, so the dash would leak into src/generated file names;
 //     an ASCII hyphen keeps the established mt4-v2-sidecar-*.ts module names.
+//   - PATCH bodies are offered as both application/json and
+//     application/merge-patch+json. With two content types orval emits a
+//     BodyOne | BodyTwo union and sends NO Content-Type header at all; keeping
+//     only application/json (which the server accepts) makes it send one.
 function normalizeSpec<T extends object>(spec: T): T {
   const doc = spec as Record<string, unknown>;
-  const paths = (doc.paths ?? {}) as Record<string, Record<string, { tags?: string[] }>>;
+  type Operation = { tags?: string[]; requestBody?: { content?: Record<string, unknown> } };
+  const paths = (doc.paths ?? {}) as Record<string, Record<string, Operation>>;
   for (const item of Object.values(paths)) {
     for (const operation of Object.values(item)) {
-      if (operation && Array.isArray(operation.tags)) {
+      if (!operation || typeof operation !== 'object') continue;
+      if (Array.isArray(operation.tags)) {
         operation.tags = operation.tags.map((tag) => tag.replace(/\s+\u2014\s+/g, ' - '));
+      }
+      const content = operation.requestBody?.content;
+      if (content && 'application/json' in content && Object.keys(content).length > 1
+        && Object.keys(content).every((type) => type === 'application/json' || type.endsWith('+json'))) {
+        operation.requestBody!.content = { 'application/json': content['application/json'] };
       }
     }
   }

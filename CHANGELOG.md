@@ -17,6 +17,8 @@ Support for server-side request timeouts. Servers released before this feature d
 
 ### Changed
 
+- The six v2 `PATCH` methods (`patchUserRecordLogin`, `patchGroupRecordGroup` on both platforms, `patchSymbolConfigSymbol`, `patchSymbolRecordSymbol`) now take the patch object — only the fields to change — as a typed argument before `options`, and send it as `application/json`. Before, the spec did not describe the body, so these methods could not send one. `postExternalCommandJSON` takes its command the same way. Calls written as `(tradePlatform, key, options)` must insert the patch object.
+
 - Regenerated from the current server spec: every guarded operation documents its default timeout in JSDoc.
 - Flag types (for example `UsersRights`, `GroupRights`, `EnTradeRightsFlags`) are now `string` — the names of the set bits joined by `", "` — instead of a union of single names, which could not represent a combination. Code comparing such a field with one name must check for membership instead.
 - Calls that previously timed out locally at 30 s (history 30 s and maintenance 60 s server defaults) now wait for the server's answer.

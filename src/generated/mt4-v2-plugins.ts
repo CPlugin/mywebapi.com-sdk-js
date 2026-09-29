@@ -57,14 +57,15 @@ export const getPostExternalCommandJSONUrl = (tradePlatform: string,) => {
  * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Send plugin command (JSON)
  */
-export const postExternalCommandJSON = async (tradePlatform: string, options?: RequestInit): Promise<postExternalCommandJSONResponse> => {
+export const postExternalCommandJSON = async (tradePlatform: string,
+    postExternalCommandJSONBody: unknown, options?: RequestInit): Promise<postExternalCommandJSONResponse> => {
 
   return customFetch<postExternalCommandJSONResponse>(getPostExternalCommandJSONUrl(tradePlatform),
   {
     ...options,
-    method: 'POST'
-
-
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(postExternalCommandJSONBody)
   }
 );}
 

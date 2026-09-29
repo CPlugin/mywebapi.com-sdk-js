@@ -6,7 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 import type {
-  MT5SymbolApiResponse
+  MT5SymbolApiResponse,
+  PatchSymbolRecordSymbolBody
 } from './model';
 
 import { customFetch } from '../mutator';
@@ -79,14 +80,15 @@ export const getPatchSymbolRecordSymbolUrl = (tradePlatform: string,
  * @summary Partially update a symbol
  */
 export const patchSymbolRecordSymbol = async (tradePlatform: string,
-    symbol: string, options?: RequestInit): Promise<patchSymbolRecordSymbolResponse> => {
+    symbol: string,
+    patchSymbolRecordSymbolBody: PatchSymbolRecordSymbolBody, options?: RequestInit): Promise<patchSymbolRecordSymbolResponse> => {
 
   return customFetch<patchSymbolRecordSymbolResponse>(getPatchSymbolRecordSymbolUrl(tradePlatform,symbol),
   {
     ...options,
-    method: 'PATCH'
-
-
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(patchSymbolRecordSymbolBody)
   }
 );}
 

@@ -6,7 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 import type {
-  MT5UserApiResponse
+  MT5UserApiResponse,
+  PatchUserRecordLoginMT5Body
 } from './model';
 
 import { customFetch } from '../mutator';
@@ -79,14 +80,15 @@ export const getPatchUserRecordLoginMT5Url = (tradePlatform: string,
  * @summary Partially update a user
  */
 export const patchUserRecordLoginMT5 = async (tradePlatform: string,
-    login: number, options?: RequestInit): Promise<patchUserRecordLoginMT5Response> => {
+    login: number,
+    patchUserRecordLoginMT5Body: PatchUserRecordLoginMT5Body, options?: RequestInit): Promise<patchUserRecordLoginMT5Response> => {
 
   return customFetch<patchUserRecordLoginMT5Response>(getPatchUserRecordLoginMT5Url(tradePlatform,login),
   {
     ...options,
-    method: 'PATCH'
-
-
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(patchUserRecordLoginMT5Body)
   }
 );}
 

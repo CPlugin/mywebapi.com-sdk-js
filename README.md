@@ -251,7 +251,7 @@ await client.mt4.postTradeTransaction(tp, transaction, {
 });
 ```
 
-A repeated key returns the original result instead of executing again; see [Safe recovery with `Idempotency-Key`](#safe-recovery-with-idempotency-key).
+Keys are private to your API client and to the operation. A repeated key returns the original result instead of executing again; see [Safe recovery with `Idempotency-Key`](#safe-recovery-with-idempotency-key).
 
 ## Pagination helpers
 

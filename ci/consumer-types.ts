@@ -18,6 +18,7 @@ const trade = client.mt4.postTradeTransaction('fixture-platform', { symbol: 'EUR
   requestTimeout: 10,
   headers: { 'Idempotency-Key': 'fixture-key' },
 });
+const patched = client.mt4.patchUserRecordLogin('fixture-platform', 817542, { comment: 'updated' }, { requestTimeout: 15 });
 // @ts-expect-error requestTimeout is a number of seconds
 void client.mt4.getServerTime('fixture-platform', { requestTimeout: '10' });
 const outcome: RequestOutcome | undefined = new ApiError({ code: 'Busy' }, null, 200).outcome;
@@ -31,6 +32,7 @@ void init;
 void time;
 void timed;
 void trade;
+void patched;
 void outcome;
 void flags;
 void realtime;

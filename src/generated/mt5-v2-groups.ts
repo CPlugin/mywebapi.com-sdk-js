@@ -6,7 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 import type {
-  MT5ConGroupApiResponse
+  MT5ConGroupApiResponse,
+  PatchGroupRecordGroupMT5Body
 } from './model';
 
 import { customFetch } from '../mutator';
@@ -79,14 +80,15 @@ export const getPatchGroupRecordGroupMT5Url = (tradePlatform: string,
  * @summary Partially update a group
  */
 export const patchGroupRecordGroupMT5 = async (tradePlatform: string,
-    group: string, options?: RequestInit): Promise<patchGroupRecordGroupMT5Response> => {
+    group: string,
+    patchGroupRecordGroupMT5Body: PatchGroupRecordGroupMT5Body, options?: RequestInit): Promise<patchGroupRecordGroupMT5Response> => {
 
   return customFetch<patchGroupRecordGroupMT5Response>(getPatchGroupRecordGroupMT5Url(tradePlatform,group),
   {
     ...options,
-    method: 'PATCH'
-
-
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(patchGroupRecordGroupMT5Body)
   }
 );}
 

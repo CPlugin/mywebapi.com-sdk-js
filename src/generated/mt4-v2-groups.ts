@@ -12,7 +12,8 @@ import type {
   MT4GroupListApiResponse,
   MT4GroupMarginListApiResponse,
   MT4GroupSecListApiResponse,
-  MT4GroupUpdate
+  MT4GroupUpdate,
+  PatchGroupRecordGroupMT4Body
 } from './model';
 
 import { customFetch } from '../mutator';
@@ -328,14 +329,15 @@ export const getPatchGroupRecordGroupMT4Url = (tradePlatform: string,
  * @summary Patch trading group
  */
 export const patchGroupRecordGroupMT4 = async (tradePlatform: string,
-    group: string, options?: RequestInit): Promise<patchGroupRecordGroupMT4Response> => {
+    group: string,
+    patchGroupRecordGroupMT4Body: PatchGroupRecordGroupMT4Body, options?: RequestInit): Promise<patchGroupRecordGroupMT4Response> => {
 
   return customFetch<patchGroupRecordGroupMT4Response>(getPatchGroupRecordGroupMT4Url(tradePlatform,group),
   {
     ...options,
-    method: 'PATCH'
-
-
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(patchGroupRecordGroupMT4Body)
   }
 );}
 
