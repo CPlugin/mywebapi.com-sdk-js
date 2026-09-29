@@ -6,10 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type EnRequestFlags = typeof EnRequestFlags[keyof typeof EnRequestFlags];
-
-
-export const EnRequestFlags = {
-  None: 'None',
-  All: 'All',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("Order"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: Order = 0x1.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type EnRequestFlags = string;

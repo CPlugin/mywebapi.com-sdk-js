@@ -6,11 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type TickRequestFlags = typeof TickRequestFlags[keyof typeof TickRequestFlags];
-
-
-export const TickRequestFlags = {
-  Raw: 'Raw',
-  Normal: 'Normal',
-  All: 'All',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("Raw, Normal"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: Raw = 0x1, Normal = 0x2. Accepted on input, never written: All = Raw, Normal.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type TickRequestFlags = string;

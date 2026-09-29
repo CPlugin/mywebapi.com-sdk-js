@@ -41,6 +41,8 @@ export const getGetNewsTotalUrl = (tradePlatform: string,) => {
  *
  * Pump-cached read — instant local lookup, no round-trip to MT4 server.
  * Useful as a cheap polling probe before fetching news bodies.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get news count
  */
 export const getNewsTotal = async (tradePlatform: string, options?: RequestInit): Promise<getNewsTotalResponse> => {
@@ -81,6 +83,8 @@ export const getGetNewsBodyGetKeyUrl = (tradePlatform: string,
  *
  * Pump-cached read — pair with `NewsTotal` and `NewsGet` (later)
  * to enumerate cached news. The key is the news item id known to MT4.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get news body (cached)
  */
 export const getNewsBodyGetKey = async (tradePlatform: string,
@@ -124,6 +128,8 @@ export const getGetNewsGetUrl = (tradePlatform: string,) => {
  * Category, Keywords, Priority, LangId). Body text is fetched via
  * `NewsBodyGet(key)` after asking the pump to populate it via
  * `NewsBodyRequest(key)`.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List news headers
  */
 export const getNewsGet = async (tradePlatform: string, options?: RequestInit): Promise<getNewsGetResponse> => {
@@ -166,6 +172,8 @@ export const getGetNewsTopicGetPosUrl = (tradePlatform: string,
  * the whole array. Pair with `NewsTotal` to bound the index.
  * Returns a wrapper-failure envelope when pos is
  * out of range.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get news header by index
  */
 export const getNewsTopicGetPos = async (tradePlatform: string,
@@ -210,6 +218,8 @@ export const getPostNewsBodyRequestKeyUrl = (tradePlatform: string,
  * success/failure to surface. A subsequent `NewsBodyGet(key)` will
  * see the body once the pump has retrieved it. The payload is a sentinel
  * `true` meaning "request dispatched".
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Request news body fetch
  */
 export const postNewsBodyRequestKey = async (tradePlatform: string,

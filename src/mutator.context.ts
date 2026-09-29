@@ -13,7 +13,10 @@ export interface RequestContext {
   tokenProvider: TokenProvider;
   fetchImpl: typeof fetch;
   retryPolicy: RetryPolicy;
+  /** Minimum client deadline in milliseconds; extended to outlast the server timeout. */
   timeoutMs: number;
+  /** Client-wide X-Request-Timeout in seconds, sent to operations that accept it. */
+  requestTimeout?: number;
 }
 
 /** Private symbol copied through generated object spreads. */

@@ -6,13 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type EnReportsFlags = typeof EnReportsFlags[keyof typeof EnReportsFlags];
-
-
-export const EnReportsFlags = {
-  None: 'None',
-  Email: 'Email',
-  Support: 'Support',
-  Statements: 'Statements',
-  All: 'All',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("Email, Support"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: Email = 0x1, Support = 0x2, Statements = 0x4. Accepted on input, never written: All = Email, Statements.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type EnReportsFlags = string;

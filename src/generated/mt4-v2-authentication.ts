@@ -46,6 +46,8 @@ export const getPostUserPasswordCheckLoginUrl = (tradePlatform: string,
  * Read-only operation: no state changes. Idempotency-Key on this endpoint
  * is supported but rarely useful — pin if your retry policy expects the
  * same answer across attempts.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Verify account password
  */
 export const postUserPasswordCheckLogin = async (tradePlatform: string,
@@ -111,6 +113,9 @@ export const getPostUserPasswordSetLoginUrl = (tradePlatform: string,
  * though the password is the same), which is harmless but generates audit
  * noise. With the header, the second call short-circuits to the cached
  * response.
+ *
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Set account password
  */
 export const postUserPasswordSetLogin = async (tradePlatform: string,

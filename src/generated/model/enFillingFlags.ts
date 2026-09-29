@@ -6,13 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type EnFillingFlags = typeof EnFillingFlags[keyof typeof EnFillingFlags];
-
-
-export const EnFillingFlags = {
-  None: 'None',
-  FoK: 'FoK',
-  IoC: 'IoC',
-  BoC: 'BoC',
-  All: 'All',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("FoK, IoC"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: FoK = 0x1, IoC = 0x2, BoC = 0x4. Accepted on input, never written: All = FoK, IoC, BoC.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type EnFillingFlags = string;

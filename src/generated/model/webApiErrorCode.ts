@@ -23,5 +23,8 @@ export const WebApiErrorCode = {
   Forbidden: 'Forbidden',
   NotFound: 'NotFound',
   MT5Error: 'MT5Error',
+  Timeout: 'Timeout',
+  OutcomeUnknown: 'OutcomeUnknown',
+  Busy: 'Busy',
   Internal: 'Internal',
 } as const;

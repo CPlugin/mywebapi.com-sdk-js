@@ -6,15 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type EnMarginFlags = typeof EnMarginFlags[keyof typeof EnMarginFlags];
-
-
-export const EnMarginFlags = {
-  None: 'None',
-  CheckProcess: 'CheckProcess',
-  CheckSLTP: 'CheckSLTP',
-  HedgeLargeLeg: 'HedgeLargeLeg',
-  ExcludePl: 'ExcludePl',
-  All: 'All',
-  RecalcRates: 'RecalcRates',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("CheckProcess, CheckSLTP"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: CheckProcess = 0x1, CheckSLTP = 0x2, HedgeLargeLeg = 0x4, ExcludePl = 0x8, RecalcRates = 0x10. Accepted on input, never written: All = CheckProcess, CheckSLTP, HedgeLargeLeg, ExcludePl.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type EnMarginFlags = string;

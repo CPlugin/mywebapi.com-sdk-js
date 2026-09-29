@@ -18,14 +18,26 @@ export type { EnvironmentName, ResolvedEnvironment, EnvironmentSelector } from '
 // ---------------------------------------------------------------------------
 // Errors
 // ---------------------------------------------------------------------------
-export { ApiError } from './errors';
+export { ApiError, isOutcomeUnknown, isRetryable } from './errors';
 export type {
   WebApiErrorCode,
+  RequestOutcome,
+  ApiErrorDetails,
   PagingMeta,
   ApiMeta,
   ApiErrorBody,
   ApiEnvelope,
 } from './errors';
+
+// ---------------------------------------------------------------------------
+// Request timeouts
+// ---------------------------------------------------------------------------
+export {
+  REQUEST_TIMEOUT_MIN_SECONDS,
+  REQUEST_TIMEOUT_MAX_SECONDS,
+  SERVER_ANSWER_MARGIN_MS,
+} from './request-timeout';
+export type { RequestOptions } from './request-timeout';
 
 // ---------------------------------------------------------------------------
 // Pagination helpers

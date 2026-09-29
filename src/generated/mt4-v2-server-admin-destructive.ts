@@ -56,6 +56,9 @@ export const getPostSrvRestartUrl = (tradePlatform: string,
  * The `?confirm=true` guard rejects calls without the literal
  * query string. It is a deliberateness signal, NOT an authorization
  * mechanism — admin rights are still enforced separately.
+ *
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Restart server
  */
 export const postSrvRestart = async (tradePlatform: string,
@@ -106,6 +109,8 @@ export const getPostSrvChartsSyncUrl = (tradePlatform: string,
  * the MT4 server to walk every plugin's chart-history feed and bring
  * the local cache in sync. Idempotent — running twice is a no-op
  * against an already-synced state.
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Force chart resync
  */
 export const postSrvChartsSync = async (tradePlatform: string,
@@ -155,6 +160,8 @@ export const getPostSrvLiveUpdateStartUrl = (tradePlatform: string,
  * Manager (live) call to the wrapper's `SrvLiveUpdateStart()`.
  * Starts (or restarts) the server's outbound LiveUpdate broadcast.
  * Affects connected client terminals — they may receive an update prompt.
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Start LiveUpdate distributor
  */
 export const postSrvLiveUpdateStart = async (tradePlatform: string,
@@ -204,6 +211,8 @@ export const getPostSrvFeedsRestartUrl = (tradePlatform: string,
  * Manager (live) call to the wrapper's `SrvFeedsRestart()`.
  * Cycles all running quote/news feeders. May cause a brief gap in
  * the tick stream — typically a second or two. Idempotent.
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Restart data feeders
  */
 export const postSrvFeedsRestart = async (tradePlatform: string,

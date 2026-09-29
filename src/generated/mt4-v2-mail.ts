@@ -37,6 +37,8 @@ export const getGetMailLastUrl = (tradePlatform: string,) => {
  *
  * Pump-cached read — returns the path/identifier of the last mail.
  * Empty string when no mail has been received yet on the connection.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get last mail path
  */
 export const getMailLast = async (tradePlatform: string, options?: RequestInit): Promise<getMailLastResponse> => {

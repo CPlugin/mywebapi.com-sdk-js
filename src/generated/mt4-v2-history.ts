@@ -50,6 +50,8 @@ export const getGetTradesUserHistoryLoginUrl = (tradePlatform: string,
  * Returns an empty list if the account has no closed trades in the
  * window. Trades are mapped to the curated `MT4Trade` DTO; same
  * shape as live `TradesGetByMarket` / `TradesGetBySymbol`.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get account trade history
  */
 export const getTradesUserHistoryLogin = async (tradePlatform: string,

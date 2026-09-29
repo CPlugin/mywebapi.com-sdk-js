@@ -49,6 +49,8 @@ export const getGetPositionByGroupMaskUrl = (tradePlatform: string,
 /**
  * Returns open positions for all logins in groups matching the mask,
  * ordered by Position ID ascending. Use the cursor for the next page.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List positions by group
  */
 export const getPositionByGroupMask = async (tradePlatform: string,
@@ -97,6 +99,8 @@ export const getGetOrderByGroupMaskUrl = (tradePlatform: string,
 /**
  * Returns active and pending orders for all logins in groups matching the mask,
  * ordered by Order ID ascending. Use the cursor for the next page.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List orders by group
  */
 export const getOrderByGroupMask = async (tradePlatform: string,
@@ -145,6 +149,8 @@ export const getGetDealByGroupMaskUrl = (tradePlatform: string,
 /**
  * Returns deals for all logins in groups matching the mask, ordered by Deal ID ascending.
  * Returns the full history by default. Use the cursor for the next page.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List deals by group
  */
 export const getDealByGroupMask = async (tradePlatform: string,

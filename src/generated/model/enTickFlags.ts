@@ -6,14 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type EnTickFlags = typeof EnTickFlags[keyof typeof EnTickFlags];
-
-
-export const EnTickFlags = {
-  None: 'None',
-  Realtime: 'Realtime',
-  CollectRaw: 'CollectRaw',
-  FeedStats: 'FeedStats',
-  NegativePrices: 'NegativePrices',
-  All: 'All',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("Realtime, CollectRaw"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: Realtime = 0x1, CollectRaw = 0x2, FeedStats = 0x4, NegativePrices = 0x8. Accepted on input, never written: All = Realtime, CollectRaw, FeedStats, NegativePrices.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type EnTickFlags = string;

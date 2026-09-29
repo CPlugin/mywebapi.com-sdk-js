@@ -18,12 +18,14 @@
 
 ## Releasing a version
 
-1. Bump `"version"` in `package.json` following [semver](https://semver.org/).
+1. Bump `"version"` in `package.json` following [semver](https://semver.org/) and add
+   the release notes to [CHANGELOG.md](./CHANGELOG.md).
 2. Commit and push the version bump to `main`.
-3. Tag the commit and push the tag:
+3. Tag the commit and push the tag (the tag must equal `v` + the `package.json` version,
+   `ci/check-version.mjs` rejects anything else):
    ```sh
-   git tag v0.2.1
-   git push origin v0.2.1
+   git tag -a vX.Y.Z -m "vX.Y.Z"
+   git push origin vX.Y.Z
    ```
 4. The `publish.yml` workflow triggers automatically, builds the package, and
    publishes it to npm with provenance attestation.
@@ -31,8 +33,14 @@
 ## Regenerating the client from a new spec
 
 ```sh
-# Drop the new spec into spec/ then:
-bun run generate   # rewrites src/generated/ from spec/v2.json
+# Copy the server's exported spec to spec/v2.json unchanged, then:
+bun run generate   # rewrites src/generated/ and src/request-timeouts.generated.ts
 bun test           # verify nothing broke
 bun run build      # confirm the build still succeeds
 ```
+
+`orval.config.ts` normalises the spec in memory before generation (`servers: null`
+is dropped; em dashes in tags become hyphens so module file names stay stable), so
+`spec/v2.json` stays byte-identical to what the server publishes.
+`src/request-timeouts.generated.ts` holds each operation's server timeout from the
+`X-Request-Timeout` parameter; a test fails when it is out of date.

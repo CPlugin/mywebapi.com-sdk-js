@@ -53,6 +53,8 @@ export const getGetUserRecordGetLoginUrl = (tradePlatform: string,
  * stripped at the mapper level — they cannot be exposed via this endpoint
  * regardless of caller permissions. Returns NotFound envelope when the
  * pump cache does not contain the requested login.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get account (cached)
  */
 export const getUserRecordGetLogin = async (tradePlatform: string,
@@ -97,6 +99,8 @@ export const getGetUserRecordRequestLoginUrl = (tradePlatform: string,
  * Slower than `UserRecordGet` but guarantees fresh data (just
  * changed group, balance fix, etc). Same curated DTO, same security
  * guarantees — passwords/OTP/API blob never cross the boundary.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get account (live)
  */
 export const getUserRecordRequestLogin = async (tradePlatform: string,
@@ -151,6 +155,8 @@ export const getGetUserRecordsRequestUrl = (tradePlatform: string,
  * Order in the response is **not** guaranteed to match the request — the
  * wrapper returns a dictionary. Missing logins are silently omitted; the
  * envelope is not an error envelope in that case.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get accounts batch (live)
  */
 export const getUserRecordsRequest = async (tradePlatform: string,
@@ -199,6 +205,8 @@ export const getGetAdmBalanceCheckLoginUrl = (tradePlatform: string,
  * Read-only operation despite the wrapper's "Adm" prefix (the prefix
  * signals the elevated authorization requirement, not a write side
  * effect).
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Check account balance
  */
 export const getAdmBalanceCheckLogin = async (tradePlatform: string,
@@ -251,6 +259,8 @@ export const getGetAdmBalanceCheckUrl = (tradePlatform: string,
  * list contains entries only for accounts the server flagged with a
  * non-zero diff — clean accounts are silently omitted. Clients should
  * treat "missing from response" as "diff = 0".
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Check account balances (batch)
  */
 export const getAdmBalanceCheck = async (tradePlatform: string,
@@ -308,6 +318,8 @@ export const getPostAdmBalanceFixUrl = (tradePlatform: string,
  * `Idempotency-Key` header; otherwise a retried fix can double-
  * apply on an account whose original fix happened to land but whose
  * response was lost on the wire.
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Fix account balances
  */
 export const postAdmBalanceFix = async (tradePlatform: string,
@@ -358,6 +370,8 @@ export const getGetUsersRequestUrl = (tradePlatform: string,
  * reduces only the wire payload, not MT4 server load. Items are sorted
  * by login ascending; pages are stable across concurrent inserts as
  * long as the new login is greater than the previous page's last login.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List accounts (live)
  */
 export const getUsersRequest = async (tradePlatform: string,
@@ -408,6 +422,8 @@ export const getPostUserRecordNewUrl = (tradePlatform: string,) => {
  * Idempotency-Key strongly recommended — a retried create without it
  * can land twice when the original response was lost on the wire,
  * burning a second login id from the broker's sequence.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Create account
  */
 export const postUserRecordNew = async (tradePlatform: string,
@@ -465,6 +481,9 @@ export const getPostUserRecordUpdateLoginUrl = (tradePlatform: string,
  * Idempotency-Key is strongly recommended; without it a retried update
  * risks silently overwriting concurrent edits that happened between
  * the original send and the retry.
+ *
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update account
  */
 export const postUserRecordUpdateLogin = async (tradePlatform: string,
@@ -510,6 +529,8 @@ export const getPatchUserRecordLoginMT4Url = (tradePlatform: string,
  * surface as `MT4Error` envelopes. Secret-preservation and
  * computed-field protection are handled by the existing Type 1 ApplyTo
  * mapper's ignore list.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Patch account
  */
 export const patchUserRecordLoginMT4 = async (tradePlatform: string,
@@ -559,6 +580,8 @@ export const getGetAdmUsersRequestSafeGroupUrl = (tradePlatform: string,
  * commas and trims whitespace internally); the simplest call pattern
  * is a single group name. Large groups may return substantial
  * payloads — pair with `Idempotency-Key` on retry.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List group accounts (admin)
  */
 export const getAdmUsersRequestSafeGroup = async (tradePlatform: string,
@@ -613,6 +636,8 @@ export const getPostUsersSyncStartUrl = (tradePlatform: string,
  *
  * `timestamp` is Unix epoch seconds (int32) in MT4 server-local
  * time, not UTC. Returns a bare success envelope.
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Start user-records sync
  */
 export const postUsersSyncStart = async (tradePlatform: string,
@@ -666,6 +691,8 @@ export const getPostUsersGroupOpUrl = (tradePlatform: string,) => {
  * account; the wrapper enforces this server-side. Idempotency-Key
  * strongly recommended — bulk Delete / SetGroup operations are
  * destructive on customer-visible state.
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Bulk account operation
  */
 export const postUsersGroupOp = async (tradePlatform: string,

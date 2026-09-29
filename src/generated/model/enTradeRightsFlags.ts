@@ -6,23 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type EnTradeRightsFlags = typeof EnTradeRightsFlags[keyof typeof EnTradeRightsFlags];
-
-
-export const EnTradeRightsFlags = {
-  None: 'None',
-  Swaps: 'Swaps',
-  Trailing: 'Trailing',
-  Experts: 'Experts',
-  Expiration: 'Expiration',
-  SignalsAll: 'SignalsAll',
-  Default: 'Default',
-  SignalsOwn: 'SignalsOwn',
-  SOCompensation: 'SOCompensation',
-  SOFullyHedged: 'SOFullyHedged',
-  FifoClose: 'FifoClose',
-  HedgeProhibit: 'HedgeProhibit',
-  DealCost: 'DealCost',
-  SOCompensationCredit: 'SOCompensationCredit',
-  All: 'All',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("Swaps, Trailing"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: Swaps = 0x1, Trailing = 0x2, Experts = 0x4, Expiration = 0x8, SignalsAll = 0x10, SignalsOwn = 0x20, SOCompensation = 0x40, SOFullyHedged = 0x80, FifoClose = 0x100, HedgeProhibit = 0x200, DealCost = 0x400, SOCompensationCredit = 0x800. Accepted on input, never written: Default = Swaps, Trailing, Experts, Expiration, SignalsAll; All = Swaps, Trailing, Experts, Expiration, SignalsAll, SignalsOwn, SOCompensation, SOFullyHedged, FifoClose, HedgeProhibit, DealCost, SOCompensationCredit.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type EnTradeRightsFlags = string;

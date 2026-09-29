@@ -55,6 +55,8 @@ export const getGetTradesGetUrl = (tradePlatform: string,
 
 /**
  * Pump-cached snapshot of all open trades on the platform, returned paginated. Sort key is the order ticket ascending. `?limit=` caps page size; without it all open trades come back in one page.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List open trades (cached)
  */
 export const getTradesGet = async (tradePlatform: string,
@@ -100,6 +102,8 @@ export const getGetTradesGetTicketUrl = (tradePlatform: string,
  * trade up in the open-trades dictionary. Behaviourally equivalent for
  * open trades; `TradeRecordGet` can also resolve recently closed
  * trades that linger in cache.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get trade by ticket (cached)
  */
 export const getTradesGetTicket = async (tradePlatform: string,
@@ -144,6 +148,8 @@ export const getGetTradesGetByLoginLoginGroupUrl = (tradePlatform: string,
  * required because the wrapper organises trades by group internally —
  * callers can fetch the group via `UserRecordGet/{login}` first.
  * Empty list when the account has no open trades.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List trades by account (cached)
  */
 export const getTradesGetByLoginLoginGroup = async (tradePlatform: string,
@@ -194,6 +200,8 @@ export const getGetTradesGetBySymbolUrl = (tradePlatform: string,
  * Pump-cached snapshot — instant local lookup, no MT4 round-trip. Useful
  * for per-instrument risk monitoring. Empty array is a legitimate result
  * (no live trades on that symbol).
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List trades by symbol (cached)
  */
 export const getTradesGetBySymbol = async (tradePlatform: string,
@@ -235,6 +243,8 @@ export const getGetTradesGetByMarketUrl = (tradePlatform: string,) => {
  * Pump-cached snapshot of every open market order across all accounts.
  * Pending orders (limits/stops) are excluded — for those query per-symbol
  * or per-account. Empty array is a legitimate result on idle servers.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List market trades (cached)
  */
 export const getTradesGetByMarket = async (tradePlatform: string, options?: RequestInit): Promise<getTradesGetByMarketResponse> => {
@@ -277,6 +287,8 @@ export const getGetTradeRecordGetOrderUrl = (tradePlatform: string,
  * ticket, cache miss) surface in the envelope's ManagerAPICode /
  * ErrorCode pair — clients must branch on isError before dereferencing
  * payload.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get trade record (cached)
  */
 export const getTradeRecordGetOrder = async (tradePlatform: string,
@@ -333,6 +345,8 @@ export const getPostTradeCheckStopsUrl = (tradePlatform: string,
  * Useful for client-side pre-flight before submitting a real
  * `TradeTransaction` — saves a server round-trip for invalid
  * orders.
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Validate order stops
  */
 export const postTradeCheckStops = async (tradePlatform: string,
@@ -380,6 +394,8 @@ export const getPostTradeClearRollbackOrderUrl = (tradePlatform: string,
  * wrapper's `ResultCode` as part of the envelope on failure.
  *
  * Idempotent on already-committed/already-rolled-back tickets.
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Roll back trade transaction
  */
 export const postTradeClearRollbackOrder = async (tradePlatform: string,
@@ -426,6 +442,8 @@ export const getGetTradeRecordRequestOrderUrl = (tradePlatform: string,
  * flushed), or any flow where the caller can tolerate the latency cost
  * in exchange for guaranteed freshness. Returns NotFound envelope when
  * the ticket does not exist on the server.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get trade record (live)
  */
 export const getTradeRecordRequestOrder = async (tradePlatform: string,
@@ -479,6 +497,8 @@ export const getGetTradesRequestUrl = (tradePlatform: string,
  * this endpoint returns the full server-side set the manager can see.
  * Heavy — paginate aggressively, prefer pump variants when freshness
  * is not critical.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Query trades (live)
  */
 export const getTradesRequest = async (tradePlatform: string,
@@ -534,6 +554,9 @@ export const getPostAdmTradeRecordModifyTicketUrl = (tradePlatform: string,
  * <br>
  * Idempotency-Key strongly recommended. A retried edit without it can
  * land twice — usually harmless, but generates audit log noise.
+ *
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Modify trade record (admin)
  */
 export const postAdmTradeRecordModifyTicket = async (tradePlatform: string,
@@ -587,6 +610,9 @@ export const getPostTradeTransactionUrl = (tradePlatform: string,) => {
  * transaction without the header can open a second position, double-
  * close, or apply a balance op twice. With the header the second call
  * returns the cached envelope from the first.
+ *
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Submit trade transaction
  */
 export const postTradeTransaction = async (tradePlatform: string,
@@ -642,6 +668,8 @@ export const getGetTradeRecordsRequestUrl = (tradePlatform: string,
  * Order in the response is NOT guaranteed to match the request order;
  * missing tickets are silently omitted (the envelope is not an error
  * envelope in that case — match by `order` field on the client).
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get trade records batch (live)
  */
 export const getTradeRecordsRequest = async (tradePlatform: string,
@@ -693,6 +721,8 @@ export const getGetAdmTradesRequestGroupUrl = (tradePlatform: string,
  * the given group. `openOnly=true` filters out closed trades on
  * the server side. Pair with `Idempotency-Key` on retry — large
  * groups can return substantial payloads.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List group trades (admin)
  */
 export const getAdmTradesRequestGroup = async (tradePlatform: string,
@@ -750,6 +780,8 @@ export const getPostAdmTradesDeleteUrl = (tradePlatform: string,
  * server's trade table; this is not reversible from the API side.
  * Pair with `Idempotency-Key` so retries don't re-process partial
  * failures.
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Delete trades (admin)
  */
 export const postAdmTradesDelete = async (tradePlatform: string,
@@ -801,6 +833,8 @@ export const getPostTradesSyncStartUrl = (tradePlatform: string,
  * (see deferral note in the Users section above). Pass
  * `timestamp=0` to request all trades. The timestamp is Unix
  * epoch seconds (int32) in MT4 server-local time, not UTC.
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Start trade-records sync
  */
 export const postTradesSyncStart = async (tradePlatform: string,

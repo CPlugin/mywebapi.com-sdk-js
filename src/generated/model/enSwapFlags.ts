@@ -6,10 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type EnSwapFlags = typeof EnSwapFlags[keyof typeof EnSwapFlags];
-
-
-export const EnSwapFlags = {
-  None: 'None',
-  ConsiderHolidays: 'ConsiderHolidays',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("ConsiderHolidays"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: ConsiderHolidays = 0x1.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type EnSwapFlags = string;

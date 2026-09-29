@@ -6,14 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type EnExpirationFlags = typeof EnExpirationFlags[keyof typeof EnExpirationFlags];
-
-
-export const EnExpirationFlags = {
-  None: 'None',
-  GtC: 'GtC',
-  Day: 'Day',
-  Specified: 'Specified',
-  SpecifiedDay: 'SpecifiedDay',
-  All: 'All',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("GtC, Day"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: GtC = 0x1, Day = 0x2, Specified = 0x4, SpecifiedDay = 0x8. Accepted on input, never written: All = GtC, Day, Specified, SpecifiedDay.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type EnExpirationFlags = string;

@@ -6,10 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type EnMarginCalcFlags = typeof EnMarginCalcFlags[keyof typeof EnMarginCalcFlags];
-
-
-export const EnMarginCalcFlags = {
-  None: 'None',
-  ClearAcc: 'ClearAcc',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("ClearAcc"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: ClearAcc = 0x1.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type EnMarginCalcFlags = string;

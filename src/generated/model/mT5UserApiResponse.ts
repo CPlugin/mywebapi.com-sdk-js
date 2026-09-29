@@ -18,7 +18,7 @@ export interface MT5UserApiResponse {
   /**
      * MT5 user, v2 read DTO — full field set (A4 expansion). Includes all editable
      *             fields mirrored from MT5UserUpdate plus read-only financial/metadata fields.
-     *             `Rights` serializes as a string via `V2JsonContext.UseStringEnumConverter`.
+     *             `Rights` is a flags string: the names of the set bits, `"Enabled, Password"`.
      */
   data?: MT5User | null;
   /**

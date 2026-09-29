@@ -6,17 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type TradeActivationFlags = typeof TradeActivationFlags[keyof typeof TradeActivationFlags];
-
-
-export const TradeActivationFlags = {
-  None: 'None',
-  NoLimit: 'NoLimit',
-  NoStop: 'NoStop',
-  NoSLimit: 'NoSLimit',
-  NoSL: 'NoSL',
-  NoTP: 'NoTP',
-  NoSO: 'NoSO',
-  NoExpiration: 'NoExpiration',
-  All: 'All',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("NoLimit, NoStop"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: NoLimit = 0x1, NoStop = 0x2, NoSLimit = 0x4, NoSL = 0x8, NoTP = 0x10, NoSO = 0x20, NoExpiration = 0x40. Accepted on input, never written: All = NoLimit, NoStop, NoSLimit, NoSL, NoTP, NoSO, NoExpiration.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type TradeActivationFlags = string;

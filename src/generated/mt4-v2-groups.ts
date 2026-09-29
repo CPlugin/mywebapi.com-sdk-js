@@ -45,6 +45,8 @@ export const getGetGroupsGetUrl = (tradePlatform: string,) => {
  * and nested SecGroups/SecMargins arrays (those get dedicated v2
  * endpoints in a later wave). Typical group counts are small (dozens),
  * so no pagination is needed.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List trading groups (cached)
  */
 export const getGroupsGet = async (tradePlatform: string, options?: RequestInit): Promise<getGroupsGetResponse> => {
@@ -86,6 +88,8 @@ export const getGetGroupRecordGetGroupUrl = (tradePlatform: string,
  * Pump-cached lookup. Returns NotFound envelope if no group with the
  * given name exists. Group names are case-sensitive — the wrapper does
  * an exact dictionary lookup.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get trading group (cached)
  */
 export const getGroupRecordGetGroup = async (tradePlatform: string,
@@ -131,6 +135,8 @@ export const getGetGroupsRequestUrl = (tradePlatform: string,
 
 /**
  * Manager (live) call returning a paged list of all configured groups on the platform. Sort key is the group name (string, ordinal compare) ascending. Cursor is the last returned group name encoded as opaque base64.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List trading groups (live)
  */
 export const getGroupsRequest = async (tradePlatform: string,
@@ -174,6 +180,8 @@ export const getGetGroupSecGroupsGetGroupUrl = (tradePlatform: string,
  * `Trade` and `Show` are both 0 are placeholders (the wrapper
  * reserves the slot for the symbol-group regardless of whether the
  * group is configured to trade it). Filter on the client side.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get group security entries
  */
 export const getGroupSecGroupsGetGroup = async (tradePlatform: string,
@@ -217,6 +225,8 @@ export const getGetGroupSecMarginsGetGroupUrl = (tradePlatform: string,
  * the wrapper's 128-element `SecMargins` array — the trailing
  * slots are always uninitialised padding. `SecMarginsTotal` itself
  * is part of the parent `MT4Group` DTO.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get group margin overrides
  */
 export const getGroupSecMarginsGetGroup = async (tradePlatform: string,
@@ -271,6 +281,9 @@ export const getPostGroupRecordUpdateGroupUrl = (tradePlatform: string,
  * v1's `POST CfgUpdateGroup` endpoint.
  * <br>
  * Idempotency-Key strongly recommended for safe retries.
+ *
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update trading group
  */
 export const postGroupRecordUpdateGroup = async (tradePlatform: string,
@@ -310,6 +323,8 @@ export const getPatchGroupRecordGroupMT4Url = (tradePlatform: string,
 
 /**
  * Type 2 mutator — partial update of a trading group. Same semantics as `UserRecordPatch`; see that endpoint for the read-merge- write flow and forwards-compat behavior.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Patch trading group
  */
 export const patchGroupRecordGroupMT4 = async (tradePlatform: string,
@@ -359,6 +374,8 @@ export const getGetEnsureGroupNameExistGroupUrl = (tradePlatform: string,
  * Returns `true` if the group is configured on the server,
  * `false` otherwise. Group lookup is case-sensitive (MT4 group
  * names are case-sensitive in the underlying API).
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Check group exists
  */
 export const getEnsureGroupNameExistGroup = async (tradePlatform: string,

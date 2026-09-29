@@ -5,7 +5,7 @@ import { pathToFileURL } from 'node:url';
 const consumerRoot = process.env.SDK_CONSUMER_ROOT ?? process.cwd();
 const require = createRequire(pathToFileURL(resolve(consumerRoot, 'package.json')));
 const sdk = await import(require.resolve('@mywebapi.com/sdk'));
-const requiredExports = ['CPluginWebApiClient', 'ApiError', 'MT4V2SignalRClient', 'MT5V2SignalRClient'];
+const requiredExports = ['CPluginWebApiClient', 'ApiError', 'isOutcomeUnknown', 'isRetryable', 'MT4V2SignalRClient', 'MT5V2SignalRClient'];
 for (const name of requiredExports) {
   if (typeof sdk[name] !== 'function') throw new Error(`missing consumer export: ${name}`);
 }

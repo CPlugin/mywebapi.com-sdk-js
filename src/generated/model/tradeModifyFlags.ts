@@ -7,20 +7,7 @@
  */
 
 /**
- * also used for Deal,Order,Position
+ * also used for Deal,Order,Position<br/>Flags: names of the set bits joined by ", " ("Admin, Manager"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: Admin = 0x1, Manager = 0x2, Position = 0x4, Restore = 0x8, ApiAdmin = 0x10, ApiManager = 0x20, ApiServer = 0x40, ApiGateway = 0x80. Accepted on input, never written: All = Admin, Manager, Position, Restore, ApiAdmin, ApiManager, ApiServer, ApiGateway.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
  */
-export type TradeModifyFlags = typeof TradeModifyFlags[keyof typeof TradeModifyFlags];
-
-
-export const TradeModifyFlags = {
-  None: 'None',
-  Admin: 'Admin',
-  Manager: 'Manager',
-  Position: 'Position',
-  Restore: 'Restore',
-  ApiAdmin: 'ApiAdmin',
-  ApiManager: 'ApiManager',
-  ApiServer: 'ApiServer',
-  ApiGateway: 'ApiGateway',
-  All: 'All',
-} as const;
+export type TradeModifyFlags = string;

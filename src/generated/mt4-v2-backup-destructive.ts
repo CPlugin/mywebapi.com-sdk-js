@@ -59,6 +59,9 @@ export const getPostBackupRestoreUsersUrl = (tradePlatform: string,
  * whether the write happened. Without the key, retry will double-write.
  * <br>
  * Batch cap: 10000 records per call. Larger restores must be split.
+ *
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Restore users from backup
  */
 export const postBackupRestoreUsers = async (tradePlatform: string,
@@ -114,6 +117,9 @@ export const getPostBackupRestoreOrdersUrl = (tradePlatform: string,
  * <br>
  * Idempotency-Key header is <b>strongly recommended</b>. Batch cap:
  * 10000 records per call.
+ *
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Restore orders from backup
  */
 export const postBackupRestoreOrders = async (tradePlatform: string,

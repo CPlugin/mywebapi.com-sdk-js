@@ -58,6 +58,8 @@ export const getGetSymbolInfoGetUrl = (tradePlatform: string,
  * for the requested instrument. Returns NotFound-shaped envelope (the
  * wrapper-level result code surfaces in ManagerAPICode / ErrorCode)
  * when the symbol is not loaded on the connected server.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get symbol market data (cached)
  */
 export const getSymbolInfoGet = async (tradePlatform: string,
@@ -107,6 +109,8 @@ export const getGetSymbolInfoUpdatedUrl = (tradePlatform: string,
  * Pump-cached read — instant local lookup, no MT4 round-trip. Useful for
  * bulk refresh of a quote panel or watchlist. Sort key is the symbol
  * name; cursors are opaque base64 strings.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List updated symbols (cached)
  */
 export const getSymbolInfoUpdated = async (tradePlatform: string,
@@ -149,6 +153,8 @@ export const getGetSymbolsGroupsGetUrl = (tradePlatform: string,) => {
  * (e.g. "Forex", "CFD", "Metals"). Each entry only carries Name and
  * Description; ConSymbolGroup has no additional fields on the
  * MT4-side struct.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List symbol groups (cached)
  */
 export const getSymbolsGroupsGet = async (tradePlatform: string, options?: RequestInit): Promise<getSymbolsGroupsGetResponse> => {
@@ -189,6 +195,8 @@ export const getGetCfgRequestSymbolUrl = (tradePlatform: string,) => {
  * Manager (live) call. Heavy response — typical platforms have dozens
  * to hundreds of symbols, each with a 50+ field `ConSymbol`
  * structure. Pair with `Idempotency-Key` on retry.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List symbol configs
  */
 export const getCfgRequestSymbol = async (tradePlatform: string, options?: RequestInit): Promise<getCfgRequestSymbolResponse> => {
@@ -230,6 +238,8 @@ export const getGetCfgRequestSymbolSymbolUrl = (tradePlatform: string,
  * Manager (live) call. Returns NotFound envelope when the symbol is
  * not configured on the server. Same DTO shape as `CfgRequestSymbol`'s
  * list element.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get symbol config
  */
 export const getCfgRequestSymbolSymbol = async (tradePlatform: string,
@@ -276,6 +286,8 @@ export const getGetSymbolSessionsGetSymbolUrl = (tradePlatform: string,
  * `MT4SymbolConfig`: the parent `CfgRequestSymbol` endpoint
  * drops the nested Sessions array to keep the DTO manageable; this
  * dedicated endpoint exposes it.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get symbol sessions
  */
 export const getSymbolSessionsGetSymbol = async (tradePlatform: string,
@@ -325,6 +337,8 @@ export const getPostCfgUpdateSymbolSymbolUrl = (tradePlatform: string,
  * — those are `[MapperIgnoreTarget]`'d on the mapper.
  *
  * Idempotency-Key strongly recommended.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update symbol config
  */
 export const postCfgUpdateSymbolSymbol = async (tradePlatform: string,
@@ -364,6 +378,8 @@ export const getPatchSymbolConfigSymbolUrl = (tradePlatform: string,
 
 /**
  * Type 2 mutator — partial update of a symbol configuration. Same flow as `UserRecordPatch`; reads existing config live, overlays the patch, writes back.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Patch symbol config
  */
 export const patchSymbolConfigSymbol = async (tradePlatform: string,
@@ -412,6 +428,8 @@ export const getPostSymbolAddSymbolUrl = (tradePlatform: string,
  * corrects the verb to POST without changing the wrapper behaviour. The
  * path stays the same to keep traceability with the underlying wrapper
  * method name; only the HTTP verb changes.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Add symbol
  */
 export const postSymbolAddSymbol = async (tradePlatform: string,
@@ -454,6 +472,8 @@ export const getPostSymbolHideSymbolUrl = (tradePlatform: string,
  * Removes the symbol from the active subscription set; ticks stop flowing
  * and orders are no longer accepted for that symbol. Reversible via
  * `SymbolAdd`. v1 exposes this as a GET — v2 fixes to POST.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Hide symbol
  */
 export const postSymbolHideSymbol = async (tradePlatform: string,
@@ -495,6 +515,8 @@ export const getPostSymbolsRefreshUrl = (tradePlatform: string,) => {
  * Forces the wrapper to reload its symbol catalog. Useful after admin
  * tooling has added/edited symbols on the MT4 server side. v1 exposes
  * this as GET — v2 fixes to POST (mutation of the wrapper's local state).
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Refresh symbol catalog
  */
 export const postSymbolsRefresh = async (tradePlatform: string, options?: RequestInit): Promise<postSymbolsRefreshResponse> => {
@@ -543,6 +565,8 @@ export const getPostSymbolChangeUrl = (tradePlatform: string,) => {
  * path; `CfgUpdateSymbol` changes structural symbol configuration
  * (currency, calc mode, margin, swap) that requires admin privileges
  * and broker-side coordination.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Change symbol attributes
  */
 export const postSymbolChange = async (tradePlatform: string,
@@ -600,6 +624,8 @@ export const getPostSymbolSendTickUrl = (tradePlatform: string,
  * `bid` and `ask` are absolute prices, not deltas. Pass
  * the symbol's last-known bid/ask if you only need to refresh the
  * timestamp; pass adjusted prices to actually move the quote.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Send synthetic tick
  */
 export const postSymbolSendTick = async (tradePlatform: string,

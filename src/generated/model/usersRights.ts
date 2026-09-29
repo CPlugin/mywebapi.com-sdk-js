@@ -7,29 +7,7 @@
  */
 
 /**
- * MT5 user permission flags. Values mirror CIMTUser.EnUsersRights.
- *             Serializes as a string (not a number) via V2JsonContext.UseStringEnumConverter.
+ * MT5 user permission flags. Values mirror CIMTUser.EnUsersRights.<br/>Flags: names of the set bits joined by ", " ("Enabled, Password"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: Enabled = 0x1, Password = 0x2, TradeDisabled = 0x4, Investor = 0x8, Confirmed = 0x10, Trailing = 0x20, Expert = 0x40, Obsolete = 0x80, Reports = 0x100, Readonly = 0x200, ResetPass = 0x400, OTPEnabled = 0x800, SponsoredHosting = 0x2000, APIEnabled = 0x4000, PushNotification = 0x8000, Technical = 0x10000, ExcludeReports = 0x20000.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
  */
-export type UsersRights = typeof UsersRights[keyof typeof UsersRights];
-
-
-export const UsersRights = {
-  None: 'None',
-  Enabled: 'Enabled',
-  Password: 'Password',
-  TradeDisabled: 'TradeDisabled',
-  Investor: 'Investor',
-  Confirmed: 'Confirmed',
-  Trailing: 'Trailing',
-  Expert: 'Expert',
-  Obsolete: 'Obsolete',
-  Reports: 'Reports',
-  Readonly: 'Readonly',
-  ResetPass: 'ResetPass',
-  OTPEnabled: 'OTPEnabled',
-  SponsoredHosting: 'SponsoredHosting',
-  APIEnabled: 'APIEnabled',
-  PushNotification: 'PushNotification',
-  Technical: 'Technical',
-  ExcludeReports: 'ExcludeReports',
-} as const;
+export type UsersRights = string;

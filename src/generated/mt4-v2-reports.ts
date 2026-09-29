@@ -61,6 +61,8 @@ export const getGetPerformanceRequestUrl = (tradePlatform: string,
  * cache is NOT consulted — data reflects the authoritative server log.
  * Returns an empty list (Ok envelope, not an error) when the window
  * contains no snapshots.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get server performance series
  */
 export const getPerformanceRequest = async (tradePlatform: string,
@@ -125,6 +127,8 @@ export const getGetReportsRequestUrl = (tradePlatform: string,
  * indirectly via the API-side `ResourceAccess` check, but a broker
  * that mis-configured the underlying manager rights can still observe
  * transient connection bounces.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get closed-trade reports
  */
 export const getReportsRequest = async (tradePlatform: string,
@@ -187,6 +191,8 @@ export const getGetDailyReportsRequestUrl = (tradePlatform: string,
  * `ResourceAccess` check is an indirect guard; a broker that
  * mis-configured the underlying manager rights can still observe
  * transient connection bounces.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get daily reports
  */
 export const getDailyReportsRequest = async (tradePlatform: string,
@@ -242,6 +248,8 @@ export const getGetDailyReportsRequestExUrl = (tradePlatform: string,
  * JSON shape: `{ "817542": [ ... ], "1001": [ ... ] }` — JSON
  * object keys are strings, so int logins are stringified. Clients
  * should parse keys back to int if needed.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get daily reports (grouped)
  */
 export const getDailyReportsRequestEx = async (tradePlatform: string,
@@ -299,6 +307,8 @@ export const getPostDailySyncStartUrl = (tradePlatform: string,
  *
  * Returns a bare success envelope (no payload); the actual data comes
  * from a subsequent `DailySyncRead` call.
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Start daily-report sync
  */
 export const postDailySyncStart = async (tradePlatform: string,
@@ -345,6 +355,8 @@ export const getPostDailySyncReadUrl = (tradePlatform: string,) => {
  * Call `DailySyncStart` first; calling `DailySyncRead` without
  * a prior `DailySyncStart` may return an empty list or a non-Ok
  * `managerAPICode` depending on server build.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Read daily-report sync
  */
 export const postDailySyncRead = async (tradePlatform: string, options?: RequestInit): Promise<postDailySyncReadResponse> => {

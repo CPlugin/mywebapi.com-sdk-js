@@ -6,17 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type EnOrderFlags = typeof EnOrderFlags[keyof typeof EnOrderFlags];
-
-
-export const EnOrderFlags = {
-  None: 'None',
-  Market: 'Market',
-  Limit: 'Limit',
-  Stop: 'Stop',
-  StopLimit: 'StopLimit',
-  SL: 'SL',
-  TP: 'TP',
-  CloseBy: 'CloseBy',
-  All: 'All',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("Market, Limit"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: Market = 0x1, Limit = 0x2, Stop = 0x4, StopLimit = 0x8, SL = 0x10, TP = 0x20, CloseBy = 0x40. Accepted on input, never written: All = Market, Limit, Stop, StopLimit, SL, TP, CloseBy.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type EnOrderFlags = string;

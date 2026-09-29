@@ -7,14 +7,7 @@
  */
 
 /**
- * Common Trade Flags
+ * Common Trade Flags<br/>Flags: names of the set bits joined by ", " ("ProfitByMarket, AllowSignals"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: ProfitByMarket = 0x1, AllowSignals = 0x2. Accepted on input, never written: TradeFlagsAll = ProfitByMarket, AllowSignals.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
  */
-export type EnTradeFlags = typeof EnTradeFlags[keyof typeof EnTradeFlags];
-
-
-export const EnTradeFlags = {
-  None: 'None',
-  ProfitByMarket: 'ProfitByMarket',
-  Default: 'Default',
-  TradeFlagsAll: 'TradeFlagsAll',
-} as const;
+export type EnTradeFlags = string;

@@ -6,20 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type EnPermissionsFlags = typeof EnPermissionsFlags[keyof typeof EnPermissionsFlags];
-
-
-export const EnPermissionsFlags = {
-  None: 'None',
-  CertConfirm: 'CertConfirm',
-  EnableConnection: 'EnableConnection',
-  ResetPassword: 'ResetPassword',
-  ForcedOtpUsage: 'ForcedOtpUsage',
-  RiskWarning: 'RiskWarning',
-  RegulationProtect: 'RegulationProtect',
-  NotifyDeals: 'NotifyDeals',
-  NotifyOrders: 'NotifyOrders',
-  NotifyBalances: 'NotifyBalances',
-  NotifyAll: 'NotifyAll',
-  All: 'All',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("CertConfirm, EnableConnection"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: CertConfirm = 0x1, EnableConnection = 0x2, ResetPassword = 0x4, ForcedOtpUsage = 0x8, RiskWarning = 0x10, RegulationProtect = 0x20, NotifyDeals = 0x40, NotifyOrders = 0x80, NotifyBalances = 0x100. Accepted on input, never written: NotifyAll = NotifyDeals, NotifyOrders, NotifyBalances; All = CertConfirm, EnableConnection, ResetPassword, ForcedOtpUsage, RiskWarning, RegulationProtect, NotifyDeals, NotifyOrders, NotifyBalances.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type EnPermissionsFlags = string;

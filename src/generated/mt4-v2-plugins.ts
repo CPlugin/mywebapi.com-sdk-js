@@ -53,6 +53,8 @@ export const getPostExternalCommandJSONUrl = (tradePlatform: string,) => {
  * Idempotency-Key is strongly recommended — plugins may have side
  * effects, and the channel itself gives no read-modify-write
  * semantics.
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Send plugin command (JSON)
  */
 export const postExternalCommandJSON = async (tradePlatform: string, options?: RequestInit): Promise<postExternalCommandJSONResponse> => {

@@ -6,10 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type EnInstantFlags = typeof EnInstantFlags[keyof typeof EnInstantFlags];
-
-
-export const EnInstantFlags = {
-  None: 'None',
-  All: 'All',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("FastConfirmation"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: FastConfirmation = 0x1.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type EnInstantFlags = string;

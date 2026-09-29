@@ -34,6 +34,7 @@ export const getGetGroupGetGroupUrl = (tradePlatform: string,
 }
 
 /**
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get a group by name
  */
 export const getGroupGetGroup = async (tradePlatform: string,
@@ -73,6 +74,8 @@ export const getPatchGroupRecordGroupMT5Url = (tradePlatform: string,
 /**
  * Send only the fields you want to change (JSON Merge Patch, RFC 7386);
  * omitted fields keep their current values. Returns the updated record.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Partially update a group
  */
 export const patchGroupRecordGroupMT5 = async (tradePlatform: string,

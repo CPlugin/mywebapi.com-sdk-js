@@ -47,6 +47,9 @@ export const getGetBackupInfoUsersModeUrl = (tradePlatform: string,
  * <br>`mode` is the server-defined backup mode selector (typical
  * values: `0` = daily, `1` = weekly — confirm against your
  * server's `ConBackup` configuration).
+ *
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List user backup files
  */
 export const getBackupInfoUsersMode = async (tradePlatform: string,
@@ -90,6 +93,8 @@ export const getGetBackupInfoOrdersModeUrl = (tradePlatform: string,
  * `BackupInfoOrders(int mode)`. Order-side counterpart of
  * `BackupInfoUsers` — same shape, different catalog.
  * Read-only operation.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List order backup files
  */
 export const getBackupInfoOrdersMode = async (tradePlatform: string,
@@ -151,6 +156,9 @@ export const getGetBackupRequestUsersFileUrl = (tradePlatform: string,
  * optional `limit` query truncates the response server-side
  * (default 10000, max 100000). The wrapper still loads the full
  * file regardless of limit — limit only caps the JSON response size.
+ *
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Read users from backup
  */
 export const getBackupRequestUsersFile = async (tradePlatform: string,
@@ -204,6 +212,8 @@ export const getGetBackupRequestOrdersFileUrl = (tradePlatform: string,
  * counterpart of `BackupRequestUsers`. Same caveats:
  * read-only, full file loaded server-side regardless of `limit`,
  * destructive restore is a separate (Wave 4b) operation.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Read orders from backup
  */
 export const getBackupRequestOrdersFile = async (tradePlatform: string,

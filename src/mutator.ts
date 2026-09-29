@@ -3,10 +3,17 @@
 // Every request carries its RequestContext explicitly. There is no process-global
 // mutable fallback, so browser calls from multiple client instances remain isolated.
 
-import { ApiError, codeForHttpStatus, type ApiEnvelope, type ApiMeta } from './errors';
+import { ApiError, codeForHttpStatus, parseRequestOutcome, type ApiEnvelope, type ApiErrorDetails, type ApiMeta } from './errors';
 import { contextFromOptions, requestContext, responseMeta, type RequestContext } from './mutator.context';
 import { withRetry } from './retry';
 import { withDeadline } from './deadline';
+import {
+  planRequestTimeout,
+  REQUEST_OUTCOME_HEADER,
+  REQUEST_TIMEOUT_APPLIED_HEADER,
+  setTimeoutHeader,
+  type RequestOptions,
+} from './request-timeout';
 
 export type UnwrapEnvelope<T> = T extends { data?: infer D } ? NonNullable<D> : T;
 
@@ -15,26 +22,38 @@ type ResponseConsumer<T> = (response: Response, signal: AbortSignal) => Promise<
 export async function authenticatedFetch<T>(
   ctx: RequestContext,
   url: string,
-  options: RequestInit,
+  options: RequestOptions,
   consume: ResponseConsumer<T>,
 ): Promise<T> {
-  return withDeadline(ctx.timeoutMs, options.signal, async (signal) => {
-    const fullUrl = new URL(url, ctx.apiBaseUrl).toString();
-    const requestOptions = { ...options } as RequestInit & { [requestContext]?: RequestContext };
-    delete requestOptions[requestContext];
+  const fullUrl = new URL(url, ctx.apiBaseUrl);
+  const { requestTimeout, ...fetchOptions } = options;
+  const requestOptions = fetchOptions as RequestInit & { [requestContext]?: RequestContext };
+  delete requestOptions[requestContext];
 
-    const headerObj: Record<string, string> = {};
-    if (options.headers) {
-      if (options.headers instanceof Headers) {
-        options.headers.forEach((value, key) => { headerObj[key] = value; });
-      } else if (Array.isArray(options.headers)) {
-        for (const [key, value] of options.headers) headerObj[key] = value;
-      } else {
-        Object.assign(headerObj, options.headers);
-      }
+  const headerObj: Record<string, string> = {};
+  if (options.headers) {
+    if (options.headers instanceof Headers) {
+      options.headers.forEach((value, key) => { headerObj[key] = value; });
+    } else if (Array.isArray(options.headers)) {
+      for (const [key, value] of options.headers) headerObj[key] = value;
+    } else {
+      Object.assign(headerObj, options.headers);
     }
+  }
 
-    const method = (options.method ?? 'GET').toUpperCase();
+  const method = (options.method ?? 'GET').toUpperCase();
+  // * Validated before anything is sent: an invalid per-call value rejects without a request.
+  const plan = planRequestTimeout({
+    method,
+    url: fullUrl,
+    headers: headerObj,
+    perCall: requestTimeout,
+    clientDefault: ctx.requestTimeout,
+    timeoutMs: ctx.timeoutMs,
+  });
+  if (plan.send !== undefined) setTimeoutHeader(headerObj, plan.send);
+
+  return withDeadline(plan.deadlineMs, options.signal, async (signal) => {
     const isIdempotent = method === 'GET' || method === 'HEAD' || method === 'OPTIONS' || method === 'PUT' || method === 'DELETE';
 
     const doFetch = async (forceRefresh: boolean): Promise<Response> => {
@@ -42,7 +61,7 @@ export async function authenticatedFetch<T>(
         ...(forceRefresh ? { forceRefresh: true } : {}),
         signal,
       });
-      return ctx.fetchImpl(fullUrl, {
+      return ctx.fetchImpl(fullUrl.toString(), {
         ...requestOptions,
         method,
         headers: {
@@ -67,18 +86,20 @@ export async function authenticatedFetch<T>(
   });
 }
 
-export async function customFetch<T>(url: string, options: RequestInit): Promise<T> {
+export async function customFetch<T>(url: string, options: RequestOptions): Promise<T> {
   const ctx = contextFromOptions(options);
-  return authenticatedFetch(ctx, url, options, async (response, signal) => {
+  return authenticatedFetch(ctx, url, options, async (response) => {
+    const details = errorDetails(response);
     if (!response.ok) {
       const text = await response.text();
       try {
         const env = JSON.parse(text) as ApiEnvelope<T>;
-        if (env.error != null) throw new ApiError(env.error, env.meta, response.status);
+        if (env.error != null) throw new ApiError(env.error, env.meta, response.status, details);
         throw new ApiError(
           { code: codeForHttpStatus(response.status), message: 'HTTP ' + response.status },
           env.meta ?? null,
           response.status,
+          details,
         );
       } catch (error) {
         if (error instanceof ApiError) throw error;
@@ -86,14 +107,23 @@ export async function customFetch<T>(url: string, options: RequestInit): Promise
           { code: codeForHttpStatus(response.status), message: 'HTTP ' + response.status },
           null,
           response.status,
+          details,
         );
       }
     }
 
     const envelope = (await response.json()) as ApiEnvelope<T>;
-    if (envelope.error != null) throw new ApiError(envelope.error, envelope.meta, response.status);
+    if (envelope.error != null) throw new ApiError(envelope.error, envelope.meta, response.status, details);
     return attachResponseMeta(envelope.data as T, envelope.meta);
   });
+}
+
+function errorDetails(response: Response): ApiErrorDetails {
+  const applied = Number(response.headers.get(REQUEST_TIMEOUT_APPLIED_HEADER) ?? Number.NaN);
+  return {
+    outcome: parseRequestOutcome(response.headers.get(REQUEST_OUTCOME_HEADER)),
+    appliedTimeout: Number.isFinite(applied) ? applied : undefined,
+  };
 }
 
 function attachResponseMeta<T>(data: T, meta: ApiMeta | null | undefined): T {

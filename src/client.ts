@@ -20,6 +20,7 @@ import { withRequestContext, type RequestContext } from './mutator.context';
 import { authenticatedFetch, pagingFromResult, type UnwrapEnvelope } from './mutator';
 import type { PagedResult } from './pagination';
 import { ApiError, codeForHttpStatus } from './errors';
+import { validateRequestTimeout, type RequestOptions } from './request-timeout';
 
 // ---------------------------------------------------------------------------
 // TradePlatform — discovery type for GET /api/TradePlatforms
@@ -127,8 +128,21 @@ export interface CPluginWebApiClientOptions {
   fetch?: typeof fetch;
   /** Override individual retry-policy fields. */
   retry?: Partial<RetryPolicy>;
-  /** Per-request deadline in milliseconds. Defaults to 30 seconds. */
+  /**
+   * Minimum client deadline per request in milliseconds, covering token acquisition,
+   * the request and the response body. Defaults to 30 seconds. For operations with a
+   * server timeout the deadline is extended automatically to that timeout plus 10 s,
+   * so the server's `Timeout` / `OutcomeUnknown` / `Busy` answer is received rather
+   * than cut off by a local abort.
+   */
   timeoutMs?: number;
+  /**
+   * Client-wide server timeout in seconds (1–300), sent as `X-Request-Timeout` to every
+   * operation that accepts it. A per-call `requestTimeout` overrides it. Omit to use each
+   * operation's server default (trade 5 s, read 10 s, change 15 s, history 30 s,
+   * maintenance 60 s).
+   */
+  requestTimeout?: number;
 }
 
 /** Combine environment selector with client credentials. */
@@ -218,8 +232,18 @@ type MT5Namespace = CleanNamespace<
 //   primitive does not extend { data? }, so UnwrapEnvelope returns it as-is.
 type BoundModule<M> = {
   [K in keyof M]: M[K] extends (...args: infer A) => Promise<infer R>
-    ? (...args: A) => Promise<UnwrapEnvelope<UnwrapEnvelope<R>>>
+    ? (...args: WithRequestOptions<A>) => Promise<UnwrapEnvelope<UnwrapEnvelope<R>>>
     : M[K];
+};
+
+// * Exact type identity — structural assignability would also match request bodies
+//   whose fields happen to be optional.
+type IsExactly<X, Y> = (<T>() => T extends X ? 1 : 2) extends (<T>() => T extends Y ? 1 : 2) ? true : false;
+
+// * Replaces the generated trailing `options?: RequestInit` with RequestOptions, which
+//   adds the per-call `requestTimeout`. Optionality of each position is preserved.
+type WithRequestOptions<A extends unknown[]> = {
+  [I in keyof A]: IsExactly<NonNullable<A[I]>, RequestInit> extends true ? RequestOptions | undefined : A[I];
 };
 
 
@@ -328,6 +352,9 @@ export class CPluginWebApiClient {
       fetchImpl: init.fetch ?? globalThis.fetch.bind(globalThis),
       retryPolicy: { ...defaultPolicy, ...(init.retry ?? {}) },
       timeoutMs: init.timeoutMs ?? 30_000,
+      ...(init.requestTimeout !== undefined
+        ? { requestTimeout: validateRequestTimeout(init.requestTimeout) }
+        : {}),
     };
     if (!Number.isFinite(this.base.timeoutMs) || this.base.timeoutMs <= 0) {
       throw new TypeError('timeoutMs must be a positive finite number');

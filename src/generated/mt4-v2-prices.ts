@@ -60,6 +60,8 @@ export const getGetChartRequestSymbolUrl = (tradePlatform: string,
  * the given `period` in the date window. `mode` defaults to
  * `RangeInExcludeOutOfRage` — bars whose time falls strictly
  * inside the window.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get chart bars
  */
 export const getChartRequestSymbol = async (tradePlatform: string,
@@ -115,6 +117,8 @@ export const getPostChartAddSymbolUrl = (tradePlatform: string,
  *
  * Idempotency-Key strongly recommended — duplicate writes can corrupt the
  * historical data series.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Add chart bars
  */
 export const postChartAddSymbol = async (tradePlatform: string,
@@ -169,6 +173,8 @@ export const getPostChartUpdateSymbolUrl = (tradePlatform: string,
  * match an existing bar are silently ignored by the MT4 server.
  *
  * Idempotency-Key strongly recommended.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update chart bars
  */
 export const postChartUpdateSymbol = async (tradePlatform: string,
@@ -225,6 +231,8 @@ export const getPostChartDeleteSymbolUrl = (tradePlatform: string,
  * Idempotency-Key strongly recommended — silently repeating a delete on
  * already-removed bars is harmless, but accidental double-submit could
  * nudge audit logs with extra "operation requested" entries.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Delete chart bars
  */
 export const postChartDeleteSymbol = async (tradePlatform: string,
@@ -276,6 +284,8 @@ export const getPostHistoryCorrectSymbolUrl = (tradePlatform: string,
  * can take many seconds on long histories; pair with
  * `Idempotency-Key` for retry safety so a TCP retry doesn't
  * kick off a second full sweep.
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Repair chart history
  */
 export const postHistoryCorrectSymbol = async (tradePlatform: string,
@@ -327,6 +337,8 @@ export const getGetTicksRequestSymbolUrl = (tradePlatform: string,
  * `flags` controls whether raw and/or normalised ticks are
  * included (defaults to `All`). Heavy endpoint — pair with
  * `Idempotency-Key` for retry safety.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get historical ticks
  */
 export const getTicksRequestSymbol = async (tradePlatform: string,
@@ -372,6 +384,8 @@ export const getGetTickInfoLastSymbolUrl = (tradePlatform: string,
  * pump cache has no tick for the requested symbol (symbol not in the
  * active subscription set, or the platform has never received a tick
  * since startup).
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get last tick (cached)
  */
 export const getTickInfoLastSymbol = async (tradePlatform: string,
@@ -414,6 +428,8 @@ export const getGetTickInfoLastUrl = (tradePlatform: string,) => {
  * when no quotes have been received yet. For sub-second updates use the
  * SignalR tick stream — this endpoint is intended for one-shot snapshots
  * (warm-up, monitoring dashboards, idempotent cache scenarios).
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get last ticks, all symbols (cached)
  */
 export const getTickInfoLast = async (tradePlatform: string, options?: RequestInit): Promise<getTickInfoLastResponse> => {

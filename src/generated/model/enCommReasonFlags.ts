@@ -6,17 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type EnCommReasonFlags = typeof EnCommReasonFlags[keyof typeof EnCommReasonFlags];
-
-
-export const EnCommReasonFlags = {
-  None: 'None',
-  Client: 'Client',
-  Expert: 'Expert',
-  Dealer: 'Dealer',
-  ExternalClient: 'ExternalClient',
-  Mobile: 'Mobile',
-  Web: 'Web',
-  Signal: 'Signal',
-  All: 'All',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("Client, Expert"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: Client = 0x1, Expert = 0x2, Dealer = 0x4, ExternalClient = 0x8, Mobile = 0x10, Web = 0x20, Signal = 0x40. Accepted on input, never written: All = Client, Expert, Dealer, ExternalClient, Mobile, Web, Signal.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type EnCommReasonFlags = string;

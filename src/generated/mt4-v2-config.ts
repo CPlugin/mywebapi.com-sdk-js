@@ -101,6 +101,8 @@ export const getGetCfgRequestCommonUrl = (tradePlatform: string,) => {
  * (Name/Owner/Build/Version/TimeZone), but sourced via the
  * configuration-system entry point rather than the manager-context one.
  * Pump cache is NOT consulted; data reflects the live server state.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get common config (live)
  */
 export const getCfgRequestCommon = async (tradePlatform: string, options?: RequestInit): Promise<getCfgRequestCommonResponse> => {
@@ -153,6 +155,8 @@ export const getPostCfgUpdateCommonUrl = (tradePlatform: string,) => {
  * Wine x64 safe: wrapper uses `cpp.AllocSafe()` (single struct
  * pack, no UnpackObject loop). Idempotency-Key strongly recommended
  * — overwriting common settings affects every connected client.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update common config
  */
 export const postCfgUpdateCommon = async (tradePlatform: string,
@@ -210,6 +214,8 @@ export const getGetCfgRequestHolidayUrl = (tradePlatform: string,
  * covers the case where multiple holidays share date and From minute
  * (per-symbol partial-day closures), guaranteeing pagination never drops
  * rows even inside same-(date,From) clusters.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List holiday config
  */
 export const getCfgRequestHoliday = async (tradePlatform: string,
@@ -261,6 +267,8 @@ export const getGetCfgRequestManagerUrl = (tradePlatform: string,
  * Money, Broker, Admin, Reports, Trades, MarketWatch, etc.), IP-filter
  * range, and InfoDepth. Internal wrapper fields (SecGroups, Unused,
  * ExpTime, Reserved) are dropped from the v2 contract.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List manager configs
  */
 export const getCfgRequestManager = async (tradePlatform: string,
@@ -305,6 +313,8 @@ export const getGetCfgRequestTimeUrl = (tradePlatform: string,) => {
  * `index = day*24 + hour`, day 0 = Sunday (MT4 convention).
  * Internal `DaysControl` and `Reserved` wrapper fields
  * are not surfaced.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get access-hour matrix
  */
 export const getCfgRequestTime = async (tradePlatform: string, options?: RequestInit): Promise<getCfgRequestTimeResponse> => {
@@ -355,6 +365,8 @@ export const getPostCfgUpdateTimeUrl = (tradePlatform: string,) => {
  * MT4 may treat anything non-zero as allowed depending on build).
  *
  * Echoes the merged `MT4ServerTime` in the response.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update access-hour matrix
  */
 export const postCfgUpdateTime = async (tradePlatform: string,
@@ -408,6 +420,8 @@ export const getGetCfgRequestAccessUrl = (tradePlatform: string,
  * "{IpFrom:D10}|{IpTo:D10}" — D10 width matches uint range (max
  * 4_294_967_295 = 10 digits) so lexicographic compare matches
  * numeric compare, and the '|' delimiter cannot appear in IP values.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List IP firewall rules
  */
 export const getCfgRequestAccess = async (tradePlatform: string,
@@ -452,6 +466,8 @@ export const getGetCfgRequestBackupUrl = (tradePlatform: string,) => {
  * `WatchPassword` (slave-server credential) is intentionally
  * dropped from the v2 contract for security and is NOT present in
  * the response payload.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get backup config
  */
 export const getCfgRequestBackup = async (tradePlatform: string, options?: RequestInit): Promise<getCfgRequestBackupResponse> => {
@@ -498,6 +514,8 @@ export const getPostCfgUpdateBackupUrl = (tradePlatform: string,) => {
  *         `ArchiveLastTime`, `ExportLastTime`, `WatchTimestamp`.
  *         Server-derived runtime state that clients must not overwrite.</item></list>
  * Echoes the merged `MT4Backup` in the response.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update backup config
  */
 export const postCfgUpdateBackup = async (tradePlatform: string,
@@ -544,6 +562,8 @@ export const getPostCfgUpdateSyncUrl = (tradePlatform: string,) => {
  *         replication credential (`Password`) carried by the
  *         live struct is preserved.</item><item>Write the merged struct back.</item></list>
  * Echoes the merged `MT4Sync` in the response.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update sync rule
  */
 export const postCfgUpdateSync = async (tradePlatform: string,
@@ -587,6 +607,8 @@ export const getPostCfgUpdateFeederUrl = (tradePlatform: string,) => {
  * feeder by its `Name`. Same read-modify-write flow as
  * `CfgUpdateSync`; the datafeed credential (`Password`)
  * is preserved server-side.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update feeder config
  */
 export const postCfgUpdateFeeder = async (tradePlatform: string,
@@ -633,6 +655,8 @@ export const getPostCfgUpdateGatewayAccountUrl = (tradePlatform: string,) => {
  *         credential (`Password`) carried by the live struct is
  *         preserved.</item><item>Write the merged struct back.</item></list>
  * Echoes the merged `MT4GatewayAccount` in the response.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update gateway account
  */
 export const postCfgUpdateGatewayAccount = async (tradePlatform: string,
@@ -677,6 +701,8 @@ export const getPostCfgUpdateGatewayMarkupUrl = (tradePlatform: string,) => {
  * read endpoint uses). Same read-modify-write flow as
  * `CfgUpdateGatewayAccount`; the wrapper's 16-int reserved
  * padding is preserved.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update gateway markup
  */
 export const postCfgUpdateGatewayMarkup = async (tradePlatform: string,
@@ -720,6 +746,8 @@ export const getPostCfgUpdateGatewayRuleUrl = (tradePlatform: string,) => {
  * by its public `Name`. Same read-modify-write flow; the two
  * wrapper reserved padding blocks (`RequestRreserved` 32-int,
  * `ExeReserved` 25-int) are preserved server-side.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update gateway rule
  */
 export const postCfgUpdateGatewayRule = async (tradePlatform: string,
@@ -765,6 +793,8 @@ export const getPostCfgUpdateLiveUpdateUrl = (tradePlatform: string,) => {
  * overlay → write back. The 128-element `Files` descriptor
  * table and the runtime `Connections` counter are preserved
  * server-side.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update LiveUpdate config
  */
 export const postCfgUpdateLiveUpdate = async (tradePlatform: string,
@@ -815,6 +845,9 @@ export const getPostCfgUpdateManagerUrl = (tradePlatform: string,) => {
  * `[0, uint.MaxValue]` are rejected with
  * `errorCode=Validation` before `ApplyTo`, to avoid a
  * runtime `OverflowException` from Mapperly's checked cast.
+ *
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update manager config
  */
 export const postCfgUpdateManager = async (tradePlatform: string,
@@ -865,6 +898,8 @@ export const getPostCfgUpdateAccessPosUrl = (tradePlatform: string,
  *         range yields a NotFound envelope.</item><item>Apply DTO overlay onto `list[pos]`.</item><item>Write back with `CfgUpdateAccess(merged, pos)`.</item></list>`IpFrom`/`IpTo` in the body must fit in `[0, uint.MaxValue]`
  * — out-of-range values are rejected with `errorCode=Validation`
  * before the Mapperly checked-narrowing cast can throw.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update IP firewall rule
  */
 export const postCfgUpdateAccessPos = async (tradePlatform: string,
@@ -910,6 +945,8 @@ export const getPostCfgUpdateDataServerPosUrl = (tradePlatform: string,
  * (`Reserved1`, `Reserved2`) and the `Next` pointer.
  * `Loading`/`IpInternal` in the body must fit in
  * `[0, uint.MaxValue]`.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update data-server entry
  */
 export const postCfgUpdateDataServerPos = async (tradePlatform: string,
@@ -954,6 +991,8 @@ export const getPostCfgUpdateHolidayPosUrl = (tradePlatform: string,
  * as `int` (0/1) — the DTO surfaces it as `bool`; the
  * mapper bridges with a `BoolToInt` helper. The 13-int
  * `Reserved` padding and `Next` pointer are preserved.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update holiday entry
  */
 export const postCfgUpdateHolidayPos = async (tradePlatform: string,
@@ -996,6 +1035,8 @@ export const getPostCfgUpdateSymbolGroupPosUrl = (tradePlatform: string,
  *
  * Position-based read-modify-write. `ConSymbolGroup` has no
  * reserved padding or internal pointers, so the overlay is trivial.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update symbol group
  */
 export const postCfgUpdateSymbolGroupPos = async (tradePlatform: string,
@@ -1050,6 +1091,8 @@ export const getGetCfgRequestGatewayAccountUrl = (tradePlatform: string,
  * of 8 broker-side recipients, and a Flags bitmap. The wrapper's
  * `Password` field (STP MT4 credential) is intentionally
  * excluded from the v2 contract.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List gateway accounts
  */
 export const getCfgRequestGatewayAccount = async (tradePlatform: string,
@@ -1102,6 +1145,8 @@ export const getGetCfgRequestGatewayMarkupUrl = (tradePlatform: string,
  * Cursor is an opaque base64 string holding the composite key
  * "{Source}|{Symbol}" — MT4 symbol wildcards use `*` and `?`
  * (not `|`), so the delimiter is safe.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List gateway markups
  */
 export const getCfgRequestGatewayMarkup = async (tradePlatform: string,
@@ -1153,6 +1198,8 @@ export const getGetCfgRequestGatewayRuleUrl = (tradePlatform: string,
  * execution gateway-account (ExeAccountName/ExeAccountId) with
  * per-rule slippage and volume limits. Name is assumed unique
  * within the rules table and serves as the cursor key.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List gateway rules
  */
 export const getCfgRequestGatewayRule = async (tradePlatform: string,
@@ -1204,6 +1251,8 @@ export const getGetCfgRequestDataServerUrl = (tradePlatform: string,
  * Ip, Description, IsProxy flag, Priority (0-7 base, 255 = idle),
  * Loading (UINT_MAX = no reporting), IpInternal, IsWitness flag.
  * Internal Reserved padding and the Next pointer chain are dropped.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List data servers
  */
 export const getCfgRequestDataServer = async (tradePlatform: string,
@@ -1256,6 +1305,8 @@ export const getGetCfgRequestFeederUrl = (tradePlatform: string,
  * (Timeout, TimeoutReconnect, TimeoutSleep, AttempsSleep),
  * NewsLangId. The wrapper's `Password` (datafeed credentials)
  * is intentionally excluded from the v2 contract.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List feeder configs
  */
 export const getCfgRequestFeeder = async (tradePlatform: string,
@@ -1307,6 +1358,8 @@ export const getGetCfgRequestLiveUpdateUrl = (tradePlatform: string,
  * Type, Enable flag, TotalFiles. The wrapper's 128-element
  * per-file Files descriptor table is dropped from this payload
  * for tractability; a dedicated per-file endpoint will follow.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List LiveUpdate configs
  */
 export const getCfgRequestLiveUpdate = async (tradePlatform: string,
@@ -1359,6 +1412,8 @@ export const getGetCfgRequestSyncUrl = (tradePlatform: string,
  * TimeCorrection (minutes) adjusts incoming bar timestamps. The
  * wrapper's `Password` (replication credentials) is
  * intentionally excluded from the v2 contract.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List sync rules
  */
 export const getCfgRequestSync = async (tradePlatform: string,
@@ -1402,6 +1457,8 @@ export const getPostCfgDeleteAccessPosUrl = (tradePlatform: string,
  * Read the current table via `CfgRequestAccess`, find the target
  * row's index, then delete. Destructive — pair with `Idempotency-Key`
  * on retry.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Delete IP firewall rule
  */
 export const postCfgDeleteAccessPos = async (tradePlatform: string,
@@ -1440,6 +1497,8 @@ export const getPostCfgDeleteDataServerPosUrl = (tradePlatform: string,
 
 /**
  * Deletes an entry from the server's access-server (DataServer) configuration table by zero-based row position.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Delete data-server entry
  */
 export const postCfgDeleteDataServerPos = async (tradePlatform: string,
@@ -1478,6 +1537,8 @@ export const getPostCfgDeleteFeederPosUrl = (tradePlatform: string,
 
 /**
  * Deletes an entry from the quote/news feeder configuration table by zero-based row position.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Delete feeder config
  */
 export const postCfgDeleteFeederPos = async (tradePlatform: string,
@@ -1516,6 +1577,8 @@ export const getPostCfgDeleteGatewayAccountPosUrl = (tradePlatform: string,
 
 /**
  * Deletes an STP gateway-account configuration entry by zero-based row position.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Delete gateway account
  */
 export const postCfgDeleteGatewayAccountPos = async (tradePlatform: string,
@@ -1554,6 +1617,8 @@ export const getPostCfgDeleteGatewayMarkupPosUrl = (tradePlatform: string,
 
 /**
  * Deletes a per-symbol gateway markup rule by zero-based row position.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Delete gateway markup
  */
 export const postCfgDeleteGatewayMarkupPos = async (tradePlatform: string,
@@ -1592,6 +1657,8 @@ export const getPostCfgDeleteGatewayRulePosUrl = (tradePlatform: string,
 
 /**
  * Deletes an STP execution-routing (gateway) rule by zero-based row position.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Delete gateway rule
  */
 export const postCfgDeleteGatewayRulePos = async (tradePlatform: string,
@@ -1630,6 +1697,8 @@ export const getPostCfgDeleteHolidayPosUrl = (tradePlatform: string,
 
 /**
  * Deletes a holiday-calendar entry by zero-based row position.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Delete holiday entry
  */
 export const postCfgDeleteHolidayPos = async (tradePlatform: string,
@@ -1668,6 +1737,8 @@ export const getPostCfgDeleteLiveUpdatePosUrl = (tradePlatform: string,
 
 /**
  * Deletes a LiveUpdate service configuration by zero-based row position.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Delete LiveUpdate config
  */
 export const postCfgDeleteLiveUpdatePos = async (tradePlatform: string,
@@ -1706,6 +1777,8 @@ export const getPostCfgDeleteManagerPosUrl = (tradePlatform: string,
 
 /**
  * Deletes a manager-account configuration entry by zero-based row position.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Delete manager config
  */
 export const postCfgDeleteManagerPos = async (tradePlatform: string,
@@ -1744,6 +1817,8 @@ export const getPostCfgDeleteSymbolPosUrl = (tradePlatform: string,
 
 /**
  * Deletes a symbol configuration entry by zero-based row position. This permanently removes the symbol from the server — pair with `Idempotency-Key` and prefer `SymbolHide` when you only want to suspend visibility.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Delete symbol config
  */
 export const postCfgDeleteSymbolPos = async (tradePlatform: string,
@@ -1782,6 +1857,8 @@ export const getPostCfgDeleteSyncPosUrl = (tradePlatform: string,
 
 /**
  * Deletes a chart-history synchronization rule by zero-based row position.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Delete sync rule
  */
 export const postCfgDeleteSyncPos = async (tradePlatform: string,
@@ -1828,6 +1905,8 @@ export const getPostCfgShiftAccessPosUrl = (tradePlatform: string,
 
 /**
  * Reorders an entry in the access-rules table by relative displacement.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Reorder IP firewall rule
  */
 export const postCfgShiftAccessPos = async (tradePlatform: string,
@@ -1875,6 +1954,8 @@ export const getPostCfgShiftDataServerPosUrl = (tradePlatform: string,
 
 /**
  * Reorders an entry in the data-servers table by relative displacement.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Reorder data-server entry
  */
 export const postCfgShiftDataServerPos = async (tradePlatform: string,
@@ -1922,6 +2003,8 @@ export const getPostCfgShiftFeederPosUrl = (tradePlatform: string,
 
 /**
  * Reorders an entry in the feeders table by relative displacement.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Reorder feeder config
  */
 export const postCfgShiftFeederPos = async (tradePlatform: string,
@@ -1969,6 +2052,8 @@ export const getPostCfgShiftGatewayAccountPosUrl = (tradePlatform: string,
 
 /**
  * Reorders an entry in the gateway-accounts table by relative displacement.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Reorder gateway account
  */
 export const postCfgShiftGatewayAccountPos = async (tradePlatform: string,
@@ -2016,6 +2101,8 @@ export const getPostCfgShiftGatewayMarkupPosUrl = (tradePlatform: string,
 
 /**
  * Reorders an entry in the gateway-markup table by relative displacement.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Reorder gateway markup
  */
 export const postCfgShiftGatewayMarkupPos = async (tradePlatform: string,
@@ -2063,6 +2150,8 @@ export const getPostCfgShiftGatewayRulePosUrl = (tradePlatform: string,
 
 /**
  * Reorders an entry in the gateway-rules table by relative displacement.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Reorder gateway rule
  */
 export const postCfgShiftGatewayRulePos = async (tradePlatform: string,
@@ -2110,6 +2199,8 @@ export const getPostCfgShiftGroupPosUrl = (tradePlatform: string,
 
 /**
  * Reorders an entry in the trading-groups table by relative displacement.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Reorder trading group
  */
 export const postCfgShiftGroupPos = async (tradePlatform: string,
@@ -2157,6 +2248,8 @@ export const getPostCfgShiftHolidayPosUrl = (tradePlatform: string,
 
 /**
  * Reorders an entry in the holiday-calendar table by relative displacement.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Reorder holiday entry
  */
 export const postCfgShiftHolidayPos = async (tradePlatform: string,
@@ -2204,6 +2297,8 @@ export const getPostCfgShiftLiveUpdatePosUrl = (tradePlatform: string,
 
 /**
  * Reorders an entry in the live-update table by relative displacement.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Reorder LiveUpdate config
  */
 export const postCfgShiftLiveUpdatePos = async (tradePlatform: string,
@@ -2251,6 +2346,8 @@ export const getPostCfgShiftManagerPosUrl = (tradePlatform: string,
 
 /**
  * Reorders an entry in the managers table by relative displacement.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Reorder manager config
  */
 export const postCfgShiftManagerPos = async (tradePlatform: string,
@@ -2302,6 +2399,8 @@ export const getPostCfgShiftPluginPosUrl = (tradePlatform: string,
  * Unlike the deferred `CfgRequestPlugin` read endpoint, the shift
  * call does not dereference `ConPluginParam.Params` — it only
  * reorders existing rows by index. Safe under wine x64.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Reorder plugin entry
  */
 export const postCfgShiftPluginPos = async (tradePlatform: string,
@@ -2349,6 +2448,8 @@ export const getPostCfgShiftSymbolPosUrl = (tradePlatform: string,
 
 /**
  * Reorders an entry in the symbols table by relative displacement.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Reorder symbol entry
  */
 export const postCfgShiftSymbolPos = async (tradePlatform: string,
@@ -2396,6 +2497,8 @@ export const getPostCfgShiftSyncPosUrl = (tradePlatform: string,
 
 /**
  * Reorders an entry in the sync-rules table by relative displacement.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Reorder sync rule
  */
 export const postCfgShiftSyncPos = async (tradePlatform: string,

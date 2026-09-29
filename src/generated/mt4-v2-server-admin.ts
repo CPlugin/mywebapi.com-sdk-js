@@ -55,6 +55,9 @@ export const getGetSrvFeedersUrl = (tradePlatform: string,
  * <br>
  * Sorted by `Name` ascending. Paged with the same cursor codec as
  * the rest of the v2 paged endpoints (`Name` is the cursor key).
+ *
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List data feeders
  */
 export const getSrvFeeders = async (tradePlatform: string,
@@ -99,6 +102,8 @@ export const getGetLicenseCheckLicenseNameUrl = (tradePlatform: string,
  * result code is `Ok`, indicating the license is recognized;
  * `false` on any non-Ok code (covers both "license not found"
  * and "manager lacks permission to query the license registry").
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Check license
  */
 export const getLicenseCheckLicenseName = async (tradePlatform: string,
@@ -134,6 +139,9 @@ export const getPostNotificationsSendUrl = (tradePlatform: string,) => {
   return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/NotificationsSend`
 }
 
+/**
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ */
 export const postNotificationsSend = async (tradePlatform: string,
     mT4NotificationsSendRequest?: MT4NotificationsSendRequest, options?: RequestInit): Promise<postNotificationsSendResponse> => {
 
@@ -175,6 +183,8 @@ export const getGetSrvFeederLogNameUrl = (tradePlatform: string,
  * the feeder's log buffer as a string (empty when the feeder is unknown
  * or has no recent log activity). Payload is the raw log text — not an
  * array of lines — to preserve formatting at the wrapper boundary.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get feeder log
  */
 export const getSrvFeederLogName = async (tradePlatform: string,

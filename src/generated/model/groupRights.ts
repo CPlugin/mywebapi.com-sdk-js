@@ -6,16 +6,8 @@
  * OpenAPI spec version: 2.0
  */
 
-export type GroupRights = typeof GroupRights[keyof typeof GroupRights];
-
-
-export const GroupRights = {
-  Signals: 'Signals',
-  Trailing: 'Trailing',
-  Advisor: 'Advisor',
-  Expiration: 'Expiration',
-  SignalAll: 'SignalAll',
-  SignalsOwn: 'SignalsOwn',
-  RiskWarning: 'RiskWarning',
-  ForcedOTPUsage: 'ForcedOTPUsage',
-} as const;
+/**
+ * Flags: names of the set bits joined by ", " ("Signals, Trailing"), "None" when none is set; a set bit without a name is "Bit<n>" (bit number). Bits: Signals = 0x1, Trailing = 0x2, Advisor = 0x4, Expiration = 0x8, SignalAll = 0x10, SignalsOwn = 0x20, RiskWarning = 0x40, ForcedOTPUsage = 0x80.
+ * @pattern ^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$
+ */
+export type GroupRights = string;

@@ -40,6 +40,8 @@ export const getGetMarginsGetUrl = (tradePlatform: string,) => {
  * for bulk monitoring of account health (margin calls / stop-out
  * proximity). For a single account, prefer the existing
  * MarginLevelGet/MarginLevelRequest endpoints.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List account margins (cached)
  */
 export const getMarginsGet = async (tradePlatform: string, options?: RequestInit): Promise<getMarginsGetResponse> => {
@@ -82,6 +84,8 @@ export const getGetMarginLevelGetLoginUrl = (tradePlatform: string,
  * account's group, then `MarginLevelGet(login, group)`. Returns
  * NotFound envelope if the account is unknown or has no open trades.
  * For a live round-trip use MarginLevelRequest.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get account margin (cached)
  */
 export const getMarginLevelGetLogin = async (tradePlatform: string,
@@ -125,6 +129,8 @@ export const getGetMarginLevelRequestLoginUrl = (tradePlatform: string,
  * directly. Slower than `MarginLevelGet` but always fresh. Cost-
  * equivalent to other live Manager calls (billed per request, unlike
  * pump reads).
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get account margin (live)
  */
 export const getMarginLevelRequestLogin = async (tradePlatform: string,

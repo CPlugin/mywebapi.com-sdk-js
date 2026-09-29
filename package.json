@@ -48,7 +48,7 @@
     "url": "https://github.com/CPlugin/mywebapi.com-sdk-js/issues"
   },
   "scripts": {
-    "generate": "orval --config orval.config.ts",
+    "generate": "orval --config orval.config.ts && bun scripts/generate-request-timeouts.ts",
     "build": "rm -rf dist && mkdir -p dist/node dist/browser && bun build src/index.ts --outdir dist/node --target node --format esm --external @microsoft/signalr && bun build src/index.ts --outdir dist/browser --target browser --format esm --external @microsoft/signalr && tsc -p tsconfig.build.json --emitDeclarationOnly --declaration",
     "test": "bun test",
     "test:e2e": "WEBAPI_E2E=1 bun test e2e",

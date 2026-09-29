@@ -40,6 +40,8 @@ export const getGetServerTimeMT4Url = (tradePlatform: string,) => {
  *
  * Smoke-test endpoint exercising the v2 envelope. Returns current MT4
  * server time wrapped in ApiResponse<DateTime>.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get server time
  */
 export const getServerTimeMT4 = async (tradePlatform: string, options?: RequestInit): Promise<getServerTimeMT4Response> => {
@@ -80,6 +82,8 @@ export const getGetManagerCommonUrl = (tradePlatform: string,) => {
  * Returns MT4Common DTO — server name, broker, server version/build,
  * time zone. Schema is decoupled from the wrapper's ConCommon: v2
  * clients are protected from MetaQuotes schema changes.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get manager common settings
  */
 export const getManagerCommon = async (tradePlatform: string, options?: RequestInit): Promise<getManagerCommonResponse> => {
@@ -133,6 +137,8 @@ export const getGetJournalRequestUrl = (tradePlatform: string,
  * Heavier endpoint — large date windows return large arrays. Pair with
  * reasonable `from`/`to` bounds; consider `Idempotency-Key`
  * for retry safety on slow links.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get server journal
  */
 export const getJournalRequest = async (tradePlatform: string,
