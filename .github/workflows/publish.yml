@@ -16,8 +16,39 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # * Release gate: a tag publishes only a commit that reached main through a merged pull
+  #   request and passed CI there. Tags are admin-only and immutable (repository rulesets);
+  #   this job refuses a tag put on any other commit, so review happens on the pull request.
+  gate:
+    name: Release gate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+      - name: Tagged commit is on main and passed CI
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::$GITHUB_REF_NAME points to $GITHUB_SHA, which is not on main. Release only commits merged into main."
+            exit 1
+          fi
+          passed=$(gh api "repos/$GITHUB_REPOSITORY/actions/workflows/ci.yml/runs?head_sha=$GITHUB_SHA&status=success&per_page=1" --jq '.total_count')
+          if [ "$passed" -lt 1 ]; then
+            echo "::error::CI has not passed on $GITHUB_SHA. Wait for it on main, then push the tag again."
+            exit 1
+          fi
+          echo "$GITHUB_REF_NAME -> $GITHUB_SHA: on main, CI passed."
+
   publish:
     name: Verify one tarball and publish with provenance
+    needs: gate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
