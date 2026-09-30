@@ -96,6 +96,7 @@ describe('MT4V2SignalRClient — construction', () => {
     // The type still accepts empty string; we exercise the runtime guard.
     expect(() => new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '',
       token: 'eyJ.fake.token',
     })).toThrow(MT4V2SignalRError);
@@ -114,6 +115,7 @@ describe('MT4V2SignalRClient — construction', () => {
     // caller who passes an object missing both discriminator branches.
     const opts = {
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '00000000-0000-0000-0000-000000000001',
     } as unknown as ConstructorParameters<typeof MT4V2SignalRClient>[0];
     expect(() => new MT4V2SignalRClient(opts)).toThrow(MT4V2SignalRError);
@@ -122,6 +124,7 @@ describe('MT4V2SignalRClient — construction', () => {
   test('accepts static-token options', () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '00000000-0000-0000-0000-000000000001',
       token: 'eyJ.fake.token',
     });
@@ -131,6 +134,7 @@ describe('MT4V2SignalRClient — construction', () => {
   test('accepts client_credentials options', () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '00000000-0000-0000-0000-000000000001',
       clientId: 'cid',
       clientSecret: 'csec',
@@ -146,6 +150,7 @@ describe('MT4V2SignalRClient — start()', () => {
   test('builds default hub URL from baseUrl', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -158,6 +163,7 @@ describe('MT4V2SignalRClient — start()', () => {
   test('respects explicit hubUrl override', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
       hubUrl: 'https://api.example/mt4hub',
@@ -170,6 +176,7 @@ describe('MT4V2SignalRClient — start()', () => {
   test('appends tradePlatform with `&` when hubUrl already has a query', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
       hubUrl: 'https://api.example/mt4hub?x=1',
@@ -182,6 +189,7 @@ describe('MT4V2SignalRClient — start()', () => {
   test('accessTokenFactory yields the static token', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.static.token',
     });
@@ -193,6 +201,7 @@ describe('MT4V2SignalRClient — start()', () => {
   test('default reconnect intervals are wired', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -203,6 +212,7 @@ describe('MT4V2SignalRClient — start()', () => {
   test('reconnect=false disables auto-reconnect', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
       reconnect: false,
@@ -214,6 +224,7 @@ describe('MT4V2SignalRClient — start()', () => {
   test('start() is idempotent', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -229,6 +240,7 @@ describe('MT4V2SignalRClient — streams', () => {
   test('streamTicks() invokes server method with symbol arg', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -249,6 +261,7 @@ describe('MT4V2SignalRClient — streams', () => {
   test('streamTicks() with no symbol invokes server method with no args', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -262,6 +275,7 @@ describe('MT4V2SignalRClient — streams', () => {
   test('streamMarginCallUpdates() / streamTrades() / streamUserUpdates() / streamSymbolUpdates() invoke matching methods', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -280,6 +294,7 @@ describe('MT4V2SignalRClient — streams', () => {
   test('async iterator completes when server stream completes', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -306,6 +321,7 @@ describe('MT4V2SignalRClient — streams', () => {
   test('breaking out of for-await disposes the underlying server stream', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -329,14 +345,33 @@ describe('MT4V2SignalRClient — streams', () => {
     expect(collected).toEqual([1.1]);
     expect(captured?.disposed).toBe(true);
   });
-});
+  test('pending next rejects on server stream error and disposes the subscription', async () => {
+    const c = new MT4V2SignalRClient({
+      baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
+      tradePlatform: '11111111-2222-3333-4444-555555555555',
+      token: 'eyJ.fake.token',
+    });
+    await c.start();
 
-// * --- Callbacks -------------------------------------------------------------
+    const pending = c.streamTicks()[Symbol.asyncIterator]().next();
+    const stream = lastConnection!.streams.find(x => x.method === 'StreamTicks')!.stream;
+    const reason = new Error('stream failed');
+    stream.fail(reason);
+
+    let caught: unknown;
+    try { await pending; } catch (error) { caught = error; }
+    expect(caught).toBe(reason);
+    expect(stream.disposed).toBe(true);
+  });
+
+});
 
 describe('MT4V2SignalRClient — callbacks', () => {
   test('subscribeToTicks() invokes server method', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -348,6 +383,7 @@ describe('MT4V2SignalRClient — callbacks', () => {
   test('unsubscribeFromTicks() invokes server method', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -359,6 +395,7 @@ describe('MT4V2SignalRClient — callbacks', () => {
   test('onTick() registers a server -> client callback', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -373,6 +410,7 @@ describe('MT4V2SignalRClient — callbacks', () => {
   test('getConnection() throws before start()', () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -386,6 +424,7 @@ describe('MT4V2SignalRClient — stop()', () => {
   test('stop() closes the connection', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -397,6 +436,7 @@ describe('MT4V2SignalRClient — stop()', () => {
   test('stop() before start() is a no-op', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -421,6 +461,7 @@ describe('MT4V2SignalRClient — pre-start callback registration', () => {
   test('onConnectionStatus() registered before start() does NOT throw', () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -433,6 +474,7 @@ describe('MT4V2SignalRClient — pre-start callback registration', () => {
   test('onTick() registered before start() does NOT throw', () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -468,6 +510,7 @@ describe('MT4V2SignalRClient — pre-start callback registration', () => {
     try {
       const c = new MT4V2SignalRClient({
         baseUrl: 'http://localhost:5002',
+        allowInsecureLoopback: true,
         tradePlatform: '11111111-2222-3333-4444-555555555555',
         token: 'eyJ.fake.token',
       });
@@ -510,6 +553,7 @@ describe('MT4V2SignalRClient — pre-start callback registration', () => {
     try {
       const c = new MT4V2SignalRClient({
         baseUrl: 'http://localhost:5002',
+        allowInsecureLoopback: true,
         tradePlatform: '11111111-2222-3333-4444-555555555555',
         token: 'eyJ.fake.token',
       });
@@ -530,6 +574,7 @@ describe('MT4V2SignalRClient — pre-start callback registration', () => {
   test('onConnectionStatus() registered AFTER start() is wired immediately', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -556,6 +601,7 @@ describe('MT4V2SignalRClient — default OnConnectionStatus sink', () => {
     // * Stream-only consumer — no onConnectionStatus() call.
     const c = new MT4V2SignalRClient({
       baseUrl:       'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token:         'eyJ.fake.token',
     });
@@ -587,6 +633,7 @@ describe('MT4V2SignalRClient — default OnConnectionStatus sink', () => {
       // * Stream-only consumer — no onConnectionStatus() call.
       const c = new MT4V2SignalRClient({
         baseUrl:       'http://localhost:5002',
+        allowInsecureLoopback: true,
         tradePlatform: '11111111-2222-3333-4444-555555555555',
         token:         'eyJ.fake.token',
       });
@@ -610,6 +657,7 @@ describe('MT5V2SignalRClient — pre-start callback registration', () => {
   test('onConnectionStatus() registered before start() does NOT throw', () => {
     const c = new MT5V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -639,6 +687,7 @@ describe('MT5V2SignalRClient — pre-start callback registration', () => {
     try {
       const c = new MT5V2SignalRClient({
         baseUrl: 'http://localhost:5002',
+        allowInsecureLoopback: true,
         tradePlatform: '11111111-2222-3333-4444-555555555555',
         token: 'eyJ.fake.token',
       });
@@ -660,6 +709,7 @@ describe('MT5V2SignalRClient — pre-start callback registration', () => {
   test('onConnectionStatus() registered AFTER start() is wired immediately', async () => {
     const c = new MT5V2SignalRClient({
       baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
@@ -682,6 +732,7 @@ describe('MT5V2SignalRClient — default OnConnectionStatus sink', () => {
     // * Stream-only consumer — no onConnectionStatus() call.
     const c = new MT5V2SignalRClient({
       baseUrl:       'http://localhost:5002',
+      allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token:         'eyJ.fake.token',
     });
@@ -713,6 +764,7 @@ describe('MT5V2SignalRClient — default OnConnectionStatus sink', () => {
       // * Stream-only consumer — no onConnectionStatus() call.
       const c = new MT5V2SignalRClient({
         baseUrl:       'http://localhost:5002',
+        allowInsecureLoopback: true,
         tradePlatform: '11111111-2222-3333-4444-555555555555',
         token:         'eyJ.fake.token',
       });
@@ -727,5 +779,27 @@ describe('MT5V2SignalRClient — default OnConnectionStatus sink', () => {
     } finally {
       FakeHubConnectionBuilder.prototype.build = originalBuild;
     }
+  });
+});
+
+describe('MT5V2SignalRClient — streams', () => {
+  test('pending next rejects on server stream error and disposes the subscription', async () => {
+    const c = new MT5V2SignalRClient({
+      baseUrl: 'http://localhost:5002',
+      allowInsecureLoopback: true,
+      tradePlatform: '11111111-2222-3333-4444-555555555555',
+      token: 'eyJ.fake.token',
+    });
+    await c.start();
+
+    const pending = c.streamMarginCallUpdates()[Symbol.asyncIterator]().next();
+    const stream = lastConnection!.streams.find(x => x.method === 'StreamMarginCallUpdates')!.stream;
+    const reason = new Error('stream failed');
+    stream.fail(reason);
+
+    let caught: unknown;
+    try { await pending; } catch (error) { caught = error; }
+    expect(caught).toBe(reason);
+    expect(stream.disposed).toBe(true);
   });
 });

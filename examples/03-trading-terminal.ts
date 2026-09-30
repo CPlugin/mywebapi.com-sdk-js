@@ -148,7 +148,10 @@ async function openMarketOrder(tp: string, ask: number): Promise<number> {
   }
 
   // * The Idempotency-Key header is STRONGLY recommended for trade mutations.
-  //   A unique key per logical order prevents double-execution on HTTP retry.
+  //   The SDK never repeats a POST by itself. When the call fails with
+  //   OutcomeUnknown (isOutcomeUnknown(err)), a network error or a client abort,
+  //   the order may still be placed: repeat the SAME request with the SAME key —
+  //   the server returns the original result and never executes it twice.
   //   Here we generate a per-run key; in production use a stable request UUID.
   const idempotencyKey = crypto.randomUUID();
 
