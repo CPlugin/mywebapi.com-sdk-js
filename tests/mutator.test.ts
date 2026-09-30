@@ -1,12 +1,12 @@
 import { describe, expect, test } from 'bun:test';
 import { customFetch } from '../src/mutator';
-import { withContext, type RequestContext } from '../src/mutator.context';
+import { withRequestContext, type RequestContext } from '../src/mutator.context';
 import { ApiError } from '../src/errors';
 import { StaticTokenProvider, type TokenProvider } from '../src/auth';
 import { defaultPolicy } from '../src/retry';
 
-const json = (b: unknown) =>
-  new Response(JSON.stringify(b), { headers: { 'Content-Type': 'application/json' } });
+const json = (b: unknown, init?: ResponseInit) =>
+  new Response(JSON.stringify(b), { ...init, headers: { 'Content-Type': 'application/json' } });
 
 function ctx(overrides: Partial<RequestContext>): RequestContext {
   return {
@@ -14,17 +14,20 @@ function ctx(overrides: Partial<RequestContext>): RequestContext {
     tokenProvider: new StaticTokenProvider('tok'),
     fetchImpl: overrides.fetchImpl ?? ((async () => json({})) as unknown as typeof fetch),
     retryPolicy: defaultPolicy,
+    timeoutMs: 30_000,
     ...overrides,
   };
+}
+
+function call<T>(context: RequestContext, url: string, options: RequestInit): Promise<T> {
+  return customFetch<T>(url, withRequestContext(options, context));
 }
 
 describe('customFetch envelope unwrap', () => {
   test('returns data on success', async () => {
     const fetchImpl = (async () =>
       json({ data: '2026-06-26T00:00:00Z', error: null, meta: { activityId: 'a1' } })) as unknown as typeof fetch;
-    const result = await withContext(ctx({ fetchImpl }), () =>
-      customFetch<string>('/api/v2/MT4/tp-1/ServerTime', { method: 'GET' }),
-    );
+    const result = await call<string>(ctx({ fetchImpl }), '/api/v2/MT4/tp-1/ServerTime', { method: 'GET' });
     expect(result).toBe('2026-06-26T00:00:00Z');
   });
 
@@ -37,9 +40,7 @@ describe('customFetch envelope unwrap', () => {
       })) as unknown as typeof fetch;
     let caught: unknown;
     try {
-      await withContext(ctx({ fetchImpl }), () =>
-        customFetch<string>('/api/v2/MT4/tp-1/ServerTime', { method: 'GET' }),
-      );
+      await call<string>(ctx({ fetchImpl }), '/api/v2/MT4/tp-1/ServerTime', { method: 'GET' });
     } catch (e) {
       caught = e;
     }
@@ -51,21 +52,15 @@ describe('customFetch envelope unwrap', () => {
   });
 
   test('persistent 401 with non-JSON body throws ApiError (not SyntaxError)', async () => {
-    // * Simulates an upstream proxy returning a plain-text 401 — e.g. "Unauthorized"
-    //   with no JSON body. The transport must NOT let response.json() throw a
-    //   SyntaxError; it must synthesise an ApiError with code 'Forbidden'.
     let calls = 0;
     const tp: TokenProvider = { async getToken() { return 'tok-stale'; } };
     const fetchImpl = (async () => {
       calls++;
-      // * Always 401 with a plain-text body (no JSON envelope).
       return new Response('Unauthorized', { status: 401 });
     }) as unknown as typeof fetch;
     let caught: unknown;
     try {
-      await withContext(ctx({ tokenProvider: tp, fetchImpl }), () =>
-        customFetch<string>('/api/v2/MT4/tp-1/ServerTime', { method: 'GET' }),
-      );
+      await call<string>(ctx({ tokenProvider: tp, fetchImpl }), '/api/v2/MT4/tp-1/ServerTime', { method: 'GET' });
     } catch (e) {
       caught = e;
     }
@@ -73,7 +68,6 @@ describe('customFetch envelope unwrap', () => {
     const err = caught as ApiError;
     expect(err.code).toBe('Forbidden');
     expect(err.status).toBe(401);
-    // * The transport retried once (token refresh), so fetchImpl was called twice.
     expect(calls).toBe(2);
   });
 
@@ -97,11 +91,28 @@ describe('customFetch envelope unwrap', () => {
       expect(auth).toBe('Bearer tok-2');
       return json({ data: 'ok', error: null, meta: null });
     }) as unknown as typeof fetch;
-    const result = await withContext(ctx({ tokenProvider: tp, fetchImpl }), () =>
-      customFetch<string>('/api/v2/MT4/tp-1/ServerTime', { method: 'GET' }),
-    );
+    const result = await call<string>(ctx({ tokenProvider: tp, fetchImpl }), '/api/v2/MT4/tp-1/ServerTime', { method: 'GET' });
     expect(result).toBe('ok');
     expect(apiCalls).toBe(2);
     expect(tokens).toContain('tok-2');
+  });
+
+  test('unsafe POST is never replayed merely because Idempotency-Key is present', async () => {
+    let calls = 0;
+    const fetchImpl = (async () => {
+      calls++;
+      throw new Error('connection reset');
+    }) as unknown as typeof fetch;
+    let caught: unknown;
+    try {
+      await call<string>(ctx({ fetchImpl }), '/api/v2/MT4/tp-1/Restart', {
+        method: 'POST',
+        headers: { 'Idempotency-Key': 'request-1' },
+      });
+    } catch (e) {
+      caught = e;
+    }
+    expect(caught).toBeInstanceOf(Error);
+    expect(calls).toBe(1);
   });
 });

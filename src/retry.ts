@@ -1,16 +1,12 @@
 // Exponential-backoff retry layer for fetch-based operations.
 //
-// Retry eligibility (mirrors AWS / Google / Stripe conventions):
-//   - Thrown errors from `op()` (network failures, DNS, TLS): always eligible.
-//   - 429, 502, 503, 504: eligible only if the request is idempotent.
-//   - 408: eligible only if idempotent (RFC 7231 §6.5.7 — client may retry).
-//   - Other 4xx / 2xx / 3xx: returned to the caller as-is.
+// Retry eligibility:
+//   - Thrown errors are eligible only for idempotent methods.
+//   - 408, 429, 502, 503, 504 are eligible only when the request is idempotent.
+//   - Other statuses are returned to the caller as-is.
 //
-// Idempotency must be decided by the caller (GET/HEAD/PUT/DELETE are idempotent
-// by HTTP spec; POST/PATCH are idempotent only when an Idempotency-Key is set).
-//
-// After exhaustion: if the last attempt produced a Response, return it (caller
-// decides on the status); if it threw, rethrow the original error.
+// Idempotency is decided by the caller from the HTTP method. Unsafe POST/PATCH
+// operations are never replayed merely because a header is present.
 
 export interface RetryPolicy {
   maxAttempts: number;
@@ -28,8 +24,7 @@ export const defaultPolicy: RetryPolicy = {
   jitterPercent: 0.25,
 };
 
-const RETRYABLE_STATUSES = new Set([429, 502, 503, 504]);
-const IDEMPOTENT_ONLY_STATUSES = new Set([408]);
+const RETRYABLE_STATUSES = new Set([408, 429, 502, 503, 504]);
 
 export interface WithRetryOptions {
   policy?: RetryPolicy;
@@ -43,80 +38,67 @@ export async function withRetry<T>(
 ): Promise<{ response: Response; result: T }> {
   const policy = opts.policy ?? defaultPolicy;
   const { isIdempotent, signal } = opts;
-
   let attempt = 0;
-  // Track the most recent outcome so we can return it after exhausting attempts
-  // without re-running the op or losing the Response body.
   let lastResponse: { response: Response; result: T } | null = null;
   let lastError: unknown = null;
 
   while (attempt < policy.maxAttempts) {
     attempt++;
     throwIfAborted(signal);
-
     let outcome: { response: Response; result: T } | null = null;
     let thrown: unknown = null;
     try {
       outcome = await op();
-    } catch (err) {
-      thrown = err;
+    } catch (error) {
+      thrown = error;
     }
 
     if (outcome) {
       lastResponse = outcome;
       lastError = null;
-      if (!shouldRetryStatus(outcome.response.status, isIdempotent)) {
-        return outcome;
-      }
+      if (!shouldRetryStatus(outcome.response.status, isIdempotent)) return outcome;
     } else {
       lastError = thrown;
       lastResponse = null;
+      // Unsafe methods and all cancellation errors must fail immediately.
+      if (!isIdempotent || isAbortLike(thrown) || signal?.aborted) break;
     }
 
     if (attempt >= policy.maxAttempts) break;
-
-    const delayMs = computeDelayMs({
-      attempt,
-      policy,
-      response: outcome?.response,
-    });
-    await sleep(delayMs, signal);
+    await sleep(computeDelayMs({ attempt, policy, response: outcome?.response }), signal);
   }
 
   if (lastResponse) return lastResponse;
   throw lastError;
 }
 
+function isAbortLike(error: unknown): boolean {
+  if (!error || typeof error !== 'object') return false;
+  const value = error as { name?: unknown; code?: unknown };
+  return value.name === 'AbortError' || value.name === 'TimeoutError' || value.code === 'ABORT_ERR';
+}
+
 function shouldRetryStatus(status: number, isIdempotent: boolean): boolean {
-  if (RETRYABLE_STATUSES.has(status)) return isIdempotent;
-  if (IDEMPOTENT_ONLY_STATUSES.has(status)) return isIdempotent;
-  return false;
+  return isIdempotent && RETRYABLE_STATUSES.has(status);
 }
 
 function computeDelayMs(args: { attempt: number; policy: RetryPolicy; response: Response | undefined }): number {
   const { attempt, policy, response } = args;
   if (response) {
     const retryAfterMs = parseRetryAfter(response.headers.get('retry-after'));
-    if (retryAfterMs !== null) {
-      return Math.min(retryAfterMs, policy.maxDelayMs);
-    }
+    if (retryAfterMs !== null) return Math.min(retryAfterMs, policy.maxDelayMs);
   }
   const exp = policy.baseDelayMs * Math.pow(policy.factor, attempt - 1);
   const capped = Math.min(exp, policy.maxDelayMs);
-  // Symmetric jitter: ±jitterPercent. (random()-0.5)*2 yields [-1, 1].
   const jitter = (Math.random() - 0.5) * 2 * policy.jitterPercent;
   return Math.max(0, capped * (1 + jitter));
 }
 
-// RFC 7231 §7.1.3: Retry-After is either a non-negative integer (delta-seconds)
-// or an HTTP-date. Returns ms, or null if header is absent/unparseable.
 function parseRetryAfter(header: string | null): number | null {
   if (!header) return null;
   const trimmed = header.trim();
   if (trimmed === '') return null;
-  if (/^\d+$/.test(trimmed)) {
-    return Number(trimmed) * 1000;
-  }
+  if (/^\d+$/.test(trimmed)) return Number(trimmed) * 1000;
   const date = Date.parse(trimmed);
   if (Number.isNaN(date)) return null;
   return Math.max(0, date - Date.now());
@@ -124,8 +106,7 @@ function parseRetryAfter(header: string | null): number | null {
 
 function throwIfAborted(signal: AbortSignal | undefined): void {
   if (!signal?.aborted) return;
-  if (signal.reason !== undefined) throw signal.reason;
-  throw new DOMException('Aborted', 'AbortError');
+  throw signal.reason ?? new DOMException('Aborted', 'AbortError');
 }
 
 function sleep(ms: number, signal: AbortSignal | undefined): Promise<void> {
@@ -134,22 +115,19 @@ function sleep(ms: number, signal: AbortSignal | undefined): Promise<void> {
     return Promise.resolve();
   }
   return new Promise<void>((resolve, reject) => {
-    const timer = setTimeout(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    const onAbort = (): void => {
+      clearTimeout(timer);
+      signal?.removeEventListener('abort', onAbort);
+      reject(signal?.reason ?? new DOMException('Aborted', 'AbortError'));
+    };
+    timer = setTimeout(() => {
       signal?.removeEventListener('abort', onAbort);
       resolve();
     }, ms);
-    const onAbort = (): void => {
-      clearTimeout(timer);
-      const reason = signal?.reason ?? new DOMException('Aborted', 'AbortError');
-      reject(reason);
-    };
     if (signal) {
-      if (signal.aborted) {
-        clearTimeout(timer);
-        reject(signal.reason ?? new DOMException('Aborted', 'AbortError'));
-        return;
-      }
-      signal.addEventListener('abort', onAbort, { once: true });
+      if (signal.aborted) onAbort();
+      else signal.addEventListener('abort', onAbort, { once: true });
     }
   });
 }

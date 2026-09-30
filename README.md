@@ -2,11 +2,12 @@
 
 TypeScript client for the CPlugin WebAPI v2 — a management API for trading-platform servers.
 
-**Status:** Published on the public npm registry as [`@mywebapi.com/sdk`](https://www.npmjs.com/package/@mywebapi.com/sdk) (early access, current version `0.1.2`). The API shape is stable; while the package is at `0.x`, minor releases may introduce breaking changes, so pin a version in production. Versioning follows [semver](https://semver.org/).
+**Status:** Version `0.3.0`. The package keeps the generated REST catalog and typed MT4/MT5 realtime clients in one entry point; minor releases may introduce breaking changes while the package remains at `0.x`. Pin a version in production.
 
 - **Auto-generated types** from the live OpenAPI spec — all endpoints, DTOs, and enums are exact and stay in sync with the server.
 - **Unified entry point** — `CPluginWebApiClient` with `mt4` and `mt5` namespaces; credentials and token management configured once at instantiation.
 - **Envelope-aware** — automatic unwrapping of API responses; failures throw `ApiError` carrying `code`, `description`, and `activityId`.
+- **Server timeouts** — per-call and client-wide `requestTimeout`; the client deadline always outlasts the server's, and uncertain trades are never repeated automatically.
 - **Pagination helper** — `paged()` and `collectAll()` for cursor-based v2 list endpoints.
 - **Native fetch foundation** — uses platform `fetch` (Web API / Node.js 18+), injectable for testing.
 
@@ -27,7 +28,7 @@ The SDK manages OAuth2 access tokens for you — pass `clientId` / `clientSecret
 import { CPluginWebApiClient, ApiError, collectAll } from '@mywebapi.com/sdk';
 
 const client = new CPluginWebApiClient({
-  env: 'prod',  // or 'staging' or { baseUrl, authUrl }
+  env: 'prod',  // or 'staging' or { env: 'custom', apiBaseUrl, authority }
   clientId: 'your-client-id',
   clientSecret: process.env.CPLUGIN_WEBAPI_CLIENT_SECRET!,
 });
@@ -35,12 +36,11 @@ const client = new CPluginWebApiClient({
 // server time (mt4 namespace)
 const tp = '3029d415-d0a6-4710-a9c1-8cb063ef872f';
 const time = await client.mt4.getServerTime(tp);
-console.log('server time (mt4):', time.data.timestamp);
+console.log('server time (mt4):', time);
 
 // server time (mt5 namespace)
 const mt5Time = await client.mt5.getServerTime(tp);
-console.log('server time (mt5):', mt5Time.data.timestamp);
-
+console.log('server time (mt5):', mt5Time);
 // Pagination — single page with cursor capture
 const page = await client.paged(() =>
   client.mt4.getOnlineGet(tp, { limit: 50 }),
@@ -81,38 +81,130 @@ try {
 }
 ```
 
-### From environment variables
+### Configuration from environment variables
 
-`CPluginWebApiClient.fromEnvironment()` builds a client from `CPLUGIN_WEBAPI_ENV` (or `CPLUGIN_WEBAPI_BASE_URL` + `CPLUGIN_WEBAPI_AUTH_URL`), `CPLUGIN_WEBAPI_CLIENT_ID`, and `CPLUGIN_WEBAPI_CLIENT_SECRET`. Missing variables raise an `Error` that names the missing key.
+The client constructor is the single configuration API. Read environment variables in the application and pass the supported fields explicitly; there is no `fromEnvironment()` factory.
 
 ```typescript
-const client = CPluginWebApiClient.fromEnvironment();
-const tp = process.env.CPLUGIN_WEBAPI_TRADE_PLATFORM!;
-const time = await client.mt4.getServerTime(tp);
+const client = new CPluginWebApiClient({
+  env: (process.env.CPLUGIN_WEBAPI_ENV === 'staging' ? 'staging' : 'prod'),
+  clientId: process.env.CPLUGIN_WEBAPI_CLIENT_ID!,
+  clientSecret: process.env.CPLUGIN_WEBAPI_CLIENT_SECRET!,
+});
 ```
 
-### Static token (advanced / testing)
+### Request deadlines and cancellation
 
-For scenarios with a pre-issued JWT (CI fixtures, short-lived service-account tokens, test rigs), pass a `token` instead of `clientId` / `clientSecret`. No refresh is performed — when the token expires, the API returns errors.
+REST operations and each OAuth discovery/token request have a bounded deadline. Configure the minimum REST deadline with `timeoutMs` (the default is 30 seconds):
 
 ```typescript
 const client = new CPluginWebApiClient({
   env: 'prod',
-  token: 'eyJhbGc...',
+  clientId: process.env.CPLUGIN_WEBAPI_CLIENT_ID!,
+  clientSecret: process.env.CPLUGIN_WEBAPI_CLIENT_SECRET!,
+  timeoutMs: 10_000,
 });
-
-const tp = '3029d415-d0a6-4710-a9c1-8cb063ef872f';
-const time = await client.mt4.getServerTime(tp);
 ```
 
-## Retries
+The deadline covers token acquisition, the API request, and response-body decoding. Cancellation and timeout errors are propagated rather than being reported as malformed JSON. For operations with a server timeout the deadline is extended automatically — see [Timeouts and retries](#timeouts-and-retries).
 
-Idempotent requests retry automatically on transient errors (`429`, `502`, `503`, `504`, and `408`). Retry-eligible:
+### Static token (advanced realtime/testing)
 
-- `GET` and `HEAD` — always idempotent per HTTP spec.
-- `POST` / `PATCH` / `PUT` / `DELETE` — only when you supply an `Idempotency-Key` header via method options.
+The unified REST client uses client credentials. For a pre-issued JWT in a test rig or a direct realtime client, use the exported `StaticTokenProvider`; no refresh is performed.
 
-Backoff is exponential (default 3 attempts, base 500 ms, factor 2, ±25% jitter) with `Retry-After` honoured (both `delta-seconds` and HTTP-date forms). Override per-client:
+```typescript
+import { MT4V2SignalRClient, StaticTokenProvider } from '@mywebapi.com/sdk';
+
+const rt = new MT4V2SignalRClient({
+  baseUrl: 'https://cloud.mywebapi.com',
+  tradePlatform: process.env.CPLUGIN_WEBAPI_TRADE_PLATFORM!,
+  tokenProvider: new StaticTokenProvider(process.env.CPLUGIN_WEBAPI_ACCESS_TOKEN!),
+});
+```
+
+## Timeouts and retries
+
+### Server timeouts
+
+The server bounds every call to a trading platform with a timeout that depends on the kind of operation:
+
+| Operation kind | Examples | Default |
+|---|---|---|
+| Trade | trade transactions, stop checks, trade record edits | 5 s |
+| Read | records, symbols, groups, server time | 10 s |
+| Change | account, group and symbol updates | 15 s |
+| History | trade history, reports, ticks and charts, journals, backup listings | 30 s |
+| Maintenance | backup restore, server restart, synchronisation, bulk account operations | 60 s |
+
+The exact default of each method is stated in its JSDoc (`**Timeout:** … s by default`). Change it per call, or for the whole client, with `requestTimeout` in seconds (1–300, fractions allowed). The SDK sends it as the `X-Request-Timeout` header; the server reports the value it applied in `ApiError.appliedTimeout`.
+
+```typescript
+const client = new CPluginWebApiClient({
+  env: 'prod',
+  clientId: '...',
+  clientSecret: '...',
+  requestTimeout: 20,                      // every operation that has a server timeout
+});
+
+await client.mt4.getTradesUserHistoryLogin(tp, 817542, { fromTime, toTime }, { requestTimeout: 120 });   // this call only
+```
+
+A per-call value overrides the client-wide one; a value outside 1–300 throws a `TypeError` before anything is sent. Every generated method, the MT4 x86 sidecar ones included, has a server timeout; the client-wide value is not sent only to `listTradePlatforms()`, which does not call a trading platform.
+
+The client deadline is kept longer than the server timeout: `max(timeoutMs, server timeout + 30 s)`, where the server timeout is the requested one or the operation's default. The margin covers the up to 20 s the server may add while it opens the trading platform connection for this request, plus transfer time, so the server's own answer arrives instead of a local abort. A short `requestTimeout` therefore does not make the client give up sooner than about 30 s; use an `AbortSignal` in the options for a hard local limit.
+
+### Error codes
+
+| `code` | `outcome` | Meaning | What to do |
+|---|---|---|---|
+| `Timeout` | `timeout` | A read did not finish in time. Nothing was changed. | Safe to repeat. |
+| `Busy` | `not-started` | Refused before it was sent to the trading server. Nothing was executed. | Safe to repeat, preferably after a pause. |
+| `OutcomeUnknown` | `unknown` | A trade or change did not finish in time and **may still be applied** by the server. | Do not repeat blindly — see below. |
+| `OutcomeUnknown` | `in-progress` | A request with the same `Idempotency-Key` is still running; this one was not executed. | Repeat later with the same key. |
+
+`outcome` is the `X-Request-Outcome` response header, available as `ApiError.outcome`. Two helpers classify any caught value:
+
+- `isRetryable(err)` — the server says the request changed nothing and may be sent again as is (`Timeout`, `Busy`).
+- `isOutcomeUnknown(err)` — the server does not know yet whether the operation took effect (`OutcomeUnknown`).
+
+Both return `false` for anything that is not an `ApiError`. A network error or a client deadline abort on a `POST`/`PATCH` is just as uncertain as `OutcomeUnknown`, and is recovered the same way.
+
+### Safe recovery with `Idempotency-Key`
+
+Send an `Idempotency-Key` with every trade or change. The server reserves the key when the request starts: a repeat while the first request is still running is answered with `OutcomeUnknown` / `in-progress` and **not executed**; a repeat after it finished returns the original result. Repeating the same request with the same key is therefore the safe way to learn the outcome: within the server's idempotency window it never executes the operation twice. Transient answers (`Busy`, `Timeout`, `NoConnect`, `Internal`) are not stored, so a repeat after them executes normally.
+
+```typescript
+import { ApiError, isOutcomeUnknown, isRetryable } from '@mywebapi.com/sdk';
+
+const key = crypto.randomUUID();                  // one key per logical operation, reused on every repeat
+const send = () =>
+  client.mt4.postTradeTransaction(tp, transaction, { headers: { 'Idempotency-Key': key } });
+
+async function sendWithRecovery(maxAttempts = 5) {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await send();
+    } catch (err) {
+      // * Network errors and client aborts are as uncertain as OutcomeUnknown.
+      const uncertain = isOutcomeUnknown(err) || !(err instanceof ApiError);
+      if (attempt >= maxAttempts || !(uncertain || isRetryable(err))) throw err;
+      await new Promise((resolve) => setTimeout(resolve, attempt * 2_000));   // then: same request, same key
+    }
+  }
+}
+```
+
+Without an `Idempotency-Key`, check the resulting state (for example the account's open trades) before sending a trade again.
+
+### Automatic retries
+
+The SDK repeats a request by itself only when that is safe by HTTP semantics, and only on transient transport failures (`408`, `429`, `502`, `503`, `504`) and retryable network errors:
+
+- `GET`, `HEAD`, and `OPTIONS` — safe by definition.
+- `PUT` and `DELETE` — treated as idempotent by the transport.
+- `POST` and `PATCH` — never repeated automatically, even when an `Idempotency-Key` header is present.
+
+Envelope errors — including `Timeout`, `Busy` and `OutcomeUnknown` — are never repeated automatically; the helpers above leave the decision to the caller. An aborted request is never retried. Backoff is exponential (default 3 attempts, base 500 ms, factor 2, ±25% jitter) with `Retry-After` honoured (both `delta-seconds` and HTTP-date forms). All attempts share the one request deadline. Override per-client:
 
 ```typescript
 const client = new CPluginWebApiClient({
@@ -149,20 +241,17 @@ try {
 
 ## Idempotency
 
-Mutating endpoints (POST / PATCH / PUT / DELETE) accept an optional `Idempotency-Key` header for safe retries. Pass it in the options object:
+Mutating endpoints accept an optional `Idempotency-Key` header, passed in the options argument like any other header. The SDK forwards it to the server for its own deduplication and does not treat it as permission to replay `POST` or `PATCH`.
 
 ```typescript
 const tp = '3029d415-d0a6-4710-a9c1-8cb063ef872f';
 
-await client.mt4.patchUserRecordLogin(
-  tp,
-  817542,
-  { comment: 'updated comment' },
-  { 'idempotency-key': 'my-request-id-12345' },
-);
+await client.mt4.postTradeTransaction(tp, transaction, {
+  headers: { 'Idempotency-Key': 'my-request-id-12345' },
+});
 ```
 
-Any string ≤255 chars is valid. Two calls with the same key within the server's `cacheTimeout` window return the cached response. Supplying a key also marks the request as idempotent for the retry layer, enabling automatic retry on transient failures.
+Keys are private to your API client and to the operation. A repeated key returns the original result instead of executing again; see [Safe recovery with `Idempotency-Key`](#safe-recovery-with-idempotency-key).
 
 ## Pagination helpers
 
@@ -208,8 +297,7 @@ for await (const pageItems of paginate((cursor) =>
 
 ```bash
 bun install
-bun run fetch-spec    # download swagger.json from running WebAPI (WEBAPI_BASE_URL env)
-bun run generate      # regenerate src/generated/api.d.ts
+bun run generate      # regenerate src/generated/
 bun run typecheck
 
 # Integration tests against the live WebAPI — needs env vars (or a .env file):
@@ -222,11 +310,8 @@ bun run build         # outputs dist/index.js + dist/*.d.ts
 
 ## SignalR (real-time streams)
 
-Real-time streaming is **built into this package** — there is no separate SignalR package. The only extra is the optional peer dependency `@microsoft/signalr`, installed **only if you use real-time** (the REST surface works without it):
+Real-time streaming clients are exported from this package. `@microsoft/signalr` is a required runtime dependency and is installed with the SDK; the build keeps the official package external so consumers can use their normal bundler/runtime.
 
-```sh
-bun add @microsoft/signalr   # or: npm install @microsoft/signalr
-```
 
 Open a hub from the same client — it reuses the client's environment and OAuth token:
 
@@ -241,6 +326,8 @@ await rt.stop();
 ```
 
 The `mt4` hubs expose ticks, trades, margin-call, user and symbol streams; the `mt5` hubs expose connection status and margin-call updates.
+
+Hub method calls addressed to a trading platform (such as subscribing to ticks) and the hub connection itself fail with an error when the trading server does not answer within 60 s; open streams are not affected.
 
 ## What's next
 

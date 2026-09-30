@@ -50,8 +50,8 @@ function makeFullMock(apiResponse: () => Response): typeof fetch {
 
     if (url.includes('/.well-known/openid-configuration')) {
       return json({
-        token_endpoint: 'https://auth.example/connect/token',
-        issuer: 'https://auth.example',
+        token_endpoint: 'https://pre.auth.cplugin.net/connect/token',
+        issuer: 'https://pre.auth.cplugin.net',
       });
     }
     if (url.endsWith('/connect/token')) {

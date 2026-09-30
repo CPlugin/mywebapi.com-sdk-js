@@ -285,4 +285,36 @@ describe('ClientCredentialsTokenProvider', () => {
     expect(parsed.get('client_secret')).toBe('csec');
     expect(parsed.get('scope')).toBe('webapi.read webapi.write');
   });
+  test('reuses a caller timeout signal after a completed token wait', async () => {
+    let tokenCalls = 0;
+    const mock = makeFetchMock({
+      discovery: () => jsonResponse(discoveryDoc),
+      token: async () => {
+        tokenCalls++;
+        if (tokenCalls === 1) return jsonResponse({ access_token: 'tok-first', expires_in: 3600 });
+        await new Promise((resolve) => setTimeout(resolve, 150));
+        return jsonResponse({ access_token: 'tok-second', expires_in: 3600 });
+      },
+    });
+    const provider = new ClientCredentialsTokenProvider({
+      clientId: 'cid',
+      clientSecret: 'csec',
+      identityUrl: 'https://identity.example',
+      fetch: mock.fetch,
+    });
+    const callerTimeout = AbortSignal.timeout(100);
+
+    expect(await provider.getToken({ signal: callerTimeout })).toBe('tok-first');
+    const secondWait = provider.getToken({ forceRefresh: true, signal: callerTimeout });
+    let caught: unknown = null;
+    try {
+      await secondWait;
+    } catch (error) {
+      caught = error;
+    }
+
+    expect(callerTimeout.aborted).toBe(true);
+    expect((caught as { name?: string } | null)?.name).toBe('TimeoutError');
+    expect(tokenCalls).toBe(2);
+  });
 });

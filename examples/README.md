@@ -14,16 +14,11 @@ Each builds on the previous one, adding a new capability.
 
 ```bash
 # From the clients/typescript directory:
-bun install              # installs devDependencies including @microsoft/signalr
+bun install
 ```
 
-`@microsoft/signalr` is a peer dependency required by examples 02 and 03.
-It is already listed in `devDependencies`; `bun install` covers it.
-If you use a stripped install, add it explicitly:
-
-```bash
-bun add @microsoft/signalr
-```
+`@microsoft/signalr` is a required runtime dependency for examples 02 and 03.
+It is installed automatically with the SDK and is available to examples 02 and 03.
 
 ---
 
