@@ -43,6 +43,8 @@ export const getGetPluginsGetUrl = (tradePlatform: string,) => {
  * wrapper marks this `[Obsolete]` on x64 (mtmanapi64.dll has
  * silently-changing plugin layouts); the x86 sidecar process loads
  * mtmanapi.dll where the layout is stable, so the call is safe.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List plugins (cached)
  */
 export const getPluginsGet = async (tradePlatform: string, options?: RequestInit): Promise<getPluginsGetResponse> => {
@@ -84,6 +86,8 @@ export const getGetPluginParamGetPosUrl = (tradePlatform: string,
  * Manager-pump call to the wrapper's `PluginParamGet(pos, out ConPluginParam)`.
  * The `ConPluginParam.Params` auto-dereferences a 32-bit pointer —
  * safe on x86, sign-extension hazard on x64. Sidecar-only.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get plugin parameters
  */
 export const getPluginParamGetPos = async (tradePlatform: string,
@@ -124,6 +128,8 @@ export const getPostPluginUpdateUrl = (tradePlatform: string,) => {
  *
  * Manager-live call to the wrapper's `PluginUpdate(ConPluginParam cpp)`.
  * Body is `MT4PluginParam` (the same shape `PluginParamGet` returns).
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update plugin parameter
  */
 export const postPluginUpdate = async (tradePlatform: string,
@@ -166,6 +172,8 @@ export const getGetCfgRequestPluginUrl = (tradePlatform: string,) => {
  * Returns the full plugin set with their parameter arrays — the
  * Manager-side equivalent of `PluginsGet` + per-plugin
  * `PluginParamGet` in one round-trip.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get plugin config (live)
  */
 export const getCfgRequestPlugin = async (tradePlatform: string, options?: RequestInit): Promise<getCfgRequestPluginResponse> => {
@@ -207,6 +215,8 @@ export const getPostCfgUpdatePluginUrl = (tradePlatform: string,) => {
  * `CfgUpdatePlugin(ConPlugin cp, PluginCfg[] cfgs)`. Body is
  * `MT4PluginParam` — the plugin metadata plus its parameter
  * array. Returns a bare-bool envelope.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update plugin config
  */
 export const postCfgUpdatePlugin = async (tradePlatform: string,

@@ -41,6 +41,8 @@ export const getPostNewsSendUrl = (tradePlatform: string,) => {
  * Manager (live) call to the wrapper's `NewsSend(NewsTopic news)`.
  * Sidecar-only because `mtmanapi64.dll` throws
  * `PlatformNotSupportedException` on the body setter.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Send news to terminals
  */
 export const postNewsSend = async (tradePlatform: string,
@@ -84,6 +86,8 @@ export const getPostMailSendUrl = (tradePlatform: string,) => {
  * The wrapper itself refuses to run on x64 (
  * `throw new WrapperException("MailSend cannot be called in x64 environment")`),
  * so this endpoint exists only in the sidecar build.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Send mail to accounts
  */
 export const postMailSend = async (tradePlatform: string,
@@ -126,6 +130,8 @@ export const getGetMailsRequestUrl = (tradePlatform: string,) => {
  * Returns the server-side mailbox store as a flat list of
  * `MT4MailBox` entries. Read-only; no batching parameters
  * (the wrapper has no native pagination).
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List server mail
  */
 export const getMailsRequest = async (tradePlatform: string, options?: RequestInit): Promise<getMailsRequestResponse> => {

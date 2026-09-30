@@ -10514,7 +10514,7 @@
           "MT4 v2 :: Sidecar \u2014 Messaging"
         ],
         "summary": "Send news to terminals",
-        "description": "Push a news item to all connected client terminals. Requires 'Send news' admin right.\r\n            \r\nManager (live) call to the wrapper's `NewsSend(NewsTopic news)`.\r\nSidecar-only because `mtmanapi64.dll` throws\r\n`PlatformNotSupportedException` on the body setter.",
+        "description": "Push a news item to all connected client terminals. Requires 'Send news' admin right.\r\n            \r\nManager (live) call to the wrapper's `NewsSend(NewsTopic news)`.\r\nSidecar-only because `mtmanapi64.dll` throws\r\n`PlatformNotSupportedException` on the body setter.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "name": "tradePlatform",
@@ -10524,6 +10524,18 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Request-Timeout",
+            "in": "header",
+            "description": "How long to wait for the trade server, in seconds (1\u2013300). Default for this operation: 15 s (change). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "schema": {
+              "maximum": 300,
+              "minimum": 1,
+              "type": "number",
+              "format": "double",
+              "default": 15
             }
           }
         ],
@@ -10592,7 +10604,7 @@
           "MT4 v2 :: Sidecar \u2014 Messaging"
         ],
         "summary": "Send mail to accounts",
-        "description": "Send an email to one or more client logins. Requires 'Email' admin right.\r\n            \r\nManager (live) call to the wrapper's\r\n`MailSend(MailBox mail, ICollection<int> logins)`.\r\nThe wrapper itself refuses to run on x64 (\r\n`throw new WrapperException(\"MailSend cannot be called in x64 environment\")`),\r\nso this endpoint exists only in the sidecar build.",
+        "description": "Send an email to one or more client logins. Requires 'Email' admin right.\r\n            \r\nManager (live) call to the wrapper's\r\n`MailSend(MailBox mail, ICollection<int> logins)`.\r\nThe wrapper itself refuses to run on x64 (\r\n`throw new WrapperException(\"MailSend cannot be called in x64 environment\")`),\r\nso this endpoint exists only in the sidecar build.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "name": "tradePlatform",
@@ -10602,6 +10614,18 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Request-Timeout",
+            "in": "header",
+            "description": "How long to wait for the trade server, in seconds (1\u2013300). Default for this operation: 15 s (change). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "schema": {
+              "maximum": 300,
+              "minimum": 1,
+              "type": "number",
+              "format": "double",
+              "default": 15
             }
           }
         ],
@@ -10670,7 +10694,7 @@
           "MT4 v2 :: Sidecar \u2014 Messaging"
         ],
         "summary": "List server mail",
-        "description": "List all mail messages currently stored on the MT4 server.\r\n            \r\nManager (live) call to the wrapper's `MailsRequest()`.\r\nReturns the server-side mailbox store as a flat list of\r\n`MT4MailBox` entries. Read-only; no batching parameters\r\n(the wrapper has no native pagination).",
+        "description": "List all mail messages currently stored on the MT4 server.\r\n            \r\nManager (live) call to the wrapper's `MailsRequest()`.\r\nReturns the server-side mailbox store as a flat list of\r\n`MT4MailBox` entries. Read-only; no batching parameters\r\n(the wrapper has no native pagination).\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "name": "tradePlatform",
@@ -10680,6 +10704,18 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Request-Timeout",
+            "in": "header",
+            "description": "How long to wait for the trade server, in seconds (1\u2013300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "schema": {
+              "maximum": 300,
+              "minimum": 1,
+              "type": "number",
+              "format": "double",
+              "default": 30
             }
           }
         ],
@@ -10703,7 +10739,7 @@
           "MT4 v2 :: Sidecar \u2014 Plugins"
         ],
         "summary": "List plugins (cached)",
-        "description": "List MT4 server plugins currently configured (pump-side cache).\r\n            \r\nManager-pump call to the wrapper's `PluginsGet()`. The\r\nwrapper marks this `[Obsolete]` on x64 (mtmanapi64.dll has\r\nsilently-changing plugin layouts); the x86 sidecar process loads\r\nmtmanapi.dll where the layout is stable, so the call is safe.",
+        "description": "List MT4 server plugins currently configured (pump-side cache).\r\n            \r\nManager-pump call to the wrapper's `PluginsGet()`. The\r\nwrapper marks this `[Obsolete]` on x64 (mtmanapi64.dll has\r\nsilently-changing plugin layouts); the x86 sidecar process loads\r\nmtmanapi.dll where the layout is stable, so the call is safe.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "name": "tradePlatform",
@@ -10713,6 +10749,18 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Request-Timeout",
+            "in": "header",
+            "description": "How long to wait for the trade server, in seconds (1\u2013300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "schema": {
+              "maximum": 300,
+              "minimum": 1,
+              "type": "number",
+              "format": "double",
+              "default": 10
             }
           }
         ],
@@ -10736,7 +10784,7 @@
           "MT4 v2 :: Sidecar \u2014 Plugins"
         ],
         "summary": "Get plugin parameters",
-        "description": "Get a single plugin's parameters by position in the `PluginsGet` list.\r\n            \r\nManager-pump call to the wrapper's `PluginParamGet(pos, out ConPluginParam)`.\r\nThe `ConPluginParam.Params` auto-dereferences a 32-bit pointer \u2014\r\nsafe on x86, sign-extension hazard on x64. Sidecar-only.",
+        "description": "Get a single plugin's parameters by position in the `PluginsGet` list.\r\n            \r\nManager-pump call to the wrapper's `PluginParamGet(pos, out ConPluginParam)`.\r\nThe `ConPluginParam.Params` auto-dereferences a 32-bit pointer \u2014\r\nsafe on x86, sign-extension hazard on x64. Sidecar-only.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "name": "tradePlatform",
@@ -10757,6 +10805,18 @@
               "minimum": 0,
               "type": "integer",
               "format": "int32"
+            }
+          },
+          {
+            "name": "X-Request-Timeout",
+            "in": "header",
+            "description": "How long to wait for the trade server, in seconds (1\u2013300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "schema": {
+              "maximum": 300,
+              "minimum": 1,
+              "type": "number",
+              "format": "double",
+              "default": 10
             }
           }
         ],
@@ -10780,7 +10840,7 @@
           "MT4 v2 :: Sidecar \u2014 Plugins"
         ],
         "summary": "Update plugin parameter",
-        "description": "Apply a plugin parameter update via the pump-side wrapper. Requires admin rights.\r\n            \r\nManager-live call to the wrapper's `PluginUpdate(ConPluginParam cpp)`.\r\nBody is `MT4PluginParam` (the same shape `PluginParamGet` returns).",
+        "description": "Apply a plugin parameter update via the pump-side wrapper. Requires admin rights.\r\n            \r\nManager-live call to the wrapper's `PluginUpdate(ConPluginParam cpp)`.\r\nBody is `MT4PluginParam` (the same shape `PluginParamGet` returns).\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "name": "tradePlatform",
@@ -10790,6 +10850,18 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Request-Timeout",
+            "in": "header",
+            "description": "How long to wait for the trade server, in seconds (1\u2013300). Default for this operation: 15 s (change). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "schema": {
+              "maximum": 300,
+              "minimum": 1,
+              "type": "number",
+              "format": "double",
+              "default": 15
             }
           }
         ],
@@ -10858,7 +10930,7 @@
           "MT4 v2 :: Sidecar \u2014 Plugins"
         ],
         "summary": "Get plugin config (live)",
-        "description": "Read the plugin configuration (Manager-live).\r\n            \r\nManager (live) call to the wrapper's `CfgRequestPlugin()`.\r\nReturns the full plugin set with their parameter arrays \u2014 the\r\nManager-side equivalent of `PluginsGet` + per-plugin\r\n`PluginParamGet` in one round-trip.",
+        "description": "Read the plugin configuration (Manager-live).\r\n            \r\nManager (live) call to the wrapper's `CfgRequestPlugin()`.\r\nReturns the full plugin set with their parameter arrays \u2014 the\r\nManager-side equivalent of `PluginsGet` + per-plugin\r\n`PluginParamGet` in one round-trip.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "name": "tradePlatform",
@@ -10868,6 +10940,18 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Request-Timeout",
+            "in": "header",
+            "description": "How long to wait for the trade server, in seconds (1\u2013300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "schema": {
+              "maximum": 300,
+              "minimum": 1,
+              "type": "number",
+              "format": "double",
+              "default": 10
             }
           }
         ],
@@ -10891,7 +10975,7 @@
           "MT4 v2 :: Sidecar \u2014 Plugins"
         ],
         "summary": "Update plugin config",
-        "description": "Update plugin configuration (Manager-live).\r\n            \r\nManager (live) call to the wrapper's\r\n`CfgUpdatePlugin(ConPlugin cp, PluginCfg[] cfgs)`. Body is\r\n`MT4PluginParam` \u2014 the plugin metadata plus its parameter\r\narray. Returns a bare-bool envelope.",
+        "description": "Update plugin configuration (Manager-live).\r\n            \r\nManager (live) call to the wrapper's\r\n`CfgUpdatePlugin(ConPlugin cp, PluginCfg[] cfgs)`. Body is\r\n`MT4PluginParam` \u2014 the plugin metadata plus its parameter\r\narray. Returns a bare-bool envelope.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "name": "tradePlatform",
@@ -10901,6 +10985,18 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Request-Timeout",
+            "in": "header",
+            "description": "How long to wait for the trade server, in seconds (1\u2013300). Default for this operation: 15 s (change). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "schema": {
+              "maximum": 300,
+              "minimum": 1,
+              "type": "number",
+              "format": "double",
+              "default": 15
             }
           }
         ],
@@ -10969,7 +11065,7 @@
           "MT4 v2 :: Sidecar \u2014 Batch reads"
         ],
         "summary": "Snapshot all users",
-        "description": "Atomic snapshot of all registered users on the MT4 server.\r\n            \r\nManager (live) call to the wrapper's `UsersSnapshot()`.\r\nIterates `UnpackObject<UserRecord>(i)` over the native\r\narray \u2014 on mtmanapi64.dll the per-struct cost combined with\r\nASLR alignment triggers access violations after some iterations,\r\nso this endpoint is sidecar-only.",
+        "description": "Atomic snapshot of all registered users on the MT4 server.\r\n            \r\nManager (live) call to the wrapper's `UsersSnapshot()`.\r\nIterates `UnpackObject<UserRecord>(i)` over the native\r\narray \u2014 on mtmanapi64.dll the per-struct cost combined with\r\nASLR alignment triggers access violations after some iterations,\r\nso this endpoint is sidecar-only.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "name": "tradePlatform",
@@ -10989,6 +11085,18 @@
               "type": "integer",
               "format": "int32",
               "default": 100000
+            }
+          },
+          {
+            "name": "X-Request-Timeout",
+            "in": "header",
+            "description": "How long to wait for the trade server, in seconds (1\u2013300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "schema": {
+              "maximum": 300,
+              "minimum": 1,
+              "type": "number",
+              "format": "double",
+              "default": 30
             }
           }
         ],
@@ -11012,7 +11120,7 @@
           "MT4 v2 :: Sidecar \u2014 Batch reads"
         ],
         "summary": "Read user-records sync",
-        "description": "Read user records buffered by a prior `UsersSyncStart` call.\r\n            \r\nManager (live) call to the wrapper's `UsersSyncRead()`.\r\nMust be preceded by `POST UsersSyncStart` on the main x64\r\nAPI to seed the server-side snapshot. Same UnpackObject hazard\r\nas `UsersSnapshot` \u2014 sidecar-only.",
+        "description": "Read user records buffered by a prior `UsersSyncStart` call.\r\n            \r\nManager (live) call to the wrapper's `UsersSyncRead()`.\r\nMust be preceded by `POST UsersSyncStart` on the main x64\r\nAPI to seed the server-side snapshot. Same UnpackObject hazard\r\nas `UsersSnapshot` \u2014 sidecar-only.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "name": "tradePlatform",
@@ -11032,6 +11140,18 @@
               "type": "integer",
               "format": "int32",
               "default": 100000
+            }
+          },
+          {
+            "name": "X-Request-Timeout",
+            "in": "header",
+            "description": "How long to wait for the trade server, in seconds (1\u2013300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "schema": {
+              "maximum": 300,
+              "minimum": 1,
+              "type": "number",
+              "format": "double",
+              "default": 30
             }
           }
         ],
@@ -11055,7 +11175,7 @@
           "MT4 v2 :: Sidecar \u2014 Batch reads"
         ],
         "summary": "Snapshot all trades",
-        "description": "Atomic snapshot of all open/pending trades on the MT4 server.\r\n            \r\nManager (live) call to the wrapper's `TradesSnapshot()`.\r\nSame UnpackObject-loop hazard as the user batch reads. Sidecar-only.",
+        "description": "Atomic snapshot of all open/pending trades on the MT4 server.\r\n            \r\nManager (live) call to the wrapper's `TradesSnapshot()`.\r\nSame UnpackObject-loop hazard as the user batch reads. Sidecar-only.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "name": "tradePlatform",
@@ -11075,6 +11195,18 @@
               "type": "integer",
               "format": "int32",
               "default": 100000
+            }
+          },
+          {
+            "name": "X-Request-Timeout",
+            "in": "header",
+            "description": "How long to wait for the trade server, in seconds (1\u2013300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "schema": {
+              "maximum": 300,
+              "minimum": 1,
+              "type": "number",
+              "format": "double",
+              "default": 30
             }
           }
         ],
@@ -11098,7 +11230,7 @@
           "MT4 v2 :: Sidecar \u2014 Batch reads"
         ],
         "summary": "Read trade-records sync",
-        "description": "Read trade records buffered by a prior `TradesSyncStart` call.\r\n            \r\nManager (live) call to the wrapper's `TradesSyncRead()`.\r\nMust be preceded by `POST TradesSyncStart` on the main x64\r\nAPI. Same UnpackObject hazard \u2014 sidecar-only.",
+        "description": "Read trade records buffered by a prior `TradesSyncStart` call.\r\n            \r\nManager (live) call to the wrapper's `TradesSyncRead()`.\r\nMust be preceded by `POST TradesSyncStart` on the main x64\r\nAPI. Same UnpackObject hazard \u2014 sidecar-only.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "name": "tradePlatform",
@@ -11118,6 +11250,18 @@
               "type": "integer",
               "format": "int32",
               "default": 100000
+            }
+          },
+          {
+            "name": "X-Request-Timeout",
+            "in": "header",
+            "description": "How long to wait for the trade server, in seconds (1\u2013300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "schema": {
+              "maximum": 300,
+              "minimum": 1,
+              "type": "number",
+              "format": "double",
+              "default": 30
             }
           }
         ],
@@ -11141,7 +11285,7 @@
           "MT4 v2 :: Sidecar \u2014 ExternalCommand"
         ],
         "summary": "Send plugin command (binary)",
-        "description": "Pass arbitrary binary payload to the MT4 server's plugin pipeline.\r\n            \r\n<br>\r\nManager (live) call via the wrapper's\r\n`ExternalCommandCustom<byte[], byte[]>` overload with a\r\npass-through byte-array marshaller. The first installed plugin\r\nthat returns `RET_OK` wins; its response bytes become the\r\npayload's `Data` field.\r\n<br>\r\nWire format: `byte[]` serializes as base64 in JSON. Clients\r\nagree with the plugin author on the binary layout.\r\n<br><b>Why sidecar-only:</b> the wrapper's binary variants rely on\r\n`Marshal.SizeOf` + native `ExternalCommand` dispatch.\r\nOn `mtmanapi64.dll` the signed/unsigned marshalling\r\ndiverges from `mtmanapi.dll` \u2014 same payload byte-for-byte\r\ncan decode differently on x64. The x86 sidecar process loads the\r\n32-bit DLL where the marshalling is the original one.\r\n<br>\r\nThe wrapper's third `ExternalCommandCustom` overload that\r\ntakes an `ICustomSerializer` interface is genuinely not\r\nREST-translatable \u2014 it requires the caller to provide C#\r\nserialization logic in-process. Not exposed.\r\n",
+        "description": "Pass arbitrary binary payload to the MT4 server's plugin pipeline.\r\n            \r\n<br>\r\nManager (live) call via the wrapper's\r\n`ExternalCommandCustom<byte[], byte[]>` overload with a\r\npass-through byte-array marshaller. The first installed plugin\r\nthat returns `RET_OK` wins; its response bytes become the\r\npayload's `Data` field.\r\n<br>\r\nWire format: `byte[]` serializes as base64 in JSON. Clients\r\nagree with the plugin author on the binary layout.\r\n<br><b>Why sidecar-only:</b> the wrapper's binary variants rely on\r\n`Marshal.SizeOf` + native `ExternalCommand` dispatch.\r\nOn `mtmanapi64.dll` the signed/unsigned marshalling\r\ndiverges from `mtmanapi.dll` \u2014 same payload byte-for-byte\r\ncan decode differently on x64. The x86 sidecar process loads the\r\n32-bit DLL where the marshalling is the original one.\r\n<br>\r\nThe wrapper's third `ExternalCommandCustom` overload that\r\ntakes an `ICustomSerializer` interface is genuinely not\r\nREST-translatable \u2014 it requires the caller to provide C#\r\nserialization logic in-process. Not exposed.\r\n\n\n**Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "name": "tradePlatform",
@@ -11151,6 +11295,18 @@
             "schema": {
               "type": "string",
               "format": "uuid"
+            }
+          },
+          {
+            "name": "X-Request-Timeout",
+            "in": "header",
+            "description": "How long to wait for the trade server, in seconds (1\u2013300). Default for this operation: 60 s (server maintenance). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "schema": {
+              "maximum": 300,
+              "minimum": 1,
+              "type": "number",
+              "format": "double",
+              "default": 60
             }
           }
         ],

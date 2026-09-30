@@ -53,6 +53,8 @@ export const getGetUsersSnapshotUrl = (tradePlatform: string,
  * array — on mtmanapi64.dll the per-struct cost combined with
  * ASLR alignment triggers access violations after some iterations,
  * so this endpoint is sidecar-only.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Snapshot all users
  */
 export const getUsersSnapshot = async (tradePlatform: string,
@@ -103,6 +105,8 @@ export const getGetUsersSyncReadUrl = (tradePlatform: string,
  * Must be preceded by `POST UsersSyncStart` on the main x64
  * API to seed the server-side snapshot. Same UnpackObject hazard
  * as `UsersSnapshot` — sidecar-only.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Read user-records sync
  */
 export const getUsersSyncRead = async (tradePlatform: string,
@@ -151,6 +155,8 @@ export const getGetTradesSnapshotUrl = (tradePlatform: string,
  *
  * Manager (live) call to the wrapper's `TradesSnapshot()`.
  * Same UnpackObject-loop hazard as the user batch reads. Sidecar-only.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Snapshot all trades
  */
 export const getTradesSnapshot = async (tradePlatform: string,
@@ -200,6 +206,8 @@ export const getGetTradesSyncReadUrl = (tradePlatform: string,
  * Manager (live) call to the wrapper's `TradesSyncRead()`.
  * Must be preceded by `POST TradesSyncStart` on the main x64
  * API. Same UnpackObject hazard — sidecar-only.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Read trade-records sync
  */
 export const getTradesSyncRead = async (tradePlatform: string,

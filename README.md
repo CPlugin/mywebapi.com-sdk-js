@@ -149,7 +149,7 @@ const client = new CPluginWebApiClient({
 await client.mt4.getTradesUserHistoryLogin(tp, 817542, { fromTime, toTime }, { requestTimeout: 120 });   // this call only
 ```
 
-A per-call value overrides the client-wide one; a value outside 1–300 throws a `TypeError` before anything is sent. The client-wide value is not sent to the few operations that have no server timeout.
+A per-call value overrides the client-wide one; a value outside 1–300 throws a `TypeError` before anything is sent. Every generated method, the MT4 x86 sidecar ones included, has a server timeout; the client-wide value is not sent only to `listTradePlatforms()`, which does not call a trading platform.
 
 The client deadline is kept longer than the server timeout: `max(timeoutMs, server timeout + 30 s)`, where the server timeout is the requested one or the operation's default. The margin covers the up to 20 s the server may add while it opens the trading platform connection for this request, plus transfer time, so the server's own answer arrives instead of a local abort. A short `requestTimeout` therefore does not make the client give up sooner than about 30 s; use an `AbortSignal` in the options for a hard local limit.
 

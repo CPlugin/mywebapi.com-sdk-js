@@ -108,9 +108,23 @@ describe('generated timeout table', () => {
     expect(operationDefaultTimeout('get', '/api/v2/mt4/a%2Fb/servertime')).toBe(10);
   });
 
+  test('x86 sidecar operations carry their server defaults', () => {
+    expect(operationDefaultTimeout('GET', '/api/v2/MT4/tp-1/PluginsGet')).toBe(10);
+    expect(operationDefaultTimeout('GET', '/api/v2/MT4/tp-1/PluginParamGet/3')).toBe(10);
+    expect(operationDefaultTimeout('POST', '/api/v2/MT4/tp-1/MailSend')).toBe(15);
+    expect(operationDefaultTimeout('GET', '/api/v2/MT4/tp-1/TradesSyncRead')).toBe(30);
+    expect(operationDefaultTimeout('POST', '/api/v2/MT4/tp-1/ExternalCommandBinary')).toBe(60);
+  });
+
+  test('every v2 operation in the spec has a server timeout', () => {
+    const spec = JSON.parse(readFileSync(SPEC_PATH, 'utf8')) as { paths: Record<string, Record<string, unknown>> };
+    const verbs = new Set(['get', 'put', 'post', 'delete', 'patch']);
+    const operations = Object.values(spec.paths).flatMap((item) => Object.keys(item).filter((verb) => verbs.has(verb)));
+    expect(OPERATION_TIMEOUTS).toHaveLength(operations.length);
+  });
+
   test('operations without a server timeout have no default', () => {
     expect(operationDefaultTimeout('GET', '/api/TradePlatforms')).toBeUndefined();
-    expect(operationDefaultTimeout('GET', '/api/v2/MT4/tp-1/PluginsGet')).toBeUndefined();
     expect(operationDefaultTimeout('DELETE', '/api/v2/MT4/tp-1/ServerTime')).toBeUndefined();
   });
 
@@ -177,9 +191,18 @@ describe('X-Request-Timeout header', () => {
     expect(JSON.parse(String(sent.body))).toEqual({ comment: 'updated' });
   });
 
-  test('client default is not sent to operations without a server timeout', async () => {
+  test('x86 sidecar methods take the per-call option and the client default', async () => {
     const { client, apiCalls } = clientWith(() => ok([]), { requestTimeout: 20 });
+    await client.mt4.getPluginsGet('tp-1', { requestTimeout: 4 });
     await client.mt4.getPluginsGet('tp-1');
+    expect(header(apiCalls[0]!, 'X-Request-Timeout')).toBe('4');
+    expect(header(apiCalls[1]!, 'X-Request-Timeout')).toBe('20');
+  });
+
+  test('client default is not sent to operations without a server timeout', async () => {
+    const { client, apiCalls } = clientWith(() => json([]), { requestTimeout: 20 });
+    await client.listTradePlatforms();
+    expect(apiCalls[0]!.url).toContain('/api/TradePlatforms');
     expect(header(apiCalls[0]!, 'X-Request-Timeout')).toBeUndefined();
   });
 
@@ -222,6 +245,10 @@ describe('client deadline outlasts the server timeout', () => {
     expect(plan('GET', '/api/v2/MT4/tp-1/ServerTime', { clientDefault: 45 }).deadlineMs).toBe(45_000 + SERVER_ANSWER_MARGIN_MS);
   });
 
+  test('an x86 sidecar call gets its own default plus the margin', () => {
+    expect(plan('POST', '/api/v2/MT4/tp-1/ExternalCommandBinary').deadlineMs).toBe(60_000 + SERVER_ANSWER_MARGIN_MS);
+  });
+
   test('operation default covers history (30 s) and maintenance (60 s) calls', () => {
     const history = sampleOperation('GET', 30);
     const maintenance = sampleOperation('POST', 60);
@@ -253,7 +280,7 @@ describe('client deadline outlasts the server timeout', () => {
         const timer = setTimeout(() => resolve(ok([])), 150);
         init?.signal?.addEventListener('abort', () => { clearTimeout(timer); reject(init.signal?.reason); });
       })) as unknown as typeof fetch;
-    const error = await rejection(call(ctx(unguarded, { timeoutMs: 50 }), '/api/v2/MT4/tp-1/PluginsGet', { method: 'GET' }));
+    const error = await rejection(call(ctx(unguarded, { timeoutMs: 50 }), '/api/TradePlatforms', { method: 'GET' }));
     expect((error as { name?: string }).name).toBe('TimeoutError');
   });
 });
