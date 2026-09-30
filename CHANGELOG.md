@@ -23,11 +23,14 @@ Support for server-side request timeouts. Servers released before this feature d
 - The 13 MT4 x86 sidecar methods (`getPluginsGet`, `getPluginParamGetPos`, `getCfgRequestPlugin`, `postPluginUpdate`, `postCfgUpdatePlugin`, `getMailsRequest`, `postMailSend`, `postNewsSend`, `getUsersSnapshot`, `getUsersSyncRead`, `getTradesSnapshot`, `getTradesSyncRead`, `postExternalCommandBinary`) now have server timeouts too: they receive the client-wide `requestTimeout`, and their deadline is extended to the server default (10–60 s) plus the 30 s margin.
 - Flag types (for example `UsersRights`, `GroupRights`, `EnTradeRightsFlags`) are now `string` — the names of the set bits joined by `", "` — instead of a union of single names, which could not represent a combination. Code comparing such a field with one name must check for membership instead.
 - Calls that previously timed out locally at 30 s (history 30 s and maintenance 60 s server defaults) now wait for the server's answer.
+- The `options` argument of every generated method is typed as the SDK's own call options (including `requestTimeout`) instead of plain `RequestInit`, and headers passed there as a `Headers` object or an array of pairs are now kept when the method adds its own `Content-Type` — before, spreading a `Headers` object dropped them.
 
 ### Unchanged on purpose
 
 - `POST` and `PATCH` are never repeated automatically — not on `OutcomeUnknown`, not on `in-progress`, not on network errors or aborts. Envelope errors, including `Busy` and `Timeout`, are never repeated automatically either; the helpers leave that decision to the caller.
 
 ### Fixed
+
+- Development: the code generator (orval) is updated from 8.19.0 to 8.38.0, which fixes code-execution flaws triggered by a malicious OpenAPI document at generation time. The published package never contained the generator.
 
 - README idempotency example passed the key in a form the transport ignores; it now uses `{ headers: { 'Idempotency-Key': … } }`.
