@@ -2,6 +2,14 @@
 
 All notable changes to `@mywebapi.com/sdk`. The package follows [semver](https://semver.org/); while it is at `0.x`, a minor release may contain breaking changes.
 
+## Unreleased
+
+### Documentation
+
+- README: "What brokers do with it" — eight common back-office tasks (open positions of a group, trade stream, account creation, deposits and withdrawals, group and leverage changes, trade history, margin levels, symbol swaps), each with the SDK call that performs it; links to the product site, API reference and pricing.
+- Package metadata: `homepage` is now <https://mywebapi.com>; the description and keywords name the compatible trading platforms. Reaches npm with the next release.
+- Landing page (`docs/index.html`): the quick-start snippet called a `fromEnvironment()` factory that does not exist and read `time.data.timestamp` from an already unwrapped value; both corrected. The footer no longer shows a stale version and carries the trademark notice.
+
 ## 0.3.0
 
 Support for server-side request timeouts. Servers released before this feature do not read `X-Request-Timeout` and never send the new codes, so the SDK keeps working against them.

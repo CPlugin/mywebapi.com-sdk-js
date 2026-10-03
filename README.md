@@ -11,6 +11,85 @@ TypeScript client for the CPlugin WebAPI v2 — a management API for trading-pla
 - **Pagination helper** — `paged()` and `collectAll()` for cursor-based v2 list endpoints.
 - **Native fetch foundation** — uses platform `fetch` (Web API / Node.js 18+), injectable for testing.
 
+The WebAPI works with MetaTrader 4 and MetaTrader 5 servers through their Manager API, so a Node.js or browser application gets REST and WebSocket (SignalR) access to a broker's trade server without the native Windows Manager API libraries.
+
+- Product and sign-up: <https://mywebapi.com>
+- API reference: <https://cplugin.com/docs/webapi> · interactive: <https://cloud.mywebapi.com/swagger>
+- Pricing: <https://cplugin.com/docs/pricing-and-terms>
+- SDK reference (TypeDoc): <https://cplugin.github.io/mywebapi.com-sdk-js/>
+
+## What brokers do with it
+
+Typical back-office tasks, each with the SDK call that performs it. `client` is created as in [Quick start](#quick-start); `tp` is the trade platform id from the Toolbox.
+
+**List open positions of a group** (MT4 `AdmTradesRequest`, MT5 `PositionByGroup`):
+
+```typescript
+const mt4Trades = await client.mt4.getAdmTradesRequestGroup(tp, 'real-usd', { openOnly: true });
+const mt5Positions = await client.mt5.getPositionByGroupMask(tp, 'real\\*');
+for (const p of mt5Positions) console.log(p.login, p.symbol, p.volume, p.profit);
+```
+
+**Stream trades in real time** (SignalR hub; the MT4 hub streams trades, ticks, account and symbol changes and margin calls):
+
+```typescript
+const rt = client.realtime.mt4(tp);
+await rt.start();
+for await (const t of rt.streamTrades()) {
+  console.log(t.kind, t.order, t.login, t.symbol, t.volumeLots);
+}
+```
+
+**Open an account from a CRM** (`UserRecordNew`, then `UserPasswordSet`):
+
+```typescript
+const user = await client.mt4.postUserRecordNew(tp,
+  { login: 0, group: 'real-usd', name: 'John Smith', email: 'john@example.com', leverage: 100 },
+  { headers: { 'Idempotency-Key': crmRequestId } });
+await client.mt4.postUserPasswordSetLogin(tp, user.login!, newPassword);
+```
+
+**Post a deposit or a withdrawal** (`TradeTransaction` balance operation; a negative amount withdraws):
+
+```typescript
+await client.mt4.postTradeTransaction(tp,
+  { tradeTransactionType: 'BrBalance', tradeCommand: 'Balance', orderBy: 1001, price: 500, comment: 'Deposit #8812' },
+  { headers: { 'Idempotency-Key': paymentId } });
+```
+
+**Move an account to another group or change its leverage** (JSON Merge Patch, MT4 and MT5):
+
+```typescript
+await client.mt4.patchUserRecordLogin(tp, 1001, { group: 'real-vip', leverage: 200 });
+await client.mt5.patchUserRecordLogin(tp, 50001, { leverage: 200 });
+```
+
+**Read trade history for reports and statements** (`TradesUserHistory`, MT5 `DealByGroup`):
+
+```typescript
+const closed = await client.mt4.getTradesUserHistoryLogin(tp, 1001,
+  { fromTime: '2026-09-01T00:00:00Z', toTime: '2026-10-01T00:00:00Z' });
+const mt5Deals = await client.mt5.getDealByGroupMask(tp, 'real\\*', { limit: 1000 });
+```
+
+**Watch margin levels** (cached snapshot of every account, then the live margin-call stream):
+
+```typescript
+const atRisk = (await client.mt4.getMarginsGet(tp)).filter((m) => (m.level ?? 0) > 0 && (m.level ?? 0) < 100);
+const rt = client.realtime.mt4(tp);
+await rt.start();
+for await (const m of rt.streamMarginCallUpdates()) console.log('margin call', m.login, m.level);
+```
+
+**Change symbol settings, for example swaps** (`SymbolConfig` on MT4, `SymbolRecord` on MT5):
+
+```typescript
+await client.mt4.patchSymbolConfigSymbol(tp, 'EURUSD', { swapLong: -6.1, swapShort: 1.2 });
+await client.mt5.patchSymbolRecordSymbol(tp, 'EURUSD', { swapLong: -6.1, swapShort: 1.2 });
+```
+
+Every other endpoint (trading groups, server configuration, backups, journal, charts, news, plugins) is a method on `client.mt4` or `client.mt5`; see the [API reference](https://cplugin.com/docs/webapi) and the [TypeDoc pages](https://cplugin.github.io/mywebapi.com-sdk-js/).
+
 ## Install
 
 ```bash
