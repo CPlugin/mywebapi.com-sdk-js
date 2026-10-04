@@ -2,7 +2,7 @@
 
 TypeScript client for the CPlugin WebAPI v2 — a management API for trading-platform servers.
 
-**Status:** Version `0.3.0`. The package keeps the generated REST catalog and typed MT4/MT5 realtime clients in one entry point; minor releases may introduce breaking changes while the package remains at `0.x`. Pin a version in production.
+**Status:** Version `0.3.1`. The package keeps the generated REST catalog and typed MT4/MT5 realtime clients in one entry point; minor releases may introduce breaking changes while the package remains at `0.x`. Pin a version in production.
 
 - **Auto-generated types** from the live OpenAPI spec — all endpoints, DTOs, and enums are exact and stay in sync with the server.
 - **Unified entry point** — `CPluginWebApiClient` with `mt4` and `mt5` namespaces; credentials and token management configured once at instantiation.
@@ -11,7 +11,7 @@ TypeScript client for the CPlugin WebAPI v2 — a management API for trading-pla
 - **Pagination helper** — `paged()` and `collectAll()` for cursor-based v2 list endpoints.
 - **Native fetch foundation** — uses platform `fetch` (Web API / Node.js 18+), injectable for testing.
 
-The WebAPI works with MetaTrader 4 and MetaTrader 5 servers through their Manager API, so a Node.js or browser application gets REST and WebSocket (SignalR) access to a broker's trade server without the native Windows Manager API libraries.
+The WebAPI works with MetaTrader 4 and MetaTrader 5 servers, so a Node.js or browser application gets REST and WebSocket (SignalR) access to a broker's trade server without installing native Windows platform libraries.
 
 - Product and sign-up: <https://mywebapi.com>
 - API reference: <https://cplugin.com/docs/webapi> · interactive: <https://cloud.mywebapi.com/swagger>
