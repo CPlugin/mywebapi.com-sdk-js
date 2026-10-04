@@ -1,8 +1,8 @@
 {
   "name": "@mywebapi.com/sdk",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "license": "MIT",
-  "description": "TypeScript SDK for CPlugin WebAPI: REST and WebSocket (SignalR) client that works with MetaTrader 4 and MetaTrader 5 servers. Accounts, open positions, deposits, trade history, groups and symbols for brokers, from Node.js and browsers; OAuth2, retries, pagination and typed models included. MetaTrader is a trademark of MetaQuotes Ltd.; this project is not affiliated with MetaQuotes.",
+  "description": "TypeScript SDK for CPlugin WebAPI: REST and WebSocket (SignalR) client that works with MetaTrader 4 and MetaTrader 5 servers, for Node.js and browsers. MetaTrader is a trademark of MetaQuotes Ltd.; not affiliated with MetaQuotes.",
   "type": "module",
   "main": "./dist/node/index.js",
   "types": "./dist/index.d.ts",
