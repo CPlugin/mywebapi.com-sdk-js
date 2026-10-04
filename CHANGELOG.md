@@ -2,6 +2,21 @@
 
 All notable changes to `@mywebapi.com/sdk`. The package follows [semver](https://semver.org/); while it is at `0.x`, a minor release may contain breaking changes.
 
+## 0.3.1
+
+Regenerated from the WebAPI v2 specification of 03.10.2026; no change to the API surface or to the request and response types.
+
+### Changed
+
+- The MT4 enum fields of `MT4TradeTransaction` (`tradeTransactionType`, `tradeCommand`, `tradeRequestFlags`, used by `postTradeTransaction` and `postTradeCheckStops`) and `MT4UsersGroupOp.command` now document the values the server accepts; the old descriptions listed names such as `ModifyTrade` and `BalanceAdd` that the server does not know. Values are case-insensitive, and the numeric value is accepted too.
+- An unknown value in `tradeTransactionType`, `tradeCommand` or `MT4UsersGroupOp.command` is now refused by the server with an `ApiError` whose `code` is `Validation`; until 03.10.2026 it was silently replaced by the enum's default. The behaviour belongs to the server, so it applies to every SDK version; check code that builds these values from user input.
+
+### Documentation
+
+- README: "What brokers do with it" — eight common back-office tasks (open positions of a group, trade stream, account creation, deposits and withdrawals, group and leverage changes, trade history, margin levels, symbol swaps), each with the SDK call that performs it; links to the product site, API reference and pricing.
+- Package metadata: `homepage` is now <https://mywebapi.com>; the description and keywords name the compatible trading platforms (MetaTrader 4 and MetaTrader 5).
+- Landing page (`docs/index.html`): the quick-start snippet called a `fromEnvironment()` factory that does not exist and read `time.data.timestamp` from an already unwrapped value; both corrected. The footer no longer shows a stale version and carries the trademark notice.
+
 ## 0.3.0
 
 Support for server-side request timeouts. Servers released before this feature do not read `X-Request-Timeout` and never send the new codes, so the SDK keeps working against them.

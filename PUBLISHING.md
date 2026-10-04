@@ -3,9 +3,9 @@
 ## Before the first release
 
 1. **Package name** — `@mywebapi.com/sdk` (npm org `mywebapi.com` must exist).
-2. **Update repository URLs** — replace `CPlugin/mywebapi.com-sdk-js` in
-   `package.json` (`repository.url`, `homepage`, `bugs.url`) with the real
-   GitHub org and repo name.
+2. **Repository URLs** — `package.json` points `repository.url` and `bugs.url`
+   at `CPlugin/mywebapi.com-sdk-js`; `homepage` is the product site,
+   <https://mywebapi.com>.
 3. **Authentication: npm Trusted Publishing (OIDC) — no token to store or rotate.**
    - First publish is a one-time bootstrap (npm needs the package to exist before
      a Trusted Publisher can be attached): publish `v0.1.0` once using a short-lived
