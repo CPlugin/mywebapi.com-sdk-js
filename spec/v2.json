@@ -2,9 +2,24 @@
   "openapi": "3.0.1",
   "info": {
     "title": "JSON-Pure WebAPI for MT4/MT5",
-    "description": "It uses native MetaQuote ManagerAPI for both MT4 and MT5 connection. Plus, it keep pumping connection active, so all *Get calls will run much faster, than *Request.<br/>Here partially used the idea of JSON-Pure API, only HTTP code 200 is acceptable. Other codes signal about errors on server side, which are out of control of client, like wrong parameters, platform unavailability, etc.",
+    "description": "Uses the native MetaQuotes Manager API to connect to MT4 and MT5 trade servers and keeps a pumping connection open, so the `\u2026Get` calls answer from it much faster than the `\u2026Request` calls.\n\nPartly follows the JSON-Pure API idea: a successful call answers HTTP 200; any other code reports an error, such as wrong parameters or an unavailable trade platform.",
+    "contact": {
+      "name": "CPlugin",
+      "url": "https://mywebapi.com",
+      "email": "info@cplugin.com"
+    },
     "version": "2.0"
   },
+  "servers": [
+    {
+      "url": "https://cloud.mywebapi.com",
+      "description": "Production"
+    },
+    {
+      "url": "https://pre.mywebapi.com",
+      "description": "Sandbox \u2014 free, no SLA, may be reset"
+    }
+  ],
   "paths": {
     "/api/v2/MT4/{tradePlatform}/ServerTime": {
       "get": {
@@ -4816,7 +4831,7 @@
                     "$ref": "#/components/schemas/MT4TradeTransaction"
                   }
                 ],
-                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"OpenPending\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested."
+                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"PendingOpen\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested.\r\nThe valid names in the API reference are generated from the enums\r\n(CPlugin.SaaSWebApps.WebAPI.Code.EnumStringSchemaFilter), so keep them out of the summaries."
               }
             },
             "application/json": {
@@ -4826,7 +4841,7 @@
                     "$ref": "#/components/schemas/MT4TradeTransaction"
                   }
                 ],
-                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"OpenPending\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested."
+                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"PendingOpen\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested.\r\nThe valid names in the API reference are generated from the enums\r\n(CPlugin.SaaSWebApps.WebAPI.Code.EnumStringSchemaFilter), so keep them out of the summaries."
               }
             },
             "text/json": {
@@ -4836,7 +4851,7 @@
                     "$ref": "#/components/schemas/MT4TradeTransaction"
                   }
                 ],
-                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"OpenPending\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested."
+                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"PendingOpen\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested.\r\nThe valid names in the API reference are generated from the enums\r\n(CPlugin.SaaSWebApps.WebAPI.Code.EnumStringSchemaFilter), so keep them out of the summaries."
               }
             },
             "application/*+json": {
@@ -4846,7 +4861,7 @@
                     "$ref": "#/components/schemas/MT4TradeTransaction"
                   }
                 ],
-                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"OpenPending\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested."
+                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"PendingOpen\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested.\r\nThe valid names in the API reference are generated from the enums\r\n(CPlugin.SaaSWebApps.WebAPI.Code.EnumStringSchemaFilter), so keep them out of the summaries."
               }
             }
           }
@@ -6806,7 +6821,7 @@
           "MT4 v2 :: Trades"
         ],
         "summary": "Modify trade record (admin)",
-        "description": "Admin direct edit of a single trade record \u2014 Type 1 with read-first.\r\n            \r\n<br>\r\nLow-level back-office override that writes directly to the trade\r\nrecord. For SL/TP edits prefer\r\n`POST TradeTransaction` with `tradeTransactionType=ModifyTrade`\r\n\u2014 that route goes through the wrapper's audited path. Use this\r\nendpoint for manual accounting corrections (commission/storage/taxes/\r\nprofit, comment, magic) that the standard TradeTransaction path\r\ndoes not cover.\r\n<br>\r\nFlow: read existing trade via `TradeRecordsRequest`, patch the\r\nallow-listed fields in place, submit via `AdmTradeRecordModify`.\r\nOrder/Login/Symbol/Volume/OpenPrice/OpenTime/CloseTime and gateway\r\ninternals are preserved by virtue of not being on the input DTO.\r\n<br>\r\nIdempotency-Key strongly recommended. A retried edit without it can\r\nland twice \u2014 usually harmless, but generates audit log noise.\r\n\n\n**Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "Admin direct edit of a single trade record \u2014 Type 1 with read-first.\r\n            \r\n<br>\r\nLow-level back-office override that writes directly to the trade\r\nrecord. For SL/TP edits prefer\r\n`POST TradeTransaction` with `tradeTransactionType=BrModify`\r\n\u2014 that route goes through the wrapper's audited path. Use this\r\nendpoint for manual accounting corrections (commission/storage/taxes/\r\nprofit, comment, magic) that the standard TradeTransaction path\r\ndoes not cover.\r\n<br>\r\nFlow: read existing trade via `TradeRecordsRequest`, patch the\r\nallow-listed fields in place, submit via `AdmTradeRecordModify`.\r\nOrder/Login/Symbol/Volume/OpenPrice/OpenTime/CloseTime and gateway\r\ninternals are preserved by virtue of not being on the input DTO.\r\n<br>\r\nIdempotency-Key strongly recommended. A retried edit without it can\r\nland twice \u2014 usually harmless, but generates audit log noise.\r\n\n\n**Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "name": "tradePlatform",
@@ -6852,7 +6867,7 @@
                     "$ref": "#/components/schemas/MT4TradeUpdate"
                   }
                 ],
-                "description": "Type 1 mutator input for the admin direct-edit endpoint\r\n`AdmTradeRecordModify`. Only the fields a back-office tool would\r\nlegitimately need to adjust are exposed; everything else (order id,\r\nlogin, symbol, volume, open/close times, gateway internals, conversion\r\nrates, API data blobs) is preserved from the server-side read.\r\n            \r\n<br>\r\nFor typical stop-loss / take-profit edits prefer\r\n`POST TradeTransaction` with `tradeTransactionType=ModifyTrade`\r\n\u2014 that goes through the wrapper's audited path. This endpoint is the\r\nlow-level admin override for back-office corrections.\r\n"
+                "description": "Type 1 mutator input for the admin direct-edit endpoint\r\n`AdmTradeRecordModify`. Only the fields a back-office tool would\r\nlegitimately need to adjust are exposed; everything else (order id,\r\nlogin, symbol, volume, open/close times, gateway internals, conversion\r\nrates, API data blobs) is preserved from the server-side read.\r\n            \r\n<br>\r\nFor typical stop-loss / take-profit edits prefer\r\n`POST TradeTransaction` with `tradeTransactionType=BrModify`\r\n\u2014 that goes through the wrapper's audited path. This endpoint is the\r\nlow-level admin override for back-office corrections.\r\n"
               }
             },
             "application/json": {
@@ -6862,7 +6877,7 @@
                     "$ref": "#/components/schemas/MT4TradeUpdate"
                   }
                 ],
-                "description": "Type 1 mutator input for the admin direct-edit endpoint\r\n`AdmTradeRecordModify`. Only the fields a back-office tool would\r\nlegitimately need to adjust are exposed; everything else (order id,\r\nlogin, symbol, volume, open/close times, gateway internals, conversion\r\nrates, API data blobs) is preserved from the server-side read.\r\n            \r\n<br>\r\nFor typical stop-loss / take-profit edits prefer\r\n`POST TradeTransaction` with `tradeTransactionType=ModifyTrade`\r\n\u2014 that goes through the wrapper's audited path. This endpoint is the\r\nlow-level admin override for back-office corrections.\r\n"
+                "description": "Type 1 mutator input for the admin direct-edit endpoint\r\n`AdmTradeRecordModify`. Only the fields a back-office tool would\r\nlegitimately need to adjust are exposed; everything else (order id,\r\nlogin, symbol, volume, open/close times, gateway internals, conversion\r\nrates, API data blobs) is preserved from the server-side read.\r\n            \r\n<br>\r\nFor typical stop-loss / take-profit edits prefer\r\n`POST TradeTransaction` with `tradeTransactionType=BrModify`\r\n\u2014 that goes through the wrapper's audited path. This endpoint is the\r\nlow-level admin override for back-office corrections.\r\n"
               }
             },
             "text/json": {
@@ -6872,7 +6887,7 @@
                     "$ref": "#/components/schemas/MT4TradeUpdate"
                   }
                 ],
-                "description": "Type 1 mutator input for the admin direct-edit endpoint\r\n`AdmTradeRecordModify`. Only the fields a back-office tool would\r\nlegitimately need to adjust are exposed; everything else (order id,\r\nlogin, symbol, volume, open/close times, gateway internals, conversion\r\nrates, API data blobs) is preserved from the server-side read.\r\n            \r\n<br>\r\nFor typical stop-loss / take-profit edits prefer\r\n`POST TradeTransaction` with `tradeTransactionType=ModifyTrade`\r\n\u2014 that goes through the wrapper's audited path. This endpoint is the\r\nlow-level admin override for back-office corrections.\r\n"
+                "description": "Type 1 mutator input for the admin direct-edit endpoint\r\n`AdmTradeRecordModify`. Only the fields a back-office tool would\r\nlegitimately need to adjust are exposed; everything else (order id,\r\nlogin, symbol, volume, open/close times, gateway internals, conversion\r\nrates, API data blobs) is preserved from the server-side read.\r\n            \r\n<br>\r\nFor typical stop-loss / take-profit edits prefer\r\n`POST TradeTransaction` with `tradeTransactionType=BrModify`\r\n\u2014 that goes through the wrapper's audited path. This endpoint is the\r\nlow-level admin override for back-office corrections.\r\n"
               }
             },
             "application/*+json": {
@@ -6882,7 +6897,7 @@
                     "$ref": "#/components/schemas/MT4TradeUpdate"
                   }
                 ],
-                "description": "Type 1 mutator input for the admin direct-edit endpoint\r\n`AdmTradeRecordModify`. Only the fields a back-office tool would\r\nlegitimately need to adjust are exposed; everything else (order id,\r\nlogin, symbol, volume, open/close times, gateway internals, conversion\r\nrates, API data blobs) is preserved from the server-side read.\r\n            \r\n<br>\r\nFor typical stop-loss / take-profit edits prefer\r\n`POST TradeTransaction` with `tradeTransactionType=ModifyTrade`\r\n\u2014 that goes through the wrapper's audited path. This endpoint is the\r\nlow-level admin override for back-office corrections.\r\n"
+                "description": "Type 1 mutator input for the admin direct-edit endpoint\r\n`AdmTradeRecordModify`. Only the fields a back-office tool would\r\nlegitimately need to adjust are exposed; everything else (order id,\r\nlogin, symbol, volume, open/close times, gateway internals, conversion\r\nrates, API data blobs) is preserved from the server-side read.\r\n            \r\n<br>\r\nFor typical stop-loss / take-profit edits prefer\r\n`POST TradeTransaction` with `tradeTransactionType=BrModify`\r\n\u2014 that goes through the wrapper's audited path. This endpoint is the\r\nlow-level admin override for back-office corrections.\r\n"
               }
             }
           }
@@ -6907,7 +6922,7 @@
           "MT4 v2 :: Trades"
         ],
         "summary": "Submit trade transaction",
-        "description": "Submit a trade transaction \u2014 open / modify / close / balance op.\r\n            \r\n<br>\r\nPOST mutator covering every wrapper trade operation through the single\r\n`TradeTransaction` entry point. The request body's\r\n`tradeTransactionType` + `tradeCommand` combination selects\r\nthe actual operation (OpenPending+Buy, ModifyTrade, CloseMarket+Sell,\r\nBalanceAdd+Balance, etc).\r\n<br>\r\nOn success the response echoes the wrapper's mutated structure \u2014 most\r\nimportantly the `Order` field, which the server assigns on Open\r\noperations and clients use to track the ticket afterwards.\r\n<br><b>Idempotency-Key is essentially mandatory.</b> A retried trade\r\ntransaction without the header can open a second position, double-\r\nclose, or apply a balance op twice. With the header the second call\r\nreturns the cached envelope from the first.\r\n\n\n**Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "Submit a trade transaction \u2014 open / modify / close / balance op.\r\n            \r\n<br>\r\nPOST mutator covering every wrapper trade operation through the single\r\n`TradeTransaction` entry point. The request body's\r\n`tradeTransactionType` + `tradeCommand` combination selects\r\nthe actual operation \u2014 `OpenMarket`+`Buy`, `PendingOpen`+`BuyLimit`,\r\n`CloseMarket`+`Sell`, and the manager-side `Br*` types:\r\n`BrModify` (open price, SL, TP of an order), `BrDelete`,\r\n`BrBalance`+`Balance` or `Credit` (balance/credit operation on\r\n`orderBy`). The schema of the request body lists every accepted value.\r\n<br>\r\nAn unknown `tradeTransactionType`, `tradeCommand` or\r\n`tradeRequestFlags` value is refused with error code `Validation`\r\nand the list of valid values; nothing is sent to the trading platform.\r\nNames are case-insensitive; the numeric value of a member is accepted too.\r\n<br>\r\nOn success the response echoes the wrapper's mutated structure \u2014 most\r\nimportantly the `Order` field, which the server assigns on Open\r\noperations and clients use to track the ticket afterwards.\r\n<br><b>Idempotency-Key is essentially mandatory.</b> A retried trade\r\ntransaction without the header can open a second position, double-\r\nclose, or apply a balance op twice. With the header the second call\r\nreturns the cached envelope from the first.\r\n\n\n**Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "name": "tradePlatform",
@@ -6942,7 +6957,7 @@
                     "$ref": "#/components/schemas/MT4TradeTransaction"
                   }
                 ],
-                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"OpenPending\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested."
+                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"PendingOpen\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested.\r\nThe valid names in the API reference are generated from the enums\r\n(CPlugin.SaaSWebApps.WebAPI.Code.EnumStringSchemaFilter), so keep them out of the summaries."
               }
             },
             "application/json": {
@@ -6952,7 +6967,7 @@
                     "$ref": "#/components/schemas/MT4TradeTransaction"
                   }
                 ],
-                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"OpenPending\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested."
+                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"PendingOpen\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested.\r\nThe valid names in the API reference are generated from the enums\r\n(CPlugin.SaaSWebApps.WebAPI.Code.EnumStringSchemaFilter), so keep them out of the summaries."
               }
             },
             "text/json": {
@@ -6962,7 +6977,7 @@
                     "$ref": "#/components/schemas/MT4TradeTransaction"
                   }
                 ],
-                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"OpenPending\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested."
+                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"PendingOpen\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested.\r\nThe valid names in the API reference are generated from the enums\r\n(CPlugin.SaaSWebApps.WebAPI.Code.EnumStringSchemaFilter), so keep them out of the summaries."
               }
             },
             "application/*+json": {
@@ -6972,7 +6987,7 @@
                     "$ref": "#/components/schemas/MT4TradeTransaction"
                   }
                 ],
-                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"OpenPending\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested."
+                "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"PendingOpen\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested.\r\nThe valid names in the API reference are generated from the enums\r\n(CPlugin.SaaSWebApps.WebAPI.Code.EnumStringSchemaFilter), so keep them out of the summaries."
               }
             }
           }
@@ -17078,17 +17093,17 @@
         "properties": {
           "tradeTransactionType": {
             "type": "string",
-            "description": "Transaction type: OpenPending, OpenMarket, ModifyPending, ModifyTrade, DeletePending, CloseMarket, BalanceAdd, CreditAdd, etc.",
+            "description": "Transaction type (required). Manager-side operations use the `Br*` types, e.g. `BrBalance` with trade command `Balance` or `Credit` for a balance or credit operation.<br/>One of: PricesGet, PricesRequote, OpenInstant, OpenRequest, OpenMarket, PendingOpen, CloseInstant, CloseRequest, CloseMarket, Modify, Delete, CloseBy, CloseAll, BrOpen, BrClose, BrDelete, BrCloseBy, BrCloseAll, BrModify, BrActivate, BrComment, BrBalance. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation.",
             "nullable": true
           },
           "tradeCommand": {
             "type": "string",
-            "description": "Trade command: Buy, Sell, BuyLimit, SellLimit, BuyStop, SellStop, Balance, Credit",
+            "description": "Trade command. Empty means `Buy`.<br/>One of: Buy, Sell, BuyLimit, SellLimit, BuyStop, SellStop, Balance, Credit. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation.",
             "nullable": true
           },
           "tradeRequestFlags": {
             "type": "string",
-            "description": "Request flags: None, MarketOpen, Partial, NoExpiration, etc.",
+            "description": "Request flags (who placed the request). Empty means `None`.<br/>Flags, names joined by \", \": None, Signal, Expert, Gateway, Mobile, Web, API. Case-insensitive; numbers are accepted.",
             "nullable": true
           },
           "expiration": {
@@ -17148,7 +17163,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"OpenPending\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested."
+        "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"PendingOpen\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested.\r\nThe valid names in the API reference are generated from the enums\r\n(CPlugin.SaaSWebApps.WebAPI.Code.EnumStringSchemaFilter), so keep them out of the summaries."
       },
       "MT4TradeTransactionApiResponse": {
         "type": "object",
@@ -17159,7 +17174,7 @@
                 "$ref": "#/components/schemas/MT4TradeTransaction"
               }
             ],
-            "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"OpenPending\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested.",
+            "description": "v2 DTO for a trade transaction \u2014 input AND output of `TradeTransaction`.\r\nThe wrapper's `TradeTransInfo` is in/out: the caller fills the request\r\nfields (operation type, command, symbol, volume, price), submits via POST,\r\nand the server populates the resulting `Order` id (for Open) or\r\nechoes the modified record (for Modify/Close).\r\n            \r\nEnum fields (`TradeTransactionType`, `TradeCommand`,\r\n`TradeRequestFlags`) are exposed as plain strings. Clients submit\r\nthe enum name (e.g. `\"Buy\"`, `\"PendingOpen\"`); the response\r\nechoes the names back. This dodges the leaf-enum nested-generic STJ\r\nsource-gen quirk documented in feedback-stj-enum-leaf-nested.\r\nThe valid names in the API reference are generated from the enums\r\n(CPlugin.SaaSWebApps.WebAPI.Code.EnumStringSchemaFilter), so keep them out of the summaries.",
             "nullable": true
           },
           "error": {
@@ -17239,7 +17254,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "Type 1 mutator input for the admin direct-edit endpoint\r\n`AdmTradeRecordModify`. Only the fields a back-office tool would\r\nlegitimately need to adjust are exposed; everything else (order id,\r\nlogin, symbol, volume, open/close times, gateway internals, conversion\r\nrates, API data blobs) is preserved from the server-side read.\r\n            \r\n<br>\r\nFor typical stop-loss / take-profit edits prefer\r\n`POST TradeTransaction` with `tradeTransactionType=ModifyTrade`\r\n\u2014 that goes through the wrapper's audited path. This endpoint is the\r\nlow-level admin override for back-office corrections.\r\n"
+        "description": "Type 1 mutator input for the admin direct-edit endpoint\r\n`AdmTradeRecordModify`. Only the fields a back-office tool would\r\nlegitimately need to adjust are exposed; everything else (order id,\r\nlogin, symbol, volume, open/close times, gateway internals, conversion\r\nrates, API data blobs) is preserved from the server-side read.\r\n            \r\n<br>\r\nFor typical stop-loss / take-profit edits prefer\r\n`POST TradeTransaction` with `tradeTransactionType=BrModify`\r\n\u2014 that goes through the wrapper's audited path. This endpoint is the\r\nlow-level admin override for back-office corrections.\r\n"
       },
       "MT4User": {
         "type": "object",
@@ -17749,7 +17764,7 @@
         "properties": {
           "command": {
             "type": "string",
-            "description": "Bulk operation: `\"Delete\"`, `\"Enable\"`, `\"Disable\"`, `\"Leverage\"`, or `\"SetGroup\"`.",
+            "description": "Bulk operation.<br/>One of: Delete, Enable, Disable, Leverage, SetGroup. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation.",
             "nullable": true
           },
           "newGroup": {
@@ -21289,5 +21304,9 @@
       "name": "MT5ControllerV",
       "description": "MT5 Manager API v2 \u2014 clean envelope, structured errors, Idempotency-Key\r\nheader support, cache-hit billing exemption, path-based versioning.\r\nSee history.md for the customer-facing migration guide."
     }
-  ]
+  ],
+  "externalDocs": {
+    "description": "Guides (authentication, timeouts, idempotency, realtime) and the HTML API reference at https://mywebapi.com/reference/",
+    "url": "https://cplugin.com/docs/webapi"
+  }
 }
