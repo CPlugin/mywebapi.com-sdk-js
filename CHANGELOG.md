@@ -2,6 +2,12 @@
 
 All notable changes to `@mywebapi.com/sdk`. The package follows [semver](https://semver.org/); while it is at `0.x`, a minor release may contain breaking changes.
 
+## 0.3.2
+
+### Fixed
+
+- Package description shortened to fit npm's 255-character limit: the registry cut the 0.3.1 description mid-word and dropped its trademark notice. The release check (`ci/check-version.mjs`) now refuses a longer description. No code changes.
+
 ## 0.3.1
 
 Regenerated from the WebAPI v2 specification of 03.10.2026; no change to the API surface or to the request and response types.
