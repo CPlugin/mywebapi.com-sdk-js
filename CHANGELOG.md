@@ -2,6 +2,15 @@
 
 All notable changes to `@mywebapi.com/sdk`. The package follows [semver](https://semver.org/); while it is at `0.x`, a minor release may contain breaking changes.
 
+## 0.3.3
+
+Regenerated from the WebAPI v2 specification of 05.10.2026; no change to the API surface or to the request and response types.
+
+### Changed
+
+- The specification header (`info.description`) and the operation and schema descriptions in the generated code and in the API reference no longer name the server's internal library. The header now describes the API itself: it works with MetaTrader 4 and MetaTrader 5 trade servers and keeps a live connection to each of them.
+- Documentation only; no change in behaviour.
+
 ## 0.3.2
 
 ### Fixed
