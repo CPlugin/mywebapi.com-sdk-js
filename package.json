@@ -65,7 +65,7 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "orval": "8.38.0",
+    "orval": "8.45.0",
     "typedoc": "^0.28.19",
     "typescript": "^7.0.2"
   },
@@ -73,6 +73,6 @@
     "bun": ">=1.0.0"
   },
   "dependencies": {
-    "@microsoft/signalr": "10.0.0"
+    "@microsoft/signalr": "10.0.11"
   }
 }
