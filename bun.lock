@@ -5,7 +5,7 @@
     "": {
       "name": "@cplugin/saas-webapi-client",
       "dependencies": {
-        "@microsoft/signalr": "10.0.0",
+        "@microsoft/signalr": "10.0.11",
       },
       "devDependencies": {
         "@types/bun": "latest",
@@ -72,7 +72,7 @@
 
     "@gerrit0/mini-shiki": ["@gerrit0/mini-shiki@3.23.0", "", { "dependencies": { "@shikijs/engine-oniguruma": "^3.23.0", "@shikijs/langs": "^3.23.0", "@shikijs/themes": "^3.23.0", "@shikijs/types": "^3.23.0", "@shikijs/vscode-textmate": "^10.0.2" } }, "sha512-bEMORlG0cqdjVyCEuU0cDQbORWX+kYCeo0kV1lbxF5bt4r7SID2l9bqsxJEM0zndaxpOUT7riCyIVEuqq/Ynxg=="],
 
-    "@microsoft/signalr": ["@microsoft/signalr@10.0.0", "", { "dependencies": { "abort-controller": "^3.0.0", "eventsource": "^2.0.2", "fetch-cookie": "^2.0.3", "node-fetch": "^2.6.7", "ws": "^7.5.10" } }, "sha512-0BRqz/uCx3JdrOqiqgFhih/+hfTERaUfCZXFB52uMaZJrKaPRzHzMuqVsJC/V3pt7NozcNXGspjKiQEK+X7P2w=="],
+    "@microsoft/signalr": ["@microsoft/signalr@10.0.11", "", { "dependencies": { "abort-controller": "^3.0.0", "eventsource": "^2.0.2", "fetch-cookie": "^2.0.3", "node-fetch": "^2.6.7", "ws": "^7.5.10" } }, "sha512-FulOJ2EEtKvLQcswe/U7v8pzyXyk7Jua5xgWJPPwyQU/2Z9ORvKcVjyO75VvLsem+CJ1ORRexJ+7Bz1FCei2aw=="],
 
     "@orval/angular": ["@orval/angular@8.38.0", "", { "dependencies": { "@orval/core": "8.38.0" } }, "sha512-1ywkZY5bleynDqi3KGXfMdXaMh1+WnLGeJtYiKmo00kaZr606wFovFY0Nh35kqljrLzM0bVb5U1e/tIiFk734Q=="],
 
