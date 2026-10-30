@@ -2,6 +2,16 @@
 
 All notable changes to `@mywebapi.com/sdk`. The package follows [semver](https://semver.org/); while it is at `0.x`, a minor release may contain breaking changes.
 
+## 0.3.5
+
+Dependency maintenance; no change to the API surface, to the request and response types, or to behaviour.
+
+### Changed
+
+- `@microsoft/signalr` 10.0.0 → 10.0.11. The JavaScript package bundles its own transport code and does not depend on the .NET `Microsoft.AspNetCore.SignalR.Common` library, so this update is routine — it does not address the .NET advisory that affected the C# and PowerShell SDKs.
+- Development tooling: `orval` 8.38.0 → 8.45.0, `typedoc` 0.28.19 → 0.28.20, `@types/bun` 1.3.14 → 1.4.4.
+- `typescript` stays on 5.9.x: TypeDoc 0.28 does not support the 7.x compiler and fails the documentation build, so the major upgrade is deferred until a TypeDoc release supports it.
+
 ## 0.3.4
 
 MT5 market history over REST, real-time ticks on the MT5 v2 hub and batched ticks on both v2 hubs.
