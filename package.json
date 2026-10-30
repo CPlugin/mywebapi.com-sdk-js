@@ -67,7 +67,7 @@
     "@types/bun": "latest",
     "orval": "8.45.0",
     "typedoc": "^0.28.19",
-    "typescript": "^7.0.2"
+    "typescript": "^5.4.0"
   },
   "engines": {
     "bun": ">=1.0.0"
