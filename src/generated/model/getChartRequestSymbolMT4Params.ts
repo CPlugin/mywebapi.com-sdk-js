@@ -10,7 +10,7 @@
 import type { ChartPeriod } from './chartPeriod';
 import type { RequestMode } from './requestMode';
 
-export type GetChartRequestSymbolParams = {
+export type GetChartRequestSymbolMT4Params = {
 /**
  * Bar period enum (M1, M5, M15, M30, H1, H4, D1, W1, MN1)
  */

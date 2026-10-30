@@ -11386,6 +11386,185 @@
           }
         }
       }
+    },
+    "/api/v2/MT5/{tradePlatform}/ChartRequest/{symbol}": {
+      "get": {
+        "tags": [
+          "MT5 v2 :: History Data"
+        ],
+        "summary": "Get chart bars",
+        "description": "<br>\r\n            OHLC bars of a symbol for a time window, ordered by time ascending. The trade\r\n            server keeps history as minutes; bars of a coarser `period` are aggregated\r\n            from those minutes on the boundaries of the server's trading time, so a day\r\n            starts at 00:00 of the server clock. A bar opens with the first minute of the\r\n            bucket and closes with the last one, its high and low are the extremes of the\r\n            bucket, tick volume and real volume are summed, and spread is the lowest of the\r\n            bucket. Buckets without minutes are not produced.\r\n            \r\n<br>\r\n            Times are the trading times of the trade server, not UTC: `time` repeats the\r\n            seconds-from-1970 value the platform uses, `dateTime` is the same moment\r\n            without an offset. Prices are returned as the platform holds them, without\r\n            rescaling.\r\n            \r\n<br>\r\n  `from` and `to` are optional: without `from` the window starts at\r\n            the beginning of the history, without `to` it ends at the current server\r\n            time. `limit` is 0 by default and returns the whole window; a positive value\r\n            caps the returned bars and sets `truncated`. There is no pagination: to read\r\n            further, repeat the request with `from` moved past the last returned bar.\r\n            \r\n<br>\r\n            The call only reads and changes nothing. When the platform has not received the\r\n            requested history yet, the call fails with the platform code `MT_RET_OK_NONE`\r\n            and a message saying the history is not synchronized \u2014 such a request may be\r\n            repeated later. `W1` and `MN1` are rejected: such bars are not built.\r\n            \n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "parameters": [
+          {
+            "name": "tradePlatform",
+            "in": "path",
+            "description": "Trade platform identifier (GUID).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "symbol",
+            "in": "path",
+            "description": "Symbol name the chart data is requested for.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "description": "Bar period: M1, M5, M15, M30, H1, H4 or D1. Defaults to M1.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/MT5ChartPeriod"
+                }
+              ],
+              "description": "Bar period of a chart history request. Coarser bars than a minute are built by the\r\nservice from the minute history of the trade server, on the boundaries of the trade\r\nserver's trading time \u2014 a day therefore starts at 00:00 of the server clock.",
+              "default": "M1"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Window start, as a trading time of the trade server. Optional \u2014 the beginning of the history when omitted.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "Window end, as a trading time of the trade server. Optional \u2014 the current server time when omitted.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of bars returned; 0 means no limit. Defaults to 0.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "X-Request-Timeout",
+            "in": "header",
+            "description": "How long to wait for the trade server, in seconds (1\u2013300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "schema": {
+              "maximum": 300,
+              "minimum": 1,
+              "type": "number",
+              "format": "double",
+              "default": 30
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MT5ChartBarPageApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/MT5/{tradePlatform}/TicksHistory/{symbol}": {
+      "get": {
+        "tags": [
+          "MT5 v2 :: History Data"
+        ],
+        "summary": "Get historical ticks",
+        "description": "<br>\r\n            Historical ticks of a symbol for a time window, filtered by the symbol's tick\r\n            filters, ordered by time ascending.\r\n            \r\n<br>\r\n            Times are the trading times of the trade server, not UTC: `timeMsc` and\r\n            `time` repeat the millisecond and second values the platform uses,\r\n            `dateTime` is the same moment without an offset. Prices are returned as the\r\n            platform holds them, without rescaling. `flags` names the set bits of the\r\n            tick kind, the same way the streaming events do.\r\n            \r\n<br>\r\n  `from` and `to` are optional: without `from` the window starts at\r\n            the beginning of the history, without `to` it ends at the current server\r\n            time. `limit` is 0 by default and returns the whole window; a positive value\r\n            caps the returned ticks and sets `truncated`. There is no pagination: to read\r\n            further, repeat the request with `from` moved past the last returned tick.\r\n            \r\n<br>\r\n            The call only reads and changes nothing. When the platform has not received the\r\n            requested history yet, the call fails with the platform code `MT_RET_OK_NONE`\r\n            and a message saying the history is not synchronized \u2014 such a request may be\r\n            repeated later.\r\n            \n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "parameters": [
+          {
+            "name": "tradePlatform",
+            "in": "path",
+            "description": "Trade platform identifier (GUID).",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "symbol",
+            "in": "path",
+            "description": "Symbol name the tick data is requested for.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+                "required": true,
+            "description": "Window start, as a trading time of the trade server. Optional \u2014 the beginning of the history when omitted.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "Window end, as a trading time of the trade server. Optional \u2014 the current server time when omitted.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of ticks returned; 0 means no limit. Defaults to 0.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "X-Request-Timeout",
+            "in": "header",
+            "description": "How long to wait for the trade server, in seconds (1\u2013300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "schema": {
+              "maximum": 300,
+              "minimum": 1,
+              "type": "number",
+              "format": "double",
+              "default": 30
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MT5TickPageApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -21282,6 +21461,241 @@
         },
         "additionalProperties": false,
         "description": "Unified v2 response envelope: data is the payload (null on error); error is the\r\nerror object (null on success, always serialised); meta contains response metadata\r\n(activityId and optional paging). HTTP status is always 200."
+      },
+      "MT5TickPageApiResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT5TickPage"
+              }
+            ],
+            "description": "Ticks of one history request, v2 read DTO.",
+            "nullable": true
+          },
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            ],
+            "description": "v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4\r\nResultCode (serialized as a string for a known enum member, or as a number for an\r\nunrecognised value returned by MT4); Message is a human-readable description.",
+            "nullable": true
+          },
+          "meta": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiMeta"
+              }
+            ],
+            "description": "Response metadata. ActivityId identifies the request \u2014 quote it when you contact support.\r\nPaging is present only on paginated list responses; otherwise it is omitted.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Unified v2 response envelope: data is the payload (null on error); error is the\r\nerror object (null on success, always serialised); meta contains response metadata\r\n(activityId and optional paging). HTTP status is always 200."
+      },
+      "MT5TickPage": {
+        "type": "object",
+        "properties": {
+          "ticks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MT5TickV2"
+            },
+            "description": "Ticks of this page, ordered by time ascending.",
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total number of ticks in the requested window.",
+            "format": "int32"
+          },
+          "truncated": {
+            "type": "boolean",
+            "description": "True when `Total` exceeds the page and more ticks were available than returned."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Ticks of one history request, v2 read DTO."
+      },
+      "MT5TickV2": {
+        "type": "object",
+        "properties": {
+          "timeMsc": {
+            "type": "integer",
+            "description": "Tick time \u2014 milliseconds since 01.01.1970, in the trade server's trading time.",
+            "format": "int64"
+          },
+          "time": {
+            "type": "integer",
+            "description": "The same tick time in seconds since 01.01.1970.",
+            "format": "int64"
+          },
+          "dateTime": {
+            "type": "string",
+            "description": "The same tick time as a date-time without offset, for direct display.",
+            "format": "date-time"
+          },
+          "bid": {
+            "type": "number",
+            "description": "Bid price at the tick.",
+            "format": "double"
+          },
+          "ask": {
+            "type": "number",
+            "description": "Ask price at the tick.",
+            "format": "double"
+          },
+          "last": {
+            "type": "number",
+            "description": "The price of the last committed transaction.",
+            "format": "double"
+          },
+          "volume": {
+            "type": "integer",
+            "description": "Volume as the data provider passed it. The platform fills both this and\r\n`VolumeExt`; the extended value has the higher accuracy.",
+            "format": "int64"
+          },
+          "volumeExt": {
+            "type": "integer",
+            "description": "Volume with extended accuracy, as the data provider passed it.",
+            "format": "int64"
+          },
+          "flags": {
+            "type": "string",
+            "description": "Tick kind flags as a string: the names of the set bits, lowest bit first,\r\njoined by a comma and a space \u2014 for example `\"Bid, Volume\"`. `None`\r\nwhen no bit is set.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "One historical tick of a symbol, v2 read DTO."
+      },
+      "MT5ChartBarPageApiResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT5ChartBarPage"
+              }
+            ],
+            "description": "Bars of one chart history request, v2 read DTO.",
+            "nullable": true
+          },
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            ],
+            "description": "v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4\r\nResultCode (serialized as a string for a known enum member, or as a number for an\r\nunrecognised value returned by MT4); Message is a human-readable description.",
+            "nullable": true
+          },
+          "meta": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiMeta"
+              }
+            ],
+            "description": "Response metadata. ActivityId identifies the request \u2014 quote it when you contact support.\r\nPaging is present only on paginated list responses; otherwise it is omitted.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Unified v2 response envelope: data is the payload (null on error); error is the\r\nerror object (null on success, always serialised); meta contains response metadata\r\n(activityId and optional paging). HTTP status is always 200."
+      },
+      "MT5ChartBarPage": {
+        "type": "object",
+        "properties": {
+          "bars": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MT5ChartBarV2"
+            },
+            "description": "Bars of this page, ordered by time ascending.",
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total number of bars in the requested window.",
+            "format": "int32"
+          },
+          "truncated": {
+            "type": "boolean",
+            "description": "True when `Total` exceeds the page and more bars were available than returned."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Bars of one chart history request, v2 read DTO."
+      },
+      "MT5ChartBarV2": {
+        "type": "object",
+        "properties": {
+          "time": {
+            "type": "integer",
+            "description": "Bar opening time \u2014 seconds since 01.01.1970, in the trade server's trading time.",
+            "format": "int64"
+          },
+          "dateTime": {
+            "type": "string",
+            "description": "The same bar opening time as a date-time without offset, for direct display.",
+            "format": "date-time"
+          },
+          "open": {
+            "type": "number",
+            "description": "Open price \u2014 the price at the beginning of the bar's minute.",
+            "format": "double"
+          },
+          "high": {
+            "type": "number",
+            "description": "Highest price reached inside the bar.",
+            "format": "double"
+          },
+          "low": {
+            "type": "number",
+            "description": "Lowest price reached inside the bar.",
+            "format": "double"
+          },
+          "close": {
+            "type": "number",
+            "description": "Close price \u2014 the price at the end of the bar's minute.",
+            "format": "double"
+          },
+          "tickVolume": {
+            "type": "integer",
+            "description": "Tick volume: the number of incoming ticks that moved the quote during the bar.\r\nConsecutive ticks with the same price count once.",
+            "format": "int64"
+          },
+          "spread": {
+            "type": "integer",
+            "description": "Lowest spread, in points, recorded while the bar was forming.",
+            "format": "int32"
+          },
+          "volume": {
+            "type": "integer",
+            "description": "Real traded volume executed during the bar.",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false,
+        "description": "One OHLC bar of a symbol's chart history, v2 read DTO. The trade server keeps\r\nhistory as minutes; bars of a coarser period are aggregated from those minutes\r\non the boundaries of the server's trading time."
+      },
+      "MT5ChartPeriod": {
+        "enum": [
+          "M1",
+          "M5",
+          "M15",
+          "M30",
+          "H1",
+          "H4",
+          "D1",
+          "W1",
+          "MN1"
+        ],
+        "type": "string",
+        "description": "Bar period of a chart history request. Coarser bars than a minute are built by the\r\nservice from the minute history of the trade server, on the boundaries of the trade\r\nserver's trading time \u2014 a day therefore starts at 00:00 of the server clock."
       }
     },
     "securitySchemes": {

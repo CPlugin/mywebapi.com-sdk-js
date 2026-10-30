@@ -33,6 +33,7 @@ const CROSS_PLATFORM_COLLISION_SUFFIXES = new Set([
   '/ServerTime',
   '/GroupRecord',       // also covers /GroupRecord/${group}
   '/UserRecord',        // also covers /UserRecord/${login} PATCH variant
+  '/ChartRequest',      // also covers /ChartRequest/${symbol} (different params per platform)
 ]);
 
 function cleanOperationName(_op: unknown, route: string, verb: string): string {

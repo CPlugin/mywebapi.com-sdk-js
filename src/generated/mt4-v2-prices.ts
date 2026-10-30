@@ -9,7 +9,7 @@
  */
 import type {
   BooleanApiResponse,
-  GetChartRequestSymbolParams,
+  GetChartRequestSymbolMT4Params,
   GetTicksRequestSymbolParams,
   Int32ApiResponse,
   MT4ChartBarListApiResponse,
@@ -25,21 +25,21 @@ import type {
 import { customFetch } from '../mutator';
 
 
-export type getChartRequestSymbolResponse200 = {
+export type getChartRequestSymbolMT4Response200 = {
   data: MT4ChartBarListApiResponse
   status: 200
 }
 
-export type getChartRequestSymbolResponseSuccess = (getChartRequestSymbolResponse200) & {
+export type getChartRequestSymbolMT4ResponseSuccess = (getChartRequestSymbolMT4Response200) & {
   headers: Headers;
 };
 ;
 
-export type getChartRequestSymbolResponse = (getChartRequestSymbolResponseSuccess)
+export type getChartRequestSymbolMT4Response = (getChartRequestSymbolMT4ResponseSuccess)
 
-export const getGetChartRequestSymbolUrl = (tradePlatform: string,
+export const getGetChartRequestSymbolMT4Url = (tradePlatform: string,
     symbol: string,
-    params?: GetChartRequestSymbolParams,) => {
+    params?: GetChartRequestSymbolMT4Params,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -66,11 +66,11 @@ export const getGetChartRequestSymbolUrl = (tradePlatform: string,
  * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get chart bars
  */
-export const getChartRequestSymbol = async (tradePlatform: string,
+export const getChartRequestSymbolMT4 = async (tradePlatform: string,
     symbol: string,
-    params?: GetChartRequestSymbolParams, options?: Parameters<typeof customFetch>[1]): Promise<getChartRequestSymbolResponse> => {
+    params?: GetChartRequestSymbolMT4Params, options?: Parameters<typeof customFetch>[1]): Promise<getChartRequestSymbolMT4Response> => {
 
-  return customFetch<getChartRequestSymbolResponse>(getGetChartRequestSymbolUrl(tradePlatform,symbol,params),
+  return customFetch<getChartRequestSymbolMT4Response>(getGetChartRequestSymbolMT4Url(tradePlatform,symbol,params),
   {
     ...options,
     method: 'GET'

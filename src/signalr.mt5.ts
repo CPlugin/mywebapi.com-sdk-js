@@ -3,9 +3,9 @@
 // `@microsoft/signalr` is a required runtime dependency and is externalized
 // from the SDK bundle so applications can pin the official implementation.
 //
-// * MT5 v2 exposes a reduced real-time scope vs MT4: only connection status
-//   callbacks and the margin-call stream. This matches the live hub contract in
-//   `WebAPI/Hubs/MT5/v2/MT5V2Hub.cs`.
+// * MT5 v2 exposes a narrower real-time scope than MT4: connection status
+//   callbacks, ticks (callback and stream models) and the margin-call stream.
+//   This matches the live hub contract in `WebAPI/Hubs/MT5/v2/MT5V2.cs`.
 
 import type {
   HubConnection,
@@ -35,6 +35,31 @@ export interface MT5MarginCallPayload {
   direction: string;
 }
 
+export interface MT5TickPayload {
+  /** Instrument name as reported by the trade server. */
+  symbol: string;
+  /** Best bid price of the tick. */
+  bid: number;
+  /** Best ask price of the tick. */
+  ask: number;
+  /** Price of the last committed transaction; zero when the price feed carries none. */
+  last: number;
+  /** ISO-8601 string when serialised over the wire; SignalR's JSON protocol
+   *  does not auto-revive `Date`. Parse on the consumer side if needed. */
+  lastTime: string | null;
+  /** Tick volume with extended precision, as supplied by the data provider. */
+  volumeExt: number;
+  /** Names of the set tick flags joined by `", "`, for example `Bid, Ask`. */
+  flags: string;
+}
+
+export interface MT5TicksBatchPayload {
+  /** Instrument name the batch belongs to. */
+  symbol: string;
+  /** Ticks accumulated by the server during one flush, in arrival order. */
+  ticks: MT5TickPayload[];
+}
+
 // * --- Options type ----------------------------------------------------------------
 //
 // * MT5V2SignalRClientOptions reuses MT4V2ClientOptions as the base union (same
@@ -56,18 +81,20 @@ export type MT5V2SignalRClientOptions =
 
 /**
  * SignalR wrapper around `/hubs/mt5/v2`. Holds a single `HubConnection` and
- * exposes typed helpers for the MT5 reduced real-time scope.
+ * exposes typed helpers for the MT5 real-time scope: connection status, ticks
+ * and margin calls.
  *
  * Lifecycle:
  * 1. `new MT5V2SignalRClient(opts)` — synchronous; resolves the token provider
  *    and pre-computes the hub URL but does NOT open a socket.
- * 2. Register callbacks via `onConnectionStatus()` — MAY be called before
+ * 2. Register callbacks via `onConnectionStatus()` / `onTick()` — MAY be called before
  *    `start()`. Registering before `start()` is recommended so the initial
  *    post-handshake `OnConnectionStatus` push is never missed.
  * 3. `await client.start()` — opens the WebSocket connection. All callbacks
  *    queued before `start()` are attached to the `HubConnection` before the
  *    socket opens, guaranteeing they are in place before any server push arrives.
- * 4. Use `streamMarginCallUpdates()` to consume streams (requires open connection).
+ * 4. Use `streamTicks()` / `streamMarginCallUpdates()` to consume streams
+ *    (requires an open connection).
  * 5. `await client.stop()` — closes the connection.
  */
 export class MT5V2SignalRClient {
@@ -225,6 +252,22 @@ export class MT5V2SignalRClient {
 
   // * --- Callback-style helpers -------------------------------------------------------
 
+  /** Subscribe to `OnTick` callbacks. Pair with `subscribeToTicks(symbol)`.
+   *  May be called before or after `start()` — registering before is recommended
+   *  so no early server push is missed. */
+  onTick(handler: (payload: MT5TickPayload) => void): void {
+    this.register(c => c.on('OnTick', handler));
+  }
+
+  /** Subscribe to `OnTicksBatch` callbacks. Pair with `subscribeToTicksBatch(symbol)`.
+   *  A batch carries every tick the server accumulated during one interval; a
+   *  connection subscribed to batches does not receive per-tick `OnTick` events.
+   *  May be called before or after `start()` — registering before is recommended
+   *  so no early batch is missed. */
+  onTicksBatch(handler: (payload: MT5TicksBatchPayload) => void): void {
+    this.register(c => c.on('OnTicksBatch', handler));
+  }
+
   /** Subscribe to `OnConnectionStatus` callbacks. The server pushes one such
    *  event right after the handshake completes.
    *  May be called before or after `start()` — registering before `start()` is
@@ -233,7 +276,44 @@ export class MT5V2SignalRClient {
     this.register(c => c.on('OnConnectionStatus', handler));
   }
 
+  // * --- Tick subscription ------------------------------------------------------------
+
+  /** Subscribe the connection to a per-symbol tick stream. Server will push
+   *  `OnTick` callbacks for every tick of that symbol until unsubscribed. */
+  async subscribeToTicks(symbol: string): Promise<void> {
+    await this.getConnection().invoke('SubscribeToTicks', symbol);
+  }
+
+  /** Stop the per-symbol tick stream started by `subscribeToTicks(symbol)`. */
+  async unsubscribeFromTicks(symbol: string): Promise<void> {
+    await this.getConnection().invoke('UnsubscribeFromTicks', symbol);
+  }
+
+  /** Subscribe the connection to batched ticks of one symbol. The server sends
+   *  one `OnTicksBatch` event every `intervalMs` milliseconds (20–60000, default 200)
+   *  or as soon as `maxBatchSize` ticks are buffered (1–10000, default 200).
+   *  While subscribed, per-tick `OnTick` events are not delivered for that symbol.
+   *  Subscribing twice to the same symbol keeps the first subscription and its
+   *  policy. The subscription lasts until `unsubscribeFromTicksBatch(symbol)` or
+   *  until the connection closes. Out-of-range values are rejected by the server. */
+  async subscribeToTicksBatch(symbol: string, intervalMs = 200, maxBatchSize = 200): Promise<void> {
+    await this.getConnection().invoke('SubscribeToTicksBatch', symbol, intervalMs, maxBatchSize);
+  }
+
+  /** Stop the batched tick stream started by `subscribeToTicksBatch(symbol)`. */
+  async unsubscribeFromTicksBatch(symbol: string): Promise<void> {
+    await this.getConnection().invoke('UnsubscribeFromTicksBatch', symbol);
+  }
+
   // * --- Stream-style helpers --------------------------------------------------------
+
+  /** Returns an `AsyncIterable<MT5TickPayload>`. When `symbol` is omitted, every
+   *  symbol's ticks flow through. */
+  streamTicks(symbol?: string): AsyncIterable<MT5TickPayload> {
+    const conn = this.getConnection();
+    const args = symbol !== undefined ? [symbol] : [];
+    return this.toAsyncIterable<MT5TickPayload>(conn.stream('StreamTicks', ...args));
+  }
 
   /** Returns an `AsyncIterable<MT5MarginCallPayload>` backed by the server-side
    *  `StreamMarginCallUpdates` stream. Use in a `for await` loop. */
