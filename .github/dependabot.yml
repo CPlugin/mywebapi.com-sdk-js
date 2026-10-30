@@ -5,3 +5,10 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    ignore:
+      # TypeDoc 0.28 (the current release line) imports the TypeScript 5 API and
+      # crashes on TypeScript 7 with "Cannot read properties of undefined
+      # (reading 'PropertyDeclaration')". Keep TypeScript on the 5.x line until a
+      # TypeDoc release supports the native compiler; reconsider this rule then.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
