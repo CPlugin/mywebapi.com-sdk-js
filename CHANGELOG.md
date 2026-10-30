@@ -2,6 +2,29 @@
 
 All notable changes to `@mywebapi.com/sdk`. The package follows [semver](https://semver.org/); while it is at `0.x`, a minor release may contain breaking changes.
 
+## 0.3.2
+
+Batched real-time ticks on both v2 hubs, for consumers that prefer one flush per interval over a callback per tick.
+
+### Added
+
+- `MT4V2SignalRClient` and `MT5V2SignalRClient`: `onTicksBatch(handler)`, `subscribeToTicksBatch(symbol, intervalMs?, maxBatchSize?)` and `unsubscribeFromTicksBatch(symbol)` for the `OnTicksBatch` / `SubscribeToTicksBatch` / `UnsubscribeFromTicksBatch` methods of `/hubs/mt4/v2` and `/hubs/mt5/v2`, plus the `MT4TicksBatchPayload` and `MT5TicksBatchPayload` types (`symbol`, `ticks`). A batch carries the same tick shape as `OnTick`. `intervalMs` is 20–60000 (default 200) and `maxBatchSize` is 1–10000 (default 200); out-of-range values are rejected by the server.
+- While a symbol is subscribed to batches, its per-tick `OnTick` events are not delivered. Batch subscriptions last until `unsubscribeFromTicksBatch(symbol)` or until the connection closes.
+
+## 0.3.1
+
+MT5 market history over REST and real-time ticks over the MT5 v2 hub. The specification is regenerated from the server, and the MT4 x86 sidecar operations stay available.
+
+### Added
+
+- `GET /api/v2/MT5/{tradePlatform}/ChartRequest/{symbol}` — `client.mt5.getChartRequestSymbol(tradePlatform, symbol, { period, from?, to?, limit })`. Returns OHLC bars ordered by time ascending, with `total` and `truncated`; `period` is `M1`, `M5`, `M15`, `M30`, `H1`, `H4` or `D1`; `limit` 0 means the whole window.
+- `GET /api/v2/MT5/{tradePlatform}/TicksHistory/{symbol}` — `client.mt5.getTicksHistorySymbol(tradePlatform, symbol, { from?, to?, limit })`. Returns ticks ordered by time ascending with `total` and `truncated`; `limit` 0 means the whole window.
+- `MT5V2SignalRClient`: `onTick(handler)`, `subscribeToTicks(symbol)`, `unsubscribeFromTicks(symbol)` and `streamTicks(symbol?)` for the `OnTick` / `SubscribeToTicks` / `UnsubscribeFromTicks` / `StreamTicks` methods of `/hubs/mt5/v2`, plus the `MT5TickPayload` type (`symbol`, `bid`, `ask`, `last`, `lastTime`, `volumeExt`, `flags`). The margin-call stream is unchanged.
+
+### Changed
+
+- Regenerated from the current server specification: 174 operations. The 13 MT4 x86 sidecar operations, which the current x64 specification does not list, are preserved in `spec/v2.json` with their schemas.
+
 ## 0.3.0
 
 Support for server-side request timeouts. Servers released before this feature do not read `X-Request-Timeout` and never send the new codes, so the SDK keeps working against them.

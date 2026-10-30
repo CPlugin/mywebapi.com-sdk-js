@@ -86,6 +86,7 @@ import * as mt4SidecarExternalCommand from './generated/mt4-v2-sidecar-externalc
 // ---------------------------------------------------------------------------
 import * as mt5Common from './generated/mt5-v2-common';
 import * as mt5Groups from './generated/mt5-v2-groups';
+import * as mt5HistoryData from './generated/mt5-v2-history-data';
 import * as mt5Managers from './generated/mt5-v2-managers';
 import * as mt5Symbols from './generated/mt5-v2-symbols';
 import * as mt5Trades from './generated/mt5-v2-trades';
@@ -202,6 +203,7 @@ type MT4Namespace = CleanNamespace<
 type MT5Namespace = CleanNamespace<
   BoundModule<typeof mt5Common> &
   BoundModule<typeof mt5Groups> &
+  BoundModule<typeof mt5HistoryData> &
   BoundModule<typeof mt5Managers> &
   BoundModule<typeof mt5Symbols> &
   BoundModule<typeof mt5Trades> &
@@ -392,6 +394,7 @@ export class CPluginWebApiClient {
     this.mt5 = {
       ...bind(mt5Common, this.base, 'MT5'),
       ...bind(mt5Groups, this.base, 'MT5'),
+      ...bind(mt5HistoryData, this.base, 'MT5'),
       ...bind(mt5Managers, this.base, 'MT5'),
       ...bind(mt5Symbols, this.base, 'MT5'),
       ...bind(mt5Trades, this.base, 'MT5'),
