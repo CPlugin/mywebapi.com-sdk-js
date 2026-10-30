@@ -2,6 +2,24 @@
 
 All notable changes to `@mywebapi.com/sdk`. The package follows [semver](https://semver.org/); while it is at `0.x`, a minor release may contain breaking changes.
 
+## 0.3.4
+
+MT5 market history over REST, real-time ticks on the MT5 v2 hub and batched ticks on both v2 hubs.
+
+### Added
+
+- `GET /api/v2/MT5/{tradePlatform}/ChartRequest/{symbol}` — `client.mt5.getChartRequestSymbol(tradePlatform, symbol, { period?, from?, to?, limit? })`. Returns OHLC bars ordered by time ascending, with `total` and `truncated`; `period` is `M1`, `M5`, `M15`, `M30`, `H1`, `H4` or `D1` (default `M1`); `limit` 0 means the whole window. Bars coarser than a minute are aggregated from the server's minute history on the boundaries of its trading time.
+- `GET /api/v2/MT5/{tradePlatform}/TicksHistory/{symbol}` — `client.mt5.getTicksHistorySymbol(tradePlatform, symbol, { from?, to?, limit? })`. Returns ticks ordered by time ascending with `total` and `truncated`; `limit` 0 means the whole window. Times are the trade server's trading times, not UTC.
+- New types: `MT5ChartBarPage`, `MT5ChartBarV2`, `MT5ChartPeriod`, `MT5TickPage`, `MT5TickV2` and their response envelopes.
+- `MT5V2SignalRClient`: `onTick(handler)`, `subscribeToTicks(symbol)`, `unsubscribeFromTicks(symbol)` and `streamTicks(symbol?)` for the `OnTick` / `SubscribeToTicks` / `UnsubscribeFromTicks` / `StreamTicks` methods of `/hubs/mt5/v2`, plus the `MT5TickPayload` type (`symbol`, `bid`, `ask`, `last`, `lastTime`, `volumeExt`, `flags`). The margin-call stream is unchanged.
+- `MT4V2SignalRClient` and `MT5V2SignalRClient`: `onTicksBatch(handler)`, `subscribeToTicksBatch(symbol, intervalMs?, maxBatchSize?)` and `unsubscribeFromTicksBatch(symbol)` for the `OnTicksBatch` / `SubscribeToTicksBatch` / `UnsubscribeFromTicksBatch` methods of `/hubs/mt4/v2` and `/hubs/mt5/v2`, plus the `MT4TicksBatchPayload` and `MT5TicksBatchPayload` types (`symbol`, `ticks`). A batch carries the same tick shape as `OnTick`. `intervalMs` is 20–60000 (default 200) and `maxBatchSize` is 1–10000 (default 200); out-of-range values are rejected by the server.
+- While a symbol is subscribed to batches, its per-tick `OnTick` events are not delivered. Batch subscriptions last until `unsubscribeFromTicksBatch(symbol)` or until the connection closes.
+
+### Changed
+
+- Regenerated from the current server specification: 174 operations. The 13 MT4 x86 sidecar operations, which the current x64 specification does not list, are preserved in `spec/v2.json` with their schemas.
+- The MT4 chart-bars operation keeps its name on both SDK layers: `client.mt4.getChartRequestSymbol` is unchanged, and the two `/ChartRequest` operations are now told apart by their parameter types (`GetChartRequestSymbolMT4Params`, `GetChartRequestSymbolMT5Params`).
+
 ## 0.3.3
 
 Regenerated from the WebAPI v2 specification of 05.10.2026; no change to the API surface or to the request and response types.

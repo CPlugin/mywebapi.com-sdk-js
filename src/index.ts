@@ -71,6 +71,7 @@ export {
   type SignalRClientExtras,
   type ConnectionStatusPayload,
   type TickPayload,
+  type MT4TicksBatchPayload,
   type MarginCallPayload,
   type TradeUpdatePayload,
   type UserUpdatePayload,
@@ -85,4 +86,6 @@ export {
   type MT5V2SignalRClientOptions,
   type MT5ConnectionStatusPayload,
   type MT5MarginCallPayload,
+  type MT5TickPayload,
+  type MT5TicksBatchPayload,
 } from './signalr.mt5';

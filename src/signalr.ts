@@ -43,6 +43,13 @@ export interface TickPayload {
   lastTime: string | null;
 }
 
+export interface MT4TicksBatchPayload {
+  /** Instrument name the batch belongs to. */
+  symbol: string;
+  /** Ticks accumulated by the server during one flush, in arrival order. */
+  ticks: TickPayload[];
+}
+
 export interface MarginCallPayload {
   login: number;
   group: string | null;
@@ -346,6 +353,15 @@ export class MT4V2SignalRClient {
     this.register(c => c.on('OnTick', handler));
   }
 
+  /** Subscribe to `OnTicksBatch` callbacks. Pair with `subscribeToTicksBatch(symbol)`.
+   *  A batch carries every tick the server accumulated during one interval; a
+   *  connection subscribed to batches does not receive per-tick `OnTick` events.
+   *  May be called before or after `start()` — registering before is recommended
+   *  so no early batch is missed. */
+  onTicksBatch(handler: (payload: MT4TicksBatchPayload) => void): void {
+    this.register(c => c.on('OnTicksBatch', handler));
+  }
+
   /** Subscribe to `OnConnectionStatus` callbacks. The server pushes one such
    *  event right after the handshake completes.
    *  May be called before or after `start()` — registering before `start()` is
@@ -362,6 +378,23 @@ export class MT4V2SignalRClient {
 
   async unsubscribeFromTicks(symbol: string): Promise<void> {
     await this.getConnection().invoke('UnsubscribeFromTicks', symbol);
+  }
+
+  /** Subscribe the connection to batched ticks of one symbol. The server sends
+   *  one `OnTicksBatch` event every `intervalMs` milliseconds (20–60000, default 200)
+   *  or as soon as `maxBatchSize` ticks are buffered (1–10000, default 200).
+   *  While subscribed, per-tick `OnTick` events are not delivered for that symbol.
+   *  Repeating the call for the same symbol replaces the previous subscription, so
+   *  the new interval and size take effect. The subscription lasts until
+   *  `unsubscribeFromTicksBatch(symbol)` or until the connection closes.
+   *  Out-of-range values are rejected by the server. */
+  async subscribeToTicksBatch(symbol: string, intervalMs = 200, maxBatchSize = 200): Promise<void> {
+    await this.getConnection().invoke('SubscribeToTicksBatch', symbol, intervalMs, maxBatchSize);
+  }
+
+  /** Stop the batched tick stream started by `subscribeToTicksBatch(symbol)`. */
+  async unsubscribeFromTicksBatch(symbol: string): Promise<void> {
+    await this.getConnection().invoke('UnsubscribeFromTicksBatch', symbol);
   }
 
   // * --- Stream-style helpers ----------------------------------------------------
