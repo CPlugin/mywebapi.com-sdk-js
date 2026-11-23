@@ -96,16 +96,18 @@ export const getGetCfgRequestCommonUrl = (tradePlatform: string,) => {
 }
 
 /**
- * Server-wide MT4 common configuration via the platform's `CfgRequestCommon` Manager-live read.
+ * The common server record as the configuration system returns it, read live from
+ * the trade server on every call.
  *
- * Manager-live read (round-trip to MT4 server) — sibling of
- * `ManagerCommon`. Returns the same curated `MT4Common` DTO
- * (Name/Owner/Build/Version/TimeZone), but sourced via the
- * configuration-system entry point rather than the manager-context one.
- * Pump cache is NOT consulted; data reflects the live server state.
+ * Same fields as `ManagerCommonEx`; the difference is the source: this call
+ * goes through the configuration interface rather than the manager connection, and
+ * is the read that `CfgUpdateCommon` writes back.
+ *
+ * Requires the settings permission, not the sensitive one — a client that may
+ * change common settings but not read the server's infrastructure can still use it.
  *
  * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get common config (live)
+ * @summary Get common server configuration
  */
 export const getCfgRequestCommon = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestCommonResponse> => {
 
@@ -140,13 +142,11 @@ export const getPostCfgUpdateCommonUrl = (tradePlatform: string,) => {
 }
 
 /**
- * Update server-wide common settings — Type 1 mutator.
- *
- * Manager (live) call. Reads the current `ConCommon` from the
- * MT4 server, overlays the fields in `MT4CommonUpdate` onto it
- * (secret-preservation: fields not in the DTO keep their server
- * value), and writes the merged struct back via
- * `CfgUpdateCommon`.
+ * Change server-wide common settings. Only the fields present in the body are written: the
+ * current record is read from the trade server, the body is applied over it, and the merged
+ * record is written back. A field that is left out keeps its server value; for the string
+ * fields, omitting the key keeps the value while sending `""` clears it. A body without
+ * any field is rejected.
  *
  * Preserved fields the DTO does not touch:
  * <list type="bullet"><item>Runtime counters (LastOrder, LastLogin, LostLogin,

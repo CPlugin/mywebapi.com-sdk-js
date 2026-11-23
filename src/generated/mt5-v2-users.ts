@@ -8,8 +8,18 @@
  * OpenAPI spec version: 2.0
  */
 import type {
+  BooleanApiResponse,
+  GetUserGetByLoginsParams,
+  MT5AccountApiResponse,
+  MT5ResultApiResponse,
+  MT5UserAddRequest,
+  MT5UserAddResultApiResponse,
   MT5UserApiResponse,
-  PatchUserRecordLoginMT5Body
+  MT5UserListApiResponse,
+  MT5UserUpdate,
+  PatchUserRecordLoginMT5Body,
+  PostUserUpdateParams,
+  UsersPasswords
 } from './model';
 
 import { customFetch } from '../mutator';
@@ -37,6 +47,11 @@ export const getGetUserGetLoginUrl = (tradePlatform: string,
 }
 
 /**
+ * Returns the user record as held by the local pump cache. The data is as fresh as the
+ * last update delivered by the server, so it can lag behind a direct server request.
+ * The call only reads and changes nothing. It requires the pumping connection of users;
+ * without it the platform answers with an error.
+ *
  * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get a user by login
  */
@@ -105,6 +120,549 @@ return customFetch<patchUserRecordLoginMT5Response>(getPatchUserRecordLoginMT5Ur
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
     body: JSON.stringify(patchUserRecordLoginMT5Body)
+  }
+);}
+
+
+export type postUserUpdateResponse200 = {
+  data: MT5UserApiResponse
+  status: 200
+}
+
+export type postUserUpdateResponseSuccess = (postUserUpdateResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postUserUpdateResponse = (postUserUpdateResponseSuccess)
+
+export const getPostUserUpdateUrl = (tradePlatform: string,
+    params?: PostUserUpdateParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/UserUpdate?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/UserUpdate`
+}
+
+/**
+ * <br>
+ *             Changes the account named by the `login` query parameter. Only the fields present in
+ *             the body are written: the record is read from the trade server, the body is applied over
+ *             it, and the merged record is written back. A field left out keeps its server value; for
+ *             the string fields, omitting the key keeps the value while sending `""` clears it. A
+ *             body without any field is rejected. The body must be the user update object — a full user
+ *             record is not accepted.
+ *
+ * <br>
+ *             The login identifies the record and is not part of the body; it is never changed by
+ *             this call. An unknown login is answered with the trade server's error code. An unknown
+ *             value of an enum field is answered as a validation error. The response is the updated
+ *             record.
+ *
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update a user record
+ */
+export const postUserUpdate = async (tradePlatform: string,
+    mT5UserUpdate?: MT5UserUpdate,
+    params?: PostUserUpdateParams, options?: Parameters<typeof customFetch>[1]): Promise<postUserUpdateResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postUserUpdateResponse>(getPostUserUpdateUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5UserUpdate)
+  }
+);}
+
+
+export type postUserAddResponse200 = {
+  data: MT5UserAddResultApiResponse
+  status: 200
+}
+
+export type postUserAddResponseSuccess = (postUserAddResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postUserAddResponse = (postUserAddResponseSuccess)
+
+export const getPostUserAddUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/UserAdd`
+}
+
+/**
+ * <br>
+ *              Creates a trading account on the trade server. Every field of the record is optional:
+ *              a field left out is not written to the new account, so it keeps the value the platform
+ *              starts it with — and that value is `None` for rights, so an account created without
+ *              `rights` cannot log in until the flag is granted. Send `rights` (at least
+ *              `Enabled`) to make the account usable.
+ *
+ *              A real trade server also refuses creation without a leverage (`MT_RET_ERR_PARAMS`):
+ *              send `leverage` together with the group.
+ *
+ * <br>
+ *              When the login field is absent or zero the server allocates one from the available
+ *              range; when no logins are left the call fails with the platform error
+ *              `MT_RET_USR_LOGIN_EXHAUSTED`. The group must be set, as well as the first or the
+ *              last name of the account holder; otherwise the call fails with `MT_RET_ERR_PARAMS`.
+ *              Adding an account whose login already exists fails with `MT_RET_USR_LOGIN_EXIST`.
+ *
+ * <br>
+ *              Passwords are checked against the group policy. When either the master or the investor
+ *              password is absent, both are regenerated to the group minimum length; a password the
+ *              policy refuses is replaced with a fresh pair and the creation is repeated up to ten
+ *              times. A failure of any other kind ends the call at once — a retry after a timeout could
+ *              create a second account, since the first attempt may have succeeded unseen.
+ *              The response carries the record as stored by the server, including the allocated login.
+ *
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Create a user account
+ */
+export const postUserAdd = async (tradePlatform: string,
+    mT5UserAddRequest?: MT5UserAddRequest, options?: Parameters<typeof customFetch>[1]): Promise<postUserAddResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postUserAddResponse>(getPostUserAddUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5UserAddRequest)
+  }
+);}
+
+
+export type getUserRequestLoginResponse200 = {
+  data: MT5UserApiResponse
+  status: 200
+}
+
+export type getUserRequestLoginResponseSuccess = (getUserRequestLoginResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getUserRequestLoginResponse = (getUserRequestLoginResponseSuccess)
+
+export const getGetUserRequestLoginUrl = (tradePlatform: string,
+    login: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/UserRequest/${encodeURIComponent(String(login))}`
+}
+
+/**
+ * Fetches the current user record of the given login directly from the trade server
+ * database. Unlike the cached read, this call reflects changes made on the server side
+ * immediately. The call only reads and changes nothing. A login that does not exist is
+ * answered with the platform error `MT_RET_USR_LOGIN_NOT_FOUND`.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Read a user from the trade server
+ */
+export const getUserRequestLogin = async (tradePlatform: string,
+    login: number, options?: Parameters<typeof customFetch>[1]): Promise<getUserRequestLoginResponse> => {
+
+  return customFetch<getUserRequestLoginResponse>(getGetUserRequestLoginUrl(tradePlatform,login),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getUserAccountGetLoginResponse200 = {
+  data: MT5AccountApiResponse
+  status: 200
+}
+
+export type getUserAccountGetLoginResponseSuccess = (getUserAccountGetLoginResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getUserAccountGetLoginResponse = (getUserAccountGetLoginResponseSuccess)
+
+export const getGetUserAccountGetLoginUrl = (tradePlatform: string,
+    login: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/UserAccountGet/${encodeURIComponent(String(login))}`
+}
+
+/**
+ * Returns the trading state of the account — balance, credit, margin, equity and
+ * stop-out values — as held by the local pump cache. The data is as fresh as the last
+ * update delivered by the server, so it can lag behind a direct server request. The call
+ * only reads and changes nothing. It requires the pumping connection of users, orders
+ * and positions; without it the platform answers with an error.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Read the account state from the pump cache
+ */
+export const getUserAccountGetLogin = async (tradePlatform: string,
+    login: number, options?: Parameters<typeof customFetch>[1]): Promise<getUserAccountGetLoginResponse> => {
+
+  return customFetch<getUserAccountGetLoginResponse>(getGetUserAccountGetLoginUrl(tradePlatform,login),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getUserGetByLoginsResponse200 = {
+  data: MT5UserListApiResponse
+  status: 200
+}
+
+export type getUserGetByLoginsResponseSuccess = (getUserGetByLoginsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getUserGetByLoginsResponse = (getUserGetByLoginsResponseSuccess)
+
+export const getGetUserGetByLoginsUrl = (tradePlatform: string,
+    params?: GetUserGetByLoginsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["logins"];
+
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? 'null' : String(v));
+      });
+      return;
+    }
+
+
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/UserGetByLogins?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/UserGetByLogins`
+}
+
+/**
+ * Returns the cached records of the requested logins in one call, which is cheaper than
+ * reading them one by one. Logins that the cache does not hold are absent from the result.
+ * The call only reads and changes nothing. It requires the pumping connection of users.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Read several users from the pump cache by logins
+ */
+export const getUserGetByLogins = async (tradePlatform: string,
+    params?: GetUserGetByLoginsParams, options?: Parameters<typeof customFetch>[1]): Promise<getUserGetByLoginsResponse> => {
+
+  return customFetch<getUserGetByLoginsResponse>(getGetUserGetByLoginsUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getUserGetByGroupMaskResponse200 = {
+  data: MT5UserListApiResponse
+  status: 200
+}
+
+export type getUserGetByGroupMaskResponseSuccess = (getUserGetByGroupMaskResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getUserGetByGroupMaskResponse = (getUserGetByGroupMaskResponseSuccess)
+
+export const getGetUserGetByGroupMaskUrl = (tradePlatform: string,
+    mask: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/UserGetByGroup/${encodeURIComponent(String(mask))}`
+}
+
+/**
+ * Returns the cached records of all accounts that match the group mask. The mask accepts
+ * one group, several groups separated by commas, and the `*` (any value) and `!`
+ * (exception) characters, for example `demo*,!demoforex`. The call only reads and
+ * changes nothing. It requires the pumping connection of users.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Read users of a group mask from the pump cache
+ */
+export const getUserGetByGroupMask = async (tradePlatform: string,
+    mask: string, options?: Parameters<typeof customFetch>[1]): Promise<getUserGetByGroupMaskResponse> => {
+
+  return customFetch<getUserGetByGroupMaskResponse>(getGetUserGetByGroupMaskUrl(tradePlatform,mask),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getUserAccountRequestLoginResponse200 = {
+  data: MT5AccountApiResponse
+  status: 200
+}
+
+export type getUserAccountRequestLoginResponseSuccess = (getUserAccountRequestLoginResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getUserAccountRequestLoginResponse = (getUserAccountRequestLoginResponseSuccess)
+
+export const getGetUserAccountRequestLoginUrl = (tradePlatform: string,
+    login: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/UserAccountRequest/${encodeURIComponent(String(login))}`
+}
+
+/**
+ * Returns the trading state of the account — balance, credit, margin, equity and
+ * stop-out values — requested directly from the trade server instead of the local cache.
+ * The call only reads and changes nothing. It requires the pumping connection of users,
+ * orders and positions; without it the platform answers with an error.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Read the account state from the trade server
+ */
+export const getUserAccountRequestLogin = async (tradePlatform: string,
+    login: number, options?: Parameters<typeof customFetch>[1]): Promise<getUserAccountRequestLoginResponse> => {
+
+  return customFetch<getUserAccountRequestLoginResponse>(getGetUserAccountRequestLoginUrl(tradePlatform,login),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type postUserPasswordCheckLoginTypeResponse200 = {
+  data: BooleanApiResponse
+  status: 200
+}
+
+export type postUserPasswordCheckLoginTypeResponseSuccess = (postUserPasswordCheckLoginTypeResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postUserPasswordCheckLoginTypeResponse = (postUserPasswordCheckLoginTypeResponseSuccess)
+
+export const getPostUserPasswordCheckLoginTypeUrl = (tradePlatform: string,
+    login: number,
+    type: UsersPasswords,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/UserPasswordCheck/${encodeURIComponent(String(login))}/${encodeURIComponent(String(type))}`
+}
+
+/**
+ * Verifies the submitted value against the stored password of the given type —
+ * `Main`, `Investor`, `API` or `Trader`. The call only compares values
+ * and changes nothing. It answers `true` when the password matches and `false`
+ * when it does not, so a wrong password is not an error.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Check a user password
+ */
+export const postUserPasswordCheckLoginType = async (tradePlatform: string,
+    login: number,
+    type: UsersPasswords,
+    postUserPasswordCheckLoginTypeBody?: string, options?: Parameters<typeof customFetch>[1]): Promise<postUserPasswordCheckLoginTypeResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postUserPasswordCheckLoginTypeResponse>(getPostUserPasswordCheckLoginTypeUrl(tradePlatform,login,type),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(postUserPasswordCheckLoginTypeBody)
+  }
+);}
+
+
+export type postUserPasswordChangeLoginTypeResponse200 = {
+  data: BooleanApiResponse
+  status: 200
+}
+
+export type postUserPasswordChangeLoginTypeResponseSuccess = (postUserPasswordChangeLoginTypeResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postUserPasswordChangeLoginTypeResponse = (postUserPasswordChangeLoginTypeResponseSuccess)
+
+export const getPostUserPasswordChangeLoginTypeUrl = (tradePlatform: string,
+    login: number,
+    type: UsersPasswords,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/UserPasswordChange/${encodeURIComponent(String(login))}/${encodeURIComponent(String(type))}`
+}
+
+/**
+ * Replaces the stored password of the given type — `Main`, `Investor`,
+ * `API` or `Trader` — with the submitted value. The new password must satisfy the
+ * group policy, otherwise the platform rejects the change with an error. A successful
+ * change answers `true`; the other password types are left untouched.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Change a user password
+ */
+export const postUserPasswordChangeLoginType = async (tradePlatform: string,
+    login: number,
+    type: UsersPasswords,
+    postUserPasswordChangeLoginTypeBody?: string, options?: Parameters<typeof customFetch>[1]): Promise<postUserPasswordChangeLoginTypeResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postUserPasswordChangeLoginTypeResponse>(getPostUserPasswordChangeLoginTypeUrl(tradePlatform,login,type),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(postUserPasswordChangeLoginTypeBody)
+  }
+);}
+
+
+export type postUserDeleteLoginResponse200 = {
+  data: MT5ResultApiResponse
+  status: 200
+}
+
+export type postUserDeleteLoginResponseSuccess = (postUserDeleteLoginResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postUserDeleteLoginResponse = (postUserDeleteLoginResponseSuccess)
+
+export const getPostUserDeleteLoginUrl = (tradePlatform: string,
+    login: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/UserDelete/${encodeURIComponent(String(login))}`
+}
+
+/**
+ * Removes the trading account with the given login from the trade server database. The
+ * operation is not reversible: the record is gone. The response carries the platform
+ * result code, which is the successful code when the account was deleted. Deleting an
+ * account that has never existed fails with a platform error.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Delete a user
+ */
+export const postUserDeleteLogin = async (tradePlatform: string,
+    login: number, options?: Parameters<typeof customFetch>[1]): Promise<postUserDeleteLoginResponse> => {
+
+  return customFetch<postUserDeleteLoginResponse>(getPostUserDeleteLoginUrl(tradePlatform,login),
+  {
+    ...options,
+    method: 'POST'
+
+
   }
 );}
 

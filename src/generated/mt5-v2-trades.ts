@@ -8,32 +8,47 @@
  * OpenAPI spec version: 2.0
  */
 import type {
-  GetDealByGroupMaskParams,
-  GetOrderByGroupMaskParams,
-  GetPositionByGroupMaskParams,
+  BooleanApiResponse,
+  GetDealRequestByGroupMaskParams,
+  GetDealRequestByGroupSymbolMaskSymbolParams,
+  GetDealRequestByLoginsParams,
+  GetDealRequestByTicketsParams,
+  GetDealRequestLoginParams,
+  GetHistoryRequestByGroupMaskParams,
+  GetHistoryRequestLoginParams,
+  GetOrderGetByGroupMaskParams,
+  GetOrderGetByLoginsParams,
+  GetOrderGetByTicketsParams,
+  GetPositionGetByLoginsParams,
+  GetPositionGetByTicketsParams,
+  GetPositionRequestByGroupMaskParams,
+  MT5Deal,
+  MT5DealApiResponse,
   MT5DealListApiResponse,
+  MT5OrderApiResponse,
   MT5OrderListApiResponse,
-  MT5PositionListApiResponse
+  MT5PositionListApiResponse,
+  MT5ResultListApiResponse
 } from './model';
 
 import { customFetch } from '../mutator';
 
 
-export type getPositionByGroupMaskResponse200 = {
+export type getPositionRequestByGroupMaskResponse200 = {
   data: MT5PositionListApiResponse
   status: 200
 }
 
-export type getPositionByGroupMaskResponseSuccess = (getPositionByGroupMaskResponse200) & {
+export type getPositionRequestByGroupMaskResponseSuccess = (getPositionRequestByGroupMaskResponse200) & {
   headers: Headers;
 };
 ;
 
-export type getPositionByGroupMaskResponse = (getPositionByGroupMaskResponseSuccess)
+export type getPositionRequestByGroupMaskResponse = (getPositionRequestByGroupMaskResponseSuccess)
 
-export const getGetPositionByGroupMaskUrl = (tradePlatform: string,
+export const getGetPositionRequestByGroupMaskUrl = (tradePlatform: string,
     mask: string,
-    params?: GetPositionByGroupMaskParams,) => {
+    params?: GetPositionRequestByGroupMaskParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -45,7 +60,7 @@ export const getGetPositionByGroupMaskUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/PositionByGroup/${encodeURIComponent(String(mask))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/PositionByGroup/${encodeURIComponent(String(mask))}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/PositionRequestByGroup/${encodeURIComponent(String(mask))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/PositionRequestByGroup/${encodeURIComponent(String(mask))}`
 }
 
 /**
@@ -55,11 +70,11 @@ export const getGetPositionByGroupMaskUrl = (tradePlatform: string,
  * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List positions by group
  */
-export const getPositionByGroupMask = async (tradePlatform: string,
+export const getPositionRequestByGroupMask = async (tradePlatform: string,
     mask: string,
-    params?: GetPositionByGroupMaskParams, options?: Parameters<typeof customFetch>[1]): Promise<getPositionByGroupMaskResponse> => {
+    params?: GetPositionRequestByGroupMaskParams, options?: Parameters<typeof customFetch>[1]): Promise<getPositionRequestByGroupMaskResponse> => {
 
-  return customFetch<getPositionByGroupMaskResponse>(getGetPositionByGroupMaskUrl(tradePlatform,mask,params),
+  return customFetch<getPositionRequestByGroupMaskResponse>(getGetPositionRequestByGroupMaskUrl(tradePlatform,mask,params),
   {
     ...options,
     method: 'GET'
@@ -69,21 +84,21 @@ export const getPositionByGroupMask = async (tradePlatform: string,
 );}
 
 
-export type getOrderByGroupMaskResponse200 = {
+export type getOrderGetByGroupMaskResponse200 = {
   data: MT5OrderListApiResponse
   status: 200
 }
 
-export type getOrderByGroupMaskResponseSuccess = (getOrderByGroupMaskResponse200) & {
+export type getOrderGetByGroupMaskResponseSuccess = (getOrderGetByGroupMaskResponse200) & {
   headers: Headers;
 };
 ;
 
-export type getOrderByGroupMaskResponse = (getOrderByGroupMaskResponseSuccess)
+export type getOrderGetByGroupMaskResponse = (getOrderGetByGroupMaskResponseSuccess)
 
-export const getGetOrderByGroupMaskUrl = (tradePlatform: string,
+export const getGetOrderGetByGroupMaskUrl = (tradePlatform: string,
     mask: string,
-    params?: GetOrderByGroupMaskParams,) => {
+    params?: GetOrderGetByGroupMaskParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -95,7 +110,7 @@ export const getGetOrderByGroupMaskUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderByGroup/${encodeURIComponent(String(mask))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderByGroup/${encodeURIComponent(String(mask))}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderGetByGroup/${encodeURIComponent(String(mask))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderGetByGroup/${encodeURIComponent(String(mask))}`
 }
 
 /**
@@ -105,11 +120,11 @@ export const getGetOrderByGroupMaskUrl = (tradePlatform: string,
  * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List orders by group
  */
-export const getOrderByGroupMask = async (tradePlatform: string,
+export const getOrderGetByGroupMask = async (tradePlatform: string,
     mask: string,
-    params?: GetOrderByGroupMaskParams, options?: Parameters<typeof customFetch>[1]): Promise<getOrderByGroupMaskResponse> => {
+    params?: GetOrderGetByGroupMaskParams, options?: Parameters<typeof customFetch>[1]): Promise<getOrderGetByGroupMaskResponse> => {
 
-  return customFetch<getOrderByGroupMaskResponse>(getGetOrderByGroupMaskUrl(tradePlatform,mask,params),
+  return customFetch<getOrderGetByGroupMaskResponse>(getGetOrderGetByGroupMaskUrl(tradePlatform,mask,params),
   {
     ...options,
     method: 'GET'
@@ -119,21 +134,21 @@ export const getOrderByGroupMask = async (tradePlatform: string,
 );}
 
 
-export type getDealByGroupMaskResponse200 = {
+export type getDealRequestByGroupMaskResponse200 = {
   data: MT5DealListApiResponse
   status: 200
 }
 
-export type getDealByGroupMaskResponseSuccess = (getDealByGroupMaskResponse200) & {
+export type getDealRequestByGroupMaskResponseSuccess = (getDealRequestByGroupMaskResponse200) & {
   headers: Headers;
 };
 ;
 
-export type getDealByGroupMaskResponse = (getDealByGroupMaskResponseSuccess)
+export type getDealRequestByGroupMaskResponse = (getDealRequestByGroupMaskResponseSuccess)
 
-export const getGetDealByGroupMaskUrl = (tradePlatform: string,
+export const getGetDealRequestByGroupMaskUrl = (tradePlatform: string,
     mask: string,
-    params?: GetDealByGroupMaskParams,) => {
+    params?: GetDealRequestByGroupMaskParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -145,26 +160,1246 @@ export const getGetDealByGroupMaskUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealByGroup/${encodeURIComponent(String(mask))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealByGroup/${encodeURIComponent(String(mask))}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealRequestByGroup/${encodeURIComponent(String(mask))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealRequestByGroup/${encodeURIComponent(String(mask))}`
 }
 
 /**
  * Returns deals for all logins in groups matching the mask, ordered by Deal ID ascending.
- * Returns the full history by default. Use the cursor for the next page.
+ * Both window bounds are optional: without them the whole history since 01.01.1970 is
+ * read. Use the cursor for the next page.
  *
  * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List deals by group
  */
-export const getDealByGroupMask = async (tradePlatform: string,
+export const getDealRequestByGroupMask = async (tradePlatform: string,
     mask: string,
-    params?: GetDealByGroupMaskParams, options?: Parameters<typeof customFetch>[1]): Promise<getDealByGroupMaskResponse> => {
+    params?: GetDealRequestByGroupMaskParams, options?: Parameters<typeof customFetch>[1]): Promise<getDealRequestByGroupMaskResponse> => {
 
-  return customFetch<getDealByGroupMaskResponse>(getGetDealByGroupMaskUrl(tradePlatform,mask,params),
+  return customFetch<getDealRequestByGroupMaskResponse>(getGetDealRequestByGroupMaskUrl(tradePlatform,mask,params),
   {
     ...options,
     method: 'GET'
 
 
+  }
+);}
+
+
+export type getDealRequestLoginResponse200 = {
+  data: MT5DealListApiResponse
+  status: 200
+}
+
+export type getDealRequestLoginResponseSuccess = (getDealRequestLoginResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getDealRequestLoginResponse = (getDealRequestLoginResponseSuccess)
+
+export const getGetDealRequestLoginUrl = (tradePlatform: string,
+    login: number,
+    params?: GetDealRequestLoginParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealRequest/${encodeURIComponent(String(login))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealRequest/${encodeURIComponent(String(login))}`
+}
+
+/**
+ * Returns the deal history of one account for the requested time window.
+ * Both window bounds are optional: without them the whole history since 01.01.1970 is read.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Deals history by a login
+ */
+export const getDealRequestLogin = async (tradePlatform: string,
+    login: number,
+    params?: GetDealRequestLoginParams, options?: Parameters<typeof customFetch>[1]): Promise<getDealRequestLoginResponse> => {
+
+  return customFetch<getDealRequestLoginResponse>(getGetDealRequestLoginUrl(tradePlatform,login,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getDealRequestByGroupSymbolMaskSymbolResponse200 = {
+  data: MT5DealListApiResponse
+  status: 200
+}
+
+export type getDealRequestByGroupSymbolMaskSymbolResponseSuccess = (getDealRequestByGroupSymbolMaskSymbolResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getDealRequestByGroupSymbolMaskSymbolResponse = (getDealRequestByGroupSymbolMaskSymbolResponseSuccess)
+
+export const getGetDealRequestByGroupSymbolMaskSymbolUrl = (tradePlatform: string,
+    mask: string,
+    symbol: string,
+    params?: GetDealRequestByGroupSymbolMaskSymbolParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealRequestByGroupSymbol/${encodeURIComponent(String(mask))}/${encodeURIComponent(String(symbol))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealRequestByGroupSymbol/${encodeURIComponent(String(mask))}/${encodeURIComponent(String(symbol))}`
+}
+
+/**
+ * Returns the deals of the accounts matching the group mask, limited to the given symbols,
+ * for the requested time window. Several symbols may be listed comma-separated.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Deals by a user group mask and symbol
+ */
+export const getDealRequestByGroupSymbolMaskSymbol = async (tradePlatform: string,
+    mask: string,
+    symbol: string,
+    params?: GetDealRequestByGroupSymbolMaskSymbolParams, options?: Parameters<typeof customFetch>[1]): Promise<getDealRequestByGroupSymbolMaskSymbolResponse> => {
+
+  return customFetch<getDealRequestByGroupSymbolMaskSymbolResponse>(getGetDealRequestByGroupSymbolMaskSymbolUrl(tradePlatform,mask,symbol,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getDealRequestByTicketsResponse200 = {
+  data: MT5DealListApiResponse
+  status: 200
+}
+
+export type getDealRequestByTicketsResponseSuccess = (getDealRequestByTicketsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getDealRequestByTicketsResponse = (getDealRequestByTicketsResponseSuccess)
+
+export const getGetDealRequestByTicketsUrl = (tradePlatform: string,
+    params?: GetDealRequestByTicketsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["tickets"];
+
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? 'null' : String(v));
+      });
+      return;
+    }
+
+
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealRequestByTickets?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealRequestByTickets`
+}
+
+/**
+ * Looks up deals by their ticket numbers passed in the query string.
+ * For long lists use the POST variant, which takes the tickets in the body.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Deals by a list of tickets
+ */
+export const getDealRequestByTickets = async (tradePlatform: string,
+    params?: GetDealRequestByTicketsParams, options?: Parameters<typeof customFetch>[1]): Promise<getDealRequestByTicketsResponse> => {
+
+  return customFetch<getDealRequestByTicketsResponse>(getGetDealRequestByTicketsUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type postDealRequestByTicketsResponse200 = {
+  data: MT5DealListApiResponse
+  status: 200
+}
+
+export type postDealRequestByTicketsResponseSuccess = (postDealRequestByTicketsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postDealRequestByTicketsResponse = (postDealRequestByTicketsResponseSuccess)
+
+export const getPostDealRequestByTicketsUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealRequestByTickets`
+}
+
+/**
+ * Same lookup as the GET variant, but the ticket list travels in the JSON body,
+ * so it can be much longer without hitting URL length limits.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Deals by a list of tickets sent in the request body
+ */
+export const postDealRequestByTickets = async (tradePlatform: string,
+    postDealRequestByTicketsBody?: number[], options?: Parameters<typeof customFetch>[1]): Promise<postDealRequestByTicketsResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postDealRequestByTicketsResponse>(getPostDealRequestByTicketsUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(postDealRequestByTicketsBody)
+  }
+);}
+
+
+export type getDealRequestByLoginsResponse200 = {
+  data: MT5DealListApiResponse
+  status: 200
+}
+
+export type getDealRequestByLoginsResponseSuccess = (getDealRequestByLoginsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getDealRequestByLoginsResponse = (getDealRequestByLoginsResponseSuccess)
+
+export const getGetDealRequestByLoginsUrl = (tradePlatform: string,
+    params?: GetDealRequestByLoginsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["logins"];
+
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? 'null' : String(v));
+      });
+      return;
+    }
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealRequestByLogins?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealRequestByLogins`
+}
+
+/**
+ * Returns the deals of several accounts in one call, for the requested time window.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Deals by a list of logins
+ */
+export const getDealRequestByLogins = async (tradePlatform: string,
+    params?: GetDealRequestByLoginsParams, options?: Parameters<typeof customFetch>[1]): Promise<getDealRequestByLoginsResponse> => {
+
+  return customFetch<getDealRequestByLoginsResponse>(getGetDealRequestByLoginsUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getDealRequestByTicketTicketResponse200 = {
+  data: MT5DealApiResponse
+  status: 200
+}
+
+export type getDealRequestByTicketTicketResponseSuccess = (getDealRequestByTicketTicketResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getDealRequestByTicketTicketResponse = (getDealRequestByTicketTicketResponseSuccess)
+
+export const getGetDealRequestByTicketTicketUrl = (tradePlatform: string,
+    ticket: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealRequestByTicket/${encodeURIComponent(String(ticket))}`
+}
+
+/**
+ * Reads a single deal from the server history by its ticket number.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Deal by a ticket
+ */
+export const getDealRequestByTicketTicket = async (tradePlatform: string,
+    ticket: number, options?: Parameters<typeof customFetch>[1]): Promise<getDealRequestByTicketTicketResponse> => {
+
+  return customFetch<getDealRequestByTicketTicketResponse>(getGetDealRequestByTicketTicketUrl(tradePlatform,ticket),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type postDealUpdateResponse200 = {
+  data: BooleanApiResponse
+  status: 200
+}
+
+export type postDealUpdateResponseSuccess = (postDealUpdateResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postDealUpdateResponse = (postDealUpdateResponseSuccess)
+
+export const getPostDealUpdateUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealUpdate`
+}
+
+/**
+ * The server first reads the existing deal, then applies only the fields present in the body,
+ * so fields left null keep their current values. Required fields of the deal must still be
+ * valid on the server (login, symbol, action, volume, price, time, digits, contract size).
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update a deal
+ */
+export const postDealUpdate = async (tradePlatform: string,
+    mT5Deal?: MT5Deal, options?: Parameters<typeof customFetch>[1]): Promise<postDealUpdateResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postDealUpdateResponse>(getPostDealUpdateUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Deal)
+  }
+);}
+
+
+export type postDealDeleteBatchResponse200 = {
+  data: MT5ResultListApiResponse
+  status: 200
+}
+
+export type postDealDeleteBatchResponseSuccess = (postDealDeleteBatchResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postDealDeleteBatchResponse = (postDealDeleteBatchResponseSuccess)
+
+export const getPostDealDeleteBatchUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealDeleteBatch`
+}
+
+/**
+ * Deletes the listed deals and returns one result code per ticket, in the same order.
+ * `MT_RET_OK` means all were deleted, `MT_RET_ERR_PARTIAL` means only some —
+ * inspect each entry. On partial success the array carries a result for every ticket and
+ * the caller inspects them itself; on a complete failure no array is returned.
+ * Deleting deals does not change balances or open positions, so the
+ * account may afterwards fail consistency checks.
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Delete deals in bulk
+ */
+export const postDealDeleteBatch = async (tradePlatform: string,
+    postDealDeleteBatchBody?: number[], options?: Parameters<typeof customFetch>[1]): Promise<postDealDeleteBatchResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postDealDeleteBatchResponse>(getPostDealDeleteBatchUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(postDealDeleteBatchBody)
+  }
+);}
+
+
+export type getPositionGetLoginResponse200 = {
+  data: MT5PositionListApiResponse
+  status: 200
+}
+
+export type getPositionGetLoginResponseSuccess = (getPositionGetLoginResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getPositionGetLoginResponse = (getPositionGetLoginResponseSuccess)
+
+export const getGetPositionGetLoginUrl = (tradePlatform: string,
+    login: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/PositionGet/${encodeURIComponent(String(login))}`
+}
+
+/**
+ * Returns all open positions of every symbol held by the account.
+ * Under the hedged margin mode a position is identified by its ticket, not by login and symbol.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Open positions by a login
+ */
+export const getPositionGetLogin = async (tradePlatform: string,
+    login: number, options?: Parameters<typeof customFetch>[1]): Promise<getPositionGetLoginResponse> => {
+
+  return customFetch<getPositionGetLoginResponse>(getGetPositionGetLoginUrl(tradePlatform,login),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getPositionGetByLoginsResponse200 = {
+  data: MT5PositionListApiResponse
+  status: 200
+}
+
+export type getPositionGetByLoginsResponseSuccess = (getPositionGetByLoginsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getPositionGetByLoginsResponse = (getPositionGetByLoginsResponseSuccess)
+
+export const getGetPositionGetByLoginsUrl = (tradePlatform: string,
+    params?: GetPositionGetByLoginsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["logins"];
+
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? 'null' : String(v));
+      });
+      return;
+    }
+
+
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/PositionGetByLogins?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/PositionGetByLogins`
+}
+
+/**
+ * Returns all open positions of several accounts in one call.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Open positions by a list of logins
+ */
+export const getPositionGetByLogins = async (tradePlatform: string,
+    params?: GetPositionGetByLoginsParams, options?: Parameters<typeof customFetch>[1]): Promise<getPositionGetByLoginsResponse> => {
+
+  return customFetch<getPositionGetByLoginsResponse>(getGetPositionGetByLoginsUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getPositionGetByTicketsResponse200 = {
+  data: MT5PositionListApiResponse
+  status: 200
+}
+
+export type getPositionGetByTicketsResponseSuccess = (getPositionGetByTicketsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getPositionGetByTicketsResponse = (getPositionGetByTicketsResponseSuccess)
+
+export const getGetPositionGetByTicketsUrl = (tradePlatform: string,
+    params?: GetPositionGetByTicketsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["tickets"];
+
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? 'null' : String(v));
+      });
+      return;
+    }
+
+
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/PositionGetByTickets?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/PositionGetByTickets`
+}
+
+/**
+ * Returns the open positions identified by the given tickets. This is the only way to address
+ * positions under the hedged margin mode.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Open positions by a list of tickets
+ */
+export const getPositionGetByTickets = async (tradePlatform: string,
+    params?: GetPositionGetByTicketsParams, options?: Parameters<typeof customFetch>[1]): Promise<getPositionGetByTicketsResponse> => {
+
+  return customFetch<getPositionGetByTicketsResponse>(getGetPositionGetByTicketsUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getPositionGetBySymbolMaskSymbolResponse200 = {
+  data: MT5PositionListApiResponse
+  status: 200
+}
+
+export type getPositionGetBySymbolMaskSymbolResponseSuccess = (getPositionGetBySymbolMaskSymbolResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getPositionGetBySymbolMaskSymbolResponse = (getPositionGetBySymbolMaskSymbolResponseSuccess)
+
+export const getGetPositionGetBySymbolMaskSymbolUrl = (tradePlatform: string,
+    mask: string,
+    symbol: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/PositionGetBySymbol/${encodeURIComponent(String(mask))}/${encodeURIComponent(String(symbol))}`
+}
+
+/**
+ * Returns the open positions of the accounts matching the group mask, limited to the given
+ * symbols. Several symbols may be listed comma-separated.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Open positions by a user group mask and symbol
+ */
+export const getPositionGetBySymbolMaskSymbol = async (tradePlatform: string,
+    mask: string,
+    symbol: string, options?: Parameters<typeof customFetch>[1]): Promise<getPositionGetBySymbolMaskSymbolResponse> => {
+
+  return customFetch<getPositionGetBySymbolMaskSymbolResponse>(getGetPositionGetBySymbolMaskSymbolUrl(tradePlatform,mask,symbol),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type postPositionDeleteBatchResponse200 = {
+  data: MT5ResultListApiResponse
+  status: 200
+}
+
+export type postPositionDeleteBatchResponseSuccess = (postPositionDeleteBatchResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postPositionDeleteBatchResponse = (postPositionDeleteBatchResponseSuccess)
+
+export const getPostPositionDeleteBatchUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/PositionDeleteBatch`
+}
+
+/**
+ * Deletes the listed positions and returns one result code per ticket, in the same order.
+ * `MT_RET_OK` means all were deleted, `MT_RET_ERR_PARTIAL` means only some —
+ * inspect each entry. On partial success the array carries a result for every ticket and
+ * the caller inspects them itself; on a complete failure no array is returned.
+ * Deleting positions does not touch the deal history, so the account may
+ * afterwards fail consistency checks.
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Delete positions in bulk
+ */
+export const postPositionDeleteBatch = async (tradePlatform: string,
+    postPositionDeleteBatchBody?: number[], options?: Parameters<typeof customFetch>[1]): Promise<postPositionDeleteBatchResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postPositionDeleteBatchResponse>(getPostPositionDeleteBatchUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(postPositionDeleteBatchBody)
+  }
+);}
+
+
+export type getOrderRequestByGroupMaskResponse200 = {
+  data: MT5OrderListApiResponse
+  status: 200
+}
+
+export type getOrderRequestByGroupMaskResponseSuccess = (getOrderRequestByGroupMaskResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getOrderRequestByGroupMaskResponse = (getOrderRequestByGroupMaskResponseSuccess)
+
+export const getGetOrderRequestByGroupMaskUrl = (tradePlatform: string,
+    mask: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderRequestByGroup/${encodeURIComponent(String(mask))}`
+}
+
+/**
+ * Returns the orders of every login in the groups matching the mask. Only groups
+ * belonging to the trade platform are scanned. The result is not paginated: the
+ * whole set is returned at once, in the order the trade server reports it.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List orders by group
+ */
+export const getOrderRequestByGroupMask = async (tradePlatform: string,
+    mask: string, options?: Parameters<typeof customFetch>[1]): Promise<getOrderRequestByGroupMaskResponse> => {
+
+  return customFetch<getOrderRequestByGroupMaskResponse>(getGetOrderRequestByGroupMaskUrl(tradePlatform,mask),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getOrderGetBySymbolMaskSymbolResponse200 = {
+  data: MT5OrderListApiResponse
+  status: 200
+}
+
+export type getOrderGetBySymbolMaskSymbolResponseSuccess = (getOrderGetBySymbolMaskSymbolResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getOrderGetBySymbolMaskSymbolResponse = (getOrderGetBySymbolMaskSymbolResponseSuccess)
+
+export const getGetOrderGetBySymbolMaskSymbolUrl = (tradePlatform: string,
+    mask: string,
+    symbol: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderGetBySymbol/${encodeURIComponent(String(mask))}/${encodeURIComponent(String(symbol))}`
+}
+
+/**
+ * Returns the orders of the given symbol for the logins in the groups matching the
+ * mask. The result is not paginated: the whole set is returned at once, in the order
+ * the trade server reports it.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List orders by symbol
+ */
+export const getOrderGetBySymbolMaskSymbol = async (tradePlatform: string,
+    mask: string,
+    symbol: string, options?: Parameters<typeof customFetch>[1]): Promise<getOrderGetBySymbolMaskSymbolResponse> => {
+
+  return customFetch<getOrderGetBySymbolMaskSymbolResponse>(getGetOrderGetBySymbolMaskSymbolUrl(tradePlatform,mask,symbol),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getOrderRequestByGroupSymbolMaskSymbolResponse200 = {
+  data: MT5OrderListApiResponse
+  status: 200
+}
+
+export type getOrderRequestByGroupSymbolMaskSymbolResponseSuccess = (getOrderRequestByGroupSymbolMaskSymbolResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getOrderRequestByGroupSymbolMaskSymbolResponse = (getOrderRequestByGroupSymbolMaskSymbolResponseSuccess)
+
+export const getGetOrderRequestByGroupSymbolMaskSymbolUrl = (tradePlatform: string,
+    mask: string,
+    symbol: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderRequestByGroupSymbol/${encodeURIComponent(String(mask))}/${encodeURIComponent(String(symbol))}`
+}
+
+/**
+ * Returns the orders of the given symbol for the logins in the groups matching the
+ * mask. The result is not paginated: the whole set is returned at once, in the order
+ * the trade server reports it.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List orders by group and symbol
+ */
+export const getOrderRequestByGroupSymbolMaskSymbol = async (tradePlatform: string,
+    mask: string,
+    symbol: string, options?: Parameters<typeof customFetch>[1]): Promise<getOrderRequestByGroupSymbolMaskSymbolResponse> => {
+
+  return customFetch<getOrderRequestByGroupSymbolMaskSymbolResponse>(getGetOrderRequestByGroupSymbolMaskSymbolUrl(tradePlatform,mask,symbol),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type postOrderDeleteBatchResponse200 = {
+  data: MT5ResultListApiResponse
+  status: 200
+}
+
+export type postOrderDeleteBatchResponseSuccess = (postOrderDeleteBatchResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postOrderDeleteBatchResponse = (postOrderDeleteBatchResponseSuccess)
+
+export const getPostOrderDeleteBatchUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderDeleteBatch`
+}
+
+/**
+ * Orders can only be deleted from the application that created them; a different
+ * connection answers with an error instead of deleting. The reply carries one result
+ * per requested ticket, at the same index as in the request, so the caller can see
+ * which orders were removed. On partial success the array carries a result for every
+ * ticket and the caller inspects them itself; on a complete failure no array is
+ * returned. A request without tickets is rejected as invalid input.
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Delete several orders at once
+ */
+export const postOrderDeleteBatch = async (tradePlatform: string,
+    postOrderDeleteBatchBody?: number[], options?: Parameters<typeof customFetch>[1]): Promise<postOrderDeleteBatchResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postOrderDeleteBatchResponse>(getPostOrderDeleteBatchUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(postOrderDeleteBatchBody)
+  }
+);}
+
+
+export type getOrderGetTicketResponse200 = {
+  data: MT5OrderApiResponse
+  status: 200
+}
+
+export type getOrderGetTicketResponseSuccess = (getOrderGetTicketResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getOrderGetTicketResponse = (getOrderGetTicketResponseSuccess)
+
+export const getGetOrderGetTicketUrl = (tradePlatform: string,
+    ticket: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderGet/${encodeURIComponent(String(ticket))}`
+}
+
+/**
+ * Returns a single order of the trade database by its ticket. When the ticket is
+ * unknown, the response carries the trade server's "not found" error code instead
+ * of a record.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get an order by ticket
+ */
+export const getOrderGetTicket = async (tradePlatform: string,
+    ticket: number, options?: Parameters<typeof customFetch>[1]): Promise<getOrderGetTicketResponse> => {
+
+  return customFetch<getOrderGetTicketResponse>(getGetOrderGetTicketUrl(tradePlatform,ticket),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getOrderGetByLoginsResponse200 = {
+  data: MT5OrderListApiResponse
+  status: 200
+}
+
+export type getOrderGetByLoginsResponseSuccess = (getOrderGetByLoginsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getOrderGetByLoginsResponse = (getOrderGetByLoginsResponseSuccess)
+
+export const getGetOrderGetByLoginsUrl = (tradePlatform: string,
+    params?: GetOrderGetByLoginsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["logins"];
+
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? 'null' : String(v));
+      });
+      return;
+    }
+
+
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderGetByLogins?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderGetByLogins`
+}
+
+/**
+ * Returns the orders of the given accounts. The result is not paginated: the whole
+ * set is returned at once. Use the ticket-based form for a longer list than fits in
+ * the query string.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List orders by logins
+ */
+export const getOrderGetByLogins = async (tradePlatform: string,
+    params?: GetOrderGetByLoginsParams, options?: Parameters<typeof customFetch>[1]): Promise<getOrderGetByLoginsResponse> => {
+
+  return customFetch<getOrderGetByLoginsResponse>(getGetOrderGetByLoginsUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getOrderGetByTicketsResponse200 = {
+  data: MT5OrderListApiResponse
+  status: 200
+}
+
+export type getOrderGetByTicketsResponseSuccess = (getOrderGetByTicketsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getOrderGetByTicketsResponse = (getOrderGetByTicketsResponseSuccess)
+
+export const getGetOrderGetByTicketsUrl = (tradePlatform: string,
+    params?: GetOrderGetByTicketsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["tickets"];
+
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? 'null' : String(v));
+      });
+      return;
+    }
+
+
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderGetByTickets?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderGetByTickets`
+}
+
+/**
+ * Returns the orders with the given tickets. The result is not paginated: the whole
+ * set is returned at once. For a list longer than fits in the query string, use the
+ * request-body form.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List orders by tickets
+ */
+export const getOrderGetByTickets = async (tradePlatform: string,
+    params?: GetOrderGetByTicketsParams, options?: Parameters<typeof customFetch>[1]): Promise<getOrderGetByTicketsResponse> => {
+
+  return customFetch<getOrderGetByTicketsResponse>(getGetOrderGetByTicketsUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type postOrderRequestByTicketsResponse200 = {
+  data: MT5OrderListApiResponse
+  status: 200
+}
+
+export type postOrderRequestByTicketsResponseSuccess = (postOrderRequestByTicketsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postOrderRequestByTicketsResponse = (postOrderRequestByTicketsResponseSuccess)
+
+export const getPostOrderRequestByTicketsUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/OrderRequestByTickets`
+}
+
+/**
+ * Same result as the ticket query form, but the tickets are sent in the request body,
+ * so a much longer list can be requested. The result is not paginated: the whole set
+ * is returned at once.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List orders by tickets (request body)
+ */
+export const postOrderRequestByTickets = async (tradePlatform: string,
+    postOrderRequestByTicketsBody?: number[], options?: Parameters<typeof customFetch>[1]): Promise<postOrderRequestByTicketsResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postOrderRequestByTicketsResponse>(getPostOrderRequestByTicketsUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(postOrderRequestByTicketsBody)
+  }
+);}
+
+
+export type getHistoryRequestLoginResponse200 = {
+  data: MT5OrderListApiResponse
+  status: 200
+}
+
+export type getHistoryRequestLoginResponseSuccess = (getHistoryRequestLoginResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getHistoryRequestLoginResponse = (getHistoryRequestLoginResponseSuccess)
+
+export const getGetHistoryRequestLoginUrl = (tradePlatform: string,
+    login: number,
+    params?: GetHistoryRequestLoginParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/HistoryRequest/${encodeURIComponent(String(login))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/HistoryRequest/${encodeURIComponent(String(login))}`
+}
+
+/**
+ * Returns the orders of a single account within a time window, closed and still
+ * pending ones alike. Omitted bounds mean the whole history: from 01.01.1970 to the
+ * latest moment. The result is not paginated: the whole window is returned at once.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Order history of an account
+ */
+export const getHistoryRequestLogin = async (tradePlatform: string,
+    login: number,
+    params?: GetHistoryRequestLoginParams, options?: Parameters<typeof customFetch>[1]): Promise<getHistoryRequestLoginResponse> => {
+
+  return customFetch<getHistoryRequestLoginResponse>(getGetHistoryRequestLoginUrl(tradePlatform,login,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getHistoryRequestByGroupMaskResponse200 = {
+  data: MT5OrderListApiResponse
+  status: 200
+}
+
+export type getHistoryRequestByGroupMaskResponseSuccess = (getHistoryRequestByGroupMaskResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getHistoryRequestByGroupMaskResponse = (getHistoryRequestByGroupMaskResponseSuccess)
+
+export const getGetHistoryRequestByGroupMaskUrl = (tradePlatform: string,
+    mask: string,
+    params?: GetHistoryRequestByGroupMaskParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/HistoryRequestByGroup/${encodeURIComponent(String(mask))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/HistoryRequestByGroup/${encodeURIComponent(String(mask))}`
+}
+
+/**
+ * Returns the orders of every login in the groups matching the mask within a time
+ * window. Omitted bounds mean the whole history: from 01.01.1970 to the latest
+ * moment. The result is not paginated: the whole window is returned at once.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Order history by group
+ */
+export const getHistoryRequestByGroupMask = async (tradePlatform: string,
+    mask: string,
+    params?: GetHistoryRequestByGroupMaskParams, options?: Parameters<typeof customFetch>[1]): Promise<getHistoryRequestByGroupMaskResponse> => {
+
+  return customFetch<getHistoryRequestByGroupMaskResponse>(getGetHistoryRequestByGroupMaskUrl(tradePlatform,mask,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type postHistoryRequestByTicketsResponse200 = {
+  data: MT5OrderListApiResponse
+  status: 200
+}
+
+export type postHistoryRequestByTicketsResponseSuccess = (postHistoryRequestByTicketsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postHistoryRequestByTicketsResponse = (postHistoryRequestByTicketsResponseSuccess)
+
+export const getPostHistoryRequestByTicketsUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/HistoryRequestByTickets`
+}
+
+/**
+ * Returns the order history records with the given tickets, sent in the request body
+ * so a long list fits. The result is not paginated: the whole set is returned at
+ * once.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Order history by tickets (request body)
+ */
+export const postHistoryRequestByTickets = async (tradePlatform: string,
+    postHistoryRequestByTicketsBody?: number[], options?: Parameters<typeof customFetch>[1]): Promise<postHistoryRequestByTicketsResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postHistoryRequestByTicketsResponse>(getPostHistoryRequestByTicketsUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(postHistoryRequestByTicketsBody)
   }
 );}
 

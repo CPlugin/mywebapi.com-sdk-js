@@ -9,34 +9,11 @@
  */
 
 /**
- * Type 1 mutator input — full-replace shape for `UserRecordUpdate`.
- * Client submits every non-secret, non-read-only, non-computed field; the
- * handler reads the current record from MT4 server, copies the secrets and
- * read-only fields off it, applies this DTO over the rest, and writes the
- * modified structure back.
- *
- * Read-only fields that do NOT appear here (preserved by the server-side
- * read step):
- *   * `Login` — passed as a path parameter, immutable identity.
- *   * `RegistrationDate` — set once on creation, never updated.
- *   * `LastDate`, `LastIP` — assigned by MT4 server during login.
- *   * `PrevMonthBalance`, `PrevBalance`, `PrevMonthEquity`,
- *     `PrevEquity` — derived server-side at reporting close.
- *
- * Secret fields that do NOT appear here (preserved by the server-side
- * read step; use dedicated endpoints to change them):
- *   * `Password`, `PasswordInvestor`, `PasswordPhone` —
- *     change via `POST UserPasswordSet`.
- *   * `OTPSecret` — provisioned via separate admin flow.
- *   * `APIData` — platform-internal blob, never client-controlled.
- *
- * <br><b>Note on Balance/Credit:</b> these fields ARE accepted here because the
- * platform `UserRecordUpdate` writes them directly. However, the audit-
- * trail-preserving way to move money is the dedicated balance operation
- * endpoints (forthcoming) — submitting Balance via this DTO bypasses the
- * audit log on MT4 server side.
+ * Input shape for `UserRecordUpdate`: the editable part of an MT4 account record.
  */
 export interface MT4UserUpdate {
+  /** Login of the account to update (required identity; never changed by this call) */
+  login?: number;
   /**
      * Group name the account belongs to
      * @nullable
@@ -102,24 +79,54 @@ export interface MT4UserUpdate {
      * @nullable
      */
   comment?: string | null;
-  /** Account leverage (e.g. 100 means 1:100) */
-  leverage?: number;
-  /** IB / agent account number that referred this client */
-  agentAccount?: number;
-  /** Current balance (prefer dedicated balance ops for audit trail) */
-  balance?: number;
-  /** Credit on the account */
-  credit?: number;
-  /** Interest rate */
-  interestRate?: number;
-  /** Tax rate */
-  taxes?: number;
-  /** Account flag bitfield — see MT4User.EnableFlags for bit semantics */
-  enableFlags?: number;
-  /** 0 = no reports, non-zero = nightly email reports enabled */
-  sendReports?: number;
-  /** MetaQuotes ID for mobile push notifications */
-  mqid?: number;
-  /** UI tint color in terminal client lists */
-  userColor?: number;
+  /**
+     * Account leverage (e.g. 100 means 1:100)
+     * @nullable
+     */
+  leverage?: number | null;
+  /**
+     * IB / agent account number that referred this client
+     * @nullable
+     */
+  agentAccount?: number | null;
+  /**
+     * Current balance (prefer dedicated balance ops for audit trail)
+     * @nullable
+     */
+  balance?: number | null;
+  /**
+     * Credit on the account
+     * @nullable
+     */
+  credit?: number | null;
+  /**
+     * Interest rate
+     * @nullable
+     */
+  interestRate?: number | null;
+  /**
+     * Tax rate
+     * @nullable
+     */
+  taxes?: number | null;
+  /**
+     * Account flag bitfield — see MT4User.EnableFlags for bit semantics
+     * @nullable
+     */
+  enableFlags?: number | null;
+  /**
+     * 0 = no reports, non-zero = nightly email reports enabled
+     * @nullable
+     */
+  sendReports?: number | null;
+  /**
+     * MetaQuotes ID for mobile push notifications
+     * @nullable
+     */
+  mqid?: number | null;
+  /**
+     * UI tint color in terminal client lists
+     * @nullable
+     */
+  userColor?: number | null;
 }

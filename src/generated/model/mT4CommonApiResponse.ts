@@ -18,9 +18,10 @@ import type { MT4Common } from './mT4Common';
  */
 export interface MT4CommonApiResponse {
   /**
-     * v2 DTO for MT4 server-wide common settings. Curated subset of the
-     * the platform's ConCommon struct — exposes fields useful to clients while
-     * shielding the v2 contract from MetaQuotes schema drift.
+     * Full server-wide common configuration of an MT4 trade server: identity,
+     * protocol version, bind and web address lists, storage paths, runtime
+     * counters and the operational subsystems (demo accounts, rollover,
+     * statements, live update).
      */
   data?: MT4Common | null;
   /**

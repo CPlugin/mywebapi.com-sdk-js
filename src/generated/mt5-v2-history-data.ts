@@ -107,7 +107,7 @@ export type getTicksHistorySymbolResponse = (getTicksHistorySymbolResponseSucces
 
 export const getGetTicksHistorySymbolUrl = (tradePlatform: string,
     symbol: string,
-    params?: GetTicksHistorySymbolParams,) => {
+    params: GetTicksHistorySymbolParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -135,11 +135,12 @@ export const getGetTicksHistorySymbolUrl = (tradePlatform: string,
  *             tick kind, the same way the streaming events do.
  *
  * <br>
- *   `from` and `to` are optional: without `from` the window starts at
- *             the beginning of the history, without `to` it ends at the current server
- *             time. `limit` is 0 by default and returns the whole window; a positive value
- *             caps the returned ticks and sets `truncated`. There is no pagination: to read
- *             further, repeat the request with `from` moved past the last returned tick.
+ *   `from` is required — ticks are far denser than bars, and a window without a
+ *             start would scan the whole stored history. `to` is optional and defaults to
+ *             the current server time. `limit` is 0 by default and returns the whole window;
+ *             a positive value caps the returned ticks and sets `truncated`. There is no
+ *             pagination: to read further, repeat the request with `from` moved past the last
+ *             returned tick.
  *
  * <br>
  *             The call only reads and changes nothing. When the platform has not received the
@@ -153,7 +154,7 @@ export const getGetTicksHistorySymbolUrl = (tradePlatform: string,
  */
 export const getTicksHistorySymbol = async (tradePlatform: string,
     symbol: string,
-    params?: GetTicksHistorySymbolParams, options?: Parameters<typeof customFetch>[1]): Promise<getTicksHistorySymbolResponse> => {
+    params: GetTicksHistorySymbolParams, options?: Parameters<typeof customFetch>[1]): Promise<getTicksHistorySymbolResponse> => {
 
   return customFetch<getTicksHistorySymbolResponse>(getGetTicksHistorySymbolUrl(tradePlatform,symbol,params),
   {

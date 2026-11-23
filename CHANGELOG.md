@@ -2,6 +2,38 @@
 
 All notable changes to `@mywebapi.com/sdk`. The package follows [semver](https://semver.org/); while it is at `0.x`, a minor release may contain breaking changes.
 
+## 0.4.0
+
+Regenerated from the WebAPI v2 specification of 23.11.2026. v2 now carries the same operation names as v1 and the operations v2 was missing, so a client no longer needs v1 for MT5 management. Minor release with breaking changes: every renamed or removed call is listed under Changed and Removed.
+
+### Added
+
+- The MT5 management surface v2 did not publish: accounts and users (`getUsersGet`, `getUserRequestLogin`, `getUserGetByGroupMask`, `getUserGetByLogins`, `getUserAccountGetLogin`, `getUserAccountRequestLogin`, `postUserAdd`, `postUserUpdate`, `postUserDeleteLogin`, `postUserPasswordChangeLoginType`, `postUserPasswordCheckLoginType`), clients (`getClientRequestClientId`, `postClientAdd`, `postClientDeleteClientId`, `postClientUserAddClientIdLogin`), orders (`getOrderGetTicket`, `getOrderGetByGroupMask`, `getOrderGetByLogins`, `getOrderGetBySymbolMaskSymbol`, `getOrderGetByTickets`, `postOrderRequestByTickets`, `postOrderDeleteBatch`), deals and history (`getDealRequestLogin`, `getDealRequestByGroupMask`, `getDealRequestByGroupSymbolMaskSymbol`, `getDealRequestByLogins`, `getDealRequestByTickets`, `getDealRequestByTicketTicket`, `postDealRequestByTickets`, `postDealUpdate`, `postDealDeleteBatch`, `getHistoryRequestLogin`, `getHistoryRequestByGroupMask`, `postHistoryRequestByTickets`), positions (`getPositionGetLogin`, `getPositionGetByLogins`, `getPositionGetBySymbolMaskSymbol`, `getPositionGetByTickets`, `postPositionDeleteBatch`), dealer calls (`postDealerBalance`, `postDealerBalanceRaw`, `postDealerSend`) and the symbol and group arrays (`getSymbolRequestArrayMask`, `getGroupRequestGroup`, `getGroupRequestArrayMask`).
+- `client.mt4.getManagerCommonEx` — the full server record. `getManagerCommon` keeps answering the short one and `getCfgRequestCommon` the complete one, as on the server.
+- MT4 reads that v2 did not publish: `getUsersGet`, `getSymbolsGetAll` (and `getSymbolsGetAllSymbol`), `getCfgRequestSymbolGroup` (symbol groups, live configuration) and `getCfgRequestGroup`.
+- Partial updates: `postUserRecordUpdate` (MT4, body `MT4UserUpdate`), `postUserUpdate` (MT5, body `MT5UserUpdate`), `postSymbolUpdateSymbol` (MT5) and `postCfgUpdateGroup` (MT4, body `MT4GroupUpdate`). Their bodies now carry only the fields being changed: an omitted field keeps its server value, and an empty body is refused with `Validation`. `MT4UserUpdate` and `MT4GroupUpdate` follow: every field is optional, and an optional field marked nullable can be cleared with `null`.
+- Regenerated from the current server spec: 224 operations.
+
+### Changed
+
+- `client.mt5.getServerTime` → `client.mt5.getTimeServer` — the operation takes v1's name (`ServerTime` became `TimeServer`). `client.mt4.getServerTime` is unchanged.
+- The MT5 group queries take v1's names: `getOrderByGroupMask` → `getOrderGetByGroupMask`, `getDealByGroupMask` → `getDealRequestByGroupMask`, `getPositionByGroupMask` → `getPositionRequestByGroupMask`.
+- Realtime: `onConnectionStatus` is now `onMT4ConnectionStatus` on `MT4V2SignalRClient` and `onMT5ConnectionStatus` on `MT5V2SignalRClient`. The hubs send one event each — `OnMT4ConnectionStatus` on `/hubs/mt4/v2`, `OnMT5ConnectionStatus` on `/hubs/mt5/v2` — so each client registers its own. The transition is delivered for the whole life of the connection, not only right after the handshake.
+- The server checks rights by the effect of the operation: `AdmBalanceFix`, `SymbolAdd`, `SymbolHide` and `SymbolsRefresh` now need the Update right (Request before), `TradeTransaction` needs Update (Create before), and MT5 `getDealRequestByTicketTicket` is checked against the order right. A call that the previous check allowed is answered `Forbidden` until the API client is granted the right.
+- The number of operations the SDK exposes grew from 174 to 224; `src/request-timeouts.generated.ts` carries the server timeout of each.
+
+### Removed
+
+- `client.mt4.getSymbolsGroupsGet` — the pump-cached symbol-group list. Symbol groups are read with `getCfgRequestSymbolGroup`.
+- `client.mt4.postGroupRecordUpdateGroup` — use `postCfgUpdateGroup` with the fields that change, or `patchGroupRecordGroup` for JSON Merge Patch.
+- `client.mt4.postUserRecordUpdateLogin` — use `postUserRecordUpdate`.
+- The GET twins of mutations: a mutation in v2 is a POST, so the duplicated `GET` variants are gone.
+
+### Documentation
+
+- README and the landing page show the new method and event names.
+- TypeDoc reference regenerated.
+
 ## 0.3.5
 
 Dependency maintenance; no change to the API surface, to the request and response types, or to behaviour.

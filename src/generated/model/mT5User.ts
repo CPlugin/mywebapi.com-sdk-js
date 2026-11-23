@@ -7,7 +7,7 @@
  * Partly follows the JSON-Pure API idea: a successful call answers HTTP 200; any other code reports an error, such as wrong parameters or an unavailable trade platform.
  * OpenAPI spec version: 2.0
  */
-import type { UsersRights } from './usersRights';
+import type { MT5UserRights } from './mT5UserRights';
 
 /**
  * MT5 user, v2 read DTO — full field set (A4 expansion). Includes all editable
@@ -122,8 +122,8 @@ export interface MT5User {
      * @nullable
      */
   middleName?: string | null;
-  /** Account permission flags: names of the set bits, `"Enabled, Password"` (the UsersRights schema). */
-  rights?: UsersRights;
+  /** Account permission flags: names of the set bits, `"Enabled, Password"` (the MT5UserRights schema). */
+  rights?: MT5UserRights;
   /** SSL certificate serial number (read-only). */
   certSerialNumber?: number;
   /**

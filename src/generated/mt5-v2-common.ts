@@ -15,33 +15,37 @@ import type {
 import { customFetch } from '../mutator';
 
 
-export type getServerTimeMT5Response200 = {
+export type getTimeServerResponse200 = {
   data: DateTimeApiResponse
   status: 200
 }
 
-export type getServerTimeMT5ResponseSuccess = (getServerTimeMT5Response200) & {
+export type getTimeServerResponseSuccess = (getTimeServerResponse200) & {
   headers: Headers;
 };
 ;
 
-export type getServerTimeMT5Response = (getServerTimeMT5ResponseSuccess)
+export type getTimeServerResponse = (getTimeServerResponseSuccess)
 
-export const getGetServerTimeMT5Url = (tradePlatform: string,) => {
-
-
+export const getGetTimeServerUrl = (tradePlatform: string,) => {
 
 
-  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ServerTime`
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/TimeServer`
 }
 
 /**
+ * Returns the current time of the trade server. The call only reads and changes
+ * nothing. It requires a connection to the trade platform; without one the call
+ * is answered with a "not connected" error.
+ *
  * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get server time
  */
-export const getServerTimeMT5 = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getServerTimeMT5Response> => {
+export const getTimeServer = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getTimeServerResponse> => {
 
-  return customFetch<getServerTimeMT5Response>(getGetServerTimeMT5Url(tradePlatform),
+  return customFetch<getTimeServerResponse>(getGetTimeServerUrl(tradePlatform),
   {
     ...options,
     method: 'GET'

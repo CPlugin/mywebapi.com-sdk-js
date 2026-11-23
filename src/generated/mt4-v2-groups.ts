@@ -155,6 +155,51 @@ export const getGroupsRequest = async (tradePlatform: string,
 );}
 
 
+export type getCfgRequestGroupResponse200 = {
+  data: MT4GroupListApiResponse
+  status: 200
+}
+
+export type getCfgRequestGroupResponseSuccess = (getCfgRequestGroupResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCfgRequestGroupResponse = (getCfgRequestGroupResponseSuccess)
+
+export const getGetCfgRequestGroupUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGroup`
+}
+
+/**
+ * Manager (live) call returning the group configuration set as stored on
+ * the MT4 server — the same data the platform persists for
+ * `CfgUpdateGroup`, unlike the pump-cached `GroupsGet`.
+ *
+ * Curated DTO: SMTP credentials and template paths are dropped, and the
+ * nested security/margin arrays are served by their own endpoints. Order
+ * follows the server response. Typical group counts are small, so no
+ * pagination is needed.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List trading groups (live configuration)
+ */
+export const getCfgRequestGroup = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestGroupResponse> => {
+
+  return customFetch<getCfgRequestGroupResponse>(getGetCfgRequestGroupUrl(tradePlatform),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
 export type getGroupSecGroupsGetGroupResponse200 = {
   data: MT4GroupSecListApiResponse
   status: 200
@@ -245,53 +290,45 @@ export const getGroupSecMarginsGetGroup = async (tradePlatform: string,
 );}
 
 
-export type postGroupRecordUpdateGroupResponse200 = {
-  data: MT4GroupApiResponse
+export type postCfgUpdateGroupResponse200 = {
+  data: BooleanApiResponse
   status: 200
 }
 
-export type postGroupRecordUpdateGroupResponseSuccess = (postGroupRecordUpdateGroupResponse200) & {
+export type postCfgUpdateGroupResponseSuccess = (postCfgUpdateGroupResponse200) & {
   headers: Headers;
 };
 ;
 
-export type postGroupRecordUpdateGroupResponse = (postGroupRecordUpdateGroupResponseSuccess)
+export type postCfgUpdateGroupResponse = (postCfgUpdateGroupResponseSuccess)
 
-export const getPostGroupRecordUpdateGroupUrl = (tradePlatform: string,
-    group: string,) => {
-
+export const getPostCfgUpdateGroupUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/GroupRecordUpdate/${encodeURIComponent(String(group))}`
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateGroup`
 }
 
 /**
- * Update a group configuration — Type 1 mutator with secret-preservation read.
+ * Change a trading group. The `group` field of the body names the target group and is
+ * never changed; the response is a boolean.
  *
- * <br>
- * Same flow as `UserRecordUpdate`: read the existing
- * `ConGroup` from the MT4 server, overlay the
- * `MT4GroupUpdate` DTO over the in-memory record, write the
- * merged structure back. Preserves SMTP credentials, template paths,
- * SecuritiesHash, reserved arrays, the nested SecGroups/SecMargins
- * arrays, and NewsLanguages — none of those are on the input DTO so
- * they survive untouched.
- * <br>
- * Wraps the platform's `CfgUpdateGroup` — v2 renames to
- * `GroupRecordUpdate` for consistency with
- * `UserRecordUpdate`; the underlying platform call is the same as
- * v1's `POST CfgUpdateGroup` endpoint.
- * <br>
- * Idempotency-Key strongly recommended for safe retries.
+ * Only the fields present in the body are written: the group is read live from the trade
+ * server, the body is applied over it, and the merged record is written back. A field that
+ * is left out keeps its server value; for the string fields, omitting the key keeps the
+ * value while sending `""` clears it. Fields the body cannot carry (SMTP credentials,
+ * templates, the securities hash, reserved and nested arrays) keep their server values. A
+ * body with the group name but no field to change is rejected.
  *
+ * Idempotency-Key strongly recommended: the change applies to every
+ * account in the group at once.
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update trading group
  */
-export const postGroupRecordUpdateGroup = async (tradePlatform: string,
-    group: string,
-    mT4GroupUpdate?: MT4GroupUpdate, options?: Parameters<typeof customFetch>[1]): Promise<postGroupRecordUpdateGroupResponse> => {
+export const postCfgUpdateGroup = async (tradePlatform: string,
+    mT4GroupUpdate?: MT4GroupUpdate, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateGroupResponse> => {
 
     const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
     if (!h) return {};
@@ -307,7 +344,7 @@ export const postGroupRecordUpdateGroup = async (tradePlatform: string,
     }
     return headers;
   };
-return customFetch<postGroupRecordUpdateGroupResponse>(getPostGroupRecordUpdateGroupUrl(tradePlatform,group),
+return customFetch<postCfgUpdateGroupResponse>(getPostCfgUpdateGroupUrl(tradePlatform),
   {
     ...options,
     method: 'POST',

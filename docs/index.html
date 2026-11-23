@@ -707,7 +707,7 @@ console.log('MT4 server time:', time);</code></pre>
             </button>
           </div>
           <pre><code id="realtime-snippet">const rt = client.realtime.mt4(tp);   // or .mt5
-rt.onConnectionStatus((s) => console.log('connected:', s.connected));
+rt.onMT4ConnectionStatus((s) => console.log('connected:', s.connected));   // onMT5ConnectionStatus on mt5
 await rt.start();
 for await (const tick of rt.streamTicks('EURUSD')) {
   console.log(tick.symbol, tick.bid, tick.ask);

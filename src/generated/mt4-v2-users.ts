@@ -27,6 +27,53 @@ import type {
 import { customFetch } from '../mutator';
 
 
+export type getUsersGetResponse200 = {
+  data: MT4UserListApiResponse
+  status: 200
+}
+
+export type getUsersGetResponseSuccess = (getUsersGetResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getUsersGetResponse = (getUsersGetResponseSuccess)
+
+export const getGetUsersGetUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersGet`
+}
+
+/**
+ * Every account stored in the pump cache of the connected trade platform.
+ *
+ * Pump-cached read — instant local lookup, no MT4 round-trip. Accounts are
+ * keyed by login; the response is the values-only list of the cache. Same
+ * curated DTO as the single-account endpoints: passwords, OTP secret and
+ * the API blob never cross the boundary.
+ *
+ * A cold cache (fresh connection) answers with an empty list until the
+ * pump has flushed its first snapshot — use `UsersRequest` when a
+ * guaranteed live answer is required.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List accounts (cached)
+ */
+export const getUsersGet = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getUsersGetResponse> => {
+
+  return customFetch<getUsersGetResponse>(getGetUsersGetUrl(tradePlatform),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
 export type getUserRecordGetLoginResponse200 = {
   data: MT4UserApiResponse
   status: 200
@@ -474,56 +521,45 @@ return customFetch<postUserRecordNewResponse>(getPostUserRecordNewUrl(tradePlatf
 );}
 
 
-export type postUserRecordUpdateLoginResponse200 = {
-  data: MT4UserApiResponse
+export type postUserRecordUpdateResponse200 = {
+  data: BooleanApiResponse
   status: 200
 }
 
-export type postUserRecordUpdateLoginResponseSuccess = (postUserRecordUpdateLoginResponse200) & {
+export type postUserRecordUpdateResponseSuccess = (postUserRecordUpdateResponse200) & {
   headers: Headers;
 };
 ;
 
-export type postUserRecordUpdateLoginResponse = (postUserRecordUpdateLoginResponseSuccess)
+export type postUserRecordUpdateResponse = (postUserRecordUpdateResponseSuccess)
 
-export const getPostUserRecordUpdateLoginUrl = (tradePlatform: string,
-    login: number,) => {
-
+export const getPostUserRecordUpdateUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordUpdate/${encodeURIComponent(String(login))}`
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordUpdate`
 }
 
 /**
- * Update an account record — Type 1 mutator with secret-preservation read.
+ * Change an account. The `login` field of the body identifies the account and is never
+ * changed; the response is a boolean.
  *
- * <br>
- * Surface-level Type 1 semantics: client submits the full `MT4UserUpdate`
- * DTO and the server writes it back. Implementation requires an extra
- * read step because the platform `UserRecord` struct contains
- * secret/computed/read-only fields the v2 input DTO deliberately omits
- * (Password, OTPSecret, LastDate, etc.). Without the read step those
- * would be zeroed out by the write.
- * <br>
- * Flow:
- * <list type="number"><item>Fetch the existing record via `UserRecordsRequest` (live, not pump cache).</item><item>Apply the DTO over the in-memory record using `ApplyTo`. Secrets and read-only fields are `[MapperIgnoreTarget]`'d so they survive.</item><item>Write the modified record back via `UserRecordUpdate`.</item></list><br><b>This is NOT Type 2.</b> Type 2 mutators (single-field) are deferred
- * to a later release and will accept just the field name + value, doing
- * the read-modify-write entirely server-side. Both flows happen to use
- * the same read-modify-write structure on the implementation side — the
- * difference is what the client submits.
- * <br>
- * Idempotency-Key is strongly recommended; without it a retried update
- * risks silently overwriting concurrent edits that happened between
- * the original send and the retry.
+ * Only the fields present in the body are written: the record is read live from the trade
+ * server, the body is applied over it, and the merged record is written back. A field that
+ * is left out keeps its server value; for the string fields, omitting the key keeps the
+ * value while sending `""` clears it. Server-assigned and secret values (passwords, OTP
+ * secret, registration date, last login, previous-period balances) always keep their server
+ * values. A body with the login but no field to change is rejected.
  *
+ * Idempotency-Key strongly recommended: a change to the account affects
+ * trading immediately, and a blind retry can overwrite concurrent edits.
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Update account
  */
-export const postUserRecordUpdateLogin = async (tradePlatform: string,
-    login: number,
-    mT4UserUpdate?: MT4UserUpdate, options?: Parameters<typeof customFetch>[1]): Promise<postUserRecordUpdateLoginResponse> => {
+export const postUserRecordUpdate = async (tradePlatform: string,
+    mT4UserUpdate?: MT4UserUpdate, options?: Parameters<typeof customFetch>[1]): Promise<postUserRecordUpdateResponse> => {
 
     const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
     if (!h) return {};
@@ -539,7 +575,7 @@ export const postUserRecordUpdateLogin = async (tradePlatform: string,
     }
     return headers;
   };
-return customFetch<postUserRecordUpdateLoginResponse>(getPostUserRecordUpdateLoginUrl(tradePlatform,login),
+return customFetch<postUserRecordUpdateResponse>(getPostUserRecordUpdateUrl(tradePlatform),
   {
     ...options,
     method: 'POST',

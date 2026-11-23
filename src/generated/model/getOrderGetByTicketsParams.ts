@@ -8,15 +8,9 @@
  * OpenAPI spec version: 2.0
  */
 
-export type GetDealByGroupMaskParams = {
+export type GetOrderGetByTicketsParams = {
 /**
- * Maximum number of items to return in one page. Omit to return all items in a single page.
- * Maximum allowed value is 5000.
+ * Order tickets, repeated as `tickets=…&tickets=…` query parameters.
  */
-limit?: number;
-/**
- * Opaque continuation token. Pass the value from the previous response's
- * `meta.paging.nextCursor` to fetch the next page; omit for the first page.
- */
-cursor?: string;
+tickets?: number[];
 };

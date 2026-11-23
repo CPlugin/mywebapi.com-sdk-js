@@ -36,23 +36,23 @@ describe.skipIf(!E2E_ENABLED)('SignalR e2e', () => {
   }, 20_000);
 
   // -------------------------------------------------------------------------
-  // * Connection lifecycle — start() succeeds and server pushes OnConnectionStatus
+  // * Connection lifecycle — start() succeeds and server pushes OnMT4ConnectionStatus
   // -------------------------------------------------------------------------
 
-  test('start() connects and onConnectionStatus callback fires within 5 s', async () => {
+  test('start() connects and onMT4ConnectionStatus callback fires within 5 s', async () => {
     const rt: MT4V2SignalRClient = client.realtime.mt4(tp);
 
     // * Register the callback BEFORE start() — the race-free pattern.
     //   The handler is queued internally and attached to the HubConnection
     //   before the WebSocket handshake opens, so the server's immediate
-    //   post-handshake OnConnectionStatus push is never missed.
+    //   post-handshake OnMT4ConnectionStatus push is never missed.
     const statusReceived = new Promise<void>((resolve) => {
-      rt.onConnectionStatus((_payload) => resolve());
+      rt.onMT4ConnectionStatus((_payload) => resolve());
     });
 
     try {
       await rt.start();
-      await withTimeout(statusReceived, 5_000, 'onConnectionStatus callback');
+      await withTimeout(statusReceived, 5_000, 'onMT4ConnectionStatus callback');
     } finally {
       await rt.stop();
     }
