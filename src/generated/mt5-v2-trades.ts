@@ -793,7 +793,7 @@ export const getGetOrderGetByGroupMaskUrl = (tradePlatform: string,
  * Returns active and pending orders for all logins in groups matching the mask,
  * ordered by Order ID ascending. Use the cursor for the next page.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List orders by group
  */
 export const getOrderGetByGroupMask = async (tradePlatform: string,
@@ -990,7 +990,7 @@ export const getGetOrderRequestByGroupMaskUrl = (tradePlatform: string,
  * belonging to the trade platform are scanned. The result is not paginated: the
  * whole set is returned at once, in the order the trade server reports it.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List orders by group
  */
 export const getOrderRequestByGroupMask = async (tradePlatform: string,
@@ -1033,7 +1033,7 @@ export const getGetOrderRequestByGroupSymbolMaskSymbolUrl = (tradePlatform: stri
  * mask. The result is not paginated: the whole set is returned at once, in the order
  * the trade server reports it.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List orders by group and symbol
  */
 export const getOrderRequestByGroupSymbolMaskSymbol = async (tradePlatform: string,
@@ -1387,7 +1387,7 @@ export const getGetPositionRequestByGroupMaskUrl = (tradePlatform: string,
  * Returns open positions for all logins in groups matching the mask,
  * ordered by Position ID ascending. Use the cursor for the next page.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List positions by group
  */
 export const getPositionRequestByGroupMask = async (tradePlatform: string,

@@ -30,8 +30,22 @@ export interface MT5MarketTickStat {
   priceAw?: number;
   /** Closing price of the session. */
   priceClose?: number;
+  /** Option delta — sensitivity of the theoretical price to the underlying price. */
+  priceGreeksDelta?: number;
+  /** Option gamma — sensitivity of delta to the underlying price. */
+  priceGreeksGamma?: number;
+  /** Option omega — elasticity of the theoretical price to the underlying price. */
+  priceGreeksOmega?: number;
+  /** Option rho — sensitivity of the theoretical price to the interest rate. */
+  priceGreeksRho?: number;
+  /** Option theta — sensitivity of the theoretical price to the time to expiry. */
+  priceGreeksTheta?: number;
+  /** Option vega — sensitivity of the theoretical price to volatility. */
+  priceGreeksVega?: number;
   /** Opening price of the session. */
   priceOpen?: number;
+  /** Sensitivity of the theoretical price used by the pricing model of the server. */
+  priceSensitivity?: number;
   /** Theoretical option price. */
   priceTheoretical?: number;
   /** Price volatility of the session. */

@@ -10002,10 +10002,13 @@
         "description": "A subscription configuration of the trade server.",
         "properties": {
           "controlMode": {
-            "description": "Code of the actions the client terminals are allowed to perform with the subscription.",
-            "format": "int32",
-            "nullable": true,
-            "type": "integer"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT5SubscriptionControlMode"
+              }
+            ],
+            "description": "Actions the client terminals are allowed to perform with the subscription.<br/>One of: Full, Unsubscribe, View, Hidden. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation.",
+            "nullable": true
           },
           "countries": {
             "description": "Countries the subscription is available in.",
@@ -10027,10 +10030,13 @@
             "type": "string"
           },
           "flags": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT5ConSubscriptionFlags"
+              }
+            ],
             "description": "Additional subscription property flags.",
-            "format": "int32",
-            "nullable": true,
-            "type": "integer"
+            "nullable": true
           },
           "groups": {
             "description": "Account groups the subscription is available in.",
@@ -10047,7 +10053,7 @@
             "type": "integer"
           },
           "image": {
-            "description": "Logo identifier shown for the subscription.",
+            "description": "Logo shown for the subscription.",
             "format": "int32",
             "nullable": true,
             "type": "integer"
@@ -10076,16 +10082,22 @@
             "type": "integer"
           },
           "periodFreeMode": {
-            "description": "Trial (free) period code.",
-            "format": "int32",
-            "nullable": true,
-            "type": "integer"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT5SubscriptionFreePeriod"
+              }
+            ],
+            "description": "Trial (free) period.<br/>One of: None, Day, Week, Month, Quarter, Year, Custom. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation.",
+            "nullable": true
           },
           "periodMode": {
-            "description": "Subscription period code.",
-            "format": "int32",
-            "nullable": true,
-            "type": "integer"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT5SubscriptionPeriod"
+              }
+            ],
+            "description": "Subscription period.<br/>One of: Once, Daily, Weekly, Monthly, Quarterly, Annual, Custom. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation.",
+            "nullable": true
           },
           "price": {
             "description": "Subscription price for non-professional traders.",
@@ -10113,10 +10125,13 @@
             "type": "array"
           },
           "type": {
-            "description": "Subscription type code.",
-            "format": "int32",
-            "nullable": true,
-            "type": "integer"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT5SubscriptionType"
+              }
+            ],
+            "description": "Subscription type.<br/>One of: Subscription, Folder. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation.",
+            "nullable": true
           },
           "urlAgreement": {
             "description": "Link to the subscription agreement.",
@@ -10165,15 +10180,35 @@
         },
         "type": "object"
       },
+      "MT5ConSubscriptionFlags": {
+        "description": "Additional properties of a subscription configuration.<br/>Flags: names of the set bits joined by \", \" (\"Enable, AutoProlong\"), \"None\" when none is set; a set bit without a name is \"Bit<n>\" (bit number). Bits: Enable = 0x1, AutoProlong = 0x2. Accepted on input, never written: All = Enable, AutoProlong.",
+        "example": "Enable, AutoProlong",
+        "pattern": "^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$",
+        "type": "string",
+        "x-enum-values": [
+          0,
+          1,
+          2
+        ],
+        "x-enum-varnames": [
+          "None",
+          "Enable",
+          "AutoProlong"
+        ],
+        "x-enumFlags": true
+      },
       "MT5ConSubscriptionSymbol": {
         "additionalProperties": false,
         "description": "A trading instrument covered by a subscription configuration.",
         "properties": {
           "level": {
-            "description": "Depth of the price history available by the subscription.",
-            "format": "int32",
-            "nullable": true,
-            "type": "integer"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT5SubscriptionSymbolLevel"
+              }
+            ],
+            "description": "Depth of the price history available by the subscription.<br/>One of: Delayed, RealtimeLevel1, RealtimeLevel2. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation.",
+            "nullable": true
           },
           "symbol": {
             "description": "Name of the trading instrument, including its group path.",
@@ -10181,10 +10216,13 @@
             "type": "string"
           },
           "tickHistory": {
-            "description": "Depth of the tick history available by the subscription.",
-            "format": "int32",
-            "nullable": true,
-            "type": "integer"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT5SubscriptionTickHistory"
+              }
+            ],
+            "description": "Depth of the tick history available by the subscription.<br/>One of: None, LastDay, LastWeek, LastMonth, Last3Months, Last6Months, LastYear, Last2Years, Last3Years, Last5Years, All. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation.",
+            "nullable": true
           }
         },
         "type": "object"
@@ -12353,8 +12391,43 @@
             "format": "double",
             "type": "number"
           },
+          "priceGreeksDelta": {
+            "description": "Option delta — sensitivity of the theoretical price to the underlying price.",
+            "format": "double",
+            "type": "number"
+          },
+          "priceGreeksGamma": {
+            "description": "Option gamma — sensitivity of delta to the underlying price.",
+            "format": "double",
+            "type": "number"
+          },
+          "priceGreeksOmega": {
+            "description": "Option omega — elasticity of the theoretical price to the underlying price.",
+            "format": "double",
+            "type": "number"
+          },
+          "priceGreeksRho": {
+            "description": "Option rho — sensitivity of the theoretical price to the interest rate.",
+            "format": "double",
+            "type": "number"
+          },
+          "priceGreeksTheta": {
+            "description": "Option theta — sensitivity of the theoretical price to the time to expiry.",
+            "format": "double",
+            "type": "number"
+          },
+          "priceGreeksVega": {
+            "description": "Option vega — sensitivity of the theoretical price to volatility.",
+            "format": "double",
+            "type": "number"
+          },
           "priceOpen": {
             "description": "Opening price of the session.",
+            "format": "double",
+            "type": "number"
+          },
+          "priceSensitivity": {
+            "description": "Sensitivity of the theoretical price used by the pricing model of the server.",
             "format": "double",
             "type": "number"
           },
@@ -12578,7 +12651,7 @@
             "type": "string"
           },
           "time": {
-            "description": "Time the news item was sent, in UTC.",
+            "description": "Time the news item was sent, in the time zone of the trade server. The platform stores the\r\nvalue without a zone, so it is returned as a wall-clock time.",
             "format": "date-time",
             "nullable": true,
             "type": "string"
@@ -12685,7 +12758,7 @@
             "type": "string"
           },
           "time": {
-            "description": "Publication time, in UTC. Omitted uses the current time of the trade server.",
+            "description": "Publication time, in the time zone of the trade server. Omitted uses the current time of\r\nthe trade server.",
             "format": "date-time",
             "nullable": true,
             "type": "string"
@@ -14522,10 +14595,13 @@
         "description": "A subscription of a trading account, as stored by the trade server.",
         "properties": {
           "flags": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT5SubscriptionFlags"
+              }
+            ],
             "description": "Additional subscription property flags.",
-            "format": "int32",
-            "nullable": true,
-            "type": "integer"
+            "nullable": true
           },
           "id": {
             "description": "Identifier of the subscription record. Required when an existing record is updated.",
@@ -14540,10 +14616,13 @@
             "type": "integer"
           },
           "status": {
-            "description": "Subscription state code.",
-            "format": "int32",
-            "nullable": true,
-            "type": "integer"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT5SubscriptionStatus"
+              }
+            ],
+            "description": "Subscription state.<br/>One of: Active, Suspended, Canceled. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation.",
+            "nullable": true
           },
           "subscription": {
             "description": "Identifier of the subscription configuration the account is subscribed to.",
@@ -14571,6 +14650,17 @@
           }
         },
         "type": "object"
+      },
+      "MT5SubscriptionAction": {
+        "description": "An action performed with a subscription.",
+        "enum": [
+          "Subscribe",
+          "Renewal",
+          "Suspend",
+          "Cancel",
+          "Deleted"
+        ],
+        "type": "string"
       },
       "MT5SubscriptionActionResult": {
         "additionalProperties": false,
@@ -14730,15 +14820,56 @@
         },
         "type": "object"
       },
+      "MT5SubscriptionControlMode": {
+        "description": "What a client is allowed to do with a subscription.",
+        "enum": [
+          "Full",
+          "Unsubscribe",
+          "View",
+          "Hidden"
+        ],
+        "type": "string"
+      },
+      "MT5SubscriptionFlags": {
+        "description": "Additional properties of a subscription.<br/>Flags: names of the set bits joined by \", \" (\"FreePeriod\"), \"None\" when none is set; a set bit without a name is \"Bit<n>\" (bit number). Bits: FreePeriod = 0x1.",
+        "example": "FreePeriod",
+        "pattern": "^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$",
+        "type": "string",
+        "x-enum-values": [
+          0,
+          1
+        ],
+        "x-enum-varnames": [
+          "None",
+          "FreePeriod"
+        ],
+        "x-enumFlags": true
+      },
+      "MT5SubscriptionFreePeriod": {
+        "description": "Free period granted before the first charge.",
+        "enum": [
+          "None",
+          "Day",
+          "Week",
+          "Month",
+          "Quarter",
+          "Year",
+          "Custom"
+        ],
+        "type": "string"
+      },
       "MT5SubscriptionHistory": {
         "additionalProperties": false,
         "description": "An action performed with a subscription of a trading account.",
         "properties": {
           "action": {
-            "description": "Action type code.",
-            "format": "int32",
-            "nullable": true,
-            "type": "integer"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT5SubscriptionAction"
+              }
+            ],
+            "description": "Action performed with the subscription.<br/>One of: Subscribe, Renewal, Suspend, Cancel, Deleted. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation.",
+            "nullable": true
           },
           "amount": {
             "description": "Amount charged or returned by the action.",
@@ -14883,6 +15014,37 @@
         },
         "type": "object"
       },
+      "MT5SubscriptionPeriod": {
+        "description": "Billing period of a subscription.",
+        "enum": [
+          "Once",
+          "Daily",
+          "Weekly",
+          "Monthly",
+          "Quarterly",
+          "Annual",
+          "Custom"
+        ],
+        "type": "string"
+      },
+      "MT5SubscriptionStatus": {
+        "description": "State of a subscription.",
+        "enum": [
+          "Active",
+          "Suspended",
+          "Canceled"
+        ],
+        "type": "string"
+      },
+      "MT5SubscriptionSymbolLevel": {
+        "description": "Depth of the market data a subscription delivers for one symbol.",
+        "enum": [
+          "Delayed",
+          "RealtimeLevel1",
+          "RealtimeLevel2"
+        ],
+        "type": "string"
+      },
       "MT5SubscriptionTarget": {
         "additionalProperties": false,
         "description": "An account and a subscription configuration to act on.",
@@ -14899,6 +15061,31 @@
           }
         },
         "type": "object"
+      },
+      "MT5SubscriptionTickHistory": {
+        "description": "How much tick history a subscription delivers for one symbol.",
+        "enum": [
+          "None",
+          "LastDay",
+          "LastWeek",
+          "LastMonth",
+          "Last3Months",
+          "Last6Months",
+          "LastYear",
+          "Last2Years",
+          "Last3Years",
+          "Last5Years",
+          "All"
+        ],
+        "type": "string"
+      },
+      "MT5SubscriptionType": {
+        "description": "Kind of a subscription configuration record.",
+        "enum": [
+          "Subscription",
+          "Folder"
+        ],
+        "type": "string"
       },
       "MT5Summary": {
         "additionalProperties": false,
@@ -25718,7 +25905,7 @@
     },
     "/api/v2/MT4/{tradePlatform}/OnlineGet": {
       "get": {
-        "description": "Pump-cached snapshot of currently online users, paginated by login.\r\n            \r\nPump-cached read — instant local lookup, no MT4 round-trip. Sort\r\norder is the login ascending. `?limit=` caps the page size;\r\nwithout it the full set returns in one page. When the pump cache\r\nis not yet warmed (fresh connection) the response is a NoConnect\r\nerror with a retry hint, not an empty list — empty list means\r\n\"warmed but currently no online sessions\".\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Pump-cached snapshot of currently online users, paginated by login.\r\n            \r\nPump-cached read — instant local lookup, no MT4 round-trip. Sort\r\norder is the login ascending. `?limit=` caps the page size;\r\nwithout it the full set returns in one page. When the pump cache\r\nis not yet warmed (fresh connection) the response is a NoConnect\r\nerror with a retry hint, not an empty list — empty list means\r\n\"warmed but currently no online sessions\".\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "in": "path",
@@ -25747,11 +25934,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -25779,7 +25966,7 @@
     },
     "/api/v2/MT4/{tradePlatform}/OnlineRequest": {
       "get": {
-        "description": "Live snapshot of every currently-online session, fetched from the MT4 server (Manager round-trip — not pump cache).\r\n            \r\nManager (live) counterpart to `OnlineGet`. Useful when the pump\r\ncache hasn't warmed yet, when staleness is unacceptable, or as a\r\nreconciliation pass against the pump snapshot. Heavier than\r\n`OnlineGet`: every call hits the MT4 server. Paged the same way\r\nfor caller symmetry — cursor is the trailing login (ascending).\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Live snapshot of every currently-online session, fetched from the MT4 server (Manager round-trip — not pump cache).\r\n            \r\nManager (live) counterpart to `OnlineGet`. Useful when the pump\r\ncache hasn't warmed yet, when staleness is unacceptable, or as a\r\nreconciliation pass against the pump snapshot. Heavier than\r\n`OnlineGet`: every call hits the MT4 server. Paged the same way\r\nfor caller symmetry — cursor is the trailing login (ascending).\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform id (GUID)",
@@ -25809,11 +25996,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -29709,7 +29896,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/AttachmentAdd": {
       "post": {
-        "description": "<br>\r\n            Sends the file to the server, which stores it and assigns an identifier, and then links it to the\r\n            document named by `documentID` or to the comment named by `commentID`. At most one of the\r\n            two may be given; with neither, the file is stored on the client record without a link.\r\n            The client must be identified, as the file belongs to it.\r\n            \r\n<br>\r\n            The file is stored before the link is written. When the link fails, the file stays on the server\r\n            without an owner and cannot be removed through the API — check the document or comment identifier\r\n            before sending large files.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "<br>\r\n            Sends the file to the server, which stores it and assigns an identifier, and then links it to the\r\n            document named by `documentID` or to the comment named by `commentID`. At most one of the\r\n            two may be given; with neither, the file is stored on the client record without a link.\r\n            The client must be identified, as the file belongs to it.\r\n            \r\n<br>\r\n            The file is stored before the link is written. When the link fails, the file stays on the server\r\n            without an owner and cannot be removed through the API — check the document or comment identifier\r\n            before sending large files.\r\n            \r\n<br>\r\n            The operation is not idempotent — a repeat after an unclear outcome creates a second record.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -29799,7 +29986,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/AttachmentAddBatch": {
       "post": {
-        "description": "Stores the listed files in one call and links each one to the document or comment named in its own\r\nentry. Every entry follows the rules of the single store: one owner client, at most one link\r\ntarget, and the file content in the body. One entry per file is returned with the identifier the\r\nserver assigned; a failure of the link is reported in the entry of that file.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "Stores the listed files in one call and links each one to the document or comment named in its own\r\nentry. Every entry follows the rules of the single store: one owner client, at most one link\r\ntarget, and the file content in the body. One entry per file is returned with the identifier the\r\nserver assigned; a failure of the link is reported in the entry of that file.\r\nThe operation is not idempotent — a repeat after an unclear outcome creates a second record.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -29881,7 +30068,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/AttachmentAddBatchArray": {
       "post": {
-        "description": "Same operation as `AttachmentAddBatch` with the same rules: each file carries its own owner\r\nand link target, and one entry per file is returned with the identifier the server assigned.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "Same operation as `AttachmentAddBatch` with the same rules: each file carries its own owner\r\nand link target, and one entry per file is returned with the identifier the server assigned.\r\nThe operation is not idempotent — a repeat after an unclear outcome creates a second record.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -30020,7 +30207,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/BookGet/{symbol}": {
       "get": {
-        "description": "<br>\r\n            Returns the whole Depth of Market of the symbol — every entry, not the difference from the\r\n            previous state — ordered by price from the highest to the lowest. Volumes are given as the\r\n            data provider supplies them, together with the extended-precision value.\r\n            \r\n<br>\r\n            The trade server delivers the Depth of Market only after the manager application has\r\n            subscribed to the symbol, so the first call for a symbol subscribes to it and the\r\n            subscription is kept for later calls. A symbol with the Depth of Market disabled on the\r\n            server answers a platform error instead of an empty book.\r\n            \n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "<br>\r\n            Returns the whole Depth of Market of the symbol — every entry, not the difference from the\r\n            previous state — ordered by price from the highest to the lowest. Volumes are given as the\r\n            data provider supplies them, together with the extended-precision value.\r\n            \r\n<br>\r\n            The trade server delivers the Depth of Market only after the manager application has\r\n            subscribed to the symbol, so the first call for a symbol subscribes to it and the\r\n            subscription is kept for later calls. A symbol with the Depth of Market disabled on the\r\n            server answers a platform error instead of an empty book.\r\n            \n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -30042,11 +30229,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -30681,7 +30868,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/ClientAddBatch": {
       "post": {
-        "description": "Adds the listed clients to the server database in one call — the same rules and the same\r\nvalidation as the single add. Every record receives the identifier the server assigned to it,\r\nwhich is returned per entry together with its result code. A partial failure answers one entry\r\nper client, so inspect each result instead of trusting the batch as a whole.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "Adds the listed clients to the server database in one call — the same rules and the same\r\nvalidation as the single add. Every record receives the identifier the server assigned to it,\r\nwhich is returned per entry together with its result code. A partial failure answers one entry\r\nper client, so inspect each result instead of trusting the batch as a whole.\r\nThe operation is not idempotent — a repeat after an unclear outcome creates a second record.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -30763,7 +30950,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/ClientAddBatchArray": {
       "post": {
-        "description": "Same operation as `ClientAddBatch` with the same rules: the batch is validated per record and\r\none entry per client is returned, together with the identifier the server assigned.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "Same operation as `ClientAddBatch` with the same rules: the batch is validated per record and\r\none entry per client is returned, together with the identifier the server assigned.\r\nThe operation is not idempotent — a repeat after an unclear outcome creates a second record.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -30987,7 +31174,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/ClientRequest/{clientId}": {
       "get": {
-        "description": "Fetches the client record of the given identifier from the trade server. The call only\r\nreads and changes nothing. An identifier that does not exist is answered with a platform\r\nerror rather than an empty record.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Fetches the client record of the given identifier from the trade server. The call only\r\nreads and changes nothing. An identifier that does not exist is answered with a platform\r\nerror rather than an empty record.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -31011,11 +31198,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -31043,7 +31230,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/ClientRequestByGroup": {
       "get": {
-        "description": "Returns the clients whose preferred group matches the mask, and also those without a preferred\r\ngroup when one of their bound accounts belongs to a matching group. The mask takes one group,\r\nseveral comma-separated groups or wildcards: `*` matches any value and `!` excludes,\r\nfor example `demo*,!demoforex`. Reading changes nothing.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the clients whose preferred group matches the mask, and also those without a preferred\r\ngroup when one of their bound accounts belongs to a matching group. The mask takes one group,\r\nseveral comma-separated groups or wildcards: `*` matches any value and `!` excludes,\r\nfor example `demo*,!demoforex`. Reading changes nothing.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -31064,11 +31251,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -31096,7 +31283,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/ClientRequestHistory/{clientId}": {
       "get": {
-        "description": "Returns the versions of the client record for the requested time window — the record as it was\r\nafter every change. Both bounds are optional: without them the whole history is read. When an\r\nauthor is given, only the changes made by that manager account are returned. Reading changes\r\nnothing.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the versions of the client record for the requested time window — the record as it was\r\nafter every change. Both bounds are optional: without them the whole history is read. When an\r\nauthor is given, only the changes made by that manager account are returned. Reading changes\r\nnothing.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -31147,11 +31334,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -31817,7 +32004,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/CommentAdd": {
       "post": {
-        "description": "Stores a comment and returns it as the server saved it, including the identifier it was assigned.\r\nThe client must be identified; a document identifier is optional and, when given, makes the\r\ncomment belong to that document instead of the client. A comment can only be added from the\r\nserver that holds the client. Files are attached to the comment separately.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "Stores a comment and returns it as the server saved it, including the identifier it was assigned.\r\nThe client must be identified; a document identifier is optional and, when given, makes the\r\ncomment belong to that document instead of the client. A comment can only be added from the\r\nserver that holds the client. Files are attached to the comment separately.\r\nThe operation is not idempotent — a repeat after an unclear outcome creates a second record.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -31907,7 +32094,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/CommentAddBatch": {
       "post": {
-        "description": "Stores the listed comments in one call with the same rules as the single add. One entry per\r\ncomment is returned with the identifier the server assigned.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "Stores the listed comments in one call with the same rules as the single add. One entry per\r\ncomment is returned with the identifier the server assigned.\r\nThe operation is not idempotent — a repeat after an unclear outcome creates a second record.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -31989,7 +32176,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/CommentAddBatchArray": {
       "post": {
-        "description": "Same operation as `CommentAddBatch` with the same rules: one entry per comment is returned\r\ntogether with the identifier the server assigned.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "Same operation as `CommentAddBatch` with the same rules: one entry per comment is returned\r\ntogether with the identifier the server assigned.\r\nThe operation is not idempotent — a repeat after an unclear outcome creates a second record.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -32213,7 +32400,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/CommentRequest/{commentId}": {
       "get": {
-        "description": "Fetches the comment of the given identifier together with the list of its attached files\r\n(identifier, name and size — not the content). Reading changes nothing. An identifier that does\r\nnot exist is answered with a platform error rather than an empty record.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Fetches the comment of the given identifier together with the list of its attached files\r\n(identifier, name and size — not the content). Reading changes nothing. An identifier that does\r\nnot exist is answered with a platform error rather than an empty record.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -32237,11 +32424,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -32269,7 +32456,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/CommentRequestByClient/{clientId}": {
       "get": {
-        "description": "Returns a slice of the comments stored on the client record, in the order the server keeps them.\r\nThe slice is set by `position` (zero-based index of the first comment) and `total`\r\n(number of comments to return), so a long thread is read page by page. Reading changes nothing.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns a slice of the comments stored on the client record, in the order the server keeps them.\r\nThe slice is set by `position` (zero-based index of the first comment) and `total`\r\n(number of comments to return), so a long thread is read page by page. Reading changes nothing.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -32313,11 +32500,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -32345,7 +32532,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/CommentRequestByDocument/{documentId}": {
       "get": {
-        "description": "Returns a slice of the comments stored on the document, in the order the server keeps them. The\r\nslice is set by `position` (zero-based index of the first comment) and `total` (number\r\nof comments to return), so a long thread is read page by page. Reading changes nothing.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns a slice of the comments stored on the document, in the order the server keeps them. The\r\nslice is set by `position` (zero-based index of the first comment) and `total` (number\r\nof comments to return), so a long thread is read page by page. Reading changes nothing.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -32389,11 +32576,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -34851,7 +35038,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/DealerAnswer": {
       "post": {
-        "description": "<br>\r\n            Completes the request taken with `DealerGet` or `DealerLock`: the confirmation\r\n            carries the answer code and, depending on the request, the confirmed volume, price and\r\n            the identifiers of the order and the deal created in an external trading system. The\r\n            request is processed by the trade server immediately and cannot be answered twice.\r\n            \r\n<br>\r\n            The identifier in the confirmation is the identifier of the original request, not the\r\n            caller-side one. The queue must be opened with `DealerStart` first. A rejected\r\n            answer is returned as the platform error that explains it, and the request then stays\r\n            for the platform to expire.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "<br>\r\n            Completes the request taken with `DealerGet` or `DealerLock`: the confirmation\r\n            carries the answer code and, depending on the request, the confirmed volume, price and\r\n            the identifiers of the order and the deal created in an external trading system. The\r\n            request is processed by the trade server immediately and cannot be answered twice.\r\n            \r\n<br>\r\n            The identifier in the confirmation is the identifier of the original request, not the\r\n            caller-side one. The queue must be opened with `DealerStart` first. A rejected\r\n            answer is returned as the platform error that explains it, and the request then stays\r\n            for the platform to expire.\r\n            \n\n**Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -34864,11 +35051,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 15 s (change). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 5 s (trade operation). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 15,
+              "default": 5,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -35385,7 +35572,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/DocumentAdd": {
       "post": {
-        "description": "Stores a document in the client record and returns it as the server saved it, including the\r\nidentifier it was assigned. The client must be identified; otherwise the record is refused.\r\nA document can only be added from the server that holds the client. Files are attached to the\r\ndocument separately, by the attachment routes.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "Stores a document in the client record and returns it as the server saved it, including the\r\nidentifier it was assigned. The client must be identified; otherwise the record is refused.\r\nA document can only be added from the server that holds the client. Files are attached to the\r\ndocument separately, by the attachment routes.\r\nThe operation is not idempotent — a repeat after an unclear outcome creates a second record.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -35475,7 +35662,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/DocumentAddBatch": {
       "post": {
-        "description": "Stores the listed documents in one call with the same rules as the single add. One entry per\r\ndocument is returned with the identifier the server assigned, so a partial failure names the\r\ndocuments that were refused.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "Stores the listed documents in one call with the same rules as the single add. One entry per\r\ndocument is returned with the identifier the server assigned, so a partial failure names the\r\ndocuments that were refused.\r\nThe operation is not idempotent — a repeat after an unclear outcome creates a second record.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -35557,7 +35744,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/DocumentAddBatchArray": {
       "post": {
-        "description": "Same operation as `DocumentAddBatch` with the same rules: one entry per document is\r\nreturned together with the identifier the server assigned.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "Same operation as `DocumentAddBatch` with the same rules: one entry per document is\r\nreturned together with the identifier the server assigned.\r\nThe operation is not idempotent — a repeat after an unclear outcome creates a second record.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -35781,7 +35968,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/DocumentRequest/{documentId}": {
       "get": {
-        "description": "Fetches the document of the given identifier together with the list of its attached files\r\n(identifier, name and size — not the content). Reading changes nothing. An identifier that does\r\nnot exist is answered with a platform error rather than an empty record.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Fetches the document of the given identifier together with the list of its attached files\r\n(identifier, name and size — not the content). Reading changes nothing. An identifier that does\r\nnot exist is answered with a platform error rather than an empty record.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -35805,11 +35992,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -35837,7 +36024,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/DocumentRequestByClient/{clientId}": {
       "get": {
-        "description": "Returns every document stored in the client record, each with the list of its attached files\r\n(identifier, name and size — not the content). Reading changes nothing; a client without\r\ndocuments answers an empty list.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns every document stored in the client record, each with the list of its attached files\r\n(identifier, name and size — not the content). Reading changes nothing; a client without\r\ndocuments answers an empty list.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -35861,11 +36048,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -35893,7 +36080,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/DocumentRequestHistory/{documentId}": {
       "get": {
-        "description": "Returns the versions of the document for the requested time window — the record as it was after\r\nevery change. Both bounds are optional: without them the whole history is read. When an author is\r\ngiven, only the changes made by that manager account are returned. Reading changes nothing.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the versions of the document for the requested time window — the record as it was after\r\nevery change. Both bounds are optional: without them the whole history is read. When an author is\r\ngiven, only the changes made by that manager account are returned. Reading changes nothing.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -35944,11 +36131,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -36230,7 +36417,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/EmailSend": {
       "post": {
-        "description": "<br>\r\n            Queues an email for the recipient through the mail configuration named by the request. The\r\n            configuration must exist on the trade server; without it the platform error is returned and\r\n            nothing is sent.\r\n            \r\n<br>\r\n            The answer carries the platform result code: success means the server accepted the message\r\n            for sending, not that it was delivered. The subject and the body are not stored or logged by\r\n            the service.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "<br>\r\n            Queues an email for the recipient through the mail configuration named by the request. The\r\n            configuration must exist on the trade server; without it the platform error is returned and\r\n            nothing is sent.\r\n            \r\n<br>\r\n            The answer carries the platform result code: success means the server accepted the message\r\n            for sending, not that it was delivered. The subject and the body are not stored or logged by\r\n            the service.\r\n            \r\n<br>\r\n            The operation is not idempotent — a repeat after an unclear outcome delivers a second message.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -38116,7 +38303,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/LoggerServerRequest": {
       "get": {
-        "description": "Returns the entries of the chosen kind in the given time window, newest and oldest included.\r\nThe window is given in seconds elapsed since 01.01.1970; the optional keyword narrows the\r\nentries the way the journal search of the platform does.\r\n            \r\nThe request mode and the event type are platform values: an unknown combination is answered\r\nby the server with the error that explains it. The whole window is returned in one answer,\r\nso a wide window over a busy server is a large response.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the entries of the chosen kind in the given time window, newest and oldest included.\r\nThe window is given in seconds elapsed since 01.01.1970; the optional keyword narrows the\r\nentries the way the journal search of the platform does.\r\n            \r\n<br>`mode` accepts 0 (standard entries), 1 (errors only) or 2 (full journal); `type`\r\naccepts 0 (all events), 1–8 (configuration, system, network, history, users, trades, API\r\ncalls, notifications) or 16–17 (live update, outgoing mail). Any other value is refused.\r\n\r\n            \r\nThe whole window is returned in one answer, so a wide window over a busy server is a large\r\nresponse.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -38173,11 +38360,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -38371,7 +38558,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/MailRequest": {
       "get": {
-        "description": "Enumerates the mailbox of the account the API uses to connect to the trade server. Only the\r\nheaders are returned — subject, sender, recipient, time and sizes — so a mailbox with large\r\nmessages is enumerated without transferring their content. Request a single message by its\r\nidentifier to receive the body and the attachments.\r\n            \r\nThe positions are counted from zero over the mailbox as it is held by the connection; the\r\nlist grows as new messages arrive. Every entry of the page costs one native read, so the\r\npage is capped at `count` entries and a call that asks for more than 1000 is refused\r\nas invalid.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Enumerates the mailbox of the account the API uses to connect to the trade server. Only the\r\nheaders are returned — subject, sender, recipient, time and sizes — so a mailbox with large\r\nmessages is enumerated without transferring their content. Request a single message by its\r\nidentifier to receive the body and the attachments.\r\n            \r\nThe positions are counted from zero over the mailbox as it is held by the connection; the\r\nlist grows as new messages arrive. Every entry of the page costs one native read, so the\r\npage is capped at `count` entries and a call that asks for more than 1000 is refused\r\nas invalid.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -38404,11 +38591,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -38571,7 +38758,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/MessengerSend": {
       "post": {
-        "description": "<br>\r\n            Queues an SMS to the phone number through the messenger integration configured on the trade\r\n            server. A group may be named to pick the provider that serves it; without it the provider is\r\n            chosen without regard to the group.\r\n            \r\n<br>\r\n            Success means the message was accepted for sending, not that it was delivered. An invalid\r\n            or non-mobile number is answered with its own platform error, which names the reason. The\r\n            message text is not stored or logged by the service.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "<br>\r\n            Queues an SMS to the phone number through the messenger integration configured on the trade\r\n            server. A group may be named to pick the provider that serves it; without it the provider is\r\n            chosen without regard to the group.\r\n            \r\n<br>\r\n            Success means the message was accepted for sending, not that it was delivered. An invalid\r\n            or non-mobile number is answered with its own platform error, which names the reason. The\r\n            message text is not stored or logged by the service.\r\n            \r\n<br>\r\n            The operation is not idempotent — a repeat after an unclear outcome delivers a second message.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -39030,7 +39217,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/NewsRequest": {
       "get": {
-        "description": "Enumerates the news items received by the account the API uses to connect. Only the headers\r\nare returned; request a single news item by its identifier to receive the body.\r\n            \r\nThe positions are counted from zero. Every entry of the page costs one native read, so the\r\npage is capped at `count` entries and a call that asks for more than 1000 is refused as\r\ninvalid.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Enumerates the news items received by the account the API uses to connect. Only the headers\r\nare returned; request a single news item by its identifier to receive the body.\r\n            \r\nThe positions are counted from zero. Every entry of the page costs one native read, so the\r\npage is capped at `count` entries and a call that asks for more than 1000 is refused as\r\ninvalid.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -39063,11 +39250,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -39185,7 +39372,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/NotificationsSend": {
       "post": {
-        "description": "<br>\r\n            Delivers a short message to the mobile terminals of the named accounts, either by their\r\n            logins on the trade server or by the MetaQuotes identifiers their terminals are registered\r\n            with. Exactly one of the two addressing lists must be sent.\r\n            \r\n<br>\r\n            Success means the notification was accepted for delivery, not that it reached a terminal;\r\n            delivery needs the mobile terminal of the platform to be installed and registered. The\r\n            message is limited by the platform to 1024 characters and is not stored or logged by the\r\n            service.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "<br>\r\n            Delivers a short message to the mobile terminals of the named accounts, either by their\r\n            logins on the trade server or by the MetaQuotes identifiers their terminals are registered\r\n            with. Exactly one of the two addressing lists must be sent.\r\n            \r\n<br>\r\n            Success means the notification was accepted for delivery, not that it reached a terminal;\r\n            delivery needs the mobile terminal of the platform to be installed and registered. The\r\n            message is limited by the platform to 1024 characters and is not stored or logged by the\r\n            service.\r\n            \r\n<br>\r\n            The operation is not idempotent — a repeat after an unclear outcome delivers a second message.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -39417,7 +39604,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/OnlineGet/{login}": {
       "get": {
-        "description": "<br>\r\n            Returns every live connection of the given login. A login usually holds one session, but\r\n            a terminal and a mobile application connected at the same time appear as two entries with\r\n            their own session identifiers.\r\n            \r\n<br>\r\n            An account that is not connected answers an empty list. The call changes nothing.\r\n            \n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "<br>\r\n            Returns every live connection of the given login. A login usually holds one session, but\r\n            a terminal and a mobile application connected at the same time appear as two entries with\r\n            their own session identifiers.\r\n            \r\n<br>\r\n            An account that is not connected answers an empty list. The call changes nothing.\r\n            \n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -39441,11 +39628,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -39473,7 +39660,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/OnlineRequest": {
       "get": {
-        "description": "<br>\r\n            Returns the connections of every type the trade server currently holds — client\r\n            terminals, mobile applications, manager terminals and API clients — except the platform's\r\n            own server-to-server links, which are not part of the list.\r\n            \r\n<br>\r\n            The window is positional: `from` is the position it starts at and `count` its\r\n            size. The list is live and shifts while it is read, so a repeated call may return entries\r\n            that moved between pages; read the whole list in one pass when consistency matters more\r\n            than the page size. `total` in the answer is the connection count at the moment of\r\n            the request — a list shorter than `total` means the window ended, not that the\r\n            remaining positions are empty.\r\n            \n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "<br>\r\n            Returns the connections of every type the trade server currently holds — client\r\n            terminals, mobile applications, manager terminals and API clients — except the platform's\r\n            own server-to-server links, which are not part of the list.\r\n            \r\n<br>\r\n            The window is positional: `from` is the position it starts at and `count` its\r\n            size. The list is live and shifts while it is read, so a repeated call may return entries\r\n            that moved between pages; read the whole list in one pass when consistency matters more\r\n            than the page size. `total` in the answer is the connection count at the moment of\r\n            the request — a list shorter than `total` means the window ended, not that the\r\n            remaining positions are empty.\r\n            \n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -39504,11 +39691,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -40126,7 +40313,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/OrderGetByGroup/{mask}": {
       "get": {
-        "description": "Returns active and pending orders for all logins in groups matching the mask,\r\nordered by Order ID ascending. Use the cursor for the next page.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns active and pending orders for all logins in groups matching the mask,\r\nordered by Order ID ascending. Use the cursor for the next page.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -40165,11 +40352,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -40486,7 +40673,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/OrderRequestByGroup/{mask}": {
       "get": {
-        "description": "Returns the orders of every login in the groups matching the mask. Only groups\r\nbelonging to the trade platform are scanned. The result is not paginated: the\r\nwhole set is returned at once, in the order the trade server reports it.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the orders of every login in the groups matching the mask. Only groups\r\nbelonging to the trade platform are scanned. The result is not paginated: the\r\nwhole set is returned at once, in the order the trade server reports it.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -40508,11 +40695,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -40540,7 +40727,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/OrderRequestByGroupSymbol/{mask}/{symbol}": {
       "get": {
-        "description": "Returns the orders of the given symbol for the logins in the groups matching the\r\nmask. The result is not paginated: the whole set is returned at once, in the order\r\nthe trade server reports it.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the orders of the given symbol for the logins in the groups matching the\r\nmask. The result is not paginated: the whole set is returned at once, in the order\r\nthe trade server reports it.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -40571,11 +40758,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -40603,7 +40790,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/OrderRequestByLogins": {
       "get": {
-        "description": "Returns the orders of the given accounts as the trade server holds them now. The result is\r\nnot paginated: the whole set is returned at once. Use the ticket-based form for a longer\r\nlist than fits in the query string.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the orders of the given accounts as the trade server holds them now. The result is\r\nnot paginated: the whole set is returned at once. Use the ticket-based form for a longer\r\nlist than fits in the query string.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -40628,11 +40815,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -40660,7 +40847,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/OrderRequestByLoginsSymbol/{symbol}": {
       "get": {
-        "description": "Returns the orders of the given symbol for the given accounts as the trade server holds\r\nthem now. The result is not paginated: the whole set is returned at once.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the orders of the given symbol for the given accounts as the trade server holds\r\nthem now. The result is not paginated: the whole set is returned at once.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -40694,11 +40881,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -41118,7 +41305,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/PasswordChange/{type}": {
       "post": {
-        "description": "Replaces the stored password of the account the API uses to connect to the trade server. The\r\nchange is made by the account itself and applies to the password type given in the route.\r\n            \r\n<br>\r\nThe connection settings kept by this API are not updated by this call: the next connection\r\nattempt still presents the old password and the platform refuses it until the settings are\r\nbrought in line. Change the password here only together with the stored settings.\r\n\r\n            \r\nThe new password must contain at least two of the three character kinds — lower case, upper\r\ncase, digits — and meet the minimum length of the group of the account; a password the\r\npolicy refuses is answered with the platform error that explains it.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "Replaces the stored password of the account the API uses to connect to the trade server. The\r\nchange is made by the account itself and applies to the password type given in the route:\r\n`Main`, `Investor`, `API` or `Trader`. Any other value is refused.\r\n            \r\n<br>\r\nThe connection settings kept by this API are not updated by this call: the next connection\r\nattempt still presents the old password and the platform refuses it until the settings are\r\nbrought in line. Change the password here only together with the stored settings.\r\n\r\n            \r\nThe new password must contain at least two of the three character kinds — lower case, upper\r\ncase, digits — and meet the minimum length of the group of the account; a password the\r\npolicy refuses is answered with the platform error that explains it.\n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -41543,7 +41730,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/PositionGetByGroup/{mask}": {
       "get": {
-        "description": "Returns the open positions of every login in the groups matching the mask. The result is\r\nnot paginated: the whole set is returned at once.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the open positions of every login in the groups matching the mask. The result is\r\nnot paginated: the whole set is returned at once.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -41565,11 +41752,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -41886,7 +42073,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/PositionRequestByGroup/{mask}": {
       "get": {
-        "description": "Returns open positions for all logins in groups matching the mask,\r\nordered by Position ID ascending. Use the cursor for the next page.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns open positions for all logins in groups matching the mask,\r\nordered by Position ID ascending. Use the cursor for the next page.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -41925,11 +42112,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -41957,7 +42144,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/PositionRequestByGroupSymbol/{mask}/{symbol}": {
       "get": {
-        "description": "Returns the open positions of the given symbol for the logins in the groups matching the\r\nmask, read from the trade server. The result is not paginated: the whole set is returned\r\nat once.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the open positions of the given symbol for the logins in the groups matching the\r\nmask, read from the trade server. The result is not paginated: the whole set is returned\r\nat once.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -41988,11 +42175,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -42659,7 +42846,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/RequestGet/{id}": {
       "get": {
-        "description": "<br>\r\n            Returns the trade request with the given identifier as it is known to the connection,\r\n            without taking it for processing: the request stays in the queue and can still be handled\r\n            by any dealer. Use `DealerLock` to reserve it for an answer.\r\n            \r\n<br>\r\n            The queue must be opened with `DealerStart` first. An identifier that is not in the\r\n            queue is answered with the platform code that states it.\r\n            \n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "<br>\r\n            Returns the trade request with the given identifier as it is known to the connection,\r\n            without taking it for processing: the request stays in the queue and can still be handled\r\n            by any dealer. Use `DealerLock` to reserve it for an answer.\r\n            \r\n<br>\r\n            The queue must be opened with `DealerStart` first. An identifier that is not in the\r\n            queue is answered with the platform code that states it.\r\n            \n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -42682,11 +42869,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -42714,7 +42901,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/RequestGetAll": {
       "get": {
-        "description": "<br>\r\n            Returns the requests waiting in the queue as one list, in the order the trade server\r\n            keeps them. Reading does not take a request for processing and does not change the\r\n            queue; requests already taken by a dealer are not part of the list.\r\n            \r\n<br>\r\n            The whole queue is read at once and then trimmed to the requested window: `from`\r\n            skips that many requests from the head, `count` limits how many are returned, and\r\n            the default of both returns everything. The queue is live, so a repeated call may see a\r\n            different set. The queue must be opened with `DealerStart` first.\r\n            \n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "<br>\r\n            Returns the requests waiting in the queue as one list, in the order the trade server\r\n            keeps them. Reading does not take a request for processing and does not change the\r\n            queue; requests already taken by a dealer are not part of the list.\r\n            \r\n<br>\r\n            The whole queue is read at once and then trimmed to the requested window: `from`\r\n            skips that many requests from the head, `count` limits how many are returned, and\r\n            the default of both returns everything. The queue is live, so a repeated call may see a\r\n            different set. The queue must be opened with `DealerStart` first.\r\n            \n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -42747,11 +42934,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -43594,7 +43781,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionCancel": {
       "post": {
-        "description": "<br>\r\n            Cancels the subscription of the account the way the client terminal does: the management\r\n            mode of the configuration is honoured, and when unsubscribing is paid the money is\r\n            handled according to the configuration. The cancellation is written as an action and the\r\n            subscription record is removed.\r\n            \r\n<br>\r\n            The response carries the cancelled subscription record and the action record with the\r\n            payment, if there was one. The operation is not idempotent: a repeated request for an\r\n            already cancelled subscription fails with the platform error.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "<br>\r\n            Cancels the subscription of the account the way the client terminal does: the management\r\n            mode of the configuration is honoured, and when unsubscribing is paid the money is\r\n            handled according to the configuration. The cancellation is written as an action and the\r\n            subscription record is removed.\r\n            \r\n<br>\r\n            The response carries the cancelled subscription record and the action record with the\r\n            payment, if there was one. The operation is not idempotent: a repeated request for an\r\n            already cancelled subscription fails with the platform error.\r\n            \n\n**Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -43607,11 +43794,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 15 s (change). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 5 s (trade operation). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 15,
+              "default": 5,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -43684,7 +43871,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionCancelBatch": {
       "post": {
-        "description": "<br>\r\n            Cancels every subscription of the batch with the same checks and the same payment\r\n            handling as the single-account operation.\r\n            \r\n<br>\r\n            The response carries one result code per pair, in request order, together with the\r\n            cancelled subscription records and their action records. `Ok` in the top-level\r\n            envelope means every pair was cancelled, `ErrPartial` means only some were.\r\n            The operation is not idempotent.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "<br>\r\n            Cancels every subscription of the batch with the same checks and the same payment\r\n            handling as the single-account operation.\r\n            \r\n<br>\r\n            The response carries one result code per pair, in request order, together with the\r\n            cancelled subscription records and their action records. `Ok` in the top-level\r\n            envelope means every pair was cancelled, `ErrPartial` means only some were.\r\n            The operation is not idempotent.\r\n            \n\n**Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -43697,11 +43884,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 15 s (change). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 5 s (trade operation). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 15,
+              "default": 5,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -43876,7 +44063,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionCfgRequest/{name}": {
       "get": {
-        "description": "<br>\r\n            Requests the subscription configuration with the given name directly from the trade\r\n            server, so the answer is current at the moment of the call. An unknown name is answered\r\n            with the platform error rather than with an empty configuration.\r\n            \r\n<br>\r\n            The configuration is returned with its whole content: the countries, groups, trading\r\n            instruments and news categories it covers, not only its general settings.\r\n            \n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "<br>\r\n            Requests the subscription configuration with the given name directly from the trade\r\n            server, so the answer is current at the moment of the call. An unknown name is answered\r\n            with the platform error rather than with an empty configuration.\r\n            \r\n<br>\r\n            The configuration is returned with its whole content: the countries, groups, trading\r\n            instruments and news categories it covers, not only its general settings.\r\n            \n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -43898,11 +44085,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -43930,7 +44117,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionCfgRequestByID/{id}": {
       "get": {
-        "description": "Same as the request by name, but the configuration is addressed by its identifier. The\r\nanswer is read from the trade server at the moment of the call and carries the whole\r\ncontent of the configuration.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Same as the request by name, but the configuration is addressed by its identifier. The\r\nanswer is read from the trade server at the moment of the call and carries the whole\r\ncontent of the configuration.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -43954,11 +44141,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -44270,7 +44457,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionHistoryRequest/{login}": {
       "get": {
-        "description": "Returns every action performed with the subscriptions of the account inside the given\r\ntime range: joins, renewals, cancellations and edits, each with the payment it carried.\r\nBoth bounds are seconds since 1970-01-01 and are inclusive; the range is required.\r\nThe result is not paginated.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns every action performed with the subscriptions of the account inside the given\r\ntime range: joins, renewals, cancellations and edits, each with the payment it carried.\r\nBoth bounds are seconds since 1970-01-01 and are inclusive; the range is required.\r\nThe result is not paginated.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -44312,11 +44499,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -44344,7 +44531,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionHistoryRequestByGroup/{mask}": {
       "get": {
-        "description": "Returns the actions performed with the subscriptions of every account that belongs to a\r\ngroup matching the mask, inside the given time range. The mask takes full group names\r\nincluding the path, several names separated by commas, and the wildcards `*` (any\r\nvalue) and `!` (exclude). Both bounds are seconds since 1970-01-01 and are\r\ninclusive; the range is required.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the actions performed with the subscriptions of every account that belongs to a\r\ngroup matching the mask, inside the given time range. The mask takes full group names\r\nincluding the path, several names separated by commas, and the wildcards `*` (any\r\nvalue) and `!` (exclude). Both bounds are seconds since 1970-01-01 and are\r\ninclusive; the range is required.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -44384,11 +44571,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -44416,7 +44603,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionHistoryRequestByID/{id}": {
       "get": {
-        "description": "Returns the action record with the given identifier. An unknown identifier is answered\r\nwith the platform error `MT_RET_ERR_NOTFOUND` rather than with an empty record.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the action record with the given identifier. An unknown identifier is answered\r\nwith the platform error `MT_RET_ERR_NOTFOUND` rather than with an empty record.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -44440,11 +44627,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -44472,7 +44659,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionHistoryRequestByIDs": {
       "get": {
-        "description": "Returns the action records with the given identifiers. Identifiers that do not exist are\r\nsimply absent from the result.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the action records with the given identifiers. Identifiers that do not exist are\r\nsimply absent from the result.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -44497,11 +44684,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -44529,7 +44716,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionHistoryRequestByLogins": {
       "get": {
-        "description": "Returns the actions performed with the subscriptions of every listed account inside the\r\ngiven time range. Both bounds are seconds since 1970-01-01 and are inclusive; the range\r\nis required. The result is not paginated.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the actions performed with the subscriptions of every listed account inside the\r\ngiven time range. Both bounds are seconds since 1970-01-01 and are inclusive; the range\r\nis required. The result is not paginated.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -44572,11 +44759,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -44858,7 +45045,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionJoin": {
       "post": {
-        "description": "<br>\r\n            Adds the subscription for the account the same way the client terminal does: the\r\n            management mode of the configuration is honoured, and when the configuration is paid the\r\n            cost is debited from the account balance, creating the matching balance deal. A refused\r\n            subscription — disabled configuration, account not allowed, no money — is returned as\r\n            the platform error that explains it.\r\n            \r\n<br>\r\n            The response carries the subscription record as created and the action record with the\r\n            payment, if there was one. The operation is not idempotent: repeating a request that\r\n            succeeded but whose answer was lost subscribes the account again and charges it again.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "<br>\r\n            Adds the subscription for the account the same way the client terminal does: the\r\n            management mode of the configuration is honoured, and when the configuration is paid the\r\n            cost is debited from the account balance, creating the matching balance deal. A refused\r\n            subscription — disabled configuration, account not allowed, no money — is returned as\r\n            the platform error that explains it.\r\n            \r\n<br>\r\n            The response carries the subscription record as created and the action record with the\r\n            payment, if there was one. The operation is not idempotent: repeating a request that\r\n            succeeded but whose answer was lost subscribes the account again and charges it again.\r\n            \n\n**Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -44871,11 +45058,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 15 s (change). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 5 s (trade operation). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 15,
+              "default": 5,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -44948,7 +45135,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionJoinBatch": {
       "post": {
-        "description": "<br>\r\n            Performs the same subscription as the single-account operation for every pair of the\r\n            batch, with the same checks and the same debiting.\r\n            \r\n<br>\r\n            The response carries one result code per pair, in request order, together with the\r\n            created subscription records and their action records. `Ok` in the top-level\r\n            envelope means every pair was subscribed, `ErrPartial` means only some were.\r\n            The operation is not idempotent.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "<br>\r\n            Performs the same subscription as the single-account operation for every pair of the\r\n            batch, with the same checks and the same debiting.\r\n            \r\n<br>\r\n            The response carries one result code per pair, in request order, together with the\r\n            created subscription records and their action records. `Ok` in the top-level\r\n            envelope means every pair was subscribed, `ErrPartial` means only some were.\r\n            The operation is not idempotent.\r\n            \n\n**Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -44961,11 +45148,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 15 s (change). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 5 s (trade operation). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 15,
+              "default": 5,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -45030,7 +45217,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionRequest/{login}": {
       "get": {
-        "description": "Returns every subscription of the account with the given login, including expired ones\r\nthat the server still keeps. The result is not paginated. An unknown login is answered\r\nwith the platform error rather than with an empty list.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns every subscription of the account with the given login, including expired ones\r\nthat the server still keeps. The result is not paginated. An unknown login is answered\r\nwith the platform error rather than with an empty list.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -45054,11 +45241,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -45086,7 +45273,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionRequestByGroup/{mask}": {
       "get": {
-        "description": "Returns the subscriptions of every account that belongs to a group matching the mask.\r\nThe mask takes full group names including the path (`demo\\demoforex`), several\r\nnames separated by commas, and the wildcards `*` (any value) and `!`\r\n(exclude), for example `demo*,!demoforex`.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the subscriptions of every account that belongs to a group matching the mask.\r\nThe mask takes full group names including the path (`demo\\demoforex`), several\r\nnames separated by commas, and the wildcards `*` (any value) and `!`\r\n(exclude), for example `demo*,!demoforex`.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -45108,11 +45295,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -45140,7 +45327,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionRequestByID/{id}": {
       "get": {
-        "description": "Returns the subscription record with the given identifier. An unknown identifier is\r\nanswered with the platform error `MT_RET_ERR_NOTFOUND` rather than with an empty\r\nrecord.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the subscription record with the given identifier. An unknown identifier is\r\nanswered with the platform error `MT_RET_ERR_NOTFOUND` rather than with an empty\r\nrecord.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -45164,11 +45351,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -45196,7 +45383,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionRequestByIDs": {
       "get": {
-        "description": "Returns the subscription records with the given identifiers. Identifiers that do not\r\nexist are simply absent from the result. For a list longer than fits in the query\r\nstring, request the records one by one or by account.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the subscription records with the given identifiers. Identifiers that do not\r\nexist are simply absent from the result. For a list longer than fits in the query\r\nstring, request the records one by one or by account.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -45221,11 +45408,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -45253,7 +45440,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/SubscriptionRequestByLogins": {
       "get": {
-        "description": "Returns the subscriptions of every account whose login is listed. Logins that do not\r\nexist are simply absent from the result. For a list longer than fits in the query\r\nstring, request the accounts one by one or by group.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the subscriptions of every account whose login is listed. Logins that do not\r\nexist are simply absent from the result. For a list longer than fits in the query\r\nstring, request the accounts one by one or by group.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -45278,11 +45465,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -46840,7 +47027,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/TickLast/{symbol}": {
       "get": {
-        "description": "<br>\r\n            Returns the latest quote of the symbol as the trade server currently holds it, with the\r\n            spread difference of the manager's group already applied — the same figure the terminals\r\n            of that group see. Use `TickLastRaw` for the quote exactly as the data provider sent it.\r\n            \r\n<br>\r\n            The call only reads and changes nothing. It requires a connection to the trade platform;\r\n            without one the call is answered with a \"not connected\" error. The symbol must be part of\r\n            the quotes the connection receives, otherwise the trade server answers with an error.\r\n            \n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "<br>\r\n            Returns the latest quote of the symbol as the trade server currently holds it, with the\r\n            spread difference of the manager's group already applied — the same figure the terminals\r\n            of that group see. Use `TickLastRaw` for the quote exactly as the data provider sent it.\r\n            \r\n<br>\r\n            The call only reads and changes nothing. It requires a connection to the trade platform;\r\n            without one the call is answered with a \"not connected\" error. The symbol must be part of\r\n            the quotes the connection receives, otherwise the trade server answers with an error.\r\n            \n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -46862,11 +47049,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -46948,7 +47135,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/TickStat/{symbol}": {
       "get": {
-        "description": "<br>\r\n            Returns the session figures of the symbol: the extremes of the bid, the ask and the last\r\n            deal price, the extremes of the deal volume, and the totals of the session — the number of\r\n            deals, their volume and turnover, and the buy and sell orders received. Fields the trade\r\n            server does not fill are returned as zero.\r\n            \r\n<br>\r\n            The call only reads and changes nothing. It requires a connection to the trade platform,\r\n            and the symbol must be part of the quotes the connection receives.\r\n            \n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "<br>\r\n            Returns the session figures of the symbol: the extremes of the bid, the ask and the last\r\n            deal price, the extremes of the deal volume, and the totals of the session — the number of\r\n            deals, their volume and turnover, and the buy and sell orders received. Fields the trade\r\n            server does not fill are returned as zero.\r\n            \r\n<br>\r\n            The call only reads and changes nothing. It requires a connection to the trade platform,\r\n            and the symbol must be part of the quotes the connection receives.\r\n            \n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -46970,11 +47157,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -47220,7 +47407,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/TradeAccountSet": {
       "post": {
-        "description": "<br>\r\n            Makes the orders, positions and balance of the account match the passed state. The trade\r\n            server compares the lists with its own data and performs the difference as deals with the\r\n            `sync` reason: positions missing on one side are opened or closed, positions whose\r\n            direction, price or contract size changed are reopened, a volume change is corrected, and\r\n            a balance difference becomes a balance or correction deal. All of it stays in the trading\r\n            history of the client.\r\n            \r\n<br>\r\n            The operation is heavy and changes money and positions: it must be used by the system that\r\n            owns the account, not as a general-purpose edit. An omitted order or position list leaves\r\n            that part untouched; an empty list states that the account has none and closes the\r\n            existing ones. The call answers as soon as the trade server has accepted it, and the\r\n            resulting state of the account is reported to the platform journal.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "<br>\r\n            Makes the orders, positions and balance of the account match the passed state. The trade\r\n            server compares the lists with its own data and performs the difference as deals with the\r\n            `sync` reason: positions missing on one side are opened or closed, positions whose\r\n            direction, price or contract size changed are reopened, a volume change is corrected, and\r\n            a balance difference becomes a balance or correction deal. All of it stays in the trading\r\n            history of the client.\r\n            \r\n<br>\r\n            The operation is heavy and changes money and positions: it must be used by the system that\r\n            owns the account, not as a general-purpose edit. An omitted order or position list leaves\r\n            that part untouched; an empty list states that the account has none and closes the\r\n            existing ones. The call answers as soon as the trade server has accepted it, and the\r\n            resulting state of the account is reported to the platform journal.\r\n            \n\n**Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -47233,11 +47420,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 15 s (change). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 5 s (trade operation). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 15,
+              "default": 5,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -47906,7 +48093,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/UserAccountGetByGroup/{mask}": {
       "get": {
-        "description": "Returns the cached trading states — balance, credit, margin, equity and stop-out — of every\r\naccount that matches the group mask, in one call. The data is as fresh as the last update\r\ndelivered by the server.\r\n<br>\r\nThe mask accepts one group, several groups separated by commas, and the `*` (any value)\r\nand `!` (exception) characters, for example `demo*,!demoforex`. The call only\r\nreads and changes nothing. It requires the pumping connection of users, orders and\r\npositions.\r\n\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the cached trading states — balance, credit, margin, equity and stop-out — of every\r\naccount that matches the group mask, in one call. The data is as fresh as the last update\r\ndelivered by the server.\r\n<br>\r\nThe mask accepts one group, several groups separated by commas, and the `*` (any value)\r\nand `!` (exception) characters, for example `demo*,!demoforex`. The call only\r\nreads and changes nothing. It requires the pumping connection of users, orders and\r\npositions.\r\n\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -47928,11 +48115,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -48073,7 +48260,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/UserAccountRequestArray/{group}": {
       "get": {
-        "description": "Returns the trading states of every account of the group, requested from the trade server\r\ninstead of the local cache, so the values are current. The group name is given in full,\r\nincluding the path; several groups are separated by commas.\r\n<br>\r\nThe call only reads and changes nothing. It requires the pumping connection of users,\r\norders and positions.\r\n\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the trading states of every account of the group, requested from the trade server\r\ninstead of the local cache, so the values are current. The group name is given in full,\r\nincluding the path; several groups are separated by commas.\r\n<br>\r\nThe call only reads and changes nothing. It requires the pumping connection of users,\r\norders and positions.\r\n\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -48095,11 +48282,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -48127,7 +48314,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/UserAccountRequestByLogins": {
       "get": {
-        "description": "Returns the trading states of the submitted logins, requested from the trade server instead\r\nof the local cache. Logins that do not exist make the call fail as a whole. The call only\r\nreads and changes nothing.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the trading states of the submitted logins, requested from the trade server instead\r\nof the local cache. Logins that do not exist make the call fail as a whole. The call only\r\nreads and changes nothing.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -48152,11 +48339,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -48274,7 +48461,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/UserBalanceCheck/{login}": {
       "post": {
-        "description": "<br>\r\n            Adds up the deals of the account and compares the result with the balance and credit held\r\n            by the account record. The response carries both pairs of values, so the caller sees the\r\n            size of a discrepancy even when no correction was requested.\r\n            \r\n<br>\r\n            With `fix` set, the record is corrected to match the history before the response is\r\n            built; without it nothing is written. A mismatch is not an error: it is reported by the\r\n            `mismatch` flag of the response, while the platform error is returned for an unknown\r\n            account or a failed check.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "<br>\r\n            Adds up the deals of the account and compares the result with the balance and credit held\r\n            by the account record. The response carries both pairs of values, so the caller sees the\r\n            size of a discrepancy even when no correction was requested.\r\n            \r\n<br>\r\n            With `fix` set, the record is corrected to match the history before the response is\r\n            built; without it nothing is written. A mismatch is not an error: it is reported by the\r\n            `mismatch` flag of the response, while the platform error is returned for an unknown\r\n            account or a failed check.\r\n            \n\n**Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -48306,11 +48493,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 15 s (change). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 5 s (trade operation). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 15,
+              "default": 5,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -48338,7 +48525,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/UserBalanceCheckBatch": {
       "post": {
-        "description": "<br>\r\n            Checks every submitted login in one call, with the same comparison and the same optional\r\n            correction as the single-account check. The response lists the accounts in the order they\r\n            were submitted.\r\n            \r\n<br>\r\n            The per-account outcome is available only when every account was checked: a partly\r\n            completed batch does not return the individual results to the caller, and the whole call\r\n            is answered with the platform error so that a partial correction is never mistaken for a\r\n            complete one. Without the correction flag no account is written to.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "<br>\r\n            Checks every submitted login in one call, with the same comparison and the same optional\r\n            correction as the single-account check. The response lists the accounts in the order they\r\n            were submitted.\r\n            \r\n<br>\r\n            The per-account outcome is available only when every account was checked: a partly\r\n            completed batch does not return the individual results to the caller, and the whole call\r\n            is answered with the platform error so that a partial correction is never mistaken for a\r\n            complete one. Without the correction flag no account is written to.\r\n            \n\n**Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -48351,11 +48538,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 15 s (change). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 5 s (trade operation). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 15,
+              "default": 5,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -48753,7 +48940,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/UserDeleteBatch": {
       "post": {
-        "description": "<br>\r\n            Removes every submitted account from the trade server database in one call. The operation\r\n            is not reversible: the records are gone.\r\n            \r\n<br>\r\n            The per-account outcome is available only when every account was removed; a partly\r\n            completed batch is answered with the platform error naming the partial failure, because the\r\n            platform does not hand the individual results back to the caller in that case. Accounts\r\n            that do not exist make the call fail as a whole.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "<br>\r\n            Removes every submitted account from the trade server database in one call. The operation\r\n            is not reversible: the records are gone.\r\n            \r\n<br>\r\n            The per-account outcome is available only when every account was removed; a partly\r\n            completed batch is answered with the platform error naming the partial failure, because the\r\n            platform does not hand the individual results back to the caller in that case. Accounts\r\n            that do not exist make the call fail as a whole.\r\n            \r\n<br>\r\n            The operation is not idempotent — a repeated delete reports the record as absent instead of\r\n            deleting twice.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -48969,7 +49156,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/UserExternalSync/{login}": {
       "post": {
-        "description": "<br>\r\n            Asks the gateway to bring the trading state of the account in line with the external\r\n            trading system it is linked to, and creates the correcting operations that follow from\r\n            the difference. Such operations appear in the trading history of the account.\r\n            \r\n<br>\r\n            The scope of the synchronization is chosen by the request: the whole state, the balance,\r\n            the open positions or the pending orders. The call works only when the gateway in use\r\n            provides trading-state synchronization and the account is linked to the external system;\r\n            otherwise the platform error is returned and nothing changes.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
+        "description": "<br>\r\n            Asks the gateway to bring the trading state of the account in line with the external\r\n            trading system it is linked to, and creates the correcting operations that follow from\r\n            the difference. Such operations appear in the trading history of the account.\r\n            \r\n<br>\r\n            The scope of the synchronization is chosen by the request: the whole state, the balance,\r\n            the open positions or the pending orders. The call works only when the gateway in use\r\n            provides trading-state synchronization and the account is linked to the external system;\r\n            otherwise the platform error is returned and nothing changes.\r\n            \r\n<br>\r\n            The operation is not idempotent — a repeat after an unclear outcome may create the\r\n            correcting operations a second time.\r\n            \n\n**Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -49293,7 +49480,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/UserLogins/{group}": {
       "get": {
-        "description": "Returns the logins of every account that belongs to the group, without their records. The\r\ngroup name is given in full, including the path. The call only reads and changes nothing,\r\nand requires the pumping connection of users.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the logins of every account that belongs to the group, without their records. The\r\ngroup name is given in full, including the path. The call only reads and changes nothing,\r\nand requires the pumping connection of users.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -49315,11 +49502,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -49665,7 +49852,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/UserRequestArray/{group}": {
       "get": {
-        "description": "Returns the full records of every account of the group, requested from the trade server.\r\nThe mask accepts one group, several groups separated by commas, and the `*` (any\r\nvalue) and `!` (exception) characters, for example `demo*,!demoforex`.\r\n<br>\r\nThe call only reads and changes nothing. It can be expensive on a large group: prefer the\r\ncached read when the freshness of the server is not required.\r\n\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the full records of every account of the group, requested from the trade server.\r\nThe mask accepts one group, several groups separated by commas, and the `*` (any\r\nvalue) and `!` (exception) characters, for example `demo*,!demoforex`.\r\n<br>\r\nThe call only reads and changes nothing. It can be expensive on a large group: prefer the\r\ncached read when the freshness of the server is not required.\r\n\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -49687,11 +49874,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,
@@ -49719,7 +49906,7 @@
     },
     "/api/v2/MT5/{tradePlatform}/UserRequestByLogins": {
       "get": {
-        "description": "Returns the full records of the submitted logins, requested from the trade server, so they\r\nreflect changes made on the server immediately. Logins that do not exist make the call fail\r\nas a whole. The call only reads and changes nothing.\n\n**Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
+        "description": "Returns the full records of the submitted logins, requested from the trade server, so they\r\nreflect changes made on the server immediately. Logins that do not exist make the call fail\r\nas a whole. The call only reads and changes nothing.\n\n**Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.",
         "parameters": [
           {
             "description": "Trade platform identifier (GUID).",
@@ -49744,11 +49931,11 @@
             }
           },
           {
-            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 10 s (read). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
+            "description": "How long to wait for the trade server, in seconds (1–300). Default for this operation: 30 s (history or report). The query parameter `requestTimeout` does the same for clients that cannot set headers. The applied value is returned in the `X-Request-Timeout-Applied` response header.",
             "in": "header",
             "name": "X-Request-Timeout",
             "schema": {
-              "default": 10,
+              "default": 30,
               "format": "double",
               "maximum": 300,
               "minimum": 1,

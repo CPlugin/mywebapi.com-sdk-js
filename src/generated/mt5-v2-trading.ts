@@ -1308,7 +1308,7 @@ export const getGetOrderRequestByLoginsUrl = (tradePlatform: string,
  * not paginated: the whole set is returned at once. Use the ticket-based form for a longer
  * list than fits in the query string.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Orders of several accounts, read from the server
  */
 export const getOrderRequestByLogins = async (tradePlatform: string,
@@ -1363,7 +1363,7 @@ export const getGetOrderRequestByLoginsSymbolSymbolUrl = (tradePlatform: string,
  * Returns the orders of the given symbol for the given accounts as the trade server holds
  * them now. The result is not paginated: the whole set is returned at once.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Orders of several accounts by symbol, read from the server
  */
 export const getOrderRequestByLoginsSymbolSymbol = async (tradePlatform: string,
@@ -1663,7 +1663,7 @@ export const getGetPositionGetByGroupMaskUrl = (tradePlatform: string,
  * Returns the open positions of every login in the groups matching the mask. The result is
  * not paginated: the whole set is returned at once.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Open positions of a group
  */
 export const getPositionGetByGroupMask = async (tradePlatform: string,
@@ -1790,7 +1790,7 @@ export const getGetPositionRequestByGroupSymbolMaskSymbolUrl = (tradePlatform: s
  * mask, read from the trade server. The result is not paginated: the whole set is returned
  * at once.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Open positions of a group and symbol, read from the server
  */
 export const getPositionRequestByGroupSymbolMaskSymbol = async (tradePlatform: string,

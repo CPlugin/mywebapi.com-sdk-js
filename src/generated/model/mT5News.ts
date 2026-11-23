@@ -37,7 +37,8 @@ export interface MT5News {
      */
   subject?: string | null;
   /**
-     * Time the news item was sent, in UTC.
+     * Time the news item was sent, in the time zone of the trade server. The platform stores the
+     * value without a zone, so it is returned as a wall-clock time.
      * @nullable
      */
   time?: string | null;

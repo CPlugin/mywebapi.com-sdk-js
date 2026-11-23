@@ -64,7 +64,7 @@ export const getPostSubscriptionCancelUrl = (tradePlatform: string,) => {
  *             already cancelled subscription fails with the platform error.
  *
  *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Cancel a subscription of an account
  */
 export const postSubscriptionCancel = async (tradePlatform: string,
@@ -126,7 +126,7 @@ export const getPostSubscriptionCancelBatchUrl = (tradePlatform: string,) => {
  *             The operation is not idempotent.
  *
  *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Cancel subscriptions of several accounts
  */
 export const postSubscriptionCancelBatch = async (tradePlatform: string,
@@ -279,7 +279,7 @@ export const getGetSubscriptionCfgRequestNameUrl = (tradePlatform: string,
  *             instruments and news categories it covers, not only its general settings.
  *
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Subscription configuration by name, from the server
  */
 export const getSubscriptionCfgRequestName = async (tradePlatform: string,
@@ -321,7 +321,7 @@ export const getGetSubscriptionCfgRequestByIDIdUrl = (tradePlatform: string,
  * answer is read from the trade server at the moment of the call and carries the whole
  * content of the configuration.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Subscription configuration by identifier, from the server
  */
 export const getSubscriptionCfgRequestByIDId = async (tradePlatform: string,
@@ -584,7 +584,7 @@ export const getGetSubscriptionHistoryRequestLoginUrl = (tradePlatform: string,
  * Both bounds are seconds since 1970-01-01 and are inclusive; the range is required.
  * The result is not paginated.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Subscription actions of an account for a period
  */
 export const getSubscriptionHistoryRequestLogin = async (tradePlatform: string,
@@ -637,7 +637,7 @@ export const getGetSubscriptionHistoryRequestByGroupMaskUrl = (tradePlatform: st
  * value) and `!` (exclude). Both bounds are seconds since 1970-01-01 and are
  * inclusive; the range is required.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Subscription actions of the accounts of a group for a period
  */
 export const getSubscriptionHistoryRequestByGroupMask = async (tradePlatform: string,
@@ -679,7 +679,7 @@ export const getGetSubscriptionHistoryRequestByIDIdUrl = (tradePlatform: string,
  * Returns the action record with the given identifier. An unknown identifier is answered
  * with the platform error `MT_RET_ERR_NOTFOUND` rather than with an empty record.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Subscription action record by identifier
  */
 export const getSubscriptionHistoryRequestByIDId = async (tradePlatform: string,
@@ -733,7 +733,7 @@ export const getGetSubscriptionHistoryRequestByIDsUrl = (tradePlatform: string,
  * Returns the action records with the given identifiers. Identifiers that do not exist are
  * simply absent from the result.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Subscription action records by identifiers
  */
 export const getSubscriptionHistoryRequestByIDs = async (tradePlatform: string,
@@ -790,7 +790,7 @@ export const getGetSubscriptionHistoryRequestByLoginsUrl = (tradePlatform: strin
  * given time range. Both bounds are seconds since 1970-01-01 and are inclusive; the range
  * is required. The result is not paginated.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Subscription actions of several accounts for a period
  */
 export const getSubscriptionHistoryRequestByLogins = async (tradePlatform: string,
@@ -1014,7 +1014,7 @@ export const getPostSubscriptionJoinUrl = (tradePlatform: string,) => {
  *             succeeded but whose answer was lost subscribes the account again and charges it again.
  *
  *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Subscribe an account to a subscription configuration
  */
 export const postSubscriptionJoin = async (tradePlatform: string,
@@ -1076,7 +1076,7 @@ export const getPostSubscriptionJoinBatchUrl = (tradePlatform: string,) => {
  *             The operation is not idempotent.
  *
  *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Subscribe several accounts to subscription configurations
  */
 export const postSubscriptionJoinBatch = async (tradePlatform: string,
@@ -1132,7 +1132,7 @@ export const getGetSubscriptionRequestLoginUrl = (tradePlatform: string,
  * that the server still keeps. The result is not paginated. An unknown login is answered
  * with the platform error rather than with an empty list.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Subscriptions of an account
  */
 export const getSubscriptionRequestLogin = async (tradePlatform: string,
@@ -1175,7 +1175,7 @@ export const getGetSubscriptionRequestByGroupMaskUrl = (tradePlatform: string,
  * names separated by commas, and the wildcards `*` (any value) and `!`
  * (exclude), for example `demo*,!demoforex`.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Subscriptions of the accounts of a group
  */
 export const getSubscriptionRequestByGroupMask = async (tradePlatform: string,
@@ -1217,7 +1217,7 @@ export const getGetSubscriptionRequestByIDIdUrl = (tradePlatform: string,
  * answered with the platform error `MT_RET_ERR_NOTFOUND` rather than with an empty
  * record.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Subscription record by identifier
  */
 export const getSubscriptionRequestByIDId = async (tradePlatform: string,
@@ -1272,7 +1272,7 @@ export const getGetSubscriptionRequestByIDsUrl = (tradePlatform: string,
  * exist are simply absent from the result. For a list longer than fits in the query
  * string, request the records one by one or by account.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Subscription records by identifiers
  */
 export const getSubscriptionRequestByIDs = async (tradePlatform: string,
@@ -1327,7 +1327,7 @@ export const getGetSubscriptionRequestByLoginsUrl = (tradePlatform: string,
  * exist are simply absent from the result. For a list longer than fits in the query
  * string, request the accounts one by one or by group.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Subscriptions of several accounts
  */
 export const getSubscriptionRequestByLogins = async (tradePlatform: string,

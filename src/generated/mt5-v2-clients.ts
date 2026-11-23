@@ -66,6 +66,9 @@ export const getPostAttachmentAddUrl = (tradePlatform: string,) => {
  *             without an owner and cannot be removed through the API — check the document or comment identifier
  *             before sending large files.
  *
+ * <br>
+ *             The operation is not idempotent — a repeat after an unclear outcome creates a second record.
+ *
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Store a file and link it to a document or a comment
@@ -122,6 +125,7 @@ export const getPostAttachmentAddBatchUrl = (tradePlatform: string,) => {
  * entry. Every entry follows the rules of the single store: one owner client, at most one link
  * target, and the file content in the body. One entry per file is returned with the identifier the
  * server assigned; a failure of the link is reported in the entry of that file.
+ * The operation is not idempotent — a repeat after an unclear outcome creates a second record.
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Store files and link them in bulk
@@ -176,6 +180,7 @@ export const getPostAttachmentAddBatchArrayUrl = (tradePlatform: string,) => {
 /**
  * Same operation as `AttachmentAddBatch` with the same rules: each file carries its own owner
  * and link target, and one entry per file is returned with the identifier the server assigned.
+ * The operation is not idempotent — a repeat after an unclear outcome creates a second record.
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Store files and link them in bulk (plain array)
@@ -341,6 +346,7 @@ export const getPostClientAddBatchUrl = (tradePlatform: string,) => {
  * validation as the single add. Every record receives the identifier the server assigned to it,
  * which is returned per entry together with its result code. A partial failure answers one entry
  * per client, so inspect each result instead of trusting the batch as a whole.
+ * The operation is not idempotent — a repeat after an unclear outcome creates a second record.
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Add clients in bulk
@@ -395,6 +401,7 @@ export const getPostClientAddBatchArrayUrl = (tradePlatform: string,) => {
 /**
  * Same operation as `ClientAddBatch` with the same rules: the batch is validated per record and
  * one entry per client is returned, together with the identifier the server assigned.
+ * The operation is not idempotent — a repeat after an unclear outcome creates a second record.
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Add clients in bulk (plain array)
@@ -550,7 +557,7 @@ export const getGetClientRequestClientIdUrl = (tradePlatform: string,
  * reads and changes nothing. An identifier that does not exist is answered with a platform
  * error rather than an empty record.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Read a client
  */
 export const getClientRequestClientId = async (tradePlatform: string,
@@ -600,7 +607,7 @@ export const getGetClientRequestByGroupUrl = (tradePlatform: string,
  * several comma-separated groups or wildcards: `*` matches any value and `!` excludes,
  * for example `demo*,!demoforex`. Reading changes nothing.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Clients by preferred group
  */
 export const getClientRequestByGroup = async (tradePlatform: string,
@@ -651,7 +658,7 @@ export const getGetClientRequestHistoryClientIdUrl = (tradePlatform: string,
  * author is given, only the changes made by that manager account are returned. Reading changes
  * nothing.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary History of a client record
  */
 export const getClientRequestHistoryClientId = async (tradePlatform: string,
@@ -1102,6 +1109,7 @@ export const getPostCommentAddUrl = (tradePlatform: string,) => {
  * The client must be identified; a document identifier is optional and, when given, makes the
  * comment belong to that document instead of the client. A comment can only be added from the
  * server that holds the client. Files are attached to the comment separately.
+ * The operation is not idempotent — a repeat after an unclear outcome creates a second record.
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Add a comment to a client or a document
@@ -1156,6 +1164,7 @@ export const getPostCommentAddBatchUrl = (tradePlatform: string,) => {
 /**
  * Stores the listed comments in one call with the same rules as the single add. One entry per
  * comment is returned with the identifier the server assigned.
+ * The operation is not idempotent — a repeat after an unclear outcome creates a second record.
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Add comments in bulk
@@ -1210,6 +1219,7 @@ export const getPostCommentAddBatchArrayUrl = (tradePlatform: string,) => {
 /**
  * Same operation as `CommentAddBatch` with the same rules: one entry per comment is returned
  * together with the identifier the server assigned.
+ * The operation is not idempotent — a repeat after an unclear outcome creates a second record.
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Add comments in bulk (plain array)
@@ -1363,7 +1373,7 @@ export const getGetCommentRequestCommentIdUrl = (tradePlatform: string,
  * (identifier, name and size — not the content). Reading changes nothing. An identifier that does
  * not exist is answered with a platform error rather than an empty record.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Read a comment
  */
 export const getCommentRequestCommentId = async (tradePlatform: string,
@@ -1413,7 +1423,7 @@ export const getGetCommentRequestByClientClientIdUrl = (tradePlatform: string,
  * The slice is set by `position` (zero-based index of the first comment) and `total`
  * (number of comments to return), so a long thread is read page by page. Reading changes nothing.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Comments on a client
  */
 export const getCommentRequestByClientClientId = async (tradePlatform: string,
@@ -1464,7 +1474,7 @@ export const getGetCommentRequestByDocumentDocumentIdUrl = (tradePlatform: strin
  * slice is set by `position` (zero-based index of the first comment) and `total` (number
  * of comments to return), so a long thread is read page by page. Reading changes nothing.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Comments on a client document
  */
 export const getCommentRequestByDocumentDocumentId = async (tradePlatform: string,
@@ -1669,6 +1679,7 @@ export const getPostDocumentAddUrl = (tradePlatform: string,) => {
  * identifier it was assigned. The client must be identified; otherwise the record is refused.
  * A document can only be added from the server that holds the client. Files are attached to the
  * document separately, by the attachment routes.
+ * The operation is not idempotent — a repeat after an unclear outcome creates a second record.
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Add a document to a client record
@@ -1724,6 +1735,7 @@ export const getPostDocumentAddBatchUrl = (tradePlatform: string,) => {
  * Stores the listed documents in one call with the same rules as the single add. One entry per
  * document is returned with the identifier the server assigned, so a partial failure names the
  * documents that were refused.
+ * The operation is not idempotent — a repeat after an unclear outcome creates a second record.
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Add documents in bulk
@@ -1778,6 +1790,7 @@ export const getPostDocumentAddBatchArrayUrl = (tradePlatform: string,) => {
 /**
  * Same operation as `DocumentAddBatch` with the same rules: one entry per document is
  * returned together with the identifier the server assigned.
+ * The operation is not idempotent — a repeat after an unclear outcome creates a second record.
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Add documents in bulk (plain array)
@@ -1931,7 +1944,7 @@ export const getGetDocumentRequestDocumentIdUrl = (tradePlatform: string,
  * (identifier, name and size — not the content). Reading changes nothing. An identifier that does
  * not exist is answered with a platform error rather than an empty record.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Read a document
  */
 export const getDocumentRequestDocumentId = async (tradePlatform: string,
@@ -1973,7 +1986,7 @@ export const getGetDocumentRequestByClientClientIdUrl = (tradePlatform: string,
  * (identifier, name and size — not the content). Reading changes nothing; a client without
  * documents answers an empty list.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Documents of a client
  */
 export const getDocumentRequestByClientClientId = async (tradePlatform: string,
@@ -2023,7 +2036,7 @@ export const getGetDocumentRequestHistoryDocumentIdUrl = (tradePlatform: string,
  * every change. Both bounds are optional: without them the whole history is read. When an author is
  * given, only the changes made by that manager account are returned. Reading changes nothing.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary History of a document
  */
 export const getDocumentRequestHistoryDocumentId = async (tradePlatform: string,

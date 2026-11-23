@@ -38,7 +38,8 @@ export interface MT5NewsSendRequest {
      */
   subject?: string | null;
   /**
-     * Publication time, in UTC. Omitted uses the current time of the trade server.
+     * Publication time, in the time zone of the trade server. Omitted uses the current time of
+     * the trade server.
      * @nullable
      */
   time?: string | null;

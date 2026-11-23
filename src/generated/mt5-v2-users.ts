@@ -77,6 +77,9 @@ export const getPostEmailSendUrl = (tradePlatform: string,) => {
  *             for sending, not that it was delivered. The subject and the body are not stored or logged by
  *             the service.
  *
+ * <br>
+ *             The operation is not idempotent — a repeat after an unclear outcome delivers a second message.
+ *
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Send an email from one of the mail configurations of the trade server
@@ -138,6 +141,9 @@ export const getPostMessengerSendUrl = (tradePlatform: string,) => {
  *             Success means the message was accepted for sending, not that it was delivered. An invalid
  *             or non-mobile number is answered with its own platform error, which names the reason. The
  *             message text is not stored or logged by the service.
+ *
+ * <br>
+ *             The operation is not idempotent — a repeat after an unclear outcome delivers a second message.
  *
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
@@ -261,6 +267,9 @@ export const getPostNotificationsSend2Url = (tradePlatform: string,) => {
  *             message is limited by the platform to 1024 characters and is not stored or logged by the
  *             service.
  *
+ * <br>
+ *             The operation is not idempotent — a repeat after an unclear outcome delivers a second message.
+ *
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Send a push notification to mobile terminals
@@ -368,7 +377,7 @@ export const getGetUserAccountGetByGroupMaskUrl = (tradePlatform: string,
  * positions.
  *
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Read the trading state of a group of accounts from the pump cache
  */
 export const getUserAccountGetByGroupMask = async (tradePlatform: string,
@@ -513,7 +522,7 @@ export const getGetUserAccountRequestArrayGroupUrl = (tradePlatform: string,
  * orders and positions.
  *
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Request the trading state of a group of accounts from the trade server
  */
 export const getUserAccountRequestArrayGroup = async (tradePlatform: string,
@@ -568,7 +577,7 @@ export const getGetUserAccountRequestByLoginsUrl = (tradePlatform: string,
  * of the local cache. Logins that do not exist make the call fail as a whole. The call only
  * reads and changes nothing.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Request the trading state of several accounts from the trade server
  */
 export const getUserAccountRequestByLogins = async (tradePlatform: string,
@@ -703,7 +712,7 @@ export const getPostUserBalanceCheckLoginUrl = (tradePlatform: string,
  *             account or a failed check.
  *
  *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Check the balance and credit of an account against its deals history
  */
 export const postUserBalanceCheckLogin = async (tradePlatform: string,
@@ -753,7 +762,7 @@ export const getPostUserBalanceCheckBatchUrl = (tradePlatform: string,) => {
  *             complete one. Without the correction flag no account is written to.
  *
  *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Check the balance and credit of several accounts against their deals history
  */
 export const postUserBalanceCheckBatch = async (tradePlatform: string,
@@ -1057,6 +1066,10 @@ export const getPostUserDeleteBatchUrl = (tradePlatform: string,) => {
  *             platform does not hand the individual results back to the caller in that case. Accounts
  *             that do not exist make the call fail as a whole.
  *
+ * <br>
+ *             The operation is not idempotent — a repeated delete reports the record as absent instead of
+ *             deleting twice.
+ *
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Remove several accounts
@@ -1234,6 +1247,10 @@ export const getPostUserExternalSyncLoginUrl = (tradePlatform: string,
  *             the open positions or the pending orders. The call works only when the gateway in use
  *             provides trading-state synchronization and the account is linked to the external system;
  *             otherwise the platform error is returned and nothing changes.
+ *
+ * <br>
+ *             The operation is not idempotent — a repeat after an unclear outcome may create the
+ *             correcting operations a second time.
  *
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
@@ -1476,7 +1493,7 @@ export const getGetUserLoginsGroupUrl = (tradePlatform: string,
  * group name is given in full, including the path. The call only reads and changes nothing,
  * and requires the pumping connection of users.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List the logins of a group
  */
 export const getUserLoginsGroup = async (tradePlatform: string,
@@ -1741,7 +1758,7 @@ export const getGetUserRequestArrayGroupUrl = (tradePlatform: string,
  * cached read when the freshness of the server is not required.
  *
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Request the records of a group of accounts from the trade server
  */
 export const getUserRequestArrayGroup = async (tradePlatform: string,
@@ -1796,7 +1813,7 @@ export const getGetUserRequestByLoginsUrl = (tradePlatform: string,
  * reflect changes made on the server immediately. Logins that do not exist make the call fail
  * as a whole. The call only reads and changes nothing.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Request the records of several accounts from the trade server
  */
 export const getUserRequestByLogins = async (tradePlatform: string,

@@ -746,7 +746,7 @@ export const getGetTickLastSymbolUrl = (tradePlatform: string,
  *             the quotes the connection receives, otherwise the trade server answers with an error.
  *
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get the last quote of a symbol
  */
 export const getTickLastSymbol = async (tradePlatform: string,
@@ -843,7 +843,7 @@ export const getGetTickStatSymbolUrl = (tradePlatform: string,
  *             and the symbol must be part of the quotes the connection receives.
  *
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get statistical information about the quotes of a symbol
  */
 export const getTickStatSymbol = async (tradePlatform: string,

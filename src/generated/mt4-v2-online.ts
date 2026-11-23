@@ -54,7 +54,7 @@ export const getGetOnlineGetUrl = (tradePlatform: string,
  * error with a retry hint, not an empty list — empty list means
  * "warmed but currently no online sessions".
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List online users (cached)
  */
 export const getOnlineGet = async (tradePlatform: string,
@@ -107,7 +107,7 @@ export const getGetOnlineRequestUrl = (tradePlatform: string,
  * `OnlineGet`: every call hits the MT4 server. Paged the same way
  * for caller symmetry — cursor is the trailing login (ascending).
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List online sessions (live)
  */
 export const getOnlineRequest = async (tradePlatform: string,

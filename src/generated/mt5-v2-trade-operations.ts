@@ -59,7 +59,7 @@ export const getPostDealerAnswerUrl = (tradePlatform: string,) => {
  *             for the platform to expire.
  *
  *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Answer the trade request taken for processing
  */
 export const postDealerAnswer = async (tradePlatform: string,
@@ -313,7 +313,7 @@ export const getGetRequestGetIdUrl = (tradePlatform: string,
  *             queue is answered with the platform code that states it.
  *
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Get a trade request by identifier
  */
 export const getRequestGetId = async (tradePlatform: string,
@@ -370,7 +370,7 @@ export const getGetRequestGetAllUrl = (tradePlatform: string,
  *             different set. The queue must be opened with `DealerStart` first.
  *
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary List the trade requests waiting in the queue
  */
 export const getRequestGetAll = async (tradePlatform: string,
@@ -423,7 +423,7 @@ export const getPostTradeAccountSetUrl = (tradePlatform: string,) => {
  *             resulting state of the account is reported to the platform journal.
  *
  *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Bring orders, positions and balance of an account in line with an external system
  */
 export const postTradeAccountSet = async (tradePlatform: string,

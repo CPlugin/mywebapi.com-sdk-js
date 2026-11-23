@@ -7,16 +7,15 @@
  * Partly follows the JSON-Pure API idea: a successful call answers HTTP 200; any other code reports an error, such as wrong parameters or an unavailable trade platform.
  * OpenAPI spec version: 2.0
  */
+import type { MT5SubscriptionFlags } from './mT5SubscriptionFlags';
+import type { MT5SubscriptionStatus } from './mT5SubscriptionStatus';
 
 /**
  * A subscription of a trading account, as stored by the trade server.
  */
 export interface MT5Subscription {
-  /**
-     * Additional subscription property flags.
-     * @nullable
-     */
-  flags?: number | null;
+  /** Additional subscription property flags. */
+  flags?: MT5SubscriptionFlags | null;
   /**
      * Identifier of the subscription record. Required when an existing record is updated.
      * @nullable
@@ -27,11 +26,8 @@ export interface MT5Subscription {
      * @nullable
      */
   login?: number | null;
-  /**
-     * Subscription state code.
-     * @nullable
-     */
-  status?: number | null;
+  /** Subscription state.<br/>One of: Active, Suspended, Canceled. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation. */
+  status?: MT5SubscriptionStatus | null;
   /**
      * Identifier of the subscription configuration the account is subscribed to.
      * @nullable

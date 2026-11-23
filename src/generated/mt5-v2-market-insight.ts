@@ -59,7 +59,7 @@ export const getGetBookGetSymbolUrl = (tradePlatform: string,
  *             server answers a platform error instead of an empty book.
  *
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Read the Depth of Market of a symbol
  */
 export const getBookGetSymbol = async (tradePlatform: string,
@@ -218,7 +218,7 @@ export const getGetOnlineGetLoginUrl = (tradePlatform: string,
  *             An account that is not connected answers an empty list. The call changes nothing.
  *
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Read the open sessions of one account
  */
 export const getOnlineGetLogin = async (tradePlatform: string,
@@ -277,7 +277,7 @@ export const getGetOnlineRequest2Url = (tradePlatform: string,
  *             remaining positions are empty.
  *
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
  * @summary Read the live connection list of the trade server
  */
 export const getOnlineRequest2 = async (tradePlatform: string,

@@ -2,6 +2,21 @@
 
 All notable changes to `@mywebapi.com/sdk`. The package follows [semver](https://semver.org/); while it is at `0.x`, a minor release may contain breaking changes.
 
+## 0.5.1
+
+Regenerated from the WebAPI v2 specification of 23.11.2026 (x64 stand plus the 13 MT4 x86 sidecar operations, 456 in total). Patch release: the operation catalog and the names of every method are unchanged; only the types of the subscription contract and the payload of two models moved to what the server now publishes.
+
+### Changed
+
+- Subscriptions describe their codes by name instead of a number. `MT5Subscription.status` is now `MT5SubscriptionStatus` (`Active`, `Suspended`, `Canceled`) and `MT5SubscriptionHistory.action` is `MT5SubscriptionAction` (`Subscribe`, `Renewal`, `Suspend`, `Cancel`, `Deleted`); `MT5Subscription.flags` and `MT5ConSubscription.flags` are a string of the set bit names (`FreePeriod`), `"None"` when none is set, and `MT5ConSubscription` takes `controlMode` (`Full`, `Unsubscribe`, `View`, `Hidden`), `type` (`Subscription`, `Folder`), `periodMode` (`Once`, `Daily`, `Weekly`, `Monthly`, `Quarterly`, `Annual`, `Custom`) and `periodFreeMode` (`None`, `Day`, `Week`, `Month`, `Quarter`, `Year`, `Custom`) as those named types. The server still accepts the numeric value on input, so a numeric payload keeps working; reading a subscription now yields names.
+- `MT5ConSubscriptionSymbol.level` takes `MT5SubscriptionSymbolLevel` (`Delayed`, `RealtimeLevel1`, `RealtimeLevel2`) and `MT5SubscriptionHistory.tickHistory` takes `MT5SubscriptionTickHistory` (`None` through `All`).
+- `MT5MarketTickStat` carries the option greeks — `priceGreeksDelta`, `priceGreeksGamma`, `priceGreeksOmega`, `priceGreeksRho`, `priceGreeksTheta`, `priceGreeksVega` — and `priceSensitivity`.
+- `MT5News.time` and `MT5NewsSendRequest.time` are the trade server's wall-clock time, not UTC: the platform stores the value without a zone. The type stays `string`; only the documented meaning changed.
+
+### Tests
+
+- `tests/generated-shape.test.ts` pins the subscription enums to their names and checks that `MT5MarketTickStat` exposes the greeks.
+
 ## 0.5.0
 
 Regenerated from the WebAPI v2 specification of 23.11.2026, which adds the groups v2 still lacked for MT5 management and the MT4 dealer tools. Minor release: the catalog grows from 224 to 456 operations and no existing method changes signature or name.

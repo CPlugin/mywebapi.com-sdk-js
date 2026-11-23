@@ -7,16 +7,14 @@
  * Partly follows the JSON-Pure API idea: a successful call answers HTTP 200; any other code reports an error, such as wrong parameters or an unavailable trade platform.
  * OpenAPI spec version: 2.0
  */
+import type { MT5SubscriptionAction } from './mT5SubscriptionAction';
 
 /**
  * An action performed with a subscription of a trading account.
  */
 export interface MT5SubscriptionHistory {
-  /**
-     * Action type code.
-     * @nullable
-     */
-  action?: number | null;
+  /** Action performed with the subscription.<br/>One of: Subscribe, Renewal, Suspend, Cancel, Deleted. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation. */
+  action?: MT5SubscriptionAction | null;
   /**
      * Amount charged or returned by the action.
      * @nullable

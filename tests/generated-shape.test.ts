@@ -1,6 +1,8 @@
 import { describe, expect, test } from 'bun:test';
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { MT5SubscriptionAction } from '../src/generated/model/mT5SubscriptionAction';
+import { MT5SubscriptionStatus } from '../src/generated/model/mT5SubscriptionStatus';
 
 const GEN = join(import.meta.dir, '..', 'src', 'generated');
 
@@ -47,5 +49,38 @@ describe('orval generated output', () => {
     // * Log the actual count so CI output makes drift visible.
     console.log(`Generated endpoint function count: ${count}`);
     expect(count).toBeGreaterThanOrEqual(456);
+  });
+
+  test('subscription status and action are name-based enums', () => {
+    // * The v2 spec of 23.11.2026 describes the subscription enums by name
+    //   instead of a numeric code, so the generated contract must carry the
+    //   member names as literal values.
+    expect(MT5SubscriptionStatus).toEqual({
+      Active: 'Active',
+      Suspended: 'Suspended',
+      Canceled: 'Canceled',
+    });
+    expect(MT5SubscriptionAction).toEqual({
+      Subscribe: 'Subscribe',
+      Renewal: 'Renewal',
+      Suspend: 'Suspend',
+      Cancel: 'Cancel',
+      Deleted: 'Deleted',
+    });
+  });
+
+  test('MT5MarketTickStat carries the option greeks', () => {
+    const source = readFileSync(join(GEN, 'model', 'mT5MarketTickStat.ts'), 'utf8');
+    for (const field of [
+      'priceGreeksDelta',
+      'priceGreeksGamma',
+      'priceGreeksOmega',
+      'priceGreeksRho',
+      'priceGreeksTheta',
+      'priceGreeksVega',
+      'priceSensitivity',
+    ]) {
+      expect(source).toContain(`${field}?: number`);
+    }
   });
 });

@@ -7,24 +7,20 @@
  * Partly follows the JSON-Pure API idea: a successful call answers HTTP 200; any other code reports an error, such as wrong parameters or an unavailable trade platform.
  * OpenAPI spec version: 2.0
  */
+import type { MT5SubscriptionSymbolLevel } from './mT5SubscriptionSymbolLevel';
+import type { MT5SubscriptionTickHistory } from './mT5SubscriptionTickHistory';
 
 /**
  * A trading instrument covered by a subscription configuration.
  */
 export interface MT5ConSubscriptionSymbol {
-  /**
-     * Depth of the price history available by the subscription.
-     * @nullable
-     */
-  level?: number | null;
+  /** Depth of the price history available by the subscription.<br/>One of: Delayed, RealtimeLevel1, RealtimeLevel2. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation. */
+  level?: MT5SubscriptionSymbolLevel | null;
   /**
      * Name of the trading instrument, including its group path.
      * @nullable
      */
   symbol?: string | null;
-  /**
-     * Depth of the tick history available by the subscription.
-     * @nullable
-     */
-  tickHistory?: number | null;
+  /** Depth of the tick history available by the subscription.<br/>One of: None, LastDay, LastWeek, LastMonth, Last3Months, Last6Months, LastYear, Last2Years, Last3Years, Last5Years, All. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation. */
+  tickHistory?: MT5SubscriptionTickHistory | null;
 }

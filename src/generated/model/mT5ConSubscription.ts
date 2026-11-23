@@ -7,17 +7,19 @@
  * Partly follows the JSON-Pure API idea: a successful call answers HTTP 200; any other code reports an error, such as wrong parameters or an unavailable trade platform.
  * OpenAPI spec version: 2.0
  */
+import type { MT5ConSubscriptionFlags } from './mT5ConSubscriptionFlags';
 import type { MT5ConSubscriptionSymbol } from './mT5ConSubscriptionSymbol';
+import type { MT5SubscriptionControlMode } from './mT5SubscriptionControlMode';
+import type { MT5SubscriptionFreePeriod } from './mT5SubscriptionFreePeriod';
+import type { MT5SubscriptionPeriod } from './mT5SubscriptionPeriod';
+import type { MT5SubscriptionType } from './mT5SubscriptionType';
 
 /**
  * A subscription configuration of the trade server.
  */
 export interface MT5ConSubscription {
-  /**
-     * Code of the actions the client terminals are allowed to perform with the subscription.
-     * @nullable
-     */
-  controlMode?: number | null;
+  /** Actions the client terminals are allowed to perform with the subscription.<br/>One of: Full, Unsubscribe, View, Hidden. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation. */
+  controlMode?: MT5SubscriptionControlMode | null;
   /**
      * Countries the subscription is available in.
      * @nullable
@@ -33,11 +35,8 @@ export interface MT5ConSubscription {
      * @nullable
      */
   description?: string | null;
-  /**
-     * Additional subscription property flags.
-     * @nullable
-     */
-  flags?: number | null;
+  /** Additional subscription property flags. */
+  flags?: MT5ConSubscriptionFlags | null;
   /**
      * Account groups the subscription is available in.
      * @nullable
@@ -49,7 +48,7 @@ export interface MT5ConSubscription {
      */
   id?: number | null;
   /**
-     * Logo identifier shown for the subscription.
+     * Logo shown for the subscription.
      * @nullable
      */
   image?: number | null;
@@ -73,16 +72,10 @@ export interface MT5ConSubscription {
      * @nullable
      */
   periodFreeCustom?: number | null;
-  /**
-     * Trial (free) period code.
-     * @nullable
-     */
-  periodFreeMode?: number | null;
-  /**
-     * Subscription period code.
-     * @nullable
-     */
-  periodMode?: number | null;
+  /** Trial (free) period.<br/>One of: None, Day, Week, Month, Quarter, Year, Custom. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation. */
+  periodFreeMode?: MT5SubscriptionFreePeriod | null;
+  /** Subscription period.<br/>One of: Once, Daily, Weekly, Monthly, Quarterly, Annual, Custom. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation. */
+  periodMode?: MT5SubscriptionPeriod | null;
   /**
      * Subscription price for non-professional traders.
      * @nullable
@@ -103,11 +96,8 @@ export interface MT5ConSubscription {
      * @nullable
      */
   symbols?: MT5ConSubscriptionSymbol[] | null;
-  /**
-     * Subscription type code.
-     * @nullable
-     */
-  type?: number | null;
+  /** Subscription type.<br/>One of: Subscription, Folder. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation. */
+  type?: MT5SubscriptionType | null;
   /**
      * Link to the subscription agreement.
      * @nullable
