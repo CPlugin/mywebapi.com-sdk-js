@@ -14,30 +14,26 @@ import type { NewsMode } from './newsMode';
 import type { OTPMode } from './oTPMode';
 
 /**
- * Type 1 mutator input — full-replace shape for `GroupRecordUpdate`.
- * Same field set as the read DTO MT4Group minus the immutable
- * group name (path parameter) and the derived `SecMarginsTotal`
- * (computed from SecMargins length).
- *
- * Fields preserved by the server-side read step (NOT on this DTO):
- *   * `Group` — path param, immutable identity.
- *   * `SmtpServer`, `SmtpLogin`, `SmtpPassword` — SMTP creds,
- *     never client-controlled.
- *   * `Templates` — server-side filesystem path.
- *   * `SecuritiesHash` — opaque platform bookkeeping.
- *   * `Reserved`, `UnusedRights` — reserved arrays.
- *   * `SecGroups[32]`, `SecMargins[128]` — nested arrays, planned
- *     as dedicated v2 endpoints.
- *   * `NewsLanguages`, `NewsLanguagesTotal` — separate management.
- *   * `SecMarginsTotal` — derived from SecMargins length.
+ * Input shape for `CfgUpdateGroup`: the editable part of an MT4 trading group.
  */
 export interface MT4GroupUpdate {
-  /** 0 = group disabled, non-zero = enabled */
-  enable?: number;
-  /** Trade confirmation timeout, seconds */
-  timeout?: number;
+  /**
+     * Group name to update (required identity; never changed by this call)
+     * @nullable
+     */
+  group?: string | null;
+  /**
+     * 0 = group disabled, non-zero = enabled
+     * @nullable
+     */
+  enable?: number | null;
+  /**
+     * Trade confirmation timeout, seconds
+     * @nullable
+     */
+  timeout?: number | null;
   /** One-time password requirement mode */
-  otpMode?: OTPMode;
+  otpMode?: OTPMode | null;
   /**
      * Company name shown on statements
      * @nullable
@@ -58,57 +54,117 @@ export interface MT4GroupUpdate {
      * @nullable
      */
   supportEmail?: string | null;
-  /** Statement copy count */
-  copies?: number;
-  /** 0 = statements disabled, non-zero = enabled */
-  reports?: number;
-  /** Default leverage when accounts omit their own */
-  defaultLeverage?: number;
-  /** Default deposit when accounts omit their own balance */
-  defaultDeposit?: number;
-  /** Max simultaneously open securities */
-  maxSecurities?: number;
+  /**
+     * Statement copy count
+     * @nullable
+     */
+  copies?: number | null;
+  /**
+     * 0 = statements disabled, non-zero = enabled
+     * @nullable
+     */
+  reports?: number | null;
+  /**
+     * Default leverage when accounts omit their own
+     * @nullable
+     */
+  defaultLeverage?: number | null;
+  /**
+     * Default deposit when accounts omit their own balance
+     * @nullable
+     */
+  defaultDeposit?: number | null;
+  /**
+     * Max simultaneously open securities
+     * @nullable
+     */
+  maxSecurities?: number | null;
   /**
      * Deposit currency
      * @nullable
      */
   currency?: string | null;
-  /** Virtual credit applied to group's accounts */
-  credit?: number;
-  /** Margin call threshold (percent) */
-  marginCall?: number;
+  /**
+     * Virtual credit applied to group's accounts
+     * @nullable
+     */
+  credit?: number | null;
+  /**
+     * Margin call threshold (percent)
+     * @nullable
+     */
+  marginCall?: number | null;
   /** Margin calculation mode */
-  marginMode?: MarginMode;
-  /** Stop-out threshold */
-  marginStopout?: number;
-  /** Annual interest rate (percent) */
-  interestRate?: number;
-  /** 0 = no rollovers, non-zero = use them */
-  useSwap?: number;
+  marginMode?: MarginMode | null;
+  /**
+     * Stop-out threshold
+     * @nullable
+     */
+  marginStopout?: number | null;
+  /**
+     * Annual interest rate (percent)
+     * @nullable
+     */
+  interestRate?: number | null;
+  /**
+     * 0 = no rollovers, non-zero = use them
+     * @nullable
+     */
+  useSwap?: number | null;
   /** News delivery mode */
-  newsMode?: NewsMode;
+  newsMode?: NewsMode | null;
   /** Permissions bit mask */
-  groupRights?: GroupRights;
-  /** 0 = no IE check, non-zero = check IE prices */
-  checkIEPrices?: number;
-  /** Maximum simultaneous orders and open positions */
-  maxPositions?: number;
-  /** 0 = standard, non-zero = close-and-reopen mode */
-  closeReopen?: number;
-  /** 0 = hedging allowed, non-zero = prohibited */
-  hedgeProhibited?: number;
-  /** 0 = LIFO, non-zero = FIFO close rule */
-  closeFIFO?: number;
-  /** 0 = standard, non-zero = treat large hedged leg specially */
-  hedgeLargeLeg?: number;
+  groupRights?: GroupRights | null;
+  /**
+     * 0 = no IE check, non-zero = check IE prices
+     * @nullable
+     */
+  checkIEPrices?: number | null;
+  /**
+     * Maximum simultaneous orders and open positions
+     * @nullable
+     */
+  maxPositions?: number | null;
+  /**
+     * 0 = standard, non-zero = close-and-reopen mode
+     * @nullable
+     */
+  closeReopen?: number | null;
+  /**
+     * 0 = hedging allowed, non-zero = prohibited
+     * @nullable
+     */
+  hedgeProhibited?: number | null;
+  /**
+     * 0 = LIFO, non-zero = FIFO close rule
+     * @nullable
+     */
+  closeFIFO?: number | null;
+  /**
+     * 0 = standard, non-zero = treat large hedged leg specially
+     * @nullable
+     */
+  hedgeLargeLeg?: number | null;
   /** Margin controlling unit (percent vs deposit currency) */
-  marginControllingType?: MarginControllingType;
-  /** Inactivity period (days) before account archival */
-  archivePeriod?: number;
-  /** Max balance under which an account becomes archivable */
-  archiveMaxBalance?: number;
-  /** 0 = include hedged in stop-out checks, non-zero = skip them */
-  stopoutSkipHedged?: number;
-  /** Pending orders clean-up period (days) */
-  archivePendingPeriod?: number;
+  marginControllingType?: MarginControllingType | null;
+  /**
+     * Inactivity period (days) before account archival
+     * @nullable
+     */
+  archivePeriod?: number | null;
+  /**
+     * Max balance under which an account becomes archivable
+     * @nullable
+     */
+  archiveMaxBalance?: number | null;
+  /**
+     * 0 = include hedged in stop-out checks, non-zero = skip them
+     * @nullable
+     */
+  stopoutSkipHedged?: number | null;
+  /**
+     * Pending orders clean-up period (days)
+     * @nullable
+     */
+  archivePendingPeriod?: number | null;
 }

@@ -10,9 +10,9 @@
 
 export type GetTicksHistorySymbolParams = {
 /**
- * Window start, as a trading time of the trade server. Optional — the beginning of the history when omitted.
+ * Window start, as a trading time of the trade server. Required.
  */
-from?: string;
+from: string;
 /**
  * Window end, as a trading time of the trade server. Optional — the current server time when omitted.
  */

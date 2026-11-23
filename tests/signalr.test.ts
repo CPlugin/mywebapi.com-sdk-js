@@ -448,7 +448,7 @@ describe('MT4V2SignalRClient — stop()', () => {
 
 // * --- Pre-start callback registration (race-free) ---------------------------
 //
-// * The server pushes OnConnectionStatus immediately after the WebSocket
+// * The server pushes OnMT4ConnectionStatus / OnMT5ConnectionStatus immediately after the WebSocket
 // *   handshake completes. If the callback is registered AFTER conn.start()
 // *   resolves, there is a window where the push arrives before the handler
 // *   is wired. The fix: queue handlers in pendingHandlers and drain them
@@ -458,7 +458,7 @@ describe('MT4V2SignalRClient — stop()', () => {
 // *   FakeHubConnection before .start() is called on it.
 
 describe('MT4V2SignalRClient — pre-start callback registration', () => {
-  test('onConnectionStatus() registered before start() does NOT throw', () => {
+  test('onMT4ConnectionStatus() registered before start() does NOT throw', () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
       allowInsecureLoopback: true,
@@ -466,7 +466,7 @@ describe('MT4V2SignalRClient — pre-start callback registration', () => {
       token: 'eyJ.fake.token',
     });
     // Must not throw — the handler is queued, not applied yet.
-    expect(() => c.onConnectionStatus((_p) => {})).not.toThrow();
+    expect(() => c.onMT4ConnectionStatus((_p) => {})).not.toThrow();
     // Connection has NOT been built yet at this point.
     expect(lastConnection).toBeNull();
   });
@@ -482,7 +482,7 @@ describe('MT4V2SignalRClient — pre-start callback registration', () => {
     expect(lastConnection).toBeNull();
   });
 
-  test('onConnectionStatus() registered before start() is wired BEFORE conn.start()', async () => {
+  test('onMT4ConnectionStatus() registered before start() is wired BEFORE conn.start()', async () => {
     // * Track the order in which .on() and .start() are called on the
     // *   FakeHubConnection. The handler must be attached before the
     // *   connection is opened, so .on() must appear before .start() in the log.
@@ -516,11 +516,11 @@ describe('MT4V2SignalRClient — pre-start callback registration', () => {
       });
 
       // * Register BEFORE start().
-      c.onConnectionStatus((_p) => {});
+      c.onMT4ConnectionStatus((_p) => {});
       await c.start();
 
       // * The handler must have been attached before the socket opened.
-      const onIdx    = callOrder.indexOf('on:OnConnectionStatus');
+      const onIdx    = callOrder.indexOf('on:OnMT4ConnectionStatus');
       const startIdx = callOrder.indexOf('start');
       expect(onIdx).toBeGreaterThanOrEqual(0);
       expect(startIdx).toBeGreaterThanOrEqual(0);
@@ -571,7 +571,7 @@ describe('MT4V2SignalRClient — pre-start callback registration', () => {
     }
   });
 
-  test('onConnectionStatus() registered AFTER start() is wired immediately', async () => {
+  test('onMT4ConnectionStatus() registered AFTER start() is wired immediately', async () => {
     const c = new MT4V2SignalRClient({
       baseUrl: 'http://localhost:5002',
       allowInsecureLoopback: true,
@@ -581,24 +581,24 @@ describe('MT4V2SignalRClient — pre-start callback registration', () => {
     await c.start();
     // Registering after start() must still work — handler applied immediately.
     const received: unknown[] = [];
-    c.onConnectionStatus((p) => { received.push(p); });
-    expect(typeof lastConnection?.handlers['OnConnectionStatus']).toBe('function');
-    lastConnection!.handlers['OnConnectionStatus']!({ connected: true });
+    c.onMT4ConnectionStatus((p) => { received.push(p); });
+    expect(typeof lastConnection?.handlers['OnMT4ConnectionStatus']).toBe('function');
+    lastConnection!.handlers['OnMT4ConnectionStatus']!({ connected: true });
     expect(received).toEqual([{ connected: true }]);
   });
 });
 
-// * --- MT4V2SignalRClient — default OnConnectionStatus sink ------------------
+// * --- MT4V2SignalRClient — default OnMT4ConnectionStatus sink ------------------
 //
-// * Stream-only consumers never call onConnectionStatus(). Without a default
+// * Stream-only consumers never call onMT4ConnectionStatus(). Without a default
 //   sink, @microsoft/signalr would log:
 //   "Warning: No client method with the name 'onconnectionstatus' found."
 //   on every connection. The fix registers a no-op handler in start() so
 //   the server's guaranteed post-handshake push is always silently consumed.
 
-describe('MT4V2SignalRClient — default OnConnectionStatus sink', () => {
-  test('start() registers OnConnectionStatus even when consumer never calls onConnectionStatus()', async () => {
-    // * Stream-only consumer — no onConnectionStatus() call.
+describe('MT4V2SignalRClient — default OnMT4ConnectionStatus sink', () => {
+  test('start() registers OnMT4ConnectionStatus even when consumer never calls onMT4ConnectionStatus()', async () => {
+    // * Stream-only consumer — no onMT4ConnectionStatus() call.
     const c = new MT4V2SignalRClient({
       baseUrl:       'http://localhost:5002',
       allowInsecureLoopback: true,
@@ -607,10 +607,10 @@ describe('MT4V2SignalRClient — default OnConnectionStatus sink', () => {
     });
     await c.start();
     // * Default sink must be registered so the server push is consumed silently.
-    expect(typeof lastConnection?.handlers['OnConnectionStatus']).toBe('function');
+    expect(typeof lastConnection?.handlers['OnMT4ConnectionStatus']).toBe('function');
   });
 
-  test('default OnConnectionStatus sink is registered BEFORE conn.start()', async () => {
+  test('default OnMT4ConnectionStatus sink is registered BEFORE conn.start()', async () => {
     const callOrder: string[] = [];
 
     const originalBuild = FakeHubConnectionBuilder.prototype.build;
@@ -630,7 +630,7 @@ describe('MT4V2SignalRClient — default OnConnectionStatus sink', () => {
     };
 
     try {
-      // * Stream-only consumer — no onConnectionStatus() call.
+      // * Stream-only consumer — no onMT4ConnectionStatus() call.
       const c = new MT4V2SignalRClient({
         baseUrl:       'http://localhost:5002',
         allowInsecureLoopback: true,
@@ -640,7 +640,7 @@ describe('MT4V2SignalRClient — default OnConnectionStatus sink', () => {
       await c.start();
 
       // * The default sink must appear in the log before 'start'.
-      const onIdx    = callOrder.indexOf('on:OnConnectionStatus');
+      const onIdx    = callOrder.indexOf('on:OnMT4ConnectionStatus');
       const startIdx = callOrder.indexOf('start');
       expect(onIdx).toBeGreaterThanOrEqual(0);
       expect(startIdx).toBeGreaterThanOrEqual(0);
@@ -654,18 +654,18 @@ describe('MT4V2SignalRClient — default OnConnectionStatus sink', () => {
 // * --- MT5V2SignalRClient — pre-start callback registration ------------------
 
 describe('MT5V2SignalRClient — pre-start callback registration', () => {
-  test('onConnectionStatus() registered before start() does NOT throw', () => {
+  test('onMT5ConnectionStatus() registered before start() does NOT throw', () => {
     const c = new MT5V2SignalRClient({
       baseUrl: 'http://localhost:5002',
       allowInsecureLoopback: true,
       tradePlatform: '11111111-2222-3333-4444-555555555555',
       token: 'eyJ.fake.token',
     });
-    expect(() => c.onConnectionStatus((_p) => {})).not.toThrow();
+    expect(() => c.onMT5ConnectionStatus((_p) => {})).not.toThrow();
     expect(lastConnection).toBeNull();
   });
 
-  test('onConnectionStatus() registered before start() is wired BEFORE conn.start()', async () => {
+  test('onMT5ConnectionStatus() registered before start() is wired BEFORE conn.start()', async () => {
     const callOrder: string[] = [];
 
     const originalBuild = FakeHubConnectionBuilder.prototype.build;
@@ -693,10 +693,10 @@ describe('MT5V2SignalRClient — pre-start callback registration', () => {
       });
 
       // * Register BEFORE start().
-      c.onConnectionStatus((_p) => {});
+      c.onMT5ConnectionStatus((_p) => {});
       await c.start();
 
-      const onIdx    = callOrder.indexOf('on:OnConnectionStatus');
+      const onIdx    = callOrder.indexOf('on:OnMT5ConnectionStatus');
       const startIdx = callOrder.indexOf('start');
       expect(onIdx).toBeGreaterThanOrEqual(0);
       expect(startIdx).toBeGreaterThanOrEqual(0);
@@ -706,7 +706,7 @@ describe('MT5V2SignalRClient — pre-start callback registration', () => {
     }
   });
 
-  test('onConnectionStatus() registered AFTER start() is wired immediately', async () => {
+  test('onMT5ConnectionStatus() registered AFTER start() is wired immediately', async () => {
     const c = new MT5V2SignalRClient({
       baseUrl: 'http://localhost:5002',
       allowInsecureLoopback: true,
@@ -715,21 +715,21 @@ describe('MT5V2SignalRClient — pre-start callback registration', () => {
     });
     await c.start();
     const received: unknown[] = [];
-    c.onConnectionStatus((p) => { received.push(p); });
-    expect(typeof lastConnection?.handlers['OnConnectionStatus']).toBe('function');
-    lastConnection!.handlers['OnConnectionStatus']!({ connected: true });
+    c.onMT5ConnectionStatus((p) => { received.push(p); });
+    expect(typeof lastConnection?.handlers['OnMT5ConnectionStatus']).toBe('function');
+    lastConnection!.handlers['OnMT5ConnectionStatus']!({ connected: true });
     expect(received).toEqual([{ connected: true }]);
   });
 });
 
-// * --- MT5V2SignalRClient — default OnConnectionStatus sink ------------------
+// * --- MT5V2SignalRClient — default OnMT5ConnectionStatus sink ------------------
 //
 // * Mirror of the MT4 default-sink tests for the MT5 client. Same guarantee:
 //   a stream-only consumer must not trigger the "no client method" warning.
 
-describe('MT5V2SignalRClient — default OnConnectionStatus sink', () => {
-  test('start() registers OnConnectionStatus even when consumer never calls onConnectionStatus()', async () => {
-    // * Stream-only consumer — no onConnectionStatus() call.
+describe('MT5V2SignalRClient — default OnMT5ConnectionStatus sink', () => {
+  test('start() registers OnMT5ConnectionStatus even when consumer never calls onMT5ConnectionStatus()', async () => {
+    // * Stream-only consumer — no onMT5ConnectionStatus() call.
     const c = new MT5V2SignalRClient({
       baseUrl:       'http://localhost:5002',
       allowInsecureLoopback: true,
@@ -738,10 +738,10 @@ describe('MT5V2SignalRClient — default OnConnectionStatus sink', () => {
     });
     await c.start();
     // * Default sink must be registered so the server push is consumed silently.
-    expect(typeof lastConnection?.handlers['OnConnectionStatus']).toBe('function');
+    expect(typeof lastConnection?.handlers['OnMT5ConnectionStatus']).toBe('function');
   });
 
-  test('default OnConnectionStatus sink is registered BEFORE conn.start()', async () => {
+  test('default OnMT5ConnectionStatus sink is registered BEFORE conn.start()', async () => {
     const callOrder: string[] = [];
 
     const originalBuild = FakeHubConnectionBuilder.prototype.build;
@@ -761,7 +761,7 @@ describe('MT5V2SignalRClient — default OnConnectionStatus sink', () => {
     };
 
     try {
-      // * Stream-only consumer — no onConnectionStatus() call.
+      // * Stream-only consumer — no onMT5ConnectionStatus() call.
       const c = new MT5V2SignalRClient({
         baseUrl:       'http://localhost:5002',
         allowInsecureLoopback: true,
@@ -771,7 +771,7 @@ describe('MT5V2SignalRClient — default OnConnectionStatus sink', () => {
       await c.start();
 
       // * The default sink must appear in the log before 'start'.
-      const onIdx    = callOrder.indexOf('on:OnConnectionStatus');
+      const onIdx    = callOrder.indexOf('on:OnMT5ConnectionStatus');
       const startIdx = callOrder.indexOf('start');
       expect(onIdx).toBeGreaterThanOrEqual(0);
       expect(startIdx).toBeGreaterThanOrEqual(0);

@@ -56,7 +56,7 @@ bun run test:e2e
 
 | Test | What it proves |
 |---|---|
-| `start()` + `onConnectionStatus` | WebSocket handshake succeeds; server pushes `OnConnectionStatus` |
+| `start()` + `onMT4ConnectionStatus` | WebSocket handshake succeeds; server pushes `OnMT4ConnectionStatus` |
 | `streamTicks(symbol)` | AsyncIterable tick stream delivers a tick with `{ symbol, bid, ask }` |
 
 ## Notes

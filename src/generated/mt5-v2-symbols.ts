@@ -9,6 +9,7 @@
  */
 import type {
   MT5SymbolApiResponse,
+  MT5SymbolUpdate,
   PatchSymbolRecordSymbolBody
 } from './model';
 
@@ -105,6 +106,74 @@ return customFetch<patchSymbolRecordSymbolResponse>(getPatchSymbolRecordSymbolUr
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
     body: JSON.stringify(patchSymbolRecordSymbolBody)
+  }
+);}
+
+
+export type postSymbolUpdateSymbolResponse200 = {
+  data: MT5SymbolApiResponse
+  status: 200
+}
+
+export type postSymbolUpdateSymbolResponseSuccess = (postSymbolUpdateSymbolResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postSymbolUpdateSymbolResponse = (postSymbolUpdateSymbolResponseSuccess)
+
+export const getPostSymbolUpdateSymbolUrl = (tradePlatform: string,
+    symbol: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/SymbolUpdate/${encodeURIComponent(String(symbol))}`
+}
+
+/**
+ * <br>
+ *             Changes the symbol record with the given name. Only the fields present in the body are
+ *             written: the record is read from the trade server, the body is applied over it, and the
+ *             merged record is written back. A field left out keeps its server value; for the
+ *             description, omitting the key keeps the value while sending `""` clears it. A body
+ *             without any field is rejected, and an unknown value of an enum field is answered as a
+ *             parameter error. The body must be the symbol update object — a full symbol record is not
+ *             accepted.
+ *
+ * <br>
+ *             The record is read from the trade server first, then written, then re-read, so the
+ *             response carries the state actually stored by the server. An unknown symbol is
+ *             answered with the trade server's error code instead of a record.
+ *
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update a symbol
+ */
+export const postSymbolUpdateSymbol = async (tradePlatform: string,
+    symbol: string,
+    mT5SymbolUpdate?: MT5SymbolUpdate, options?: Parameters<typeof customFetch>[1]): Promise<postSymbolUpdateSymbolResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postSymbolUpdateSymbolResponse>(getPostSymbolUpdateSymbolUrl(tradePlatform,symbol),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5SymbolUpdate)
   }
 );}
 

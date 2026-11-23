@@ -15,6 +15,49 @@ import type {
 import { customFetch } from '../mutator';
 
 
+export type getGroupRequestGroupResponse200 = {
+  data: MT5ConGroupApiResponse
+  status: 200
+}
+
+export type getGroupRequestGroupResponseSuccess = (getGroupRequestGroupResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getGroupRequestGroupResponse = (getGroupRequestGroupResponseSuccess)
+
+export const getGetGroupRequestGroupUrl = (tradePlatform: string,
+    group: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/GroupRequest/${encodeURIComponent(String(group))}`
+}
+
+/**
+ * Returns the configuration of the group as stored on the trade server. The read is
+ * served by the server itself, so it reflects changes made on the server side at once.
+ * The SMTP credentials of the mail reports server (`ReportsSMTPLogin`,
+ * `ReportsSMTPPass`) are never returned: both fields are always empty.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get a group by name
+ */
+export const getGroupRequestGroup = async (tradePlatform: string,
+    group: string, options?: Parameters<typeof customFetch>[1]): Promise<getGroupRequestGroupResponse> => {
+
+  return customFetch<getGroupRequestGroupResponse>(getGetGroupRequestGroupUrl(tradePlatform,group),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
 export type getGroupGetGroupResponse200 = {
   data: MT5ConGroupApiResponse
   status: 200
@@ -37,8 +80,14 @@ export const getGetGroupGetGroupUrl = (tradePlatform: string,
 }
 
 /**
+ * The configuration of the group as the service already holds it, without a round trip
+ * to the trade server: cheap, and as fresh as the last update the connection applied.
+ *
+ * Use `GroupRequest` when the answer has to come from the server. The SMTP
+ * credentials of the mail reports server are never returned here either.
+ *
  * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get a group by name
+ * @summary Get a group from the pump cache
  */
 export const getGroupGetGroup = async (tradePlatform: string,
     group: string, options?: Parameters<typeof customFetch>[1]): Promise<getGroupGetGroupResponse> => {
@@ -77,6 +126,8 @@ export const getPatchGroupRecordGroupMT5Url = (tradePlatform: string,
 /**
  * Send only the fields you want to change (JSON Merge Patch, RFC 7386);
  * omitted fields keep their current values. Returns the updated record.
+ * The SMTP credentials of the mail reports server (`ReportsSMTPLogin`,
+ * `ReportsSMTPPass`) are never returned: both fields are always empty.
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
  * @summary Partially update a group

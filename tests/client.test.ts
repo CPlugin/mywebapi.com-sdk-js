@@ -127,10 +127,10 @@ describe('CPluginWebApiClient — error propagation', () => {
 });
 
 // ---------------------------------------------------------------------------
-// Test 3: mt5 namespace exists and exposes the MT5 ServerTime function
+// Test 3: mt5 namespace exists and exposes the MT5 time function
 // ---------------------------------------------------------------------------
 describe('CPluginWebApiClient — mt5 namespace', () => {
-  test('mt5 namespace is an object with getServerTime (clean name, suffix stripped)', () => {
+  test('mt5 namespace is an object with getTimeServer', () => {
     const client = new CPluginWebApiClient({
       env: 'staging',
       clientId: 'cid',
@@ -139,7 +139,7 @@ describe('CPluginWebApiClient — mt5 namespace', () => {
     });
 
     expect(typeof client.mt5).toBe('object');
-    expect(typeof client.mt5.getServerTime).toBe('function');
+    expect(typeof client.mt5.getTimeServer).toBe('function');
   });
 });
 

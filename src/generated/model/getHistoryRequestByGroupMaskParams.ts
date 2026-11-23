@@ -8,15 +8,13 @@
  * OpenAPI spec version: 2.0
  */
 
-export type GetPositionByGroupMaskParams = {
+export type GetHistoryRequestByGroupMaskParams = {
 /**
- * Maximum number of items to return in one page. Omit to return all items in a single page.
- * Maximum allowed value is 5000.
+ * Window start; omit to start from 01.01.1970.
  */
-limit?: number;
+from?: string;
 /**
- * Opaque continuation token. Pass the value from the previous response's
- * `meta.paging.nextCursor` to fetch the next page; omit for the first page.
+ * Window end; omit to take everything up to the newest order.
  */
-cursor?: string;
+to?: string;
 };

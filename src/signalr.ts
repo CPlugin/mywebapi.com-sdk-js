@@ -173,9 +173,9 @@ export class MT4V2SignalRError extends Error {
  * Lifecycle:
  * 1. `new MT4V2SignalRClient(opts)` — synchronous; resolves the token provider and
  *    pre-computes the hub URL but does NOT open a socket.
- * 2. Register callbacks via `onConnectionStatus()` / `onTick()` — MAY be called
+ * 2. Register callbacks via `onMT4ConnectionStatus()` / `onTick()` — MAY be called
  *    before `start()`. Registering before `start()` is recommended so no early
- *    server push (e.g. the post-handshake `OnConnectionStatus`) is missed.
+ *    server push (e.g. the post-handshake `OnMT4ConnectionStatus`) is missed.
  * 3. `await client.start()` — opens the connection. Auth token is fetched via the
  *    provider's `getToken()`; `tradePlatform` is appended to the URL. All callbacks
  *    queued before `start()` are attached to the `HubConnection` before the socket
@@ -314,16 +314,16 @@ export class MT4V2SignalRClient {
     // * Drain any handlers registered before start() was called.
     // ! This MUST happen before conn.start() so every callback is attached to
     // !   the HubConnection before the WebSocket handshake completes and the
-    // !   server can push its post-handshake OnConnectionStatus message.
+    // !   server can push its post-handshake OnMT4ConnectionStatus message.
     for (const fn of this.pendingHandlers) fn(conn);
     this.pendingHandlers = [];
 
-    // * The server always pushes OnConnectionStatus right after the handshake.
+    // * The server always pushes OnMT4ConnectionStatus right after the handshake.
     //   Register a default sink so stream-only consumers (who never call
-    //   onConnectionStatus) don't trigger a "no client method" warning. A
-    //   user-registered onConnectionStatus handler runs in addition to this
+    //   onMT4ConnectionStatus) don't trigger a "no client method" warning. A
+    //   user-registered onMT4ConnectionStatus handler runs in addition to this
     //   (SignalR invokes all handlers registered for a method).
-    conn.on('OnConnectionStatus', () => { /* default sink */ });
+    conn.on('OnMT4ConnectionStatus', () => { /* default sink */ });
 
     await conn.start();
   }
@@ -362,12 +362,12 @@ export class MT4V2SignalRClient {
     this.register(c => c.on('OnTicksBatch', handler));
   }
 
-  /** Subscribe to `OnConnectionStatus` callbacks. The server pushes one such
+  /** Subscribe to `OnMT4ConnectionStatus` callbacks. The server pushes one such
    *  event right after the handshake completes.
    *  May be called before or after `start()` — registering before `start()` is
    *  strongly recommended to avoid missing the initial post-handshake push. */
-  onConnectionStatus(handler: (payload: ConnectionStatusPayload) => void): void {
-    this.register(c => c.on('OnConnectionStatus', handler));
+  onMT4ConnectionStatus(handler: (payload: ConnectionStatusPayload) => void): void {
+    this.register(c => c.on('OnMT4ConnectionStatus', handler));
   }
 
   /** Subscribe the connection to a per-symbol tick stream. Server will push

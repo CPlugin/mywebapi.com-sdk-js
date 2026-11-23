@@ -2,7 +2,7 @@
 
 TypeScript client for the CPlugin WebAPI v2 — a management API for trading-platform servers.
 
-**Status:** Version `0.3.3`. The package keeps the generated REST catalog and typed MT4/MT5 realtime clients in one entry point; minor releases may introduce breaking changes while the package remains at `0.x`. Pin a version in production.
+**Status:** Version `0.4.0`. The package keeps the generated REST catalog and typed MT4/MT5 realtime clients in one entry point; minor releases may introduce breaking changes while the package remains at `0.x`. Pin a version in production.
 
 - **Auto-generated types** from the live OpenAPI spec — all endpoints, DTOs, and enums are exact and stay in sync with the server.
 - **Unified entry point** — `CPluginWebApiClient` with `mt4` and `mt5` namespaces; credentials and token management configured once at instantiation.
@@ -22,11 +22,11 @@ The WebAPI works with MetaTrader 4 and MetaTrader 5 servers, so a Node.js or bro
 
 Typical back-office tasks, each with the SDK call that performs it. `client` is created as in [Quick start](#quick-start); `tp` is the trade platform id from the Toolbox.
 
-**List open positions of a group** (MT4 `AdmTradesRequest`, MT5 `PositionByGroup`):
+**List open positions of a group** (MT4 `AdmTradesRequest`, MT5 `PositionRequestByGroup`):
 
 ```typescript
 const mt4Trades = await client.mt4.getAdmTradesRequestGroup(tp, 'real-usd', { openOnly: true });
-const mt5Positions = await client.mt5.getPositionByGroupMask(tp, 'real\\*');
+const mt5Positions = await client.mt5.getPositionRequestByGroupMask(tp, 'real\\*');
 for (const p of mt5Positions) console.log(p.login, p.symbol, p.volume, p.profit);
 ```
 
@@ -64,12 +64,12 @@ await client.mt4.patchUserRecordLogin(tp, 1001, { group: 'real-vip', leverage: 2
 await client.mt5.patchUserRecordLogin(tp, 50001, { leverage: 200 });
 ```
 
-**Read trade history for reports and statements** (`TradesUserHistory`, MT5 `DealByGroup`):
+**Read trade history for reports and statements** (`TradesUserHistory`, MT5 `DealRequestByGroup`):
 
 ```typescript
 const closed = await client.mt4.getTradesUserHistoryLogin(tp, 1001,
   { fromTime: '2026-09-01T00:00:00Z', toTime: '2026-10-01T00:00:00Z' });
-const mt5Deals = await client.mt5.getDealByGroupMask(tp, 'real\\*', { limit: 1000 });
+const mt5Deals = await client.mt5.getDealRequestByGroupMask(tp, 'real\\*', { limit: 1000 });
 ```
 
 **Watch margin levels** (cached snapshot of every account, then the live margin-call stream):
@@ -118,7 +118,7 @@ const time = await client.mt4.getServerTime(tp);
 console.log('server time (mt4):', time);
 
 // server time (mt5 namespace)
-const mt5Time = await client.mt5.getServerTime(tp);
+const mt5Time = await client.mt5.getTimeServer(tp);
 console.log('server time (mt5):', mt5Time);
 // Pagination — single page with cursor capture
 const page = await client.paged(() =>
@@ -396,7 +396,7 @@ Open a hub from the same client — it reuses the client's environment and OAuth
 
 ```ts
 const rt = client.realtime.mt4(tradePlatform);   // or client.realtime.mt5(tradePlatform)
-rt.onConnectionStatus((s) => console.log('connected:', s.connected));
+rt.onMT4ConnectionStatus((s) => console.log('connected:', s.connected));   // onMT5ConnectionStatus on mt5
 await rt.start();
 for await (const tick of rt.streamTicks('EURUSD')) {
   console.log(tick.symbol, tick.bid, tick.ask);
@@ -404,7 +404,7 @@ for await (const tick of rt.streamTicks('EURUSD')) {
 await rt.stop();
 ```
 
-The `mt4` hubs expose ticks, trades, margin-call, user and symbol streams; the `mt5` hubs expose connection status and margin-call updates.
+The `mt4` hub exposes ticks, batched ticks, trades, margin-call, user and symbol streams; the `mt5` hub exposes ticks, batched ticks, connection status and margin-call updates.
 
 Hub method calls addressed to a trading platform (such as subscribing to ticks) and the hub connection itself fail with an error when the trading server does not answer within 60 s; open streams are not affected.
 

@@ -87,9 +87,9 @@ export type MT5V2SignalRClientOptions =
  * Lifecycle:
  * 1. `new MT5V2SignalRClient(opts)` — synchronous; resolves the token provider
  *    and pre-computes the hub URL but does NOT open a socket.
- * 2. Register callbacks via `onConnectionStatus()` / `onTick()` — MAY be called before
+ * 2. Register callbacks via `onMT5ConnectionStatus()` / `onTick()` — MAY be called before
  *    `start()`. Registering before `start()` is recommended so the initial
- *    post-handshake `OnConnectionStatus` push is never missed.
+ *    post-handshake `OnMT5ConnectionStatus` push is never missed.
  * 3. `await client.start()` — opens the WebSocket connection. All callbacks
  *    queued before `start()` are attached to the `HubConnection` before the
  *    socket opens, guaranteeing they are in place before any server push arrives.
@@ -220,16 +220,16 @@ export class MT5V2SignalRClient {
     // * Drain any handlers registered before start() was called.
     // ! This MUST happen before conn.start() so every callback is attached to
     // !   the HubConnection before the WebSocket handshake completes and the
-    // !   server can push its post-handshake OnConnectionStatus message.
+    // !   server can push its post-handshake OnMT5ConnectionStatus message.
     for (const fn of this.pendingHandlers) fn(conn);
     this.pendingHandlers = [];
 
-    // * The server always pushes OnConnectionStatus right after the handshake.
+    // * The server always pushes OnMT5ConnectionStatus right after the handshake.
     //   Register a default sink so stream-only consumers (who never call
-    //   onConnectionStatus) don't trigger a "no client method" warning. A
-    //   user-registered onConnectionStatus handler runs in addition to this
+    //   onMT5ConnectionStatus) don't trigger a "no client method" warning. A
+    //   user-registered onMT5ConnectionStatus handler runs in addition to this
     //   (SignalR invokes all handlers registered for a method).
-    conn.on('OnConnectionStatus', () => { /* default sink */ });
+    conn.on('OnMT5ConnectionStatus', () => { /* default sink */ });
 
     await conn.start();
   }
@@ -268,12 +268,12 @@ export class MT5V2SignalRClient {
     this.register(c => c.on('OnTicksBatch', handler));
   }
 
-  /** Subscribe to `OnConnectionStatus` callbacks. The server pushes one such
+  /** Subscribe to `OnMT5ConnectionStatus` callbacks. The server pushes one such
    *  event right after the handshake completes.
    *  May be called before or after `start()` — registering before `start()` is
    *  strongly recommended to avoid missing the initial post-handshake push. */
-  onConnectionStatus(handler: (payload: MT5ConnectionStatusPayload) => void): void {
-    this.register(c => c.on('OnConnectionStatus', handler));
+  onMT5ConnectionStatus(handler: (payload: MT5ConnectionStatusPayload) => void): void {
+    this.register(c => c.on('OnMT5ConnectionStatus', handler));
   }
 
   // * --- Tick subscription ------------------------------------------------------------

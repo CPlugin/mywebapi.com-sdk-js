@@ -9,11 +9,8 @@
  */
 
 /**
- * v2 Type 1 mutator DTO for MT4 server-wide common settings. Curated
- * subset of the platform's `ConCommon` struct — exposes the fields
- * most likely to need adjustment from a SaaS surface while leaving
- * runtime counters, derived state, and the platform's internal arrays
- * to the secret-preservation overlay on the controller side.
+ * v2 mutator DTO for MT4 server-wide common settings: a partial record over the platform's
+ * `ConCommon` struct.
  */
 export interface MT4CommonUpdate {
   /**
@@ -26,27 +23,54 @@ export interface MT4CommonUpdate {
      * @nullable
      */
   owner?: string | null;
-  /** Server time zone offset from UTC, in hours. */
-  timeZone?: number;
-  /** DST correction setting (server-specific integer). */
-  daylightCorrection?: number;
-  /** Real time-zone (no DST) offset from UTC, in hours. */
-  timeZoneReal?: number;
+  /**
+     * Server time zone offset from UTC, in hours.
+     * @nullable
+     */
+  timeZone?: number | null;
+  /**
+     * DST correction setting (server-specific integer).
+     * @nullable
+     */
+  daylightCorrection?: number | null;
+  /**
+     * Real time-zone (no DST) offset from UTC, in hours.
+     * @nullable
+     */
+  timeZoneReal?: number | null;
   /**
      * NTP server hostname for clock sync.
      * @nullable
      */
   timeSync?: string | null;
-  /** Minimum acceptable client build number. */
-  minClient?: number;
-  /** Minimum client API build the trade server accepts. */
-  minApi?: number;
-  /** How long (days) to keep mailbox messages. */
-  keepEmails?: number;
-  /** How long (days) to keep tick history. */
-  keepTicks?: number;
-  /** Anti-flood threshold (requests per second). */
-  antiFlood?: number;
-  /** Flood-control behaviour mode. */
-  floodControl?: number;
+  /**
+     * Minimum acceptable client build number.
+     * @nullable
+     */
+  minClient?: number | null;
+  /**
+     * Minimum client API build the trade server accepts.
+     * @nullable
+     */
+  minApi?: number | null;
+  /**
+     * How long (days) to keep mailbox messages.
+     * @nullable
+     */
+  keepEmails?: number | null;
+  /**
+     * How long (days) to keep tick history.
+     * @nullable
+     */
+  keepTicks?: number | null;
+  /**
+     * Anti-flood threshold (requests per second).
+     * @nullable
+     */
+  antiFlood?: number | null;
+  /**
+     * Flood-control behaviour mode.
+     * @nullable
+     */
+  floodControl?: number | null;
 }

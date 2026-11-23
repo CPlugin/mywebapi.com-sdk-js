@@ -7,27 +7,154 @@
  * Partly follows the JSON-Pure API idea: a successful call answers HTTP 200; any other code reports an error, such as wrong parameters or an unavailable trade platform.
  * OpenAPI spec version: 2.0
  */
+import type { DemoAccountType } from './demoAccountType';
+import type { LiveUpdateMode } from './liveUpdateMode';
+import type { MonthlyStatementMode } from './monthlyStatementMode';
+import type { RolloverMode } from './rolloverMode';
+import type { ServerStopReason } from './serverStopReason';
+import type { StatementMode } from './statementMode';
 
 /**
- * v2 DTO for MT4 server-wide common settings. Curated subset of the
- * the platform's ConCommon struct — exposes fields useful to clients while
- * shielding the v2 contract from MetaQuotes schema drift.
+ * Full server-wide common configuration of an MT4 trade server: identity,
+ * protocol version, bind and web address lists, storage paths, runtime
+ * counters and the operational subsystems (demo accounts, rollover,
+ * statements, live update).
  */
 export interface MT4Common {
-  /**
-     * Trade server name
-     * @nullable
-     */
-  name?: string | null;
   /**
      * Broker / company display name
      * @nullable
      */
   owner?: string | null;
-  /** Trade server build number */
-  build?: number;
-  /** Trade server version */
-  version?: number;
+  /**
+     * Trade server name
+     * @nullable
+     */
+  name?: string | null;
+  /** IP address assigned to the server */
+  address?: number;
+  /** Server port */
+  port?: number;
+  /** Socket timeout, seconds */
+  timeout?: number;
+  /** Demo-account subsystem type */
+  demoAccountType?: DemoAccountType;
+  /** Demo-account lifetime, days */
+  timeOfDemo?: number;
+  /** Daylight-correction setting */
+  daylightCorrection?: number;
   /** Server time zone offset from UTC, in hours (DST-adjusted) */
+  timeZoneReal?: number;
+  /** Server time zone offset from UTC, in hours */
   timeZone?: number;
+  /**
+     * Time-synchronization server address
+     * @nullable
+     */
+  timeSync?: string | null;
+  /** Minimal authorized client version */
+  minClient?: number;
+  /** Minimal authorized API version */
+  minApi?: number;
+  /** Data-feed switch timeout, seconds */
+  feederTimeout?: number;
+  /** Internal mail keep period */
+  keepEmails?: number;
+  /** End-of-day time: hour */
+  endHour?: number;
+  /** End-of-day time: minute */
+  endMinute?: number;
+  /** Optimization start time, minutes */
+  optimizationTime?: number;
+  /** Optimization last run time */
+  optimizationLastTime?: number;
+  /** Optimization run counter */
+  optimizationCounter?: number;
+  /**
+     * Reserved for future use
+     * @nullable
+     */
+  optimizationUnused?: number[] | null;
+  /** Anti-flood control enabled flag */
+  antiFlood?: number;
+  /** Maximum anti-flood connections */
+  floodControl?: number;
+  /** Live-update mode */
+  liveUpdateMode?: LiveUpdateMode;
+  /** Last assigned order ticket (read only) */
+  lastOrder?: number;
+  /** Last assigned account login (read only) */
+  lastLogin?: number;
+  /** Lost-commission account login (read only) */
+  lostLogin?: number;
+  /** Overnight rollover mode */
+  rolloverMode?: RolloverMode;
+  /**
+     * Path to the databases
+     * @nullable
+     */
+  pathDatabase?: string | null;
+  /**
+     * Path to the history bases
+     * @nullable
+     */
+  pathHistory?: string | null;
+  /**
+     * Path to the logs
+     * @nullable
+     */
+  pathLog?: string | null;
+  /** Day of the last overnight */
+  overnightLastDay?: number;
+  /** Time of the last overnight */
+  overnightLastTime?: number;
+  /** Time of the overnight before the last one */
+  overnightPrevTime?: number;
+  /** Month of the last generated report */
+  overmonthLastMonth?: number;
+  /**
+     * Network adapters list (read only)
+     * @nullable
+     */
+  adapters?: string | null;
+  /**
+     * Available bind addresses
+     * @nullable
+     */
+  bindAdresses?: number[] | null;
+  /** Server version */
+  serverVersion?: number;
+  /** Server build number */
+  serverBuild?: number;
+  /**
+     * Web services access list (comma separated IP addresses)
+     * @nullable
+     */
+  webAdresses?: number[] | null;
+  /** Statement generation mode */
+  statementMode?: StatementMode;
+  /** Monthly statement generation schedule */
+  monthlyStatementMode?: MonthlyStatementMode;
+  /** Tick history keep period, days */
+  keepTicks?: number;
+  /** Generate statements at weekends */
+  statementWeekend?: number;
+  /**
+     * Reserved for future use
+     * @nullable
+     */
+  reserved?: number[] | null;
+  /** Last activation date and time */
+  lastActivate?: string;
+  /** Last stop date and time */
+  stopLast?: string;
+  /** Last stop delay */
+  stopDelay?: number;
+  /** Last stop reason */
+  stopReason?: ServerStopReason;
+  /**
+     * Account allocation URL
+     * @nullable
+     */
+  accountUrl?: string | null;
 }

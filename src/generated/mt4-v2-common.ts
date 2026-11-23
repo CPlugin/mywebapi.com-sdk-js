@@ -11,6 +11,7 @@ import type {
   DateTimeApiResponse,
   GetJournalRequestParams,
   MT4CommonApiResponse,
+  MT4CommonShortApiResponse,
   MT4ServerLogListApiResponse
 } from './model';
 
@@ -59,7 +60,7 @@ export const getServerTimeMT4 = async (tradePlatform: string, options?: Paramete
 
 
 export type getManagerCommonResponse200 = {
-  data: MT4CommonApiResponse
+  data: MT4CommonShortApiResponse
   status: 200
 }
 
@@ -79,18 +80,64 @@ export const getGetManagerCommonUrl = (tradePlatform: string,) => {
 }
 
 /**
- * Server-wide MT4 trade server settings (curated subset).
+ * Server name, protocol version and build, time zone, and the state of
+ * the operational subsystems — the part of the server record that does
+ * not describe the server's infrastructure.
  *
- * Returns MT4Common DTO — server name, broker, server version/build,
- * time zone. Schema is decoupled from the platform's ConCommon: v2
- * clients are protected from MetaQuotes schema changes.
+ * The administrative fields (storage paths, bind and web addresses,
+ * adapter list, reserved block) are not included; use
+ * `ManagerCommonEx` when they are needed.
  *
  * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get manager common settings
+ * @summary Get server common settings
  */
 export const getManagerCommon = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getManagerCommonResponse> => {
 
   return customFetch<getManagerCommonResponse>(getGetManagerCommonUrl(tradePlatform),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getManagerCommonExResponse200 = {
+  data: MT4CommonApiResponse
+  status: 200
+}
+
+export type getManagerCommonExResponseSuccess = (getManagerCommonExResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getManagerCommonExResponse = (getManagerCommonExResponseSuccess)
+
+export const getGetManagerCommonExUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ManagerCommonEx`
+}
+
+/**
+ * The complete server record: identity, protocol version, socket and
+ * feed timeouts, bind and web address lists, storage paths, runtime
+ * counters, and the operational subsystems (demo accounts, rollover,
+ * statements, live update).
+ *
+ * Requires the sensitive-settings permission: the record describes the
+ * server's infrastructure, not only its public identity.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get full server common settings
+ */
+export const getManagerCommonEx = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getManagerCommonExResponse> => {
+
+  return customFetch<getManagerCommonExResponse>(getGetManagerCommonExUrl(tradePlatform),
   {
     ...options,
     method: 'GET'
