@@ -13,8 +13,6 @@ import type { MT5User } from './mT5User';
  * The created account and the passwords it was created with.
  */
 export interface MT5UserAddResult {
-  /** The account as the trade server stored it, including the allocated login. */
-  user?: MT5User | null;
   /**
      * The master password the account was created with.
      * @nullable
@@ -25,4 +23,6 @@ export interface MT5UserAddResult {
      * @nullable
      */
   passwordInvestor?: string | null;
+  /** The account as the trade server stored it, including the allocated login. */
+  user?: MT5User | null;
 }

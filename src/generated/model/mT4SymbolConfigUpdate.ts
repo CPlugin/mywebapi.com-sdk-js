@@ -33,51 +33,51 @@ import type { TradeMode } from './tradeMode';
  *     overwrite-with-stale.
  */
 export interface MT4SymbolConfigUpdate {
-  /** @nullable */
-  description?: string | null;
-  /** @nullable */
-  source?: string | null;
+  backgroundColor?: number;
+  contractSize?: number;
   /** @nullable */
   currency?: string | null;
-  type?: number;
+  /** @nullable */
+  description?: string | null;
   digits?: number;
-  tradeMode?: TradeMode;
-  backgroundColor?: number;
-  realtime?: number;
-  starting?: string;
   expiration?: string;
-  profitCalculationMode?: ProfitCalculationMode;
   filter?: number;
   filterLimit?: number;
   filterSmoothing?: number;
-  logging?: number;
-  spread?: number;
-  spreadBalance?: number;
-  symbolExecMode?: SymbolExecMode;
-  swapEnable?: number;
-  swapType?: SwapType;
-  swapLong?: number;
-  swapShort?: number;
-  swapRollover3Days?: number;
-  contractSize?: number;
-  tickValue?: number;
-  tickSize?: number;
-  stopsLevel?: number;
+  freezeLevel?: number;
   gtcMode?: GTCMode;
-  marginCalculationMode?: MarginCalculationMode;
-  marginInitial?: number;
-  marginMaintenance?: number;
-  marginHedged?: number;
-  marginDivider?: number;
-  percentage?: number;
-  longOnly?: number;
   instantMaxVolume?: number;
+  logging?: number;
+  longOnly?: number;
+  marginCalculationMode?: MarginCalculationMode;
   /** @nullable */
   marginCurrency?: string | null;
-  freezeLevel?: number;
+  marginDivider?: number;
+  marginHedged?: number;
   marginHedgedStrong?: number;
-  valueDate?: string;
+  marginInitial?: number;
+  marginMaintenance?: number;
+  percentage?: number;
+  profitCalculationMode?: ProfitCalculationMode;
   quotesDelay?: number;
+  realtime?: number;
+  /** @nullable */
+  source?: string | null;
+  spread?: number;
+  spreadBalance?: number;
+  starting?: string;
+  stopsLevel?: number;
+  swapEnable?: number;
+  swapLong?: number;
   swapOpenPrice?: number;
+  swapRollover3Days?: number;
+  swapShort?: number;
+  swapType?: SwapType;
   swapVariationMargin?: number;
+  symbolExecMode?: SymbolExecMode;
+  tickSize?: number;
+  tickValue?: number;
+  tradeMode?: TradeMode;
+  type?: number;
+  valueDate?: string;
 }

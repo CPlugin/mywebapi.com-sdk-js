@@ -18,38 +18,53 @@ import type {
 import { customFetch } from '../mutator';
 
 
-export type getServerTimeMT4Response200 = {
-  data: DateTimeApiResponse
+export type getJournalRequestResponse200 = {
+  data: MT4ServerLogListApiResponse
   status: 200
 }
 
-export type getServerTimeMT4ResponseSuccess = (getServerTimeMT4Response200) & {
+export type getJournalRequestResponseSuccess = (getJournalRequestResponse200) & {
   headers: Headers;
 };
 ;
 
-export type getServerTimeMT4Response = (getServerTimeMT4ResponseSuccess)
+export type getJournalRequestResponse = (getJournalRequestResponseSuccess)
 
-export const getGetServerTimeMT4Url = (tradePlatform: string,) => {
+export const getGetJournalRequestUrl = (tradePlatform: string,
+    params?: GetJournalRequestParams,) => {
+  const normalizedParams = new URLSearchParams();
 
+  Object.entries(params || {}).forEach(([key, value]) => {
 
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
 
+  const stringifiedParams = normalizedParams.toString();
 
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ServerTime`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/JournalRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/JournalRequest`
 }
 
 /**
- * Server time of the connected MT4 trade server.
+ * Server journal (log) entries for a date window.
  *
- * Smoke-test endpoint exercising the v2 envelope. Returns current MT4
- * server time wrapped in ApiResponse<DateTime>.
+ * Manager (live) call — round-trips to MT4 server. Returns log entries
+ * in `[from, to]` range filtered by `mode` and an optional
+ * free-text `filter`. Defaults: `mode = Full`, `to = now`
+ * (server time).
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get server time
+ * Heavier endpoint — large date windows return large arrays. Pair with
+ * reasonable `from`/`to` bounds; consider `Idempotency-Key`
+ * for retry safety on slow links.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get server journal
  */
-export const getServerTimeMT4 = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getServerTimeMT4Response> => {
+export const getJournalRequest = async (tradePlatform: string,
+    params?: GetJournalRequestParams, options?: Parameters<typeof customFetch>[1]): Promise<getJournalRequestResponse> => {
 
-  return customFetch<getServerTimeMT4Response>(getGetServerTimeMT4Url(tradePlatform),
+  return customFetch<getJournalRequestResponse>(getGetJournalRequestUrl(tradePlatform,params),
   {
     ...options,
     method: 'GET'
@@ -147,53 +162,38 @@ export const getManagerCommonEx = async (tradePlatform: string, options?: Parame
 );}
 
 
-export type getJournalRequestResponse200 = {
-  data: MT4ServerLogListApiResponse
+export type getServerTimeMT4Response200 = {
+  data: DateTimeApiResponse
   status: 200
 }
 
-export type getJournalRequestResponseSuccess = (getJournalRequestResponse200) & {
+export type getServerTimeMT4ResponseSuccess = (getServerTimeMT4Response200) & {
   headers: Headers;
 };
 ;
 
-export type getJournalRequestResponse = (getJournalRequestResponseSuccess)
+export type getServerTimeMT4Response = (getServerTimeMT4ResponseSuccess)
 
-export const getGetJournalRequestUrl = (tradePlatform: string,
-    params?: GetJournalRequestParams,) => {
-  const normalizedParams = new URLSearchParams();
+export const getGetServerTimeMT4Url = (tradePlatform: string,) => {
 
-  Object.entries(params || {}).forEach(([key, value]) => {
 
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
 
-  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/JournalRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/JournalRequest`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ServerTime`
 }
 
 /**
- * Server journal (log) entries for a date window.
+ * Server time of the connected MT4 trade server.
  *
- * Manager (live) call — round-trips to MT4 server. Returns log entries
- * in `[from, to]` range filtered by `mode` and an optional
- * free-text `filter`. Defaults: `mode = Full`, `to = now`
- * (server time).
+ * Smoke-test endpoint exercising the v2 envelope. Returns current MT4
+ * server time wrapped in ApiResponse<DateTime>.
  *
- * Heavier endpoint — large date windows return large arrays. Pair with
- * reasonable `from`/`to` bounds; consider `Idempotency-Key`
- * for retry safety on slow links.
- *
- * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get server journal
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get server time
  */
-export const getJournalRequest = async (tradePlatform: string,
-    params?: GetJournalRequestParams, options?: Parameters<typeof customFetch>[1]): Promise<getJournalRequestResponse> => {
+export const getServerTimeMT4 = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getServerTimeMT4Response> => {
 
-  return customFetch<getJournalRequestResponse>(getGetJournalRequestUrl(tradePlatform,params),
+  return customFetch<getServerTimeMT4Response>(getGetServerTimeMT4Url(tradePlatform),
   {
     ...options,
     method: 'GET'

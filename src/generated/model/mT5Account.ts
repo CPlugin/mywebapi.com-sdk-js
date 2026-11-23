@@ -10,85 +10,16 @@
 import type { SoActivation } from './soActivation';
 
 export interface MT5Account {
-  /** Get and set the login of the client, to whom the trading account belongs. */
-  login: number;
   /**
-     * Get and set the number of decimal places in the account deposit currency.
+     * Get and set the current total amount of assets on a trading account.
      * @nullable
      */
-  currencyDigits?: number | null;
+  assets?: number | null;
   /**
      * Get and set the balance of a trading account.
      * @nullable
      */
   balance?: number | null;
-  /**
-     * Get and set the current amount of credit given to an account.
-     * @nullable
-     */
-  credit?: number | null;
-  /**
-     * Get and set the current value of the account margin.
-     * @nullable
-     */
-  margin?: number | null;
-  /**
-     * Get and set the free margin of an account.
-     * @nullable
-     */
-  marginFree?: number | null;
-  /**
-     * Get and set the margin level as a percentage.
-     * @nullable
-     */
-  marginLevel?: number | null;
-  /**
-     * Get and set the margin leverage.
-     * @nullable
-     */
-  marginLeverage?: number | null;
-  /**
-     * Get and set the size of the current profit for all open positions.
-     * @nullable
-     */
-  profit?: number | null;
-  /**
-     * Get and set the current size of swaps charged for open positions on the account.
-     * @nullable
-     */
-  storage?: number | null;
-  /**
-     * Get and set the size of floating profit/loss of open positions on the account.
-     * @nullable
-     */
-  floating?: number | null;
-  /**
-     * Get and set account equity.
-     * @nullable
-     */
-  equity?: number | null;
-  /** Get and set the account status as per the minimum amount of funds on the account required to maintain trading positions. */
-  soActivation?: SoActivation | null;
-  /**
-     * Get and set the time when the Margin Call or Stop Out level was reached.
-     * @nullable
-     */
-  soTime?: string | null;
-  /**
-     * Get and set the margin level of an account at the time of reaching the Stop Out level.
-     * @nullable
-     */
-  soLevel?: number | null;
-  /**
-     * Get and set the account equity at the time of reaching the Stop Out level.
-     * @nullable
-     */
-  soEquity?: number | null;
-  /**
-     * Get and set the margin amount on an account at the time of reaching the Stop Out level.
-     * @nullable
-     */
-  soMargin?: number | null;
   /**
      * Get and set the amount of the standard commission locked on the account, which has been accumulated during the day/month.
      * @nullable
@@ -100,23 +31,92 @@ export interface MT5Account {
      */
   blockedProfit?: number | null;
   /**
+     * Get and set the current amount of credit given to an account.
+     * @nullable
+     */
+  credit?: number | null;
+  /**
+     * Get and set the number of decimal places in the account deposit currency.
+     * @nullable
+     */
+  currencyDigits?: number | null;
+  /**
+     * Get and set account equity.
+     * @nullable
+     */
+  equity?: number | null;
+  /**
+     * Get and set the size of floating profit/loss of open positions on the account.
+     * @nullable
+     */
+  floating?: number | null;
+  /**
+     * Get and set the current total amount of liabilities on a trading account.
+     * @nullable
+     */
+  liabilities?: number | null;
+  /** Get and set the login of the client, to whom the trading account belongs. */
+  login: number;
+  /**
+     * Get and set the current value of the account margin.
+     * @nullable
+     */
+  margin?: number | null;
+  /**
+     * Get and set the free margin of an account.
+     * @nullable
+     */
+  marginFree?: number | null;
+  /**
      * Get and set the current size of the initial margin of positions on a trading account.
      * @nullable
      */
   marginInitial?: number | null;
+  /**
+     * Get and set the margin level as a percentage.
+     * @nullable
+     */
+  marginLevel?: number | null;
+  /**
+     * Get and set the margin leverage.
+     * @nullable
+     */
+  marginLeverage?: number | null;
   /**
      * Get and set the current size of the maintenance margin of positions on a trading account.
      * @nullable
      */
   marginMaintenance?: number | null;
   /**
-     * Get and set the current total amount of assets on a trading account.
+     * Get and set the size of the current profit for all open positions.
      * @nullable
      */
-  assets?: number | null;
+  profit?: number | null;
+  /** Get and set the account status as per the minimum amount of funds on the account required to maintain trading positions. */
+  soActivation?: SoActivation | null;
   /**
-     * Get and set the current total amount of liabilities on a trading account.
+     * Get and set the account equity at the time of reaching the Stop Out level.
      * @nullable
      */
-  liabilities?: number | null;
+  soEquity?: number | null;
+  /**
+     * Get and set the margin level of an account at the time of reaching the Stop Out level.
+     * @nullable
+     */
+  soLevel?: number | null;
+  /**
+     * Get and set the margin amount on an account at the time of reaching the Stop Out level.
+     * @nullable
+     */
+  soMargin?: number | null;
+  /**
+     * Get and set the time when the Margin Call or Stop Out level was reached.
+     * @nullable
+     */
+  soTime?: string | null;
+  /**
+     * Get and set the current size of swaps charged for open positions on the account.
+     * @nullable
+     */
+  storage?: number | null;
 }

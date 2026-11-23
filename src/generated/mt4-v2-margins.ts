@@ -15,49 +15,6 @@ import type {
 import { customFetch } from '../mutator';
 
 
-export type getMarginsGetResponse200 = {
-  data: MT4MarginLevelListApiResponse
-  status: 200
-}
-
-export type getMarginsGetResponseSuccess = (getMarginsGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getMarginsGetResponse = (getMarginsGetResponseSuccess)
-
-export const getGetMarginsGetUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/MarginsGet`
-}
-
-/**
- * Margin levels for all accounts from the pump cache.
- *
- * Pump-cached snapshot of margin/equity/free margin per login. Use this
- * for bulk monitoring of account health (margin calls / stop-out
- * proximity). For a single account, prefer the existing
- * MarginLevelGet/MarginLevelRequest endpoints.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List account margins (cached)
- */
-export const getMarginsGet = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getMarginsGetResponse> => {
-
-  return customFetch<getMarginsGetResponse>(getGetMarginsGetUrl(tradePlatform),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
 export type getMarginLevelGetLoginResponse200 = {
   data: MT4MarginLevelApiResponse
   status: 200
@@ -139,6 +96,49 @@ export const getMarginLevelRequestLogin = async (tradePlatform: string,
     login: number, options?: Parameters<typeof customFetch>[1]): Promise<getMarginLevelRequestLoginResponse> => {
 
   return customFetch<getMarginLevelRequestLoginResponse>(getGetMarginLevelRequestLoginUrl(tradePlatform,login),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getMarginsGetResponse200 = {
+  data: MT4MarginLevelListApiResponse
+  status: 200
+}
+
+export type getMarginsGetResponseSuccess = (getMarginsGetResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getMarginsGetResponse = (getMarginsGetResponseSuccess)
+
+export const getGetMarginsGetUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/MarginsGet`
+}
+
+/**
+ * Margin levels for all accounts from the pump cache.
+ *
+ * Pump-cached snapshot of margin/equity/free margin per login. Use this
+ * for bulk monitoring of account health (margin calls / stop-out
+ * proximity). For a single account, prefer the existing
+ * MarginLevelGet/MarginLevelRequest endpoints.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List account margins (cached)
+ */
+export const getMarginsGet = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getMarginsGetResponse> => {
+
+  return customFetch<getMarginsGetResponse>(getGetMarginsGetUrl(tradePlatform),
   {
     ...options,
     method: 'GET'

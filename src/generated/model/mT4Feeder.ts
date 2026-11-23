@@ -15,43 +15,43 @@ import type { DataFeedMode } from './dataFeedMode';
  * reserved blob AND the `Password` field (datafeed credentials).
  */
 export interface MT4Feeder {
-  /**
-     * Feeder name (used as cursor key — assumed unique)
-     * @nullable
-     */
-  name?: string | null;
+  /** Reconnect count before switching to sleep timeout */
+  attempsSleep?: number;
+  /** Feed mode (quotes / news / both — platform enum) */
+  dataFeedMode?: DataFeedMode;
+  /** Enable flag (0 = disabled, 1 = enabled — raw platform int) */
+  enable?: number;
   /**
      * Datafeed loader filename (DLL or script path)
      * @nullable
      */
   file?: string | null;
   /**
-     * Upstream feeder server address
+     * Keywords for news filtering
      * @nullable
      */
-  server?: string | null;
+  keywords?: string | null;
   /**
      * Datafeed login (upstream credential identifier)
      * @nullable
      */
   login?: string | null;
   /**
-     * Keywords for news filtering
+     * Feeder name (used as cursor key — assumed unique)
      * @nullable
      */
-  keywords?: string | null;
-  /** Enable flag (0 = disabled, 1 = enabled — raw platform int) */
-  enable?: number;
-  /** Feed mode (quotes / news / both — platform enum) */
-  dataFeedMode?: DataFeedMode;
+  name?: string | null;
+  /** News language id */
+  newsLangId?: number;
+  /**
+     * Upstream feeder server address
+     * @nullable
+     */
+  server?: string | null;
   /** Maximum freeze time in seconds before considered stalled (default ~120) */
   timeout?: number;
   /** Reconnect delay before "sleep" attempts threshold (default ~5s) */
   timeoutReconnect?: number;
   /** Reconnect delay after "sleep" attempts threshold (default ~60s) */
   timeoutSleep?: number;
-  /** Reconnect count before switching to sleep timeout */
-  attempsSleep?: number;
-  /** News language id */
-  newsLangId?: number;
 }

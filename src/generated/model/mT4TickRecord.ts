@@ -15,12 +15,10 @@
  * returned as their names.
  */
 export interface MT4TickRecord {
-  /** Server-side tick timestamp (UTC) */
-  time?: string;
-  /** Bid price */
-  bid?: number;
   /** Ask price */
   ask?: number;
+  /** Bid price */
+  bid?: number;
   /** Index of the data feed source */
   dataFeed?: number;
   /**
@@ -28,4 +26,6 @@ export interface MT4TickRecord {
      * @nullable
      */
   flags?: string | null;
+  /** Server-side tick timestamp (UTC) */
+  time?: string;
 }

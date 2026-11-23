@@ -26,99 +26,37 @@
  * that MetaQuotes occasionally reuses bit positions across builds.
  */
 export interface MT4User {
-  /** Trading account number (login) */
-  login?: number;
   /**
-     * Group name the account belongs to
+     * Street address
      * @nullable
      */
-  group?: string | null;
-  /**
-     * Display name of the account holder
-     * @nullable
-     */
-  name?: string | null;
-  /** UTC timestamp when the account was created */
-  registrationDate?: string;
-  /** UTC timestamp of the last MT4 server interaction */
-  lastDate?: string;
-  /**
-     * External customer identifier (e.g. CRM/KYC link). The platform's `Id` field.
-     * @nullable
-     */
-  externalId?: string | null;
-  /**
-     * MT4-internal status string (e.g. live/demo state)
-     * @nullable
-     */
-  status?: string | null;
-  /**
-     * Country (free text per broker's enrolment workflow)
-     * @nullable
-     */
-  country?: string | null;
+  address?: string | null;
+  /** IB / agent account number that referred this client */
+  agentAccount?: number;
+  /** Current balance */
+  balance?: number;
   /**
      * City
      * @nullable
      */
   city?: string | null;
   /**
-     * State / region
+     * Free-form back-office comment
      * @nullable
      */
-  state?: string | null;
+  comment?: string | null;
   /**
-     * Postal / ZIP code
+     * Country (free text per broker's enrolment workflow)
      * @nullable
      */
-  zipCode?: string | null;
-  /**
-     * Street address
-     * @nullable
-     */
-  address?: string | null;
-  /**
-     * Lead source / referral channel tag
-     * @nullable
-     */
-  leadSource?: string | null;
-  /**
-     * Contact phone
-     * @nullable
-     */
-  phone?: string | null;
+  country?: string | null;
+  /** Credit on the account */
+  credit?: number;
   /**
      * Contact email
      * @nullable
      */
   email?: string | null;
-  /**
-     * Free-form back-office comment
-     * @nullable
-     */
-  comment?: string | null;
-  /** Account leverage (e.g. 100 means 1:100) */
-  leverage?: number;
-  /** IB / agent account number that referred this client */
-  agentAccount?: number;
-  /** Last connection IP as raw int (use platform helpers to format) */
-  lastIP?: number;
-  /** Current balance */
-  balance?: number;
-  /** Credit on the account */
-  credit?: number;
-  /** Balance at the start of the previous calendar month */
-  prevMonthBalance?: number;
-  /** Balance at the previous reporting close */
-  prevBalance?: number;
-  /** Equity at the start of the previous calendar month */
-  prevMonthEquity?: number;
-  /** Equity at the previous reporting close */
-  prevEquity?: number;
-  /** Interest rate (broker-defined, often used for swaps) */
-  interestRate?: number;
-  /** Tax rate applied to the account */
-  taxes?: number;
   /**
      * Account flag bitfield (the platform's `EnableFlags`). Documented bits:
      *   * 0x01 = account enabled (login allowed)
@@ -129,8 +67,31 @@ export interface MT4User {
      * Manager docs if pinning behaviour to a specific bit.
      */
   enableFlags?: number;
-  /** 0 = no reports, non-zero = nightly email reports enabled */
-  sendReports?: number;
+  /**
+     * External customer identifier (e.g. CRM/KYC link). The platform's `Id` field.
+     * @nullable
+     */
+  externalId?: string | null;
+  /**
+     * Group name the account belongs to
+     * @nullable
+     */
+  group?: string | null;
+  /** Interest rate (broker-defined, often used for swaps) */
+  interestRate?: number;
+  /** UTC timestamp of the last MT4 server interaction */
+  lastDate?: string;
+  /** Last connection IP as raw int (use platform helpers to format) */
+  lastIP?: number;
+  /**
+     * Lead source / referral channel tag
+     * @nullable
+     */
+  leadSource?: string | null;
+  /** Account leverage (e.g. 100 means 1:100) */
+  leverage?: number;
+  /** Trading account number (login) */
+  login?: number;
   /**
      * MetaQuotes ID for mobile push notifications (0 if not linked).
      * Typed as `long` in v2 even though current builds store it in
@@ -139,6 +100,45 @@ export interface MT4User {
      * Int32.MaxValue. Future-proofs the contract against MQ widening.
      */
   mqid?: number;
+  /**
+     * Display name of the account holder
+     * @nullable
+     */
+  name?: string | null;
+  /**
+     * Contact phone
+     * @nullable
+     */
+  phone?: string | null;
+  /** Balance at the previous reporting close */
+  prevBalance?: number;
+  /** Equity at the previous reporting close */
+  prevEquity?: number;
+  /** Balance at the start of the previous calendar month */
+  prevMonthBalance?: number;
+  /** Equity at the start of the previous calendar month */
+  prevMonthEquity?: number;
+  /** UTC timestamp when the account was created */
+  registrationDate?: string;
+  /** 0 = no reports, non-zero = nightly email reports enabled */
+  sendReports?: number;
+  /**
+     * State / region
+     * @nullable
+     */
+  state?: string | null;
+  /**
+     * MT4-internal status string (e.g. live/demo state)
+     * @nullable
+     */
+  status?: string | null;
+  /** Tax rate applied to the account */
+  taxes?: number;
   /** UI tint color in terminal client lists */
   userColor?: number;
+  /**
+     * Postal / ZIP code
+     * @nullable
+     */
+  zipCode?: string | null;
 }

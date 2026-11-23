@@ -21,21 +21,21 @@ import type { SymbolExecMode } from './symbolExecMode';
  * margin, swap) live on the separate `CfgUpdateSymbol` Type 1 mutator.
  */
 export interface MT4SymbolChangeRequest {
-  /**
-     * Symbol name (max 12 chars — the platform's fixed slot)
-     * @nullable
-     */
-  symbol?: string | null;
   /** Quote display color (raw int; broker UI convention) */
   color?: number;
+  /** Order execution mode (Request/Instant/Market/Exchange) */
+  exeMode?: SymbolExecMode;
+  /** Quote-smoothing parameter (raw int; broker-defined) */
+  smoothing?: number;
   /** Spread (in points; 0 = market spread) */
   spread?: number;
   /** Spread imbalance offset (in points) */
   spreadBalance?: number;
   /** Minimum allowed stops distance from market (in points) */
   stopsLevel?: number;
-  /** Quote-smoothing parameter (raw int; broker-defined) */
-  smoothing?: number;
-  /** Order execution mode (Request/Instant/Market/Exchange) */
-  exeMode?: SymbolExecMode;
+  /**
+     * Symbol name (max 12 chars — the platform's fixed slot)
+     * @nullable
+     */
+  symbol?: string | null;
 }

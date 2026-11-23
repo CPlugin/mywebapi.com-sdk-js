@@ -14,27 +14,6 @@
  * `Reserved` int[3] padding. Enum fields are returned as their names.
  */
 export interface MT4GroupSec {
-  /** 0 = security group hidden from clients, non-zero = visible */
-  show?: number;
-  /** 0 = trading disabled, non-zero = trading enabled */
-  trade?: number;
-  /**
-     * Dealing mode (Manual / Auto / Activity)
-     * @nullable
-     */
-  dealingMode?: string | null;
-  /** Standard commission */
-  standardCommission?: number;
-  /**
-     * Commission type (Money / Pips / Percent)
-     * @nullable
-     */
-  commissionType?: string | null;
-  /**
-     * Commission lots mode (PerLot / PerDeal)
-     * @nullable
-     */
-  commissionLotsMode?: string | null;
   /** Agent commission */
   agentCommission?: number;
   /**
@@ -42,37 +21,58 @@ export interface MT4GroupSec {
      * @nullable
      */
   agentCommissionMode?: string | null;
-  /** Spread difference compared to default symbol spread */
-  spreadDiff?: number;
-  /** Minimum allowed lot size (in 1/100 lot units, e.g. 100 = 1 lot) */
-  lotMin?: number;
-  /** Maximum allowed lot size */
-  lotMax?: number;
-  /** Lot step (10 lot = 1000, 1 lot = 100, 0.1 lot = 10) */
-  lotStep?: number;
-  /** Max price deviation in Instant Execution mode */
-  ieDeviation?: number;
-  /** 0 = no confirmation, non-zero = request mode confirmation */
-  confirmation?: number;
-  /**
-     * Clients trade rights bit mask (string-encoded)
-     * @nullable
-     */
-  tradeRights?: string | null;
-  /** 0 = normal, non-zero = don't resend on deviation in IE */
-  ieQuickMode?: number;
   /**
      * Auto close-out method (None / HiHi / LoLo / FIFO / LIFO / ...)
      * @nullable
      */
   autoCloseOutMode?: string | null;
-  /** Commission taxes */
-  commissionTaxes?: number;
   /**
      * Agent commission lots mode
      * @nullable
      */
   commissionAgentLots?: string | null;
+  /**
+     * Commission lots mode (PerLot / PerDeal)
+     * @nullable
+     */
+  commissionLotsMode?: string | null;
+  /** Commission taxes */
+  commissionTaxes?: number;
+  /**
+     * Commission type (Money / Pips / Percent)
+     * @nullable
+     */
+  commissionType?: string | null;
+  /** 0 = no confirmation, non-zero = request mode confirmation */
+  confirmation?: number;
+  /**
+     * Dealing mode (Manual / Auto / Activity)
+     * @nullable
+     */
+  dealingMode?: string | null;
   /** 0 = strict margin check, non-zero = soft check */
   freeMarginMode?: number;
+  /** Max price deviation in Instant Execution mode */
+  ieDeviation?: number;
+  /** 0 = normal, non-zero = don't resend on deviation in IE */
+  ieQuickMode?: number;
+  /** Maximum allowed lot size */
+  lotMax?: number;
+  /** Minimum allowed lot size (in 1/100 lot units, e.g. 100 = 1 lot) */
+  lotMin?: number;
+  /** Lot step (10 lot = 1000, 1 lot = 100, 0.1 lot = 10) */
+  lotStep?: number;
+  /** 0 = security group hidden from clients, non-zero = visible */
+  show?: number;
+  /** Spread difference compared to default symbol spread */
+  spreadDiff?: number;
+  /** Standard commission */
+  standardCommission?: number;
+  /** 0 = trading disabled, non-zero = trading enabled */
+  trade?: number;
+  /**
+     * Clients trade rights bit mask (string-encoded)
+     * @nullable
+     */
+  tradeRights?: string | null;
 }

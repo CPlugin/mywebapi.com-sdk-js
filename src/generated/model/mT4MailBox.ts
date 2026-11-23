@@ -15,8 +15,11 @@
  * `ReceiversCount` bookkeeping.
  */
 export interface MT4MailBox {
-  /** Receive time (UTC) */
-  time?: string;
+  /**
+     * Body text
+     * @nullable
+     */
+  body?: string | null;
   /** Sender login (0 when sent by anonymous source) */
   senderLogin?: number;
   /**
@@ -29,9 +32,6 @@ export interface MT4MailBox {
      * @nullable
      */
   subject?: string | null;
-  /**
-     * Body text
-     * @nullable
-     */
-  body?: string | null;
+  /** Receive time (UTC) */
+  time?: string;
 }

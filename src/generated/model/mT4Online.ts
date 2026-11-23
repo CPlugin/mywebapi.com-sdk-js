@@ -17,11 +17,11 @@
  * platform bookkeeping.
  */
 export interface MT4Online {
-  /** Trading account number (login) */
-  login?: number;
   /**
      * Group name the account belongs to
      * @nullable
      */
   group?: string | null;
+  /** Trading account number (login) */
+  login?: number;
 }

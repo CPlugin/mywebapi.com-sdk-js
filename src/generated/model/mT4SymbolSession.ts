@@ -15,12 +15,12 @@
  * timezone — the trading server's clock is the reference frame).
  */
 export interface MT4SymbolSession {
-  /** Session opens at this hour (0–23) */
-  openHour?: number;
-  /** Session opens at this minute (0–59) */
-  openMinute?: number;
   /** Session closes at this hour (0–23) */
   closeHour?: number;
   /** Session closes at this minute (0–59) */
   closeMinute?: number;
+  /** Session opens at this hour (0–23) */
+  openHour?: number;
+  /** Session opens at this minute (0–59) */
+  openMinute?: number;
 }

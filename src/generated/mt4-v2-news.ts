@@ -18,47 +18,6 @@ import type {
 import { customFetch } from '../mutator';
 
 
-export type getNewsTotalResponse200 = {
-  data: Int32ApiResponse
-  status: 200
-}
-
-export type getNewsTotalResponseSuccess = (getNewsTotalResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getNewsTotalResponse = (getNewsTotalResponseSuccess)
-
-export const getGetNewsTotalUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/NewsTotal`
-}
-
-/**
- * Total number of news items currently held in the pumping cache.
- *
- * Pump-cached read — instant local lookup, no round-trip to MT4 server.
- * Useful as a cheap polling probe before fetching news bodies.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get news count
- */
-export const getNewsTotal = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getNewsTotalResponse> => {
-
-  return customFetch<getNewsTotalResponse>(getGetNewsTotalUrl(tradePlatform),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
 export type getNewsBodyGetKeyResponse200 = {
   data: StringApiResponse
   status: 200
@@ -96,6 +55,52 @@ export const getNewsBodyGetKey = async (tradePlatform: string,
   {
     ...options,
     method: 'GET'
+
+
+  }
+);}
+
+
+export type postNewsBodyRequestKeyResponse200 = {
+  data: BooleanApiResponse
+  status: 200
+}
+
+export type postNewsBodyRequestKeyResponseSuccess = (postNewsBodyRequestKeyResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postNewsBodyRequestKeyResponse = (postNewsBodyRequestKeyResponseSuccess)
+
+export const getPostNewsBodyRequestKeyUrl = (tradePlatform: string,
+    key: number,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/NewsBodyRequest/${encodeURIComponent(String(key))}`
+}
+
+/**
+ * Ask the pump to fetch the body for the given news key (fire-and-forget).
+ *
+ * POST because this is a side-effect on the pump (it queues a fetch).
+ * The platform method returns `void` — there is no synchronous
+ * success/failure to surface. A subsequent `NewsBodyGet(key)` will
+ * see the body once the pump has retrieved it. The payload is a sentinel
+ * `true` meaning "request dispatched".
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Request news body fetch
+ */
+export const postNewsBodyRequestKey = async (tradePlatform: string,
+    key: number, options?: Parameters<typeof customFetch>[1]): Promise<postNewsBodyRequestKeyResponse> => {
+
+  return customFetch<postNewsBodyRequestKeyResponse>(getPostNewsBodyRequestKeyUrl(tradePlatform,key),
+  {
+    ...options,
+    method: 'POST'
 
 
   }
@@ -191,46 +196,41 @@ export const getNewsTopicGetPos = async (tradePlatform: string,
 );}
 
 
-export type postNewsBodyRequestKeyResponse200 = {
-  data: BooleanApiResponse
+export type getNewsTotalResponse200 = {
+  data: Int32ApiResponse
   status: 200
 }
 
-export type postNewsBodyRequestKeyResponseSuccess = (postNewsBodyRequestKeyResponse200) & {
+export type getNewsTotalResponseSuccess = (getNewsTotalResponse200) & {
   headers: Headers;
 };
 ;
 
-export type postNewsBodyRequestKeyResponse = (postNewsBodyRequestKeyResponseSuccess)
+export type getNewsTotalResponse = (getNewsTotalResponseSuccess)
 
-export const getPostNewsBodyRequestKeyUrl = (tradePlatform: string,
-    key: number,) => {
-
+export const getGetNewsTotalUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/NewsBodyRequest/${encodeURIComponent(String(key))}`
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/NewsTotal`
 }
 
 /**
- * Ask the pump to fetch the body for the given news key (fire-and-forget).
+ * Total number of news items currently held in the pumping cache.
  *
- * POST because this is a side-effect on the pump (it queues a fetch).
- * The platform method returns `void` — there is no synchronous
- * success/failure to surface. A subsequent `NewsBodyGet(key)` will
- * see the body once the pump has retrieved it. The payload is a sentinel
- * `true` meaning "request dispatched".
+ * Pump-cached read — instant local lookup, no round-trip to MT4 server.
+ * Useful as a cheap polling probe before fetching news bodies.
  *
  * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Request news body fetch
+ * @summary Get news count
  */
-export const postNewsBodyRequestKey = async (tradePlatform: string,
-    key: number, options?: Parameters<typeof customFetch>[1]): Promise<postNewsBodyRequestKeyResponse> => {
+export const getNewsTotal = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getNewsTotalResponse> => {
 
-  return customFetch<postNewsBodyRequestKeyResponse>(getPostNewsBodyRequestKeyUrl(tradePlatform,key),
+  return customFetch<getNewsTotalResponse>(getGetNewsTotalUrl(tradePlatform),
   {
     ...options,
-    method: 'POST'
+    method: 'GET'
 
 
   }

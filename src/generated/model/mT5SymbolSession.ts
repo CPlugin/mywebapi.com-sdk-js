@@ -10,21 +10,6 @@
 
 export interface MT5SymbolSession {
   /**
-     * The session opening time in minutes from 00:00. For example, 100 denotes 01:40.
-     * @nullable
-     */
-  open?: number | null;
-  /**
-     * Get the number of hours in the opening time of trading or quoting session of a symbol.
-     * @nullable
-     */
-  openHours?: number | null;
-  /**
-     * The number of minutes in the opening time of trading or quoting session of a symbol.
-     * @nullable
-     */
-  openMinutes?: number | null;
-  /**
      * The session closing time in minutes from 00:00. For example, 100 denotes 01:40.
      * @nullable
      */
@@ -39,4 +24,19 @@ export interface MT5SymbolSession {
      * @nullable
      */
   closeMinutes?: number | null;
+  /**
+     * The session opening time in minutes from 00:00. For example, 100 denotes 01:40.
+     * @nullable
+     */
+  open?: number | null;
+  /**
+     * Get the number of hours in the opening time of trading or quoting session of a symbol.
+     * @nullable
+     */
+  openHours?: number | null;
+  /**
+     * The number of minutes in the opening time of trading or quoting session of a symbol.
+     * @nullable
+     */
+  openMinutes?: number | null;
 }

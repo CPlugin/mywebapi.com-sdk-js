@@ -27,257 +27,6 @@ import type {
 import { customFetch } from '../mutator';
 
 
-export type getUsersGetResponse200 = {
-  data: MT4UserListApiResponse
-  status: 200
-}
-
-export type getUsersGetResponseSuccess = (getUsersGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getUsersGetResponse = (getUsersGetResponseSuccess)
-
-export const getGetUsersGetUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersGet`
-}
-
-/**
- * Every account stored in the pump cache of the connected trade platform.
- *
- * Pump-cached read — instant local lookup, no MT4 round-trip. Accounts are
- * keyed by login; the response is the values-only list of the cache. Same
- * curated DTO as the single-account endpoints: passwords, OTP secret and
- * the API blob never cross the boundary.
- *
- * A cold cache (fresh connection) answers with an empty list until the
- * pump has flushed its first snapshot — use `UsersRequest` when a
- * guaranteed live answer is required.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List accounts (cached)
- */
-export const getUsersGet = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getUsersGetResponse> => {
-
-  return customFetch<getUsersGetResponse>(getGetUsersGetUrl(tradePlatform),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getUserRecordGetLoginResponse200 = {
-  data: MT4UserApiResponse
-  status: 200
-}
-
-export type getUserRecordGetLoginResponseSuccess = (getUserRecordGetLoginResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getUserRecordGetLoginResponse = (getUserRecordGetLoginResponseSuccess)
-
-export const getGetUserRecordGetLoginUrl = (tradePlatform: string,
-    login: number,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordGet/${encodeURIComponent(String(login))}`
-}
-
-/**
- * Account record for a single login from the pump cache.
- *
- * Pump-cached read of the platform's `UserRecord`, mapped to the v2
- * `MT4User` DTO. Secrets (passwords, OTP secret, API blob) are
- * stripped at the mapper level — they cannot be exposed via this endpoint
- * regardless of caller permissions. Returns NotFound envelope when the
- * pump cache does not contain the requested login.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get account (cached)
- */
-export const getUserRecordGetLogin = async (tradePlatform: string,
-    login: number, options?: Parameters<typeof customFetch>[1]): Promise<getUserRecordGetLoginResponse> => {
-
-  return customFetch<getUserRecordGetLoginResponse>(getGetUserRecordGetLoginUrl(tradePlatform,login),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getUserRecordRequestLoginResponse200 = {
-  data: MT4UserApiResponse
-  status: 200
-}
-
-export type getUserRecordRequestLoginResponseSuccess = (getUserRecordRequestLoginResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getUserRecordRequestLoginResponse = (getUserRecordRequestLoginResponseSuccess)
-
-export const getGetUserRecordRequestLoginUrl = (tradePlatform: string,
-    login: number,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordRequest/${encodeURIComponent(String(login))}`
-}
-
-/**
- * Account record for a single login — live round-trip to MT4 server.
- *
- * Manager variant — bypasses the pump cache and asks the MT4 server
- * directly via `UserRecordsRequest` with a single-login array.
- * Slower than `UserRecordGet` but guarantees fresh data (just
- * changed group, balance fix, etc). Same curated DTO, same security
- * guarantees — passwords/OTP/API blob never cross the boundary.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get account (live)
- */
-export const getUserRecordRequestLogin = async (tradePlatform: string,
-    login: number, options?: Parameters<typeof customFetch>[1]): Promise<getUserRecordRequestLoginResponse> => {
-
-  return customFetch<getUserRecordRequestLoginResponse>(getGetUserRecordRequestLoginUrl(tradePlatform,login),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getUserRecordsRequestResponse200 = {
-  data: MT4UserListApiResponse
-  status: 200
-}
-
-export type getUserRecordsRequestResponseSuccess = (getUserRecordsRequestResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getUserRecordsRequestResponse = (getUserRecordsRequestResponseSuccess)
-
-export const getGetUserRecordsRequestUrl = (tradePlatform: string,
-    params?: GetUserRecordsRequestParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    const explodeParameters = ["logins"];
-
-    if (Array.isArray(value) && explodeParameters.includes(key)) {
-      value.forEach((v) => {
-        normalizedParams.append(key, v === null ? 'null' : String(v));
-      });
-      return;
-    }
-
-
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordsRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordsRequest`
-}
-
-/**
- * Account records for a list of logins — live round-trip to MT4 server.
- *
- * Manager batch variant. Pass logins as repeated query parameters:
- * `?logins=1001&logins=1002&logins=1003`. Server-side billing
- * counts this as one Manager request regardless of the array length —
- * prefer batch over a loop of single-login calls.
- *
- * Order in the response is **not** guaranteed to match the request — the
- * platform returns a dictionary. Missing logins are silently omitted; the
- * envelope is not an error envelope in that case.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get accounts batch (live)
- */
-export const getUserRecordsRequest = async (tradePlatform: string,
-    params?: GetUserRecordsRequestParams, options?: Parameters<typeof customFetch>[1]): Promise<getUserRecordsRequestResponse> => {
-
-  return customFetch<getUserRecordsRequestResponse>(getGetUserRecordsRequestUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getAdmBalanceCheckLoginResponse200 = {
-  data: MT4BalanceDiffApiResponse
-  status: 200
-}
-
-export type getAdmBalanceCheckLoginResponseSuccess = (getAdmBalanceCheckLoginResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getAdmBalanceCheckLoginResponse = (getAdmBalanceCheckLoginResponseSuccess)
-
-export const getGetAdmBalanceCheckLoginUrl = (tradePlatform: string,
-    login: number,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmBalanceCheck/${encodeURIComponent(String(login))}`
-}
-
-/**
- * Admin balance integrity check for a single account.
- *
- * Manager (live) call. Returns the difference between the recorded
- * account balance and what the MT4 server recomputes from closed
- * orders + balance operations. `diff = 0` → balance is intact;
- * non-zero → admin tooling can run `AdmBalanceFix` to recompute
- * (forthcoming Wave 3 endpoint).
- *
- * Read-only operation despite the platform's "Adm" prefix (the prefix
- * signals the elevated authorization requirement, not a write side
- * effect).
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Check account balance
- */
-export const getAdmBalanceCheckLogin = async (tradePlatform: string,
-    login: number, options?: Parameters<typeof customFetch>[1]): Promise<getAdmBalanceCheckLoginResponse> => {
-
-  return customFetch<getAdmBalanceCheckLoginResponse>(getGetAdmBalanceCheckLoginUrl(tradePlatform,login),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
 export type getAdmBalanceCheckResponse200 = {
   data: MT4BalanceDiffListApiResponse
   status: 200
@@ -329,6 +78,56 @@ export const getAdmBalanceCheck = async (tradePlatform: string,
     params?: GetAdmBalanceCheckParams, options?: Parameters<typeof customFetch>[1]): Promise<getAdmBalanceCheckResponse> => {
 
   return customFetch<getAdmBalanceCheckResponse>(getGetAdmBalanceCheckUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getAdmBalanceCheckLoginResponse200 = {
+  data: MT4BalanceDiffApiResponse
+  status: 200
+}
+
+export type getAdmBalanceCheckLoginResponseSuccess = (getAdmBalanceCheckLoginResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getAdmBalanceCheckLoginResponse = (getAdmBalanceCheckLoginResponseSuccess)
+
+export const getGetAdmBalanceCheckLoginUrl = (tradePlatform: string,
+    login: number,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmBalanceCheck/${encodeURIComponent(String(login))}`
+}
+
+/**
+ * Admin balance integrity check for a single account.
+ *
+ * Manager (live) call. Returns the difference between the recorded
+ * account balance and what the MT4 server recomputes from closed
+ * orders + balance operations. `diff = 0` → balance is intact;
+ * non-zero → admin tooling can run `AdmBalanceFix` to recompute
+ * (forthcoming Wave 3 endpoint).
+ *
+ * Read-only operation despite the platform's "Adm" prefix (the prefix
+ * signals the elevated authorization requirement, not a write side
+ * effect).
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Check account balance
+ */
+export const getAdmBalanceCheckLogin = async (tradePlatform: string,
+    login: number, options?: Parameters<typeof customFetch>[1]): Promise<getAdmBalanceCheckLoginResponse> => {
+
+  return customFetch<getAdmBalanceCheckLoginResponse>(getGetAdmBalanceCheckLoginUrl(tradePlatform,login),
   {
     ...options,
     method: 'GET'
@@ -403,49 +202,155 @@ export const postAdmBalanceFix = async (tradePlatform: string,
 );}
 
 
-export type getUsersRequestResponse200 = {
+export type getAdmUsersRequestSafeGroupResponse200 = {
   data: MT4UserListApiResponse
   status: 200
 }
 
-export type getUsersRequestResponseSuccess = (getUsersRequestResponse200) & {
+export type getAdmUsersRequestSafeGroupResponseSuccess = (getAdmUsersRequestSafeGroupResponse200) & {
   headers: Headers;
 };
 ;
 
-export type getUsersRequestResponse = (getUsersRequestResponseSuccess)
+export type getAdmUsersRequestSafeGroupResponse = (getAdmUsersRequestSafeGroupResponseSuccess)
 
-export const getGetUsersRequestUrl = (tradePlatform: string,
-    params?: GetUsersRequestParams,) => {
-  const normalizedParams = new URLSearchParams();
+export const getGetAdmUsersRequestSafeGroupUrl = (tradePlatform: string,
+    group: string,) => {
 
-  Object.entries(params || {}).forEach(([key, value]) => {
 
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
 
-  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersRequest`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmUsersRequestSafe/${encodeURIComponent(String(group))}`
 }
 
 /**
- * Manager (live) call returning a paged list of every account on the platform. When `?limit=` is omitted the response contains all users in one page (back-compat). Set `?limit=N` to bound page size; the response's `paging.nextCursor` drives the next call.
+ * All user accounts in a given group (admin scope) — the safe variant that honors permission checks server-side.
  *
- * Platform-side this still fetches the full users dictionary — paging
- * reduces only the wire payload, not MT4 server load. Items are sorted
- * by login ascending; pages are stable across concurrent inserts as
- * long as the new login is greater than the previous page's last login.
+ * Manager (live) call. Returns the curated `MT4User` projection
+ * for every account in the specified group. The platform's "Safe" suffix
+ * indicates it runs through `RunSafe` with the `Admin` rights
+ * guard — a manager lacking that permission receives a sensible error
+ * rather than a connection drop.
+ *
+ * Comma-separated group lists are accepted by the platform (it strips
+ * commas and trims whitespace internally); the simplest call pattern
+ * is a single group name. Large groups may return substantial
+ * payloads — pair with `Idempotency-Key` on retry.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List group accounts (admin)
+ */
+export const getAdmUsersRequestSafeGroup = async (tradePlatform: string,
+    group: string, options?: Parameters<typeof customFetch>[1]): Promise<getAdmUsersRequestSafeGroupResponse> => {
+
+  return customFetch<getAdmUsersRequestSafeGroupResponse>(getGetAdmUsersRequestSafeGroupUrl(tradePlatform,group),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type patchUserRecordLoginMT4Response200 = {
+  data: MT4UserApiResponse
+  status: 200
+}
+
+export type patchUserRecordLoginMT4ResponseSuccess = (patchUserRecordLoginMT4Response200) & {
+  headers: Headers;
+};
+;
+
+export type patchUserRecordLoginMT4Response = (patchUserRecordLoginMT4ResponseSuccess)
+
+export const getPatchUserRecordLoginMT4Url = (tradePlatform: string,
+    login: number,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecord/${encodeURIComponent(String(login))}`
+}
+
+/**
+ * Type 2 mutator — partial update of a user record. Client sends a JSON object containing only the fields to change; the server reads the current record live from MT4 (Manager, not pump), overlays the patch, and writes back. Echoes the merged record.
+ *
+ * Unknown keys in the patch body are silently ignored (forwards-compat).
+ * Field-level validation is delegated to MT4 server — invalid values
+ * surface as `MT4Error` envelopes. Secret-preservation and
+ * computed-field protection are handled by the existing Type 1 ApplyTo
+ * mapper's ignore list.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Patch account
+ */
+export const patchUserRecordLoginMT4 = async (tradePlatform: string,
+    login: number,
+    patchUserRecordLoginMT4Body: PatchUserRecordLoginMT4Body, options?: Parameters<typeof customFetch>[1]): Promise<patchUserRecordLoginMT4Response> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<patchUserRecordLoginMT4Response>(getPatchUserRecordLoginMT4Url(tradePlatform,login),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(patchUserRecordLoginMT4Body)
+  }
+);}
+
+
+export type getUserRecordGetLoginResponse200 = {
+  data: MT4UserApiResponse
+  status: 200
+}
+
+export type getUserRecordGetLoginResponseSuccess = (getUserRecordGetLoginResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getUserRecordGetLoginResponse = (getUserRecordGetLoginResponseSuccess)
+
+export const getGetUserRecordGetLoginUrl = (tradePlatform: string,
+    login: number,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordGet/${encodeURIComponent(String(login))}`
+}
+
+/**
+ * Account record for a single login from the pump cache.
+ *
+ * Pump-cached read of the platform's `UserRecord`, mapped to the v2
+ * `MT4User` DTO. Secrets (passwords, OTP secret, API blob) are
+ * stripped at the mapper level — they cannot be exposed via this endpoint
+ * regardless of caller permissions. Returns NotFound envelope when the
+ * pump cache does not contain the requested login.
  *
  * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List accounts (live)
+ * @summary Get account (cached)
  */
-export const getUsersRequest = async (tradePlatform: string,
-    params?: GetUsersRequestParams, options?: Parameters<typeof customFetch>[1]): Promise<getUsersRequestResponse> => {
+export const getUserRecordGetLogin = async (tradePlatform: string,
+    login: number, options?: Parameters<typeof customFetch>[1]): Promise<getUserRecordGetLoginResponse> => {
 
-  return customFetch<getUsersRequestResponse>(getGetUsersRequestUrl(tradePlatform,params),
+  return customFetch<getUserRecordGetLoginResponse>(getGetUserRecordGetLoginUrl(tradePlatform,login),
   {
     ...options,
     method: 'GET'
@@ -515,8 +420,54 @@ return customFetch<postUserRecordNewResponse>(getPostUserRecordNewUrl(tradePlatf
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
     body: JSON.stringify(mT4UserCreate)
+  }
+);}
+
+
+export type getUserRecordRequestLoginResponse200 = {
+  data: MT4UserApiResponse
+  status: 200
+}
+
+export type getUserRecordRequestLoginResponseSuccess = (getUserRecordRequestLoginResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getUserRecordRequestLoginResponse = (getUserRecordRequestLoginResponseSuccess)
+
+export const getGetUserRecordRequestLoginUrl = (tradePlatform: string,
+    login: number,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordRequest/${encodeURIComponent(String(login))}`
+}
+
+/**
+ * Account record for a single login — live round-trip to MT4 server.
+ *
+ * Manager variant — bypasses the pump cache and asks the MT4 server
+ * directly via `UserRecordsRequest` with a single-login array.
+ * Slower than `UserRecordGet` but guarantees fresh data (just
+ * changed group, balance fix, etc). Same curated DTO, same security
+ * guarantees — passwords/OTP/API blob never cross the boundary.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get account (live)
+ */
+export const getUserRecordRequestLogin = async (tradePlatform: string,
+    login: number, options?: Parameters<typeof customFetch>[1]): Promise<getUserRecordRequestLoginResponse> => {
+
+  return customFetch<getUserRecordRequestLoginResponse>(getGetUserRecordRequestLoginUrl(tradePlatform,login),
+  {
+    ...options,
+    method: 'GET'
+
+
   }
 );}
 
@@ -579,115 +530,65 @@ return customFetch<postUserRecordUpdateResponse>(getPostUserRecordUpdateUrl(trad
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
     body: JSON.stringify(mT4UserUpdate)
   }
 );}
 
 
-export type patchUserRecordLoginMT4Response200 = {
-  data: MT4UserApiResponse
-  status: 200
-}
-
-export type patchUserRecordLoginMT4ResponseSuccess = (patchUserRecordLoginMT4Response200) & {
-  headers: Headers;
-};
-;
-
-export type patchUserRecordLoginMT4Response = (patchUserRecordLoginMT4ResponseSuccess)
-
-export const getPatchUserRecordLoginMT4Url = (tradePlatform: string,
-    login: number,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecord/${encodeURIComponent(String(login))}`
-}
-
-/**
- * Type 2 mutator — partial update of a user record. Client sends a JSON object containing only the fields to change; the server reads the current record live from MT4 (Manager, not pump), overlays the patch, and writes back. Echoes the merged record.
- *
- * Unknown keys in the patch body are silently ignored (forwards-compat).
- * Field-level validation is delegated to MT4 server — invalid values
- * surface as `MT4Error` envelopes. Secret-preservation and
- * computed-field protection are handled by the existing Type 1 ApplyTo
- * mapper's ignore list.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Patch account
- */
-export const patchUserRecordLoginMT4 = async (tradePlatform: string,
-    login: number,
-    patchUserRecordLoginMT4Body: PatchUserRecordLoginMT4Body, options?: Parameters<typeof customFetch>[1]): Promise<patchUserRecordLoginMT4Response> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<patchUserRecordLoginMT4Response>(getPatchUserRecordLoginMT4Url(tradePlatform,login),
-  {
-    ...options,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(patchUserRecordLoginMT4Body)
-  }
-);}
-
-
-export type getAdmUsersRequestSafeGroupResponse200 = {
+export type getUserRecordsRequestResponse200 = {
   data: MT4UserListApiResponse
   status: 200
 }
 
-export type getAdmUsersRequestSafeGroupResponseSuccess = (getAdmUsersRequestSafeGroupResponse200) & {
+export type getUserRecordsRequestResponseSuccess = (getUserRecordsRequestResponse200) & {
   headers: Headers;
 };
 ;
 
-export type getAdmUsersRequestSafeGroupResponse = (getAdmUsersRequestSafeGroupResponseSuccess)
+export type getUserRecordsRequestResponse = (getUserRecordsRequestResponseSuccess)
 
-export const getGetAdmUsersRequestSafeGroupUrl = (tradePlatform: string,
-    group: string,) => {
+export const getGetUserRecordsRequestUrl = (tradePlatform: string,
+    params?: GetUserRecordsRequestParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["logins"];
+
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? 'null' : String(v));
+      });
+      return;
+    }
 
 
+  });
 
+  const stringifiedParams = normalizedParams.toString();
 
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmUsersRequestSafe/${encodeURIComponent(String(group))}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordsRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UserRecordsRequest`
 }
 
 /**
- * All user accounts in a given group (admin scope) — the safe variant that honors permission checks server-side.
+ * Account records for a list of logins — live round-trip to MT4 server.
  *
- * Manager (live) call. Returns the curated `MT4User` projection
- * for every account in the specified group. The platform's "Safe" suffix
- * indicates it runs through `RunSafe` with the `Admin` rights
- * guard — a manager lacking that permission receives a sensible error
- * rather than a connection drop.
+ * Manager batch variant. Pass logins as repeated query parameters:
+ * `?logins=1001&logins=1002&logins=1003`. Server-side billing
+ * counts this as one Manager request regardless of the array length —
+ * prefer batch over a loop of single-login calls.
  *
- * Comma-separated group lists are accepted by the platform (it strips
- * commas and trims whitespace internally); the simplest call pattern
- * is a single group name. Large groups may return substantial
- * payloads — pair with `Idempotency-Key` on retry.
+ * Order in the response is **not** guaranteed to match the request — the
+ * platform returns a dictionary. Missing logins are silently omitted; the
+ * envelope is not an error envelope in that case.
  *
- * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List group accounts (admin)
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get accounts batch (live)
  */
-export const getAdmUsersRequestSafeGroup = async (tradePlatform: string,
-    group: string, options?: Parameters<typeof customFetch>[1]): Promise<getAdmUsersRequestSafeGroupResponse> => {
+export const getUserRecordsRequest = async (tradePlatform: string,
+    params?: GetUserRecordsRequestParams, options?: Parameters<typeof customFetch>[1]): Promise<getUserRecordsRequestResponse> => {
 
-  return customFetch<getAdmUsersRequestSafeGroupResponse>(getGetAdmUsersRequestSafeGroupUrl(tradePlatform,group),
+  return customFetch<getUserRecordsRequestResponse>(getGetUserRecordsRequestUrl(tradePlatform,params),
   {
     ...options,
     method: 'GET'
@@ -697,54 +598,47 @@ export const getAdmUsersRequestSafeGroup = async (tradePlatform: string,
 );}
 
 
-export type postUsersSyncStartResponse200 = {
-  data: BooleanApiResponse
+export type getUsersGetResponse200 = {
+  data: MT4UserListApiResponse
   status: 200
 }
 
-export type postUsersSyncStartResponseSuccess = (postUsersSyncStartResponse200) & {
+export type getUsersGetResponseSuccess = (getUsersGetResponse200) & {
   headers: Headers;
 };
 ;
 
-export type postUsersSyncStartResponse = (postUsersSyncStartResponseSuccess)
+export type getUsersGetResponse = (getUsersGetResponseSuccess)
 
-export const getPostUsersSyncStartUrl = (tradePlatform: string,
-    params?: PostUsersSyncStartParams,) => {
-  const normalizedParams = new URLSearchParams();
+export const getGetUsersGetUrl = (tradePlatform: string,) => {
 
-  Object.entries(params || {}).forEach(([key, value]) => {
 
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
 
-  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersSyncStart?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersSyncStart`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersGet`
 }
 
 /**
- * Opens a server-side incremental sync session for user records modified at or after timestamp.
+ * Every account stored in the pump cache of the connected trade platform.
  *
- * Manager-live POST (modifies server-side session state). The API does
- * not offer the follow-up read of the session yet. Pass
- * `timestamp=0` to request all user records.
+ * Pump-cached read — instant local lookup, no MT4 round-trip. Accounts are
+ * keyed by login; the response is the values-only list of the cache. Same
+ * curated DTO as the single-account endpoints: passwords, OTP secret and
+ * the API blob never cross the boundary.
  *
- * `timestamp` is Unix epoch seconds (int32) in MT4 server-local
- * time, not UTC. Returns a bare success envelope.
+ * A cold cache (fresh connection) answers with an empty list until the
+ * pump has flushed its first snapshot — use `UsersRequest` when a
+ * guaranteed live answer is required.
  *
- * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Start user-records sync
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List accounts (cached)
  */
-export const postUsersSyncStart = async (tradePlatform: string,
-    params?: PostUsersSyncStartParams, options?: Parameters<typeof customFetch>[1]): Promise<postUsersSyncStartResponse> => {
+export const getUsersGet = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getUsersGetResponse> => {
 
-  return customFetch<postUsersSyncStartResponse>(getPostUsersSyncStartUrl(tradePlatform,params),
+  return customFetch<getUsersGetResponse>(getGetUsersGetUrl(tradePlatform),
   {
     ...options,
-    method: 'POST'
+    method: 'GET'
 
 
   }
@@ -810,8 +704,114 @@ return customFetch<postUsersGroupOpResponse>(getPostUsersGroupOpUrl(tradePlatfor
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
     body: JSON.stringify(mT4UsersGroupOp)
+  }
+);}
+
+
+export type getUsersRequestResponse200 = {
+  data: MT4UserListApiResponse
+  status: 200
+}
+
+export type getUsersRequestResponseSuccess = (getUsersRequestResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getUsersRequestResponse = (getUsersRequestResponseSuccess)
+
+export const getGetUsersRequestUrl = (tradePlatform: string,
+    params?: GetUsersRequestParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersRequest`
+}
+
+/**
+ * Manager (live) call returning a paged list of every account on the platform. When `?limit=` is omitted the response contains all users in one page (back-compat). Set `?limit=N` to bound page size; the response's `paging.nextCursor` drives the next call.
+ *
+ * Platform-side this still fetches the full users dictionary — paging
+ * reduces only the wire payload, not MT4 server load. Items are sorted
+ * by login ascending; pages are stable across concurrent inserts as
+ * long as the new login is greater than the previous page's last login.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List accounts (live)
+ */
+export const getUsersRequest = async (tradePlatform: string,
+    params?: GetUsersRequestParams, options?: Parameters<typeof customFetch>[1]): Promise<getUsersRequestResponse> => {
+
+  return customFetch<getUsersRequestResponse>(getGetUsersRequestUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type postUsersSyncStartResponse200 = {
+  data: BooleanApiResponse
+  status: 200
+}
+
+export type postUsersSyncStartResponseSuccess = (postUsersSyncStartResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postUsersSyncStartResponse = (postUsersSyncStartResponseSuccess)
+
+export const getPostUsersSyncStartUrl = (tradePlatform: string,
+    params?: PostUsersSyncStartParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersSyncStart?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/UsersSyncStart`
+}
+
+/**
+ * Opens a server-side incremental sync session for user records modified at or after timestamp.
+ *
+ * Manager-live POST (modifies server-side session state). The API does
+ * not offer the follow-up read of the session yet. Pass
+ * `timestamp=0` to request all user records.
+ *
+ * `timestamp` is Unix epoch seconds (int32) in MT4 server-local
+ * time, not UTC. Returns a bare success envelope.
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Start user-records sync
+ */
+export const postUsersSyncStart = async (tradePlatform: string,
+    params?: PostUsersSyncStartParams, options?: Parameters<typeof customFetch>[1]): Promise<postUsersSyncStartResponse> => {
+
+  return customFetch<postUsersSyncStartResponse>(getPostUsersSyncStartUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'POST'
+
+
   }
 );}
 

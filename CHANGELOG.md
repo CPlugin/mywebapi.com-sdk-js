@@ -2,6 +2,34 @@
 
 All notable changes to `@mywebapi.com/sdk`. The package follows [semver](https://semver.org/); while it is at `0.x`, a minor release may contain breaking changes.
 
+## 0.5.0
+
+Regenerated from the WebAPI v2 specification of 23.11.2026, which adds the groups v2 still lacked for MT5 management and the MT4 dealer tools. Minor release: the catalog grows from 224 to 456 operations and no existing method changes signature or name.
+
+### Added
+
+- MT4 dealer: `getExposureGet`, `getExposureValueGetCurrency`, `postLogsMode`, `postLogsOut`, `getSummaryCurrency`, `getSummaryGetSymbol`, `getSummaryGetAll`, `getSummaryGetByCountCount`, `getSummaryGetByTypeSecType`, plus their POST variants — exposure, dealer journal and per-symbol/currency summary.
+- MT5 subscriptions: `getSubscriptionCfgGetName`, `getSubscriptionCfgRequestName`, `getSubscriptionCfgGetByIDId`, `getSubscriptionCfgRequestByIDId`, `getSubscriptionRequestLogin`, `getSubscriptionRequestByGroupMask`, `postSubscriptionUpdate`, `postSubscriptionUpdateBatch`, `postSubscriptionDeleteId`, `postSubscriptionDeleteBatch`, `postSubscriptionJoin`, `postSubscriptionCancel`, subscription-history calls and the batch-array variants.
+- MT5 configuration and config-trade: `postGroupUpdateGroup` / `postGroupUpdateBatch`, `getLeverageGetName` / `getLeverageRequestName` / `getLeverageRequestArray`, plugin configuration (`getPluginGetName`, `postPluginUpdate`), symbol existence and the rest of the 11 operations on the configuration-trading controller.
+- MT5 reports: daily, daily-light, exposure and margin reports in per-login, per-group and per-logins variants (14 operations).
+- MT5 market insight: order book (`getBookGetSymbol`), online sessions (`getOnlineGetLogin`, `getOnlineRequest`, disconnects), selected symbols (`postSelectedAdd`, `postSelectedAddAll`, `postSelectedAddBatch`) and the rest of the group.
+- MT5 communications: custom command, geo resolution, licence check, logger calls (`getLoggerServerRequest`, `postLoggerFlush`, `postLoggerOut`, `postLoggerOutString`) — 26 operations.
+- MT5 clients: attachments (`getAttachmentRequest`, `postAttachmentAdd` and batch variants) alongside the account, document and comment calls, 42 operations in total.
+- MT5 trading: `postDealAdd`, `postDealPerform`, `postDealDeleteTicket`, `getDealRequestByLogins`, `getDealRequestByLoginsSymbolSymbol` and the batch variants — 41 operations over orders, deals and positions.
+- MT5 trade operations: dealer answers (`postDealerAnswer`, `postDealerStart`, `postDealerStop`, `postDealerLockId`), `getRequestGetAll` / `getRequestGetId`, `postTradeAccountSet` and the request/dealer batch calls.
+- MT5 market data: `getTickLastSymbol`, `getTickLastRawSymbol`, `getTickStatSymbol`, `getTickHistoryRequestRawSymbol`, tick add/replace and chart delete/replace/split/update.
+- MT5 users extras: `getUserCertGetLogin`, `postUserCertConfirmLogin`, `postUserCertUpdateLogin`, `postUserCertDeleteLogin` and the account/subscription helpers on the users-extras controller.
+- `lib`: nothing else — every new operation is reachable from `client.mt4` / `client.mt5`, with `ApiResponse<T>` unwrapping and the server timeout already applied.
+
+### Changed
+
+- The generated catalog covers 456 operations (443 from the x64 v2 specification plus the 13 MT4 x86 sidecar operations the SDK already exposed).
+- `src/request-timeouts.generated.ts` now carries the server timeout of all 456 operations.
+
+### Tests
+
+- `tests/new-groups.test.ts` — one typed round-trip per new group: MT4 dealer, MT5 subscriptions, configuration, config-trade, reports, market insight, communications, clients, trading, trade operations, market data and users extras.
+
 ## 0.4.0
 
 Regenerated from the WebAPI v2 specification of 23.11.2026. v2 now carries the same operation names as v1 and the operations v2 was missing, so a client no longer needs v1 for MT5 management. Minor release with breaking changes: every renamed or removed call is listed under Changed and Removed.

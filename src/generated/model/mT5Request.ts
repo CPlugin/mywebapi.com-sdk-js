@@ -15,16 +15,25 @@ import type { TradeActionFlags } from './tradeActionFlags';
 import type { TradeActions } from './tradeActions';
 
 export interface MT5Request {
+  /** TradeActions */
+  action: TradeActions;
   /**
-     * <strong>Read-only: the trade server does not let this value be changed.</strong>
-     * <br />
-     * <br />
-     *             request id
+     * comment
      * @nullable
      */
-  id?: number | null;
-  /** client login */
-  login: number;
+  comment?: string | null;
+  /**
+     * price digits
+     * @nullable
+     */
+  digits?: number | null;
+  /**
+     * external system trade account (exchange, ECN, etc)
+     * @nullable
+     */
+  externalAccount?: string | null;
+  /** additional flags TradeActionFlags */
+  flags?: TradeActionFlags | null;
   /**
      * <strong>Read-only: the trade server does not let this value be changed.</strong>
      * <br />
@@ -33,175 +42,13 @@ export interface MT5Request {
      */
   group?: string | null;
   /**
-     * symbol
-     * @minLength 1
-     */
-  symbol: string;
-  /**
-     * price digits
-     * @nullable
-     */
-  digits?: number | null;
-  /** TradeActions */
-  action: TradeActions;
-  /**
-     * order expiration
-     * @nullable
-     */
-  timeExpiration?: string | null;
-  /** order type IMTOrder::OrderType */
-  type: OrderType;
-  /** IMTOrder::OrderFilling */
-  typeFill?: OrderFilling | null;
-  /** IMTOrder::OrderTime */
-  typeTime?: OrderTime | null;
-  /** additional flags TradeActionFlags */
-  flags?: TradeActionFlags | null;
-  /** 1 lot = 10_000 */
-  volume: number;
-  /**
-     * order ticket
-     * @nullable
-     */
-  order?: number | null;
-  /**
-     * order ticket in external system (exchange, ECN, etc)
-     * @nullable
-     */
-  orderExternalID?: string | null;
-  /** order price */
-  priceOrder: number;
-  /**
-     * order trigger price
-     * @nullable
-     */
-  priceTrigger?: number | null;
-  /**
-     * order SL price
-     * @nullable
-     */
-  priceSL?: number | null;
-  /**
-     * order TP price
-     * @nullable
-     */
-  priceTP?: number | null;
-  /**
-     * price deviation details
-     * @nullable
-     */
-  priceDeviation?: number | null;
-  /** @nullable */
-  priceDeviationTop?: number | null;
-  /** @nullable */
-  priceDeviationBottom?: number | null;
-  /**
-     * comment
-     * @nullable
-     */
-  comment?: string | null;
-  /**
      * <strong>Read-only: the trade server does not let this value be changed.</strong>
      * <br />
      * <br />
-     *             request result information
-     */
-  resultRetCode?: MT5Result | null;
-  /**
-     * request result deal
-     * request dealer
+     *             request id
      * @nullable
      */
-  resultDealer?: number | null;
-  /**
-     * <strong>Read-only: the trade server does not let this value be changed.</strong>
-     * <br />
-     * <br />
-     *             request result deal
-     * @nullable
-     */
-  resultDeal?: number | null;
-  /**
-     * <strong>Read-only: the trade server does not let this value be changed.</strong>
-     * <br />
-     * <br />
-     *             request result order
-     * @nullable
-     */
-  resultOrder?: number | null;
-  /**
-     * <strong>Read-only: the trade server does not let this value be changed.</strong>
-     * <br />
-     * <br />
-     *             request result confirmed volume
-     * @nullable
-     */
-  resultVolume?: number | null;
-  /**
-     * <strong>Read-only: the trade server does not let this value be changed.</strong>
-     * <br />
-     * <br />
-     *             request result confirmed price
-     * @nullable
-     */
-  resultPrice?: number | null;
-  /**
-     * <strong>Read-only: the trade server does not let this value be changed.</strong>
-     * <br />
-     * <br />
-     *             request result dealer prices
-     * @nullable
-     */
-  resultDealerBid?: number | null;
-  /**
-     * <strong>Read-only: the trade server does not let this value be changed.</strong>
-     * <br />
-     * <br />
-     * @nullable
-     */
-  resultDealerAsk?: number | null;
-  /**
-     * <strong>Read-only: the trade server does not let this value be changed.</strong>
-     * <br />
-     * <br />
-     * @nullable
-     */
-  resultDealerLast?: number | null;
-  /**
-     * <strong>Read-only: the trade server does not let this value be changed.</strong>
-     * <br />
-     * <br />
-     *             request result market prices
-     * @nullable
-     */
-  resultMarketBid?: number | null;
-  /**
-     * <strong>Read-only: the trade server does not let this value be changed.</strong>
-     * <br />
-     * <br />
-     * @nullable
-     */
-  resultMarketAsk?: number | null;
-  /**
-     * <strong>Read-only: the trade server does not let this value be changed.</strong>
-     * <br />
-     * <br />
-     * @nullable
-     */
-  resultMarketLast?: number | null;
-  /**
-     * <strong>Read-only: the trade server does not let this value be changed.</strong>
-     * <br />
-     * <br />
-     *             request result comment
-     * @nullable
-     */
-  resultComment?: string | null;
-  /**
-     * external system trade account (exchange, ECN, etc)
-     * @nullable
-     */
-  externalAccount?: string | null;
+  id?: number | null;
   /**
      * <strong>Read-only: the trade server does not let this value be changed.</strong>
      * <br />
@@ -215,11 +62,18 @@ export interface MT5Request {
      * @nullable
      */
   ip?: string | null;
+  /** client login */
+  login: number;
   /**
-     * source dealer login (for dealer transaction)
+     * order ticket
      * @nullable
      */
-  sourceLogin?: number | null;
+  order?: number | null;
+  /**
+     * order ticket in external system (exchange, ECN, etc)
+     * @nullable
+     */
+  orderExternalID?: string | null;
   /**
      * position ticket
      * @nullable
@@ -234,17 +88,135 @@ export interface MT5Request {
      * position ticket in external system (exchange, ECN, etc)
      * @nullable
      */
-  positionExternalID?: string | null;
+  positionByExternalID?: string | null;
   /**
      * position ticket in external system (exchange, ECN, etc)
      * @nullable
      */
-  positionByExternalID?: string | null;
+  positionExternalID?: string | null;
   /**
-     * volume with extended accuracy, 1 lot = 100_000_000
+     * price deviation details
      * @nullable
      */
-  volumeExt?: number | null;
+  priceDeviation?: number | null;
+  /** @nullable */
+  priceDeviationBottom?: number | null;
+  /** @nullable */
+  priceDeviationTop?: number | null;
+  /** order price */
+  priceOrder: number;
+  /**
+     * order SL price
+     * @nullable
+     */
+  priceSL?: number | null;
+  /**
+     * order TP price
+     * @nullable
+     */
+  priceTP?: number | null;
+  /**
+     * order trigger price
+     * @nullable
+     */
+  priceTrigger?: number | null;
+  /**
+     * <strong>Read-only: the trade server does not let this value be changed.</strong>
+     * <br />
+     * <br />
+     *             request result comment
+     * @nullable
+     */
+  resultComment?: string | null;
+  /**
+     * <strong>Read-only: the trade server does not let this value be changed.</strong>
+     * <br />
+     * <br />
+     *             request result deal
+     * @nullable
+     */
+  resultDeal?: number | null;
+  /**
+     * request result deal
+     * request dealer
+     * @nullable
+     */
+  resultDealer?: number | null;
+  /**
+     * <strong>Read-only: the trade server does not let this value be changed.</strong>
+     * <br />
+     * <br />
+     * @nullable
+     */
+  resultDealerAsk?: number | null;
+  /**
+     * <strong>Read-only: the trade server does not let this value be changed.</strong>
+     * <br />
+     * <br />
+     *             request result dealer prices
+     * @nullable
+     */
+  resultDealerBid?: number | null;
+  /**
+     * <strong>Read-only: the trade server does not let this value be changed.</strong>
+     * <br />
+     * <br />
+     * @nullable
+     */
+  resultDealerLast?: number | null;
+  /**
+     * <strong>Read-only: the trade server does not let this value be changed.</strong>
+     * <br />
+     * <br />
+     * @nullable
+     */
+  resultMarketAsk?: number | null;
+  /**
+     * <strong>Read-only: the trade server does not let this value be changed.</strong>
+     * <br />
+     * <br />
+     *             request result market prices
+     * @nullable
+     */
+  resultMarketBid?: number | null;
+  /**
+     * <strong>Read-only: the trade server does not let this value be changed.</strong>
+     * <br />
+     * <br />
+     * @nullable
+     */
+  resultMarketLast?: number | null;
+  /**
+     * <strong>Read-only: the trade server does not let this value be changed.</strong>
+     * <br />
+     * <br />
+     *             request result order
+     * @nullable
+     */
+  resultOrder?: number | null;
+  /**
+     * <strong>Read-only: the trade server does not let this value be changed.</strong>
+     * <br />
+     * <br />
+     *             request result confirmed price
+     * @nullable
+     */
+  resultPrice?: number | null;
+  /**
+     * <strong>Read-only: the trade server does not let this value be changed.</strong>
+     * <br />
+     * <br />
+     *             request result information
+     */
+  resultRetCode?: MT5Result | null;
+  /**
+     * <strong>Read-only: the trade server does not let this value be changed.</strong>
+     * <br />
+     * <br />
+     *             request result confirmed volume
+     * @nullable
+     */
+  resultVolume?: number | null;
   /**
      * <strong>Read-only: the trade server does not let this value be changed.</strong>
      * <br />
@@ -253,6 +225,29 @@ export interface MT5Request {
      * @nullable
      */
   resultVolumeExt?: number | null;
+  /**
+     * source dealer login (for dealer transaction)
+     * @nullable
+     */
+  sourceLogin?: number | null;
+  /**
+     * symbol
+     * @minLength 1
+     */
+  symbol: string;
+  /**
+     * order expiration
+     * @nullable
+     */
+  timeExpiration?: string | null;
+  /** order type IMTOrder::OrderType */
+  type: OrderType;
+  /** IMTOrder::OrderFilling */
+  typeFill?: OrderFilling | null;
+  /** IMTOrder::OrderTime */
+  typeTime?: OrderTime | null;
+  /** 1 lot = 10_000 */
+  volume: number;
   /**
      * current order volume
      * @nullable
@@ -263,4 +258,9 @@ export interface MT5Request {
      * @nullable
      */
   volumeCurrentExt?: number | null;
+  /**
+     * volume with extended accuracy, 1 lot = 100_000_000
+     * @nullable
+     */
+  volumeExt?: number | null;
 }

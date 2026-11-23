@@ -19,28 +19,28 @@
  * `CfgRequestLiveUpdateFiles` in a later slice.
  */
 export interface MT4LiveUpdate {
+  /** Service build number */
+  build?: number;
   /**
      * Company name advertised by the LiveUpdate service (used as cursor key)
      * @nullable
      */
   company?: string | null;
+  /** Currently active client connections (read-only counter) */
+  connections?: number;
+  /** Enable flag (0 = disabled, 1 = enabled — raw platform int) */
+  enable?: number;
+  /** Maximum simultaneous client connections allowed */
+  maxConnect?: number;
   /**
      * Filesystem path to the LiveUpdate files
      * @nullable
      */
   path?: string | null;
-  /** Service version number */
-  version?: number;
-  /** Service build number */
-  build?: number;
-  /** Maximum simultaneous client connections allowed */
-  maxConnect?: number;
-  /** Currently active client connections (read-only counter) */
-  connections?: number;
-  /** LiveUpdate kind/type (raw platform int — LIVE_UPDATE_* constants) */
-  type?: number;
-  /** Enable flag (0 = disabled, 1 = enabled — raw platform int) */
-  enable?: number;
   /** Total files served */
   totalFiles?: number;
+  /** LiveUpdate kind/type (raw platform int — LIVE_UPDATE_* constants) */
+  type?: number;
+  /** Service version number */
+  version?: number;
 }

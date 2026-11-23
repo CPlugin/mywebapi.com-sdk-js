@@ -58,6 +58,7 @@ import * as mt4BackupDestructive from './generated/mt4-v2-backup-destructive';
 import * as mt4Backup from './generated/mt4-v2-backup';
 import * as mt4Common from './generated/mt4-v2-common';
 import * as mt4Config from './generated/mt4-v2-config';
+import * as mt4Dealer from './generated/mt4-v2-dealer';
 import * as mt4Groups from './generated/mt4-v2-groups';
 import * as mt4History from './generated/mt4-v2-history';
 import * as mt4Mail from './generated/mt4-v2-mail';
@@ -85,7 +86,17 @@ import * as mt4SidecarExternalCommand from './generated/mt4-v2-sidecar-externalc
 // Generated per-tag endpoint modules — MT5
 // ---------------------------------------------------------------------------
 import * as mt5Common from './generated/mt5-v2-common';
+import * as mt5Communications from './generated/mt5-v2-communications';
+import * as mt5Configuration from './generated/mt5-v2-configuration';
+import * as mt5Clients from './generated/mt5-v2-clients';
+import * as mt5Dealer from './generated/mt5-v2-dealer';
 import * as mt5Groups from './generated/mt5-v2-groups';
+import * as mt5MarketData from './generated/mt5-v2-market-data';
+import * as mt5MarketInsight from './generated/mt5-v2-market-insight';
+import * as mt5Reports from './generated/mt5-v2-reports';
+import * as mt5Subscriptions from './generated/mt5-v2-subscriptions';
+import * as mt5TradeOperations from './generated/mt5-v2-trade-operations';
+import * as mt5Trading from './generated/mt5-v2-trading';
 import * as mt5HistoryData from './generated/mt5-v2-history-data';
 import * as mt5Managers from './generated/mt5-v2-managers';
 import * as mt5Symbols from './generated/mt5-v2-symbols';
@@ -179,6 +190,7 @@ type MT4Namespace = CleanNamespace<
   BoundModule<typeof mt4Backup> &
   BoundModule<typeof mt4Common> &
   BoundModule<typeof mt4Config> &
+  BoundModule<typeof mt4Dealer> &
   BoundModule<typeof mt4Groups> &
   BoundModule<typeof mt4History> &
   BoundModule<typeof mt4Mail> &
@@ -202,10 +214,20 @@ type MT4Namespace = CleanNamespace<
 
 type MT5Namespace = CleanNamespace<
   BoundModule<typeof mt5Common> &
+  BoundModule<typeof mt5Communications> &
+  BoundModule<typeof mt5Configuration> &
+  BoundModule<typeof mt5Clients> &
+  BoundModule<typeof mt5Dealer> &
   BoundModule<typeof mt5Groups> &
   BoundModule<typeof mt5HistoryData> &
   BoundModule<typeof mt5Managers> &
+  BoundModule<typeof mt5MarketData> &
+  BoundModule<typeof mt5MarketInsight> &
+  BoundModule<typeof mt5Reports> &
+  BoundModule<typeof mt5Subscriptions> &
   BoundModule<typeof mt5Symbols> &
+  BoundModule<typeof mt5TradeOperations> &
+  BoundModule<typeof mt5Trading> &
   BoundModule<typeof mt5Trades> &
   BoundModule<typeof mt5Users>,
   'MT5'
@@ -371,6 +393,7 @@ export class CPluginWebApiClient {
       ...bind(mt4Backup, this.base, 'MT4'),
       ...bind(mt4Common, this.base, 'MT4'),
       ...bind(mt4Config, this.base, 'MT4'),
+      ...bind(mt4Dealer, this.base, 'MT4'),
       ...bind(mt4Groups, this.base, 'MT4'),
       ...bind(mt4History, this.base, 'MT4'),
       ...bind(mt4Mail, this.base, 'MT4'),
@@ -393,10 +416,20 @@ export class CPluginWebApiClient {
 
     this.mt5 = {
       ...bind(mt5Common, this.base, 'MT5'),
+      ...bind(mt5Communications, this.base, 'MT5'),
+      ...bind(mt5Configuration, this.base, 'MT5'),
+      ...bind(mt5Clients, this.base, 'MT5'),
+      ...bind(mt5Dealer, this.base, 'MT5'),
       ...bind(mt5Groups, this.base, 'MT5'),
       ...bind(mt5HistoryData, this.base, 'MT5'),
       ...bind(mt5Managers, this.base, 'MT5'),
+      ...bind(mt5MarketData, this.base, 'MT5'),
+      ...bind(mt5MarketInsight, this.base, 'MT5'),
+      ...bind(mt5Reports, this.base, 'MT5'),
+      ...bind(mt5Subscriptions, this.base, 'MT5'),
       ...bind(mt5Symbols, this.base, 'MT5'),
+      ...bind(mt5TradeOperations, this.base, 'MT5'),
+      ...bind(mt5Trading, this.base, 'MT5'),
       ...bind(mt5Trades, this.base, 'MT5'),
       ...bind(mt5Users, this.base, 'MT5'),
     } as MT5Namespace;

@@ -15,16 +15,16 @@
  * normalised Open/High/Low/Close from raw int prices into floating point).
  */
 export interface MT4ChartBar {
-  /** Bar timestamp (UTC, start of the bar's period) */
-  time?: string;
-  /** Open price */
-  open?: number;
+  /** Close price */
+  close?: number;
   /** High price during the bar */
   high?: number;
   /** Low price during the bar */
   low?: number;
-  /** Close price */
-  close?: number;
+  /** Open price */
+  open?: number;
+  /** Bar timestamp (UTC, start of the bar's period) */
+  time?: string;
   /** Trading volume during the bar (lots × 100 in MT4 convention) */
   volume?: number;
 }

@@ -14,25 +14,25 @@
  * on the boundaries of the server's trading time.
  */
 export interface MT5ChartBarV2 {
-  /** Bar opening time — seconds since 01.01.1970, in the trade server's trading time. */
-  time?: number;
+  /** Close price — the price at the end of the bar's minute. */
+  close?: number;
   /** The same bar opening time as a date-time without offset, for direct display. */
   dateTime?: string;
-  /** Open price — the price at the beginning of the bar's minute. */
-  open?: number;
   /** Highest price reached inside the bar. */
   high?: number;
   /** Lowest price reached inside the bar. */
   low?: number;
-  /** Close price — the price at the end of the bar's minute. */
-  close?: number;
+  /** Open price — the price at the beginning of the bar's minute. */
+  open?: number;
+  /** Lowest spread, in points, recorded while the bar was forming. */
+  spread?: number;
   /**
      * Tick volume: the number of incoming ticks that moved the quote during the bar.
      * Consecutive ticks with the same price count once.
      */
   tickVolume?: number;
-  /** Lowest spread, in points, recorded while the bar was forming. */
-  spread?: number;
+  /** Bar opening time — seconds since 01.01.1970, in the trade server's trading time. */
+  time?: number;
   /** Real traded volume executed during the bar. */
   volume?: number;
 }

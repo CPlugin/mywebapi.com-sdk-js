@@ -13,37 +13,30 @@ import type { EntryFlag } from './entryFlag';
 import type { TradeModifyFlags } from './tradeModifyFlags';
 
 export interface MT5Deal {
+  /** DealAction */
+  action?: DealAction | null;
+  /**
+     * deal comment
+     * @nullable
+     */
+  comment?: string | null;
+  /**
+     * deal commission
+     * @nullable
+     */
+  commission?: number | null;
+  /**
+     * symbol contract size
+     * @nullable
+     */
+  contractSize?: number | null;
   /** deal ticket */
   deal: number;
-  /**
-     * deal ticket in external system (exchange, ECN, etc)
-     * @nullable
-     */
-  externalID?: string | null;
-  /**
-     * client login
-     * @nullable
-     */
-  login?: number | null;
   /**
      * processed dealer login (0-means auto)
      * @nullable
      */
   dealer?: number | null;
-  /**
-     * counterparty identification
-     * @nullable
-     */
-  partyID?: number | null;
-  /**
-     * deal order ticket
-     * @nullable
-     */
-  order?: number | null;
-  /** DealAction */
-  action?: DealAction | null;
-  /** EntryFlags */
-  entry?: EntryFlag | null;
   /**
      * price digits
      * @nullable
@@ -54,161 +47,38 @@ export interface MT5Deal {
      * @nullable
      */
   digitsCurrency?: number | null;
-  /**
-     * symbol contract size
-     * @nullable
-     */
-  contractSize?: number | null;
-  /**
-     * deal creation datetime in seconds. If the value of this field is specified, the IMTDeal::TimeMsc value will be filled in automatically.
-     * @nullable
-     */
-  time?: string | null;
-  /**
-     * deal symbol
-     * @nullable
-     */
-  symbol?: string | null;
-  /**
-     * deal price
-     * @nullable
-     */
-  price?: number | null;
-  /**
-     * order SL
-     * @nullable
-     */
-  priceSL?: number | null;
-  /**
-     * order TP
-     * @nullable
-     */
-  priceTP?: number | null;
-  /**
-     * deal volume
-     * @nullable
-     */
-  volume?: number | null;
-  /**
-     * deal volume with extended accuracy
-     * @nullable
-     */
-  volumeExt?: number | null;
-  /**
-     * closed volume
-     * @nullable
-     */
-  volumeClosed?: number | null;
-  /**
-     * closed volume with extended accuracy
-     * @nullable
-     */
-  volumeClosedExt?: number | null;
-  /**
-     * deal profit
-     * @nullable
-     */
-  profit?: number | null;
-  /**
-     * value
-     * @nullable
-     */
-  value?: number | null;
-  /**
-     * deal collected swaps
-     * @nullable
-     */
-  storage?: number | null;
-  /**
-     * deal commission
-     * @nullable
-     */
-  commission?: number | null;
-  /**
-     * obsolete value
-     * @nullable
-     */
-  obsoleteValue?: number | null;
-  /**
-     * fee
-     * @nullable
-     */
-  fee?: number | null;
-  /**
-     * profit conversion rate (from symbol profit currency to deposit currency)
-     * @nullable
-     */
-  rateProfit?: number | null;
-  /**
-     * margin conversion rate (from symbol margin currency to deposit currency)
-     * @nullable
-     */
-  rateMargin?: number | null;
+  /** EntryFlags */
+  entry?: EntryFlag | null;
   /**
      * expert id (filled by expert advisor)
      * @nullable
      */
   expertID?: number | null;
   /**
-     * position id
+     * deal ticket in external system (exchange, ECN, etc)
      * @nullable
      */
-  positionID?: number | null;
+  externalID?: string | null;
   /**
-     * deal comment
+     * fee
      * @nullable
      */
-  comment?: string | null;
-  /**
-     * deal profit in symbol's profit currency
-     * @nullable
-     */
-  profitRaw?: number | null;
-  /**
-     * closed position  price
-     * @nullable
-     */
-  pricePosition?: number | null;
-  /**
-     * tick value
-     * @nullable
-     */
-  tickValue?: number | null;
-  /**
-     * tick size
-     * @nullable
-     */
-  tickSize?: number | null;
+  fee?: number | null;
   /**
      * flags
      * @nullable
      */
   flags?: number | null;
   /**
-     * deal creation datetime in msc since 1970.01.01. If the value of this field is specified, the IMTDeal::Time value will be filled in automatically
-     * @nullable
-     */
-  timeMsc?: string | null;
-  /** DealReason */
-  reason?: DealReason | null;
-  /**
      * source gateway name
      * @nullable
      */
   gateway?: string | null;
   /**
-     * deal price on gateway
+     * client login
      * @nullable
      */
-  priceGateway?: number | null;
-  /**
-     * <strong>Read-only: the trade server does not let this value be changed.</strong>
-     * <br />
-     * <br />
-     *             Get the market Bid price as at the time of deal execution by the server
-     * @nullable
-     */
-  marketBid?: number | null;
+  login?: number | null;
   /**
      * <strong>Read-only: the trade server does not let this value be changed.</strong>
      * <br />
@@ -217,6 +87,14 @@ export interface MT5Deal {
      * @nullable
      */
   marketAsk?: number | null;
+  /**
+     * <strong>Read-only: the trade server does not let this value be changed.</strong>
+     * <br />
+     * <br />
+     *             Get the market Bid price as at the time of deal execution by the server
+     * @nullable
+     */
+  marketBid?: number | null;
   /**
      * <strong>Read-only: the trade server does not let this value be changed.</strong>
      * <br />
@@ -232,4 +110,126 @@ export interface MT5Deal {
      *             modification flags
      */
   modificationFlags?: TradeModifyFlags | null;
+  /**
+     * obsolete value
+     * @nullable
+     */
+  obsoleteValue?: number | null;
+  /**
+     * deal order ticket
+     * @nullable
+     */
+  order?: number | null;
+  /**
+     * counterparty identification
+     * @nullable
+     */
+  partyID?: number | null;
+  /**
+     * position id
+     * @nullable
+     */
+  positionID?: number | null;
+  /**
+     * deal price
+     * @nullable
+     */
+  price?: number | null;
+  /**
+     * deal price on gateway
+     * @nullable
+     */
+  priceGateway?: number | null;
+  /**
+     * closed position  price
+     * @nullable
+     */
+  pricePosition?: number | null;
+  /**
+     * order SL
+     * @nullable
+     */
+  priceSL?: number | null;
+  /**
+     * order TP
+     * @nullable
+     */
+  priceTP?: number | null;
+  /**
+     * deal profit
+     * @nullable
+     */
+  profit?: number | null;
+  /**
+     * deal profit in symbol's profit currency
+     * @nullable
+     */
+  profitRaw?: number | null;
+  /**
+     * margin conversion rate (from symbol margin currency to deposit currency)
+     * @nullable
+     */
+  rateMargin?: number | null;
+  /**
+     * profit conversion rate (from symbol profit currency to deposit currency)
+     * @nullable
+     */
+  rateProfit?: number | null;
+  /** DealReason */
+  reason?: DealReason | null;
+  /**
+     * deal collected swaps
+     * @nullable
+     */
+  storage?: number | null;
+  /**
+     * deal symbol
+     * @nullable
+     */
+  symbol?: string | null;
+  /**
+     * tick size
+     * @nullable
+     */
+  tickSize?: number | null;
+  /**
+     * tick value
+     * @nullable
+     */
+  tickValue?: number | null;
+  /**
+     * deal creation datetime in seconds. If the value of this field is specified, the IMTDeal::TimeMsc value will be filled in automatically.
+     * @nullable
+     */
+  time?: string | null;
+  /**
+     * deal creation datetime in msc since 1970.01.01. If the value of this field is specified, the IMTDeal::Time value will be filled in automatically
+     * @nullable
+     */
+  timeMsc?: string | null;
+  /**
+     * value
+     * @nullable
+     */
+  value?: number | null;
+  /**
+     * deal volume
+     * @nullable
+     */
+  volume?: number | null;
+  /**
+     * closed volume
+     * @nullable
+     */
+  volumeClosed?: number | null;
+  /**
+     * closed volume with extended accuracy
+     * @nullable
+     */
+  volumeClosedExt?: number | null;
+  /**
+     * deal volume with extended accuracy
+     * @nullable
+     */
+  volumeExt?: number | null;
 }

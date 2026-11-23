@@ -75,1556 +75,6 @@ import type {
 import { customFetch } from '../mutator';
 
 
-export type getCfgRequestCommonResponse200 = {
-  data: MT4CommonApiResponse
-  status: 200
-}
-
-export type getCfgRequestCommonResponseSuccess = (getCfgRequestCommonResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getCfgRequestCommonResponse = (getCfgRequestCommonResponseSuccess)
-
-export const getGetCfgRequestCommonUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestCommon`
-}
-
-/**
- * The common server record as the configuration system returns it, read live from
- * the trade server on every call.
- *
- * Same fields as `ManagerCommonEx`; the difference is the source: this call
- * goes through the configuration interface rather than the manager connection, and
- * is the read that `CfgUpdateCommon` writes back.
- *
- * Requires the settings permission, not the sensitive one — a client that may
- * change common settings but not read the server's infrastructure can still use it.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get common server configuration
- */
-export const getCfgRequestCommon = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestCommonResponse> => {
-
-  return customFetch<getCfgRequestCommonResponse>(getGetCfgRequestCommonUrl(tradePlatform),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type postCfgUpdateCommonResponse200 = {
-  data: MT4CommonApiResponse
-  status: 200
-}
-
-export type postCfgUpdateCommonResponseSuccess = (postCfgUpdateCommonResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postCfgUpdateCommonResponse = (postCfgUpdateCommonResponseSuccess)
-
-export const getPostCfgUpdateCommonUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateCommon`
-}
-
-/**
- * Change server-wide common settings. Only the fields present in the body are written: the
- * current record is read from the trade server, the body is applied over it, and the merged
- * record is written back. A field that is left out keeps its server value; for the string
- * fields, omitting the key keeps the value while sending `""` clears it. A body without
- * any field is rejected.
- *
- * Preserved fields the DTO does not touch:
- * <list type="bullet"><item>Runtime counters (LastOrder, LastLogin, LostLogin,
- *         optimization timestamps, overnight rollover state).</item><item>Protocol identity (ServerVersion, ServerBuild).</item><item>Bind / web address arrays (variable-length nested
- *         collections — own endpoints planned).</item><item>Demo-account subsystem, paths, rollover/statement modes
- *         (sensitive admin areas with separate endpoints).</item></list>
- *
- * Idempotency-Key strongly recommended — overwriting common settings
- * affects every connected client.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Update common config
- */
-export const postCfgUpdateCommon = async (tradePlatform: string,
-    mT4CommonUpdate?: MT4CommonUpdate, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateCommonResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postCfgUpdateCommonResponse>(getPostCfgUpdateCommonUrl(tradePlatform),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4CommonUpdate)
-  }
-);}
-
-
-export type getCfgRequestHolidayResponse200 = {
-  data: MT4HolidayListApiResponse
-  status: 200
-}
-
-export type getCfgRequestHolidayResponseSuccess = (getCfgRequestHolidayResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getCfgRequestHolidayResponse = (getCfgRequestHolidayResponseSuccess)
-
-export const getGetCfgRequestHolidayUrl = (tradePlatform: string,
-    params?: GetCfgRequestHolidayParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestHoliday?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestHoliday`
-}
-
-/**
- * All holiday-calendar entries configured on the MT4 server, paginated.
- *
- * Manager-live read (round-trip). Holidays describe trading-suspension
- * dates per symbol or symbol-group. Each entry carries date components
- * (Year/Month/Day), a work-time window (From/To, minutes from midnight,
- * both 0 for full closure), the affected Symbol (or "All"), a free-form
- * Description, and an Enable flag. Ordering: by (Year, Month, Day, From,
- * Symbol) ascending so cursors are stable and unique. The cursor is an
- * opaque base64 string produced by CursorCodec from the composite
- * "{YYYYMMDD * 10000 + From:D14}|{Symbol}" key — the Symbol tiebreaker
- * covers the case where multiple holidays share date and From minute
- * (per-symbol partial-day closures), guaranteeing pagination never drops
- * rows even inside same-(date,From) clusters.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List holiday config
- */
-export const getCfgRequestHoliday = async (tradePlatform: string,
-    params?: GetCfgRequestHolidayParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestHolidayResponse> => {
-
-  return customFetch<getCfgRequestHolidayResponse>(getGetCfgRequestHolidayUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getCfgRequestManagerResponse200 = {
-  data: MT4ManagerRightsListApiResponse
-  status: 200
-}
-
-export type getCfgRequestManagerResponseSuccess = (getCfgRequestManagerResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getCfgRequestManagerResponse = (getCfgRequestManagerResponseSuccess)
-
-export const getGetCfgRequestManagerUrl = (tradePlatform: string,
-    params?: GetCfgRequestManagerParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestManager?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestManager`
-}
-
-/**
- * All MT4 manager-account configurations on the connected server, paginated by Login.
- *
- * Manager-live read (round-trip). Each entry surfaces the manager's
- * Login/Name/Groups/MailBox, the 19 boolean permission rights (Manager,
- * Money, Broker, Admin, Reports, Trades, MarketWatch, etc.), IP-filter
- * range, and InfoDepth. Internal platform fields (SecGroups, Unused,
- * ExpTime, Reserved) are dropped from the v2 contract.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List manager configs
- */
-export const getCfgRequestManager = async (tradePlatform: string,
-    params?: GetCfgRequestManagerParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestManagerResponse> => {
-
-  return customFetch<getCfgRequestManagerResponse>(getGetCfgRequestManagerUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getCfgRequestTimeResponse200 = {
-  data: MT4ServerTimeApiResponse
-  status: 200
-}
-
-export type getCfgRequestTimeResponseSuccess = (getCfgRequestTimeResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getCfgRequestTimeResponse = (getCfgRequestTimeResponseSuccess)
-
-export const getGetCfgRequestTimeUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestTime`
-}
-
-/**
- * Server access-hour matrix (per-hour 7×24 allow/deny grid) from the MT4 server's `ConTime` configuration.
- *
- * Manager-live read (round-trip). Returns `MT4ServerTime` with
- * a flat 168-element `AccessHours` array; each element is 0
- * (denied) or 1 (allowed) for one hour of the week. Layout:
- * `index = day*24 + hour`, day 0 = Sunday (MT4 convention).
- * Internal `DaysControl` and `Reserved` platform fields
- * are not surfaced.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get access-hour matrix
- */
-export const getCfgRequestTime = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestTimeResponse> => {
-
-  return customFetch<getCfgRequestTimeResponse>(getGetCfgRequestTimeUrl(tradePlatform),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type postCfgUpdateTimeResponse200 = {
-  data: MT4ServerTimeApiResponse
-  status: 200
-}
-
-export type postCfgUpdateTimeResponseSuccess = (postCfgUpdateTimeResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postCfgUpdateTimeResponse = (postCfgUpdateTimeResponseSuccess)
-
-export const getPostCfgUpdateTimeUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateTime`
-}
-
-/**
- * Update the 7×24 access-hour matrix — Type 1 mutator.
- *
- * Manager (live) call. Reads the current `ConTime`, replaces the
- * 168-hour access matrix with the supplied `AccessHours`, and
- * writes back. The platform's internal `DaysControl` (server
- * housekeeping) and `Reserved` (forward-compat padding) fields
- * are preserved across the round-trip.
- *
- * `AccessHours` must be exactly 168 entries long; index =
- * `day * 24 + hour` with day 0 = Sunday. Each value is
- * `0` (denied) or `1` (allowed) — any other value is
- * passed through verbatim (the platform does not validate, and
- * MT4 may treat anything non-zero as allowed depending on build).
- *
- * Echoes the merged `MT4ServerTime` in the response.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Update access-hour matrix
- */
-export const postCfgUpdateTime = async (tradePlatform: string,
-    mT4ServerTime?: MT4ServerTime, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateTimeResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postCfgUpdateTimeResponse>(getPostCfgUpdateTimeUrl(tradePlatform),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4ServerTime)
-  }
-);}
-
-
-export type getCfgRequestAccessResponse200 = {
-  data: MT4AccessListApiResponse
-  status: 200
-}
-
-export type getCfgRequestAccessResponseSuccess = (getCfgRequestAccessResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getCfgRequestAccessResponse = (getCfgRequestAccessResponseSuccess)
-
-export const getGetCfgRequestAccessUrl = (tradePlatform: string,
-    params?: GetCfgRequestAccessParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestAccess?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestAccess`
-}
-
-/**
- * All firewall (IP access) rules configured on the MT4 server, paginated.
- *
- * Manager-live read (round-trip). Each entry describes an IP range
- * (IpFrom..IpTo, widened uint→long for JSON safety) with an Action
- * flag and a free-form Comment. Ordering: by (IpFrom, IpTo) ascending.
- * Cursor is an opaque base64 string holding the composite key
- * "{IpFrom:D10}|{IpTo:D10}" — D10 width matches uint range (max
- * 4_294_967_295 = 10 digits) so lexicographic compare matches
- * numeric compare, and the '|' delimiter cannot appear in IP values.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List IP firewall rules
- */
-export const getCfgRequestAccess = async (tradePlatform: string,
-    params?: GetCfgRequestAccessParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestAccessResponse> => {
-
-  return customFetch<getCfgRequestAccessResponse>(getGetCfgRequestAccessUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getCfgRequestBackupResponse200 = {
-  data: MT4BackupApiResponse
-  status: 200
-}
-
-export type getCfgRequestBackupResponseSuccess = (getCfgRequestBackupResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getCfgRequestBackupResponse = (getCfgRequestBackupResponseSuccess)
-
-export const getGetCfgRequestBackupUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestBackup`
-}
-
-/**
- * MT4 server backup configuration (full + archive + export schedules, watchdog HA pair settings).
- *
- * Manager-live read (round-trip). Returns the platform's ConBackup as
- * MT4Backup DTO — full/archive/export schedule enums and paths, last
- * completion timestamps, and HA-watchdog fields. The platform's
- * `WatchPassword` (slave-server credential) is intentionally
- * dropped from the v2 contract for security and is NOT present in
- * the response payload.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get backup config
- */
-export const getCfgRequestBackup = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestBackupResponse> => {
-
-  return customFetch<getCfgRequestBackupResponse>(getGetCfgRequestBackupUrl(tradePlatform),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type postCfgUpdateBackupResponse200 = {
-  data: MT4BackupApiResponse
-  status: 200
-}
-
-export type postCfgUpdateBackupResponseSuccess = (postCfgUpdateBackupResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postCfgUpdateBackupResponse = (postCfgUpdateBackupResponseSuccess)
-
-export const getPostCfgUpdateBackupUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateBackup`
-}
-
-/**
- * Update server backup configuration — Type 1 mutator.
- *
- * Manager (live) call. Reads the current `ConBackup`, overlays
- * the fields in `MT4Backup` onto it, and writes back via
- * `CfgUpdateBackup`. Two classes of preserved fields:
- * <list type="bullet"><item><b>Slave-server credential</b> — `WatchPassword` stays
- *         whatever the platform read live. It is unreachable from the
- *         v2 request body (DTO does not expose it).</item><item><b>Last-completion timestamps</b> — `FullBackupLastTime`,
- *         `ArchiveLastTime`, `ExportLastTime`, `WatchTimestamp`.
- *         Server-derived runtime state that clients must not overwrite.</item></list>
- * Echoes the merged `MT4Backup` in the response.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Update backup config
- */
-export const postCfgUpdateBackup = async (tradePlatform: string,
-    mT4Backup?: MT4Backup, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateBackupResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postCfgUpdateBackupResponse>(getPostCfgUpdateBackupUrl(tradePlatform),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4Backup)
-  }
-);}
-
-
-export type postCfgUpdateSyncResponse200 = {
-  data: MT4SyncApiResponse
-  status: 200
-}
-
-export type postCfgUpdateSyncResponseSuccess = (postCfgUpdateSyncResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postCfgUpdateSyncResponse = (postCfgUpdateSyncResponseSuccess)
-
-export const getPostCfgUpdateSyncUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateSync`
-}
-
-/**
- * Update a chart-history synchronization rule — Type 1 mutator.
- *
- * Manager (live) call. Sync configurations are paged on the read
- * side (see `CfgRequestSync`); the v2 contract identifies a
- * rule by the composite key `(Server, Login)`. Flow:
- * <list type="number"><item>Read the current list via `CfgRequestSync`.</item><item>Find the entry whose `(Server, Login)` matches the
- *         body. Missing entry → NotFound envelope.</item><item>Apply DTO overlay onto the matched entry — the
- *         replication credential (`Password`) carried by the
- *         live struct is preserved.</item><item>Write the merged struct back.</item></list>
- * Echoes the merged `MT4Sync` in the response.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Update sync rule
- */
-export const postCfgUpdateSync = async (tradePlatform: string,
-    mT4Sync?: MT4Sync, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateSyncResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postCfgUpdateSyncResponse>(getPostCfgUpdateSyncUrl(tradePlatform),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4Sync)
-  }
-);}
-
-
-export type postCfgUpdateFeederResponse200 = {
-  data: MT4FeederApiResponse
-  status: 200
-}
-
-export type postCfgUpdateFeederResponseSuccess = (postCfgUpdateFeederResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postCfgUpdateFeederResponse = (postCfgUpdateFeederResponseSuccess)
-
-export const getPostCfgUpdateFeederUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateFeeder`
-}
-
-/**
- * Update a quote/news feeder configuration — Type 1 mutator.
- *
- * Manager (live) call. Feeder configurations are paged on the read
- * side (see `CfgRequestFeeder`); the v2 contract identifies a
- * feeder by its `Name`. Same read-modify-write flow as
- * `CfgUpdateSync`; the datafeed credential (`Password`)
- * is preserved server-side.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Update feeder config
- */
-export const postCfgUpdateFeeder = async (tradePlatform: string,
-    mT4Feeder?: MT4Feeder, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateFeederResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postCfgUpdateFeederResponse>(getPostCfgUpdateFeederUrl(tradePlatform),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4Feeder)
-  }
-);}
-
-
-export type postCfgUpdateGatewayAccountResponse200 = {
-  data: MT4GatewayAccountApiResponse
-  status: 200
-}
-
-export type postCfgUpdateGatewayAccountResponseSuccess = (postCfgUpdateGatewayAccountResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postCfgUpdateGatewayAccountResponse = (postCfgUpdateGatewayAccountResponseSuccess)
-
-export const getPostCfgUpdateGatewayAccountUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateGatewayAccount`
-}
-
-/**
- * Update an STP gateway-account entry — Type 1 mutator.
- *
- * Manager (live) call. Gateway-account entries are paged on the read
- * side (see `CfgRequestGatewayAccount`); the v2 contract
- * identifies an entry by its stable internal `Id`. Flow:
- * <list type="number"><item>Read the current list via `CfgRequestGatewayAccount`.</item><item>Find the entry whose `Id` matches the body. Missing
- *         entry → NotFound envelope.</item><item>Apply DTO overlay onto the matched entry — the STP MT4
- *         credential (`Password`) carried by the live struct is
- *         preserved.</item><item>Write the merged struct back.</item></list>
- * Echoes the merged `MT4GatewayAccount` in the response.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Update gateway account
- */
-export const postCfgUpdateGatewayAccount = async (tradePlatform: string,
-    mT4GatewayAccount?: MT4GatewayAccount, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateGatewayAccountResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postCfgUpdateGatewayAccountResponse>(getPostCfgUpdateGatewayAccountUrl(tradePlatform),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4GatewayAccount)
-  }
-);}
-
-
-export type postCfgUpdateGatewayMarkupResponse200 = {
-  data: MT4GatewayMarkupApiResponse
-  status: 200
-}
-
-export type postCfgUpdateGatewayMarkupResponseSuccess = (postCfgUpdateGatewayMarkupResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postCfgUpdateGatewayMarkupResponse = (postCfgUpdateGatewayMarkupResponseSuccess)
-
-export const getPostCfgUpdateGatewayMarkupUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateGatewayMarkup`
-}
-
-/**
- * Update a gateway markup rule — Type 1 mutator.
- *
- * Manager (live) call. Markup rules are paged on the read side (see
- * `CfgRequestGatewayMarkup`); the v2 contract identifies a rule
- * by the composite key `(Source, Symbol)` (same cursor key the
- * read endpoint uses). Same read-modify-write flow as
- * `CfgUpdateGatewayAccount`; the platform's 16-int reserved
- * padding is preserved.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Update gateway markup
- */
-export const postCfgUpdateGatewayMarkup = async (tradePlatform: string,
-    mT4GatewayMarkup?: MT4GatewayMarkup, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateGatewayMarkupResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postCfgUpdateGatewayMarkupResponse>(getPostCfgUpdateGatewayMarkupUrl(tradePlatform),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4GatewayMarkup)
-  }
-);}
-
-
-export type postCfgUpdateGatewayRuleResponse200 = {
-  data: MT4GatewayRuleApiResponse
-  status: 200
-}
-
-export type postCfgUpdateGatewayRuleResponseSuccess = (postCfgUpdateGatewayRuleResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postCfgUpdateGatewayRuleResponse = (postCfgUpdateGatewayRuleResponseSuccess)
-
-export const getPostCfgUpdateGatewayRuleUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateGatewayRule`
-}
-
-/**
- * Update an STP gateway-rule entry — Type 1 mutator.
- *
- * Manager (live) call. Gateway rules are paged on the read side (see
- * `CfgRequestGatewayRule`); the v2 contract identifies a rule
- * by its public `Name`. Same read-modify-write flow; the two
- * platform reserved padding blocks (`RequestRreserved` 32-int,
- * `ExeReserved` 25-int) are preserved server-side.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Update gateway rule
- */
-export const postCfgUpdateGatewayRule = async (tradePlatform: string,
-    mT4GatewayRule?: MT4GatewayRule, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateGatewayRuleResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postCfgUpdateGatewayRuleResponse>(getPostCfgUpdateGatewayRuleUrl(tradePlatform),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4GatewayRule)
-  }
-);}
-
-
-export type postCfgUpdateLiveUpdateResponse200 = {
-  data: MT4LiveUpdateApiResponse
-  status: 200
-}
-
-export type postCfgUpdateLiveUpdateResponseSuccess = (postCfgUpdateLiveUpdateResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postCfgUpdateLiveUpdateResponse = (postCfgUpdateLiveUpdateResponseSuccess)
-
-export const getPostCfgUpdateLiveUpdateUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateLiveUpdate`
-}
-
-/**
- * Update a LiveUpdate service configuration — Type 1 mutator.
- *
- * Manager (live) call. LiveUpdate entries are paged on the read side
- * (see `CfgRequestLiveUpdate`); the v2 contract identifies an
- * entry by its `Company` field (same cursor key the read
- * endpoint uses). Flow: read live list → match by `Company` →
- * overlay → write back. The 128-element `Files` descriptor
- * table and the runtime `Connections` counter are preserved
- * server-side.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Update LiveUpdate config
- */
-export const postCfgUpdateLiveUpdate = async (tradePlatform: string,
-    mT4LiveUpdate?: MT4LiveUpdate, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateLiveUpdateResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postCfgUpdateLiveUpdateResponse>(getPostCfgUpdateLiveUpdateUrl(tradePlatform),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4LiveUpdate)
-  }
-);}
-
-
-export type postCfgUpdateManagerResponse200 = {
-  data: MT4ManagerRightsApiResponse
-  status: 200
-}
-
-export type postCfgUpdateManagerResponseSuccess = (postCfgUpdateManagerResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postCfgUpdateManagerResponse = (postCfgUpdateManagerResponseSuccess)
-
-export const getPostCfgUpdateManagerUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateManager`
-}
-
-/**
- * Update a manager-account configuration — Type 1 mutator.
- *
- * Manager (live) call. Manager-account entries are paged on the read
- * side (see `CfgRequestManager`); the v2 contract identifies an
- * entry by `Login`. Flow: read live list → match by Login →
- * overlay (19 permission flags + IP filter + MailBox/Groups/InfoDepth)
- * → write back. The platform's `Name` (read-only — server sets
- * it), `SecGroups` (32-entry permission table), `ExpTime`,
- * `Unused`, and `Reserved` are preserved.
- * <br>`IpFrom`/`IpTo` in the body are `long` (DTO widens
- * the platform's `uint` for safe JSON numerics) — values outside
- * `[0, uint.MaxValue]` are rejected with
- * `errorCode=Validation` before anything is written.
- *
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Update manager config
- */
-export const postCfgUpdateManager = async (tradePlatform: string,
-    mT4ManagerRights?: MT4ManagerRights, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateManagerResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postCfgUpdateManagerResponse>(getPostCfgUpdateManagerUrl(tradePlatform),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4ManagerRights)
-  }
-);}
-
-
-export type postCfgUpdateAccessPosResponse200 = {
-  data: MT4AccessApiResponse
-  status: 200
-}
-
-export type postCfgUpdateAccessPosResponseSuccess = (postCfgUpdateAccessPosResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postCfgUpdateAccessPosResponse = (postCfgUpdateAccessPosResponseSuccess)
-
-export const getPostCfgUpdateAccessPosUrl = (tradePlatform: string,
-    pos: number,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateAccess/${encodeURIComponent(String(pos))}`
-}
-
-/**
- * Update an IP firewall rule at a given list position — Type 1 mutator.
- *
- * Manager (live) call. The platform's `CfgUpdateAccess(cfg, pos)`
- * signature requires a position rather than a unique-key lookup (the
- * rule table has no stable identifiers — multiple rules can carry the
- * same range/action/comment). The v2 endpoint exposes the position as
- * a route parameter; callers must read the current list via
- * `CfgRequestAccess` first and pass the index of the row to
- * update. Flow:
- * <list type="number"><item>Read the live list via `CfgRequestAccess`.</item><item>Bounds-check `pos` against the list length — out of
- *         range yields a NotFound envelope.</item><item>Apply DTO overlay onto `list[pos]`.</item><item>Write back with `CfgUpdateAccess(merged, pos)`.</item></list>`IpFrom`/`IpTo` in the body must fit in `[0, uint.MaxValue]`
- * — out-of-range values are rejected with `errorCode=Validation`
- * before anything is written.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Update IP firewall rule
- */
-export const postCfgUpdateAccessPos = async (tradePlatform: string,
-    pos: number,
-    mT4Access?: MT4Access, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateAccessPosResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postCfgUpdateAccessPosResponse>(getPostCfgUpdateAccessPosUrl(tradePlatform,pos),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4Access)
-  }
-);}
-
-
-export type postCfgUpdateDataServerPosResponse200 = {
-  data: MT4DataServerApiResponse
-  status: 200
-}
-
-export type postCfgUpdateDataServerPosResponseSuccess = (postCfgUpdateDataServerPosResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postCfgUpdateDataServerPosResponse = (postCfgUpdateDataServerPosResponseSuccess)
-
-export const getPostCfgUpdateDataServerPosUrl = (tradePlatform: string,
-    pos: number,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateDataServer/${encodeURIComponent(String(pos))}`
-}
-
-/**
- * Update a DataServer (access-server) entry at a given list position — Type 1 mutator.
- *
- * Same position-based read-modify-write pattern as
- * `CfgUpdateAccess`. Preserves internal padding
- * (`Reserved1`, `Reserved2`) and the `Next` pointer.
- * `Loading`/`IpInternal` in the body must fit in
- * `[0, uint.MaxValue]`.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Update data-server entry
- */
-export const postCfgUpdateDataServerPos = async (tradePlatform: string,
-    pos: number,
-    mT4DataServer?: MT4DataServer, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateDataServerPosResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postCfgUpdateDataServerPosResponse>(getPostCfgUpdateDataServerPosUrl(tradePlatform,pos),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4DataServer)
-  }
-);}
-
-
-export type postCfgUpdateHolidayPosResponse200 = {
-  data: MT4HolidayApiResponse
-  status: 200
-}
-
-export type postCfgUpdateHolidayPosResponseSuccess = (postCfgUpdateHolidayPosResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postCfgUpdateHolidayPosResponse = (postCfgUpdateHolidayPosResponseSuccess)
-
-export const getPostCfgUpdateHolidayPosUrl = (tradePlatform: string,
-    pos: number,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateHoliday/${encodeURIComponent(String(pos))}`
-}
-
-/**
- * Update a holiday-calendar entry at a given list position — Type 1 mutator.
- *
- * Position-based read-modify-write. The platform stores `Enable`
- * as `int` (0/1) — the DTO surfaces it as `bool`; the
- * mapper bridges with a `BoolToInt` helper. The 13-int
- * `Reserved` padding and `Next` pointer are preserved.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Update holiday entry
- */
-export const postCfgUpdateHolidayPos = async (tradePlatform: string,
-    pos: number,
-    mT4Holiday?: MT4Holiday, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateHolidayPosResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postCfgUpdateHolidayPosResponse>(getPostCfgUpdateHolidayPosUrl(tradePlatform,pos),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4Holiday)
-  }
-);}
-
-
-export type postCfgUpdateSymbolGroupPosResponse200 = {
-  data: MT4SymbolGroupApiResponse
-  status: 200
-}
-
-export type postCfgUpdateSymbolGroupPosResponseSuccess = (postCfgUpdateSymbolGroupPosResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postCfgUpdateSymbolGroupPosResponse = (postCfgUpdateSymbolGroupPosResponseSuccess)
-
-export const getPostCfgUpdateSymbolGroupPosUrl = (tradePlatform: string,
-    pos: number,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateSymbolGroup/${encodeURIComponent(String(pos))}`
-}
-
-/**
- * Update a symbol group at a given list position — Type 1 mutator.
- *
- * Position-based read-modify-write. `ConSymbolGroup` has no
- * reserved padding or internal pointers, so the overlay is trivial.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Update symbol group
- */
-export const postCfgUpdateSymbolGroupPos = async (tradePlatform: string,
-    pos: number,
-    mT4SymbolGroup?: MT4SymbolGroup, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateSymbolGroupPosResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postCfgUpdateSymbolGroupPosResponse>(getPostCfgUpdateSymbolGroupPosUrl(tradePlatform,pos),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4SymbolGroup)
-  }
-);}
-
-
-export type getCfgRequestGatewayAccountResponse200 = {
-  data: MT4GatewayAccountListApiResponse
-  status: 200
-}
-
-export type getCfgRequestGatewayAccountResponseSuccess = (getCfgRequestGatewayAccountResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getCfgRequestGatewayAccountResponse = (getCfgRequestGatewayAccountResponseSuccess)
-
-export const getGetCfgRequestGatewayAccountUrl = (tradePlatform: string,
-    params?: GetCfgRequestGatewayAccountParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayAccount?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayAccount`
-}
-
-/**
- * All STP gateway-account configuration entries on the MT4 server, paginated by stable internal Id.
- *
- * Manager-live read (round-trip). Each entry describes an external
- * MT4 server connection used for STP order routing: public Name, an
- * internal Id (stable identifier — used as the cursor key), the
- * external server Login + Address, a NotifyLogins fixed-size array
- * of 8 broker-side recipients, and a Flags bitmap. The platform's
- * `Password` field (STP MT4 credential) is intentionally
- * excluded from the v2 contract.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List gateway accounts
- */
-export const getCfgRequestGatewayAccount = async (tradePlatform: string,
-    params?: GetCfgRequestGatewayAccountParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestGatewayAccountResponse> => {
-
-  return customFetch<getCfgRequestGatewayAccountResponse>(getGetCfgRequestGatewayAccountUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getCfgRequestGatewayMarkupResponse200 = {
-  data: MT4GatewayMarkupListApiResponse
-  status: 200
-}
-
-export type getCfgRequestGatewayMarkupResponseSuccess = (getCfgRequestGatewayMarkupResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getCfgRequestGatewayMarkupResponse = (getCfgRequestGatewayMarkupResponseSuccess)
-
-export const getGetCfgRequestGatewayMarkupUrl = (tradePlatform: string,
-    params?: GetCfgRequestGatewayMarkupParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayMarkup?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayMarkup`
-}
-
-/**
- * All MT4 gateway-markup rules (per-symbol bid/ask spread adjustments applied to STP-routed quotes), paginated.
- *
- * Manager-live read (round-trip). Each entry maps an external Source
- * (symbol/mask/group) onto a local Symbol with per-side pip markups
- * (BidMarkup/AskMarkup). Ordering: by (Source, Symbol) ascending.
- * Cursor is an opaque base64 string holding the composite key
- * "{Source}|{Symbol}" — MT4 symbol wildcards use `*` and `?`
- * (not `|`), so the delimiter is safe.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List gateway markups
- */
-export const getCfgRequestGatewayMarkup = async (tradePlatform: string,
-    params?: GetCfgRequestGatewayMarkupParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestGatewayMarkupResponse> => {
-
-  return customFetch<getCfgRequestGatewayMarkupResponse>(getGetCfgRequestGatewayMarkupUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getCfgRequestGatewayRuleResponse200 = {
-  data: MT4GatewayRuleListApiResponse
-  status: 200
-}
-
-export type getCfgRequestGatewayRuleResponseSuccess = (getCfgRequestGatewayRuleResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getCfgRequestGatewayRuleResponse = (getCfgRequestGatewayRuleResponseSuccess)
-
-export const getGetCfgRequestGatewayRuleUrl = (tradePlatform: string,
-    params?: GetCfgRequestGatewayRuleParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayRule?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayRule`
-}
-
-/**
- * All MT4 gateway-rule entries (STP execution routing policies), paginated by Name.
- *
- * Manager-live read (round-trip). Each rule matches incoming orders
- * by RequestSymbol + RequestGroup and routes them to a configured
- * execution gateway-account (ExeAccountName/ExeAccountId) with
- * per-rule slippage and volume limits. Name is assumed unique
- * within the rules table and serves as the cursor key.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List gateway rules
- */
-export const getCfgRequestGatewayRule = async (tradePlatform: string,
-    params?: GetCfgRequestGatewayRuleParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestGatewayRuleResponse> => {
-
-  return customFetch<getCfgRequestGatewayRuleResponse>(getGetCfgRequestGatewayRuleUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getCfgRequestDataServerResponse200 = {
-  data: MT4DataServerListApiResponse
-  status: 200
-}
-
-export type getCfgRequestDataServerResponseSuccess = (getCfgRequestDataServerResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getCfgRequestDataServerResponse = (getCfgRequestDataServerResponseSuccess)
-
-export const getGetCfgRequestDataServerUrl = (tradePlatform: string,
-    params?: GetCfgRequestDataServerParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestDataServer?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestDataServer`
-}
-
-/**
- * All MT4 access-server (data-server) entries advertised to clients for connection, paginated by Server name.
- *
- * Manager-live read (round-trip). Returns the broker-side advertised
- * list of connection endpoints — each entry: Server (host:port),
- * Ip, Description, IsProxy flag, Priority (0-7 base, 255 = idle),
- * Loading (UINT_MAX = no reporting), IpInternal, IsWitness flag.
- * Internal Reserved padding and the Next pointer chain are dropped.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List data servers
- */
-export const getCfgRequestDataServer = async (tradePlatform: string,
-    params?: GetCfgRequestDataServerParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestDataServerResponse> => {
-
-  return customFetch<getCfgRequestDataServerResponse>(getGetCfgRequestDataServerUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getCfgRequestFeederResponse200 = {
-  data: MT4FeederListApiResponse
-  status: 200
-}
-
-export type getCfgRequestFeederResponseSuccess = (getCfgRequestFeederResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getCfgRequestFeederResponse = (getCfgRequestFeederResponseSuccess)
-
-export const getGetCfgRequestFeederUrl = (tradePlatform: string,
-    params?: GetCfgRequestFeederParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestFeeder?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestFeeder`
-}
-
-/**
- * All quote/news feeder configurations on the MT4 server, paginated by Name.
- *
- * Manager-live read (round-trip). Each entry: Name, File (loader
- * path), Server (upstream), Login, Keywords (news filter),
- * Enable flag, DataFeedMode (quotes/news/both), connection timeouts
- * (Timeout, TimeoutReconnect, TimeoutSleep, AttempsSleep),
- * NewsLangId. The platform's `Password` (datafeed credentials)
- * is intentionally excluded from the v2 contract.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List feeder configs
- */
-export const getCfgRequestFeeder = async (tradePlatform: string,
-    params?: GetCfgRequestFeederParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestFeederResponse> => {
-
-  return customFetch<getCfgRequestFeederResponse>(getGetCfgRequestFeederUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getCfgRequestLiveUpdateResponse200 = {
-  data: MT4LiveUpdateListApiResponse
-  status: 200
-}
-
-export type getCfgRequestLiveUpdateResponseSuccess = (getCfgRequestLiveUpdateResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getCfgRequestLiveUpdateResponse = (getCfgRequestLiveUpdateResponseSuccess)
-
-export const getGetCfgRequestLiveUpdateUrl = (tradePlatform: string,
-    params?: GetCfgRequestLiveUpdateParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestLiveUpdate?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestLiveUpdate`
-}
-
-/**
- * All MT4 LiveUpdate service configurations on the server, paginated by Company name.
- *
- * Manager-live read (round-trip). Each entry: Company (cursor key),
- * Path, Version/Build, MaxConnect, current Connections (read-only),
- * Type, Enable flag, TotalFiles. The platform's 128-element
- * per-file Files descriptor table is dropped from this payload
- * for tractability; a dedicated per-file endpoint will follow.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List LiveUpdate configs
- */
-export const getCfgRequestLiveUpdate = async (tradePlatform: string,
-    params?: GetCfgRequestLiveUpdateParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestLiveUpdateResponse> => {
-
-  return customFetch<getCfgRequestLiveUpdateResponse>(getGetCfgRequestLiveUpdateUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getCfgRequestSyncResponse200 = {
-  data: MT4SyncListApiResponse
-  status: 200
-}
-
-export type getCfgRequestSyncResponseSuccess = (getCfgRequestSyncResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getCfgRequestSyncResponse = (getCfgRequestSyncResponseSuccess)
-
-export const getGetCfgRequestSyncUrl = (tradePlatform: string,
-    params?: GetCfgRequestSyncParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestSync?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestSync`
-}
-
-/**
- * All chart-history synchronization rules configured on the MT4 server, paginated by Server name.
- *
- * Manager-live read (round-trip). Each rule pulls historical bars
- * from an upstream source — Server (cursor key) + Login identify
- * the source, Mode/From/To/Securities define the sync scope, and
- * TimeCorrection (minutes) adjusts incoming bar timestamps. The
- * the platform's `Password` (replication credentials) is
- * intentionally excluded from the v2 contract.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List sync rules
- */
-export const getCfgRequestSync = async (tradePlatform: string,
-    params?: GetCfgRequestSyncParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestSyncResponse> => {
-
-  return customFetch<getCfgRequestSyncResponse>(getGetCfgRequestSyncUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
 export type postCfgDeleteAccessPosResponse200 = {
   data: BooleanApiResponse
   status: 200
@@ -2064,6 +514,685 @@ export const postCfgDeleteSyncPos = async (tradePlatform: string,
   {
     ...options,
     method: 'POST'
+
+
+  }
+);}
+
+
+export type getCfgRequestAccessResponse200 = {
+  data: MT4AccessListApiResponse
+  status: 200
+}
+
+export type getCfgRequestAccessResponseSuccess = (getCfgRequestAccessResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCfgRequestAccessResponse = (getCfgRequestAccessResponseSuccess)
+
+export const getGetCfgRequestAccessUrl = (tradePlatform: string,
+    params?: GetCfgRequestAccessParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestAccess?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestAccess`
+}
+
+/**
+ * All firewall (IP access) rules configured on the MT4 server, paginated.
+ *
+ * Manager-live read (round-trip). Each entry describes an IP range
+ * (IpFrom..IpTo, widened uint→long for JSON safety) with an Action
+ * flag and a free-form Comment. Ordering: by (IpFrom, IpTo) ascending.
+ * Cursor is an opaque base64 string holding the composite key
+ * "{IpFrom:D10}|{IpTo:D10}" — D10 width matches uint range (max
+ * 4_294_967_295 = 10 digits) so lexicographic compare matches
+ * numeric compare, and the '|' delimiter cannot appear in IP values.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List IP firewall rules
+ */
+export const getCfgRequestAccess = async (tradePlatform: string,
+    params?: GetCfgRequestAccessParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestAccessResponse> => {
+
+  return customFetch<getCfgRequestAccessResponse>(getGetCfgRequestAccessUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getCfgRequestBackupResponse200 = {
+  data: MT4BackupApiResponse
+  status: 200
+}
+
+export type getCfgRequestBackupResponseSuccess = (getCfgRequestBackupResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCfgRequestBackupResponse = (getCfgRequestBackupResponseSuccess)
+
+export const getGetCfgRequestBackupUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestBackup`
+}
+
+/**
+ * MT4 server backup configuration (full + archive + export schedules, watchdog HA pair settings).
+ *
+ * Manager-live read (round-trip). Returns the platform's ConBackup as
+ * MT4Backup DTO — full/archive/export schedule enums and paths, last
+ * completion timestamps, and HA-watchdog fields. The platform's
+ * `WatchPassword` (slave-server credential) is intentionally
+ * dropped from the v2 contract for security and is NOT present in
+ * the response payload.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get backup config
+ */
+export const getCfgRequestBackup = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestBackupResponse> => {
+
+  return customFetch<getCfgRequestBackupResponse>(getGetCfgRequestBackupUrl(tradePlatform),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getCfgRequestCommonResponse200 = {
+  data: MT4CommonApiResponse
+  status: 200
+}
+
+export type getCfgRequestCommonResponseSuccess = (getCfgRequestCommonResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCfgRequestCommonResponse = (getCfgRequestCommonResponseSuccess)
+
+export const getGetCfgRequestCommonUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestCommon`
+}
+
+/**
+ * The common server record as the configuration system returns it, read live from
+ * the trade server on every call.
+ *
+ * Same fields as `ManagerCommonEx`; the difference is the source: this call
+ * goes through the configuration interface rather than the manager connection, and
+ * is the read that `CfgUpdateCommon` writes back.
+ *
+ * Requires the settings permission, not the sensitive one — a client that may
+ * change common settings but not read the server's infrastructure can still use it.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get common server configuration
+ */
+export const getCfgRequestCommon = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestCommonResponse> => {
+
+  return customFetch<getCfgRequestCommonResponse>(getGetCfgRequestCommonUrl(tradePlatform),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getCfgRequestDataServerResponse200 = {
+  data: MT4DataServerListApiResponse
+  status: 200
+}
+
+export type getCfgRequestDataServerResponseSuccess = (getCfgRequestDataServerResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCfgRequestDataServerResponse = (getCfgRequestDataServerResponseSuccess)
+
+export const getGetCfgRequestDataServerUrl = (tradePlatform: string,
+    params?: GetCfgRequestDataServerParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestDataServer?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestDataServer`
+}
+
+/**
+ * All MT4 access-server (data-server) entries advertised to clients for connection, paginated by Server name.
+ *
+ * Manager-live read (round-trip). Returns the broker-side advertised
+ * list of connection endpoints — each entry: Server (host:port),
+ * Ip, Description, IsProxy flag, Priority (0-7 base, 255 = idle),
+ * Loading (UINT_MAX = no reporting), IpInternal, IsWitness flag.
+ * Internal Reserved padding and the Next pointer chain are dropped.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List data servers
+ */
+export const getCfgRequestDataServer = async (tradePlatform: string,
+    params?: GetCfgRequestDataServerParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestDataServerResponse> => {
+
+  return customFetch<getCfgRequestDataServerResponse>(getGetCfgRequestDataServerUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getCfgRequestFeederResponse200 = {
+  data: MT4FeederListApiResponse
+  status: 200
+}
+
+export type getCfgRequestFeederResponseSuccess = (getCfgRequestFeederResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCfgRequestFeederResponse = (getCfgRequestFeederResponseSuccess)
+
+export const getGetCfgRequestFeederUrl = (tradePlatform: string,
+    params?: GetCfgRequestFeederParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestFeeder?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestFeeder`
+}
+
+/**
+ * All quote/news feeder configurations on the MT4 server, paginated by Name.
+ *
+ * Manager-live read (round-trip). Each entry: Name, File (loader
+ * path), Server (upstream), Login, Keywords (news filter),
+ * Enable flag, DataFeedMode (quotes/news/both), connection timeouts
+ * (Timeout, TimeoutReconnect, TimeoutSleep, AttempsSleep),
+ * NewsLangId. The platform's `Password` (datafeed credentials)
+ * is intentionally excluded from the v2 contract.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List feeder configs
+ */
+export const getCfgRequestFeeder = async (tradePlatform: string,
+    params?: GetCfgRequestFeederParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestFeederResponse> => {
+
+  return customFetch<getCfgRequestFeederResponse>(getGetCfgRequestFeederUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getCfgRequestGatewayAccountResponse200 = {
+  data: MT4GatewayAccountListApiResponse
+  status: 200
+}
+
+export type getCfgRequestGatewayAccountResponseSuccess = (getCfgRequestGatewayAccountResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCfgRequestGatewayAccountResponse = (getCfgRequestGatewayAccountResponseSuccess)
+
+export const getGetCfgRequestGatewayAccountUrl = (tradePlatform: string,
+    params?: GetCfgRequestGatewayAccountParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayAccount?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayAccount`
+}
+
+/**
+ * All STP gateway-account configuration entries on the MT4 server, paginated by stable internal Id.
+ *
+ * Manager-live read (round-trip). Each entry describes an external
+ * MT4 server connection used for STP order routing: public Name, an
+ * internal Id (stable identifier — used as the cursor key), the
+ * external server Login + Address, a NotifyLogins fixed-size array
+ * of 8 broker-side recipients, and a Flags bitmap. The platform's
+ * `Password` field (STP MT4 credential) is intentionally
+ * excluded from the v2 contract.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List gateway accounts
+ */
+export const getCfgRequestGatewayAccount = async (tradePlatform: string,
+    params?: GetCfgRequestGatewayAccountParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestGatewayAccountResponse> => {
+
+  return customFetch<getCfgRequestGatewayAccountResponse>(getGetCfgRequestGatewayAccountUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getCfgRequestGatewayMarkupResponse200 = {
+  data: MT4GatewayMarkupListApiResponse
+  status: 200
+}
+
+export type getCfgRequestGatewayMarkupResponseSuccess = (getCfgRequestGatewayMarkupResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCfgRequestGatewayMarkupResponse = (getCfgRequestGatewayMarkupResponseSuccess)
+
+export const getGetCfgRequestGatewayMarkupUrl = (tradePlatform: string,
+    params?: GetCfgRequestGatewayMarkupParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayMarkup?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayMarkup`
+}
+
+/**
+ * All MT4 gateway-markup rules (per-symbol bid/ask spread adjustments applied to STP-routed quotes), paginated.
+ *
+ * Manager-live read (round-trip). Each entry maps an external Source
+ * (symbol/mask/group) onto a local Symbol with per-side pip markups
+ * (BidMarkup/AskMarkup). Ordering: by (Source, Symbol) ascending.
+ * Cursor is an opaque base64 string holding the composite key
+ * "{Source}|{Symbol}" — MT4 symbol wildcards use `*` and `?`
+ * (not `|`), so the delimiter is safe.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List gateway markups
+ */
+export const getCfgRequestGatewayMarkup = async (tradePlatform: string,
+    params?: GetCfgRequestGatewayMarkupParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestGatewayMarkupResponse> => {
+
+  return customFetch<getCfgRequestGatewayMarkupResponse>(getGetCfgRequestGatewayMarkupUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getCfgRequestGatewayRuleResponse200 = {
+  data: MT4GatewayRuleListApiResponse
+  status: 200
+}
+
+export type getCfgRequestGatewayRuleResponseSuccess = (getCfgRequestGatewayRuleResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCfgRequestGatewayRuleResponse = (getCfgRequestGatewayRuleResponseSuccess)
+
+export const getGetCfgRequestGatewayRuleUrl = (tradePlatform: string,
+    params?: GetCfgRequestGatewayRuleParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayRule?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestGatewayRule`
+}
+
+/**
+ * All MT4 gateway-rule entries (STP execution routing policies), paginated by Name.
+ *
+ * Manager-live read (round-trip). Each rule matches incoming orders
+ * by RequestSymbol + RequestGroup and routes them to a configured
+ * execution gateway-account (ExeAccountName/ExeAccountId) with
+ * per-rule slippage and volume limits. Name is assumed unique
+ * within the rules table and serves as the cursor key.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List gateway rules
+ */
+export const getCfgRequestGatewayRule = async (tradePlatform: string,
+    params?: GetCfgRequestGatewayRuleParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestGatewayRuleResponse> => {
+
+  return customFetch<getCfgRequestGatewayRuleResponse>(getGetCfgRequestGatewayRuleUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getCfgRequestHolidayResponse200 = {
+  data: MT4HolidayListApiResponse
+  status: 200
+}
+
+export type getCfgRequestHolidayResponseSuccess = (getCfgRequestHolidayResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCfgRequestHolidayResponse = (getCfgRequestHolidayResponseSuccess)
+
+export const getGetCfgRequestHolidayUrl = (tradePlatform: string,
+    params?: GetCfgRequestHolidayParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestHoliday?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestHoliday`
+}
+
+/**
+ * All holiday-calendar entries configured on the MT4 server, paginated.
+ *
+ * Manager-live read (round-trip). Holidays describe trading-suspension
+ * dates per symbol or symbol-group. Each entry carries date components
+ * (Year/Month/Day), a work-time window (From/To, minutes from midnight,
+ * both 0 for full closure), the affected Symbol (or "All"), a free-form
+ * Description, and an Enable flag. Ordering: by (Year, Month, Day, From,
+ * Symbol) ascending so cursors are stable and unique. The cursor is an
+ * opaque base64 string produced by CursorCodec from the composite
+ * "{YYYYMMDD * 10000 + From:D14}|{Symbol}" key — the Symbol tiebreaker
+ * covers the case where multiple holidays share date and From minute
+ * (per-symbol partial-day closures), guaranteeing pagination never drops
+ * rows even inside same-(date,From) clusters.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List holiday config
+ */
+export const getCfgRequestHoliday = async (tradePlatform: string,
+    params?: GetCfgRequestHolidayParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestHolidayResponse> => {
+
+  return customFetch<getCfgRequestHolidayResponse>(getGetCfgRequestHolidayUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getCfgRequestLiveUpdateResponse200 = {
+  data: MT4LiveUpdateListApiResponse
+  status: 200
+}
+
+export type getCfgRequestLiveUpdateResponseSuccess = (getCfgRequestLiveUpdateResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCfgRequestLiveUpdateResponse = (getCfgRequestLiveUpdateResponseSuccess)
+
+export const getGetCfgRequestLiveUpdateUrl = (tradePlatform: string,
+    params?: GetCfgRequestLiveUpdateParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestLiveUpdate?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestLiveUpdate`
+}
+
+/**
+ * All MT4 LiveUpdate service configurations on the server, paginated by Company name.
+ *
+ * Manager-live read (round-trip). Each entry: Company (cursor key),
+ * Path, Version/Build, MaxConnect, current Connections (read-only),
+ * Type, Enable flag, TotalFiles. The platform's 128-element
+ * per-file Files descriptor table is dropped from this payload
+ * for tractability; a dedicated per-file endpoint will follow.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List LiveUpdate configs
+ */
+export const getCfgRequestLiveUpdate = async (tradePlatform: string,
+    params?: GetCfgRequestLiveUpdateParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestLiveUpdateResponse> => {
+
+  return customFetch<getCfgRequestLiveUpdateResponse>(getGetCfgRequestLiveUpdateUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getCfgRequestManagerResponse200 = {
+  data: MT4ManagerRightsListApiResponse
+  status: 200
+}
+
+export type getCfgRequestManagerResponseSuccess = (getCfgRequestManagerResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCfgRequestManagerResponse = (getCfgRequestManagerResponseSuccess)
+
+export const getGetCfgRequestManagerUrl = (tradePlatform: string,
+    params?: GetCfgRequestManagerParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestManager?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestManager`
+}
+
+/**
+ * All MT4 manager-account configurations on the connected server, paginated by Login.
+ *
+ * Manager-live read (round-trip). Each entry surfaces the manager's
+ * Login/Name/Groups/MailBox, the 19 boolean permission rights (Manager,
+ * Money, Broker, Admin, Reports, Trades, MarketWatch, etc.), IP-filter
+ * range, and InfoDepth. Internal platform fields (SecGroups, Unused,
+ * ExpTime, Reserved) are dropped from the v2 contract.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List manager configs
+ */
+export const getCfgRequestManager = async (tradePlatform: string,
+    params?: GetCfgRequestManagerParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestManagerResponse> => {
+
+  return customFetch<getCfgRequestManagerResponse>(getGetCfgRequestManagerUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getCfgRequestSyncResponse200 = {
+  data: MT4SyncListApiResponse
+  status: 200
+}
+
+export type getCfgRequestSyncResponseSuccess = (getCfgRequestSyncResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCfgRequestSyncResponse = (getCfgRequestSyncResponseSuccess)
+
+export const getGetCfgRequestSyncUrl = (tradePlatform: string,
+    params?: GetCfgRequestSyncParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestSync?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestSync`
+}
+
+/**
+ * All chart-history synchronization rules configured on the MT4 server, paginated by Server name.
+ *
+ * Manager-live read (round-trip). Each rule pulls historical bars
+ * from an upstream source — Server (cursor key) + Login identify
+ * the source, Mode/From/To/Securities define the sync scope, and
+ * TimeCorrection (minutes) adjusts incoming bar timestamps. The
+ * the platform's `Password` (replication credentials) is
+ * intentionally excluded from the v2 contract.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List sync rules
+ */
+export const getCfgRequestSync = async (tradePlatform: string,
+    params?: GetCfgRequestSyncParams, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestSyncResponse> => {
+
+  return customFetch<getCfgRequestSyncResponse>(getGetCfgRequestSyncUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getCfgRequestTimeResponse200 = {
+  data: MT4ServerTimeApiResponse
+  status: 200
+}
+
+export type getCfgRequestTimeResponseSuccess = (getCfgRequestTimeResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCfgRequestTimeResponse = (getCfgRequestTimeResponseSuccess)
+
+export const getGetCfgRequestTimeUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgRequestTime`
+}
+
+/**
+ * Server access-hour matrix (per-hour 7×24 allow/deny grid) from the MT4 server's `ConTime` configuration.
+ *
+ * Manager-live read (round-trip). Returns `MT4ServerTime` with
+ * a flat 168-element `AccessHours` array; each element is 0
+ * (denied) or 1 (allowed) for one hour of the week. Layout:
+ * `index = day*24 + hour`, day 0 = Sunday (MT4 convention).
+ * Internal `DaysControl` and `Reserved` platform fields
+ * are not surfaced.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get access-hour matrix
+ */
+export const getCfgRequestTime = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getCfgRequestTimeResponse> => {
+
+  return customFetch<getCfgRequestTimeResponse>(getGetCfgRequestTimeUrl(tradePlatform),
+  {
+    ...options,
+    method: 'GET'
 
 
   }
@@ -2704,6 +1833,877 @@ export const postCfgShiftSyncPos = async (tradePlatform: string,
     method: 'POST'
 
 
+  }
+);}
+
+
+export type postCfgUpdateAccessPosResponse200 = {
+  data: MT4AccessApiResponse
+  status: 200
+}
+
+export type postCfgUpdateAccessPosResponseSuccess = (postCfgUpdateAccessPosResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCfgUpdateAccessPosResponse = (postCfgUpdateAccessPosResponseSuccess)
+
+export const getPostCfgUpdateAccessPosUrl = (tradePlatform: string,
+    pos: number,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateAccess/${encodeURIComponent(String(pos))}`
+}
+
+/**
+ * Update an IP firewall rule at a given list position — Type 1 mutator.
+ *
+ * Manager (live) call. The platform's `CfgUpdateAccess(cfg, pos)`
+ * signature requires a position rather than a unique-key lookup (the
+ * rule table has no stable identifiers — multiple rules can carry the
+ * same range/action/comment). The v2 endpoint exposes the position as
+ * a route parameter; callers must read the current list via
+ * `CfgRequestAccess` first and pass the index of the row to
+ * update. Flow:
+ * <list type="number"><item>Read the live list via `CfgRequestAccess`.</item><item>Bounds-check `pos` against the list length — out of
+ *         range yields a NotFound envelope.</item><item>Apply DTO overlay onto `list[pos]`.</item><item>Write back with `CfgUpdateAccess(merged, pos)`.</item></list>`IpFrom`/`IpTo` in the body must fit in `[0, uint.MaxValue]`
+ * — out-of-range values are rejected with `errorCode=Validation`
+ * before anything is written.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update IP firewall rule
+ */
+export const postCfgUpdateAccessPos = async (tradePlatform: string,
+    pos: number,
+    mT4Access?: MT4Access, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateAccessPosResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCfgUpdateAccessPosResponse>(getPostCfgUpdateAccessPosUrl(tradePlatform,pos),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4Access)
+  }
+);}
+
+
+export type postCfgUpdateBackupResponse200 = {
+  data: MT4BackupApiResponse
+  status: 200
+}
+
+export type postCfgUpdateBackupResponseSuccess = (postCfgUpdateBackupResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCfgUpdateBackupResponse = (postCfgUpdateBackupResponseSuccess)
+
+export const getPostCfgUpdateBackupUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateBackup`
+}
+
+/**
+ * Update server backup configuration — Type 1 mutator.
+ *
+ * Manager (live) call. Reads the current `ConBackup`, overlays
+ * the fields in `MT4Backup` onto it, and writes back via
+ * `CfgUpdateBackup`. Two classes of preserved fields:
+ * <list type="bullet"><item><b>Slave-server credential</b> — `WatchPassword` stays
+ *         whatever the platform read live. It is unreachable from the
+ *         v2 request body (DTO does not expose it).</item><item><b>Last-completion timestamps</b> — `FullBackupLastTime`,
+ *         `ArchiveLastTime`, `ExportLastTime`, `WatchTimestamp`.
+ *         Server-derived runtime state that clients must not overwrite.</item></list>
+ * Echoes the merged `MT4Backup` in the response.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update backup config
+ */
+export const postCfgUpdateBackup = async (tradePlatform: string,
+    mT4Backup?: MT4Backup, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateBackupResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCfgUpdateBackupResponse>(getPostCfgUpdateBackupUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4Backup)
+  }
+);}
+
+
+export type postCfgUpdateCommonResponse200 = {
+  data: MT4CommonApiResponse
+  status: 200
+}
+
+export type postCfgUpdateCommonResponseSuccess = (postCfgUpdateCommonResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCfgUpdateCommonResponse = (postCfgUpdateCommonResponseSuccess)
+
+export const getPostCfgUpdateCommonUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateCommon`
+}
+
+/**
+ * Change server-wide common settings. Only the fields present in the body are written: the
+ * current record is read from the trade server, the body is applied over it, and the merged
+ * record is written back. A field that is left out keeps its server value; for the string
+ * fields, omitting the key keeps the value while sending `""` clears it. A body without
+ * any field is rejected.
+ *
+ * Preserved fields the DTO does not touch:
+ * <list type="bullet"><item>Runtime counters (LastOrder, LastLogin, LostLogin,
+ *         optimization timestamps, overnight rollover state).</item><item>Protocol identity (ServerVersion, ServerBuild).</item><item>Bind / web address arrays (variable-length nested
+ *         collections — own endpoints planned).</item><item>Demo-account subsystem, paths, rollover/statement modes
+ *         (sensitive admin areas with separate endpoints).</item></list>
+ *
+ * Idempotency-Key strongly recommended — overwriting common settings
+ * affects every connected client.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update common config
+ */
+export const postCfgUpdateCommon = async (tradePlatform: string,
+    mT4CommonUpdate?: MT4CommonUpdate, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateCommonResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCfgUpdateCommonResponse>(getPostCfgUpdateCommonUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4CommonUpdate)
+  }
+);}
+
+
+export type postCfgUpdateDataServerPosResponse200 = {
+  data: MT4DataServerApiResponse
+  status: 200
+}
+
+export type postCfgUpdateDataServerPosResponseSuccess = (postCfgUpdateDataServerPosResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCfgUpdateDataServerPosResponse = (postCfgUpdateDataServerPosResponseSuccess)
+
+export const getPostCfgUpdateDataServerPosUrl = (tradePlatform: string,
+    pos: number,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateDataServer/${encodeURIComponent(String(pos))}`
+}
+
+/**
+ * Update a DataServer (access-server) entry at a given list position — Type 1 mutator.
+ *
+ * Same position-based read-modify-write pattern as
+ * `CfgUpdateAccess`. Preserves internal padding
+ * (`Reserved1`, `Reserved2`) and the `Next` pointer.
+ * `Loading`/`IpInternal` in the body must fit in
+ * `[0, uint.MaxValue]`.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update data-server entry
+ */
+export const postCfgUpdateDataServerPos = async (tradePlatform: string,
+    pos: number,
+    mT4DataServer?: MT4DataServer, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateDataServerPosResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCfgUpdateDataServerPosResponse>(getPostCfgUpdateDataServerPosUrl(tradePlatform,pos),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4DataServer)
+  }
+);}
+
+
+export type postCfgUpdateFeederResponse200 = {
+  data: MT4FeederApiResponse
+  status: 200
+}
+
+export type postCfgUpdateFeederResponseSuccess = (postCfgUpdateFeederResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCfgUpdateFeederResponse = (postCfgUpdateFeederResponseSuccess)
+
+export const getPostCfgUpdateFeederUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateFeeder`
+}
+
+/**
+ * Update a quote/news feeder configuration — Type 1 mutator.
+ *
+ * Manager (live) call. Feeder configurations are paged on the read
+ * side (see `CfgRequestFeeder`); the v2 contract identifies a
+ * feeder by its `Name`. Same read-modify-write flow as
+ * `CfgUpdateSync`; the datafeed credential (`Password`)
+ * is preserved server-side.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update feeder config
+ */
+export const postCfgUpdateFeeder = async (tradePlatform: string,
+    mT4Feeder?: MT4Feeder, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateFeederResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCfgUpdateFeederResponse>(getPostCfgUpdateFeederUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4Feeder)
+  }
+);}
+
+
+export type postCfgUpdateGatewayAccountResponse200 = {
+  data: MT4GatewayAccountApiResponse
+  status: 200
+}
+
+export type postCfgUpdateGatewayAccountResponseSuccess = (postCfgUpdateGatewayAccountResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCfgUpdateGatewayAccountResponse = (postCfgUpdateGatewayAccountResponseSuccess)
+
+export const getPostCfgUpdateGatewayAccountUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateGatewayAccount`
+}
+
+/**
+ * Update an STP gateway-account entry — Type 1 mutator.
+ *
+ * Manager (live) call. Gateway-account entries are paged on the read
+ * side (see `CfgRequestGatewayAccount`); the v2 contract
+ * identifies an entry by its stable internal `Id`. Flow:
+ * <list type="number"><item>Read the current list via `CfgRequestGatewayAccount`.</item><item>Find the entry whose `Id` matches the body. Missing
+ *         entry → NotFound envelope.</item><item>Apply DTO overlay onto the matched entry — the STP MT4
+ *         credential (`Password`) carried by the live struct is
+ *         preserved.</item><item>Write the merged struct back.</item></list>
+ * Echoes the merged `MT4GatewayAccount` in the response.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update gateway account
+ */
+export const postCfgUpdateGatewayAccount = async (tradePlatform: string,
+    mT4GatewayAccount?: MT4GatewayAccount, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateGatewayAccountResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCfgUpdateGatewayAccountResponse>(getPostCfgUpdateGatewayAccountUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4GatewayAccount)
+  }
+);}
+
+
+export type postCfgUpdateGatewayMarkupResponse200 = {
+  data: MT4GatewayMarkupApiResponse
+  status: 200
+}
+
+export type postCfgUpdateGatewayMarkupResponseSuccess = (postCfgUpdateGatewayMarkupResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCfgUpdateGatewayMarkupResponse = (postCfgUpdateGatewayMarkupResponseSuccess)
+
+export const getPostCfgUpdateGatewayMarkupUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateGatewayMarkup`
+}
+
+/**
+ * Update a gateway markup rule — Type 1 mutator.
+ *
+ * Manager (live) call. Markup rules are paged on the read side (see
+ * `CfgRequestGatewayMarkup`); the v2 contract identifies a rule
+ * by the composite key `(Source, Symbol)` (same cursor key the
+ * read endpoint uses). Same read-modify-write flow as
+ * `CfgUpdateGatewayAccount`; the platform's 16-int reserved
+ * padding is preserved.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update gateway markup
+ */
+export const postCfgUpdateGatewayMarkup = async (tradePlatform: string,
+    mT4GatewayMarkup?: MT4GatewayMarkup, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateGatewayMarkupResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCfgUpdateGatewayMarkupResponse>(getPostCfgUpdateGatewayMarkupUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4GatewayMarkup)
+  }
+);}
+
+
+export type postCfgUpdateGatewayRuleResponse200 = {
+  data: MT4GatewayRuleApiResponse
+  status: 200
+}
+
+export type postCfgUpdateGatewayRuleResponseSuccess = (postCfgUpdateGatewayRuleResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCfgUpdateGatewayRuleResponse = (postCfgUpdateGatewayRuleResponseSuccess)
+
+export const getPostCfgUpdateGatewayRuleUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateGatewayRule`
+}
+
+/**
+ * Update an STP gateway-rule entry — Type 1 mutator.
+ *
+ * Manager (live) call. Gateway rules are paged on the read side (see
+ * `CfgRequestGatewayRule`); the v2 contract identifies a rule
+ * by its public `Name`. Same read-modify-write flow; the two
+ * platform reserved padding blocks (`RequestRreserved` 32-int,
+ * `ExeReserved` 25-int) are preserved server-side.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update gateway rule
+ */
+export const postCfgUpdateGatewayRule = async (tradePlatform: string,
+    mT4GatewayRule?: MT4GatewayRule, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateGatewayRuleResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCfgUpdateGatewayRuleResponse>(getPostCfgUpdateGatewayRuleUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4GatewayRule)
+  }
+);}
+
+
+export type postCfgUpdateHolidayPosResponse200 = {
+  data: MT4HolidayApiResponse
+  status: 200
+}
+
+export type postCfgUpdateHolidayPosResponseSuccess = (postCfgUpdateHolidayPosResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCfgUpdateHolidayPosResponse = (postCfgUpdateHolidayPosResponseSuccess)
+
+export const getPostCfgUpdateHolidayPosUrl = (tradePlatform: string,
+    pos: number,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateHoliday/${encodeURIComponent(String(pos))}`
+}
+
+/**
+ * Update a holiday-calendar entry at a given list position — Type 1 mutator.
+ *
+ * Position-based read-modify-write. The platform stores `Enable`
+ * as `int` (0/1) — the DTO surfaces it as `bool`; the
+ * mapper bridges with a `BoolToInt` helper. The 13-int
+ * `Reserved` padding and `Next` pointer are preserved.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update holiday entry
+ */
+export const postCfgUpdateHolidayPos = async (tradePlatform: string,
+    pos: number,
+    mT4Holiday?: MT4Holiday, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateHolidayPosResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCfgUpdateHolidayPosResponse>(getPostCfgUpdateHolidayPosUrl(tradePlatform,pos),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4Holiday)
+  }
+);}
+
+
+export type postCfgUpdateLiveUpdateResponse200 = {
+  data: MT4LiveUpdateApiResponse
+  status: 200
+}
+
+export type postCfgUpdateLiveUpdateResponseSuccess = (postCfgUpdateLiveUpdateResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCfgUpdateLiveUpdateResponse = (postCfgUpdateLiveUpdateResponseSuccess)
+
+export const getPostCfgUpdateLiveUpdateUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateLiveUpdate`
+}
+
+/**
+ * Update a LiveUpdate service configuration — Type 1 mutator.
+ *
+ * Manager (live) call. LiveUpdate entries are paged on the read side
+ * (see `CfgRequestLiveUpdate`); the v2 contract identifies an
+ * entry by its `Company` field (same cursor key the read
+ * endpoint uses). Flow: read live list → match by `Company` →
+ * overlay → write back. The 128-element `Files` descriptor
+ * table and the runtime `Connections` counter are preserved
+ * server-side.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update LiveUpdate config
+ */
+export const postCfgUpdateLiveUpdate = async (tradePlatform: string,
+    mT4LiveUpdate?: MT4LiveUpdate, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateLiveUpdateResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCfgUpdateLiveUpdateResponse>(getPostCfgUpdateLiveUpdateUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4LiveUpdate)
+  }
+);}
+
+
+export type postCfgUpdateManagerResponse200 = {
+  data: MT4ManagerRightsApiResponse
+  status: 200
+}
+
+export type postCfgUpdateManagerResponseSuccess = (postCfgUpdateManagerResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCfgUpdateManagerResponse = (postCfgUpdateManagerResponseSuccess)
+
+export const getPostCfgUpdateManagerUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateManager`
+}
+
+/**
+ * Update a manager-account configuration — Type 1 mutator.
+ *
+ * Manager (live) call. Manager-account entries are paged on the read
+ * side (see `CfgRequestManager`); the v2 contract identifies an
+ * entry by `Login`. Flow: read live list → match by Login →
+ * overlay (19 permission flags + IP filter + MailBox/Groups/InfoDepth)
+ * → write back. The platform's `Name` (read-only — server sets
+ * it), `SecGroups` (32-entry permission table), `ExpTime`,
+ * `Unused`, and `Reserved` are preserved.
+ * <br>`IpFrom`/`IpTo` in the body are `long` (DTO widens
+ * the platform's `uint` for safe JSON numerics) — values outside
+ * `[0, uint.MaxValue]` are rejected with
+ * `errorCode=Validation` before anything is written.
+ *
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update manager config
+ */
+export const postCfgUpdateManager = async (tradePlatform: string,
+    mT4ManagerRights?: MT4ManagerRights, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateManagerResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCfgUpdateManagerResponse>(getPostCfgUpdateManagerUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4ManagerRights)
+  }
+);}
+
+
+export type postCfgUpdateSymbolGroupPosResponse200 = {
+  data: MT4SymbolGroupApiResponse
+  status: 200
+}
+
+export type postCfgUpdateSymbolGroupPosResponseSuccess = (postCfgUpdateSymbolGroupPosResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCfgUpdateSymbolGroupPosResponse = (postCfgUpdateSymbolGroupPosResponseSuccess)
+
+export const getPostCfgUpdateSymbolGroupPosUrl = (tradePlatform: string,
+    pos: number,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateSymbolGroup/${encodeURIComponent(String(pos))}`
+}
+
+/**
+ * Update a symbol group at a given list position — Type 1 mutator.
+ *
+ * Position-based read-modify-write. `ConSymbolGroup` has no
+ * reserved padding or internal pointers, so the overlay is trivial.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update symbol group
+ */
+export const postCfgUpdateSymbolGroupPos = async (tradePlatform: string,
+    pos: number,
+    mT4SymbolGroup?: MT4SymbolGroup, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateSymbolGroupPosResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCfgUpdateSymbolGroupPosResponse>(getPostCfgUpdateSymbolGroupPosUrl(tradePlatform,pos),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4SymbolGroup)
+  }
+);}
+
+
+export type postCfgUpdateSyncResponse200 = {
+  data: MT4SyncApiResponse
+  status: 200
+}
+
+export type postCfgUpdateSyncResponseSuccess = (postCfgUpdateSyncResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCfgUpdateSyncResponse = (postCfgUpdateSyncResponseSuccess)
+
+export const getPostCfgUpdateSyncUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateSync`
+}
+
+/**
+ * Update a chart-history synchronization rule — Type 1 mutator.
+ *
+ * Manager (live) call. Sync configurations are paged on the read
+ * side (see `CfgRequestSync`); the v2 contract identifies a
+ * rule by the composite key `(Server, Login)`. Flow:
+ * <list type="number"><item>Read the current list via `CfgRequestSync`.</item><item>Find the entry whose `(Server, Login)` matches the
+ *         body. Missing entry → NotFound envelope.</item><item>Apply DTO overlay onto the matched entry — the
+ *         replication credential (`Password`) carried by the
+ *         live struct is preserved.</item><item>Write the merged struct back.</item></list>
+ * Echoes the merged `MT4Sync` in the response.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update sync rule
+ */
+export const postCfgUpdateSync = async (tradePlatform: string,
+    mT4Sync?: MT4Sync, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateSyncResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCfgUpdateSyncResponse>(getPostCfgUpdateSyncUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4Sync)
+  }
+);}
+
+
+export type postCfgUpdateTimeResponse200 = {
+  data: MT4ServerTimeApiResponse
+  status: 200
+}
+
+export type postCfgUpdateTimeResponseSuccess = (postCfgUpdateTimeResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCfgUpdateTimeResponse = (postCfgUpdateTimeResponseSuccess)
+
+export const getPostCfgUpdateTimeUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/CfgUpdateTime`
+}
+
+/**
+ * Update the 7×24 access-hour matrix — Type 1 mutator.
+ *
+ * Manager (live) call. Reads the current `ConTime`, replaces the
+ * 168-hour access matrix with the supplied `AccessHours`, and
+ * writes back. The platform's internal `DaysControl` (server
+ * housekeeping) and `Reserved` (forward-compat padding) fields
+ * are preserved across the round-trip.
+ *
+ * `AccessHours` must be exactly 168 entries long; index =
+ * `day * 24 + hour` with day 0 = Sunday. Each value is
+ * `0` (denied) or `1` (allowed) — any other value is
+ * passed through verbatim (the platform does not validate, and
+ * MT4 may treat anything non-zero as allowed depending on build).
+ *
+ * Echoes the merged `MT4ServerTime` in the response.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update access-hour matrix
+ */
+export const postCfgUpdateTime = async (tradePlatform: string,
+    mT4ServerTime?: MT4ServerTime, options?: Parameters<typeof customFetch>[1]): Promise<postCfgUpdateTimeResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCfgUpdateTimeResponse>(getPostCfgUpdateTimeUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4ServerTime)
   }
 );}
 

@@ -26,198 +26,6 @@ import type {
 import { customFetch } from '../mutator';
 
 
-export type getSymbolInfoGetResponse200 = {
-  data: MT4SymbolInfoApiResponse
-  status: 200
-}
-
-export type getSymbolInfoGetResponseSuccess = (getSymbolInfoGetResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getSymbolInfoGetResponse = (getSymbolInfoGetResponseSuccess)
-
-export const getGetSymbolInfoGetUrl = (tradePlatform: string,
-    params?: GetSymbolInfoGetParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolInfoGet?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolInfoGet`
-}
-
-/**
- * Current cached market data for a single symbol.
- *
- * Pump-cached read — Bid/Ask/High/Low/Spread/Digits and last-tick time
- * for the requested instrument. Returns NotFound-shaped envelope (the
- * platform-level result code surfaces in ManagerAPICode / ErrorCode)
- * when the symbol is not loaded on the connected server.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get symbol market data (cached)
- */
-export const getSymbolInfoGet = async (tradePlatform: string,
-    params?: GetSymbolInfoGetParams, options?: Parameters<typeof customFetch>[1]): Promise<getSymbolInfoGetResponse> => {
-
-  return customFetch<getSymbolInfoGetResponse>(getGetSymbolInfoGetUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getSymbolInfoUpdatedResponse200 = {
-  data: MT4SymbolInfoListApiResponse
-  status: 200
-}
-
-export type getSymbolInfoUpdatedResponseSuccess = (getSymbolInfoUpdatedResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getSymbolInfoUpdatedResponse = (getSymbolInfoUpdatedResponseSuccess)
-
-export const getGetSymbolInfoUpdatedUrl = (tradePlatform: string,
-    params?: GetSymbolInfoUpdatedParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolInfoUpdated?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolInfoUpdated`
-}
-
-/**
- * Snapshot of all symbols that have been updated since the last pump flush, keyed by symbol name (values-only on the wire).
- *
- * Pump-cached read — instant local lookup, no MT4 round-trip. Useful for
- * bulk refresh of a quote panel or watchlist. Sort key is the symbol
- * name; cursors are opaque base64 strings.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List updated symbols (cached)
- */
-export const getSymbolInfoUpdated = async (tradePlatform: string,
-    params?: GetSymbolInfoUpdatedParams, options?: Parameters<typeof customFetch>[1]): Promise<getSymbolInfoUpdatedResponse> => {
-
-  return customFetch<getSymbolInfoUpdatedResponse>(getGetSymbolInfoUpdatedUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getSymbolsGetAllResponse200 = {
-  data: MT4SymbolConfigListApiResponse
-  status: 200
-}
-
-export type getSymbolsGetAllResponseSuccess = (getSymbolsGetAllResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getSymbolsGetAllResponse = (getSymbolsGetAllResponseSuccess)
-
-export const getGetSymbolsGetAllUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolsGetAll`
-}
-
-/**
- * Every symbol configured on the MT4 server, read through the pumping
- * connection and mapped to the same configuration shape as
- * `CfgRequestSymbol`.
- *
- * Uses the streaming (pumping) manager object rather than the request
- * manager, so it works while the platform is streamed by this instance.
- * The data itself is a full server-side read — typical platforms have
- * dozens to hundreds of symbols with 50+ fields each.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List symbols (pumping)
- */
-export const getSymbolsGetAll = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getSymbolsGetAllResponse> => {
-
-  return customFetch<getSymbolsGetAllResponse>(getGetSymbolsGetAllUrl(tradePlatform),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getSymbolsGetAllSymbolResponse200 = {
-  data: MT4SymbolConfigApiResponse
-  status: 200
-}
-
-export type getSymbolsGetAllSymbolResponseSuccess = (getSymbolsGetAllSymbolResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getSymbolsGetAllSymbolResponse = (getSymbolsGetAllSymbolResponseSuccess)
-
-export const getGetSymbolsGetAllSymbolUrl = (tradePlatform: string,
-    symbol: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolsGetAll/${encodeURIComponent(String(symbol))}`
-}
-
-/**
- * Single symbol configuration by name, read through the pumping
- * connection. Same shape as one element of `SymbolsGetAll`.
- *
- * Returns NotFound envelope when no symbol with the given name is
- * configured on the server. Symbol names are case-sensitive.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get symbol (pumping)
- */
-export const getSymbolsGetAllSymbol = async (tradePlatform: string,
-    symbol: string, options?: Parameters<typeof customFetch>[1]): Promise<getSymbolsGetAllSymbolResponse> => {
-
-  return customFetch<getSymbolsGetAllSymbolResponse>(getGetSymbolsGetAllSymbolUrl(tradePlatform,symbol),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
 export type getCfgRequestSymbolResponse200 = {
   data: MT4SymbolConfigListApiResponse
   status: 200
@@ -349,52 +157,6 @@ export const getCfgRequestSymbolGroup = async (tradePlatform: string, options?: 
 );}
 
 
-export type getSymbolSessionsGetSymbolResponse200 = {
-  data: MT4SymbolDaySessionsListApiResponse
-  status: 200
-}
-
-export type getSymbolSessionsGetSymbolResponseSuccess = (getSymbolSessionsGetSymbolResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getSymbolSessionsGetSymbolResponse = (getSymbolSessionsGetSymbolResponseSuccess)
-
-export const getGetSymbolSessionsGetSymbolUrl = (tradePlatform: string,
-    symbol: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolSessionsGet/${encodeURIComponent(String(symbol))}`
-}
-
-/**
- * Trading session windows for a symbol, per weekday.
- *
- * Returns the platform's `ConSymbol.Sessions[7]` array (one entry
- * per weekday, 0=Sunday). Each weekday entry carries up to three Quote
- * (price) windows and up to three Trade (order acceptance) windows
- * plus overnight flags. `CfgRequestSymbol` leaves the sessions out
- * to keep its response compact; this endpoint returns them.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get symbol sessions
- */
-export const getSymbolSessionsGetSymbol = async (tradePlatform: string,
-    symbol: string, options?: Parameters<typeof customFetch>[1]): Promise<getSymbolSessionsGetSymbolResponse> => {
-
-  return customFetch<getSymbolSessionsGetSymbolResponse>(getGetSymbolSessionsGetSymbolUrl(tradePlatform,symbol),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
 export type postCfgUpdateSymbolSymbolResponse200 = {
   data: MT4SymbolConfigApiResponse
   status: 200
@@ -455,63 +217,8 @@ return customFetch<postCfgUpdateSymbolSymbolResponse>(getPostCfgUpdateSymbolSymb
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
     body: JSON.stringify(mT4SymbolConfigUpdate)
-  }
-);}
-
-
-export type patchSymbolConfigSymbolResponse200 = {
-  data: MT4SymbolConfigApiResponse
-  status: 200
-}
-
-export type patchSymbolConfigSymbolResponseSuccess = (patchSymbolConfigSymbolResponse200) & {
-  headers: Headers;
-};
-;
-
-export type patchSymbolConfigSymbolResponse = (patchSymbolConfigSymbolResponseSuccess)
-
-export const getPatchSymbolConfigSymbolUrl = (tradePlatform: string,
-    symbol: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolConfig/${encodeURIComponent(String(symbol))}`
-}
-
-/**
- * Type 2 mutator — partial update of a symbol configuration. Same flow as `UserRecordPatch`; reads existing config live, overlays the patch, writes back.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Patch symbol config
- */
-export const patchSymbolConfigSymbol = async (tradePlatform: string,
-    symbol: string,
-    patchSymbolConfigSymbolBody: PatchSymbolConfigSymbolBody, options?: Parameters<typeof customFetch>[1]): Promise<patchSymbolConfigSymbolResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<patchSymbolConfigSymbolResponse>(getPatchSymbolConfigSymbolUrl(tradePlatform,symbol),
-  {
-    ...options,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(patchSymbolConfigSymbolBody)
   }
 );}
 
@@ -552,92 +259,6 @@ export const postSymbolAddSymbol = async (tradePlatform: string,
     symbol: string, options?: Parameters<typeof customFetch>[1]): Promise<postSymbolAddSymbolResponse> => {
 
   return customFetch<postSymbolAddSymbolResponse>(getPostSymbolAddSymbolUrl(tradePlatform,symbol),
-  {
-    ...options,
-    method: 'POST'
-
-
-  }
-);}
-
-
-export type postSymbolHideSymbolResponse200 = {
-  data: BooleanApiResponse
-  status: 200
-}
-
-export type postSymbolHideSymbolResponseSuccess = (postSymbolHideSymbolResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postSymbolHideSymbolResponse = (postSymbolHideSymbolResponseSuccess)
-
-export const getPostSymbolHideSymbolUrl = (tradePlatform: string,
-    symbol: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolHide/${encodeURIComponent(String(symbol))}`
-}
-
-/**
- * Hide a symbol from the platform's active set.
- *
- * Removes the symbol from the active subscription set; ticks stop flowing
- * and orders are no longer accepted for that symbol. Reversible via
- * `SymbolAdd`.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Hide symbol
- */
-export const postSymbolHideSymbol = async (tradePlatform: string,
-    symbol: string, options?: Parameters<typeof customFetch>[1]): Promise<postSymbolHideSymbolResponse> => {
-
-  return customFetch<postSymbolHideSymbolResponse>(getPostSymbolHideSymbolUrl(tradePlatform,symbol),
-  {
-    ...options,
-    method: 'POST'
-
-
-  }
-);}
-
-
-export type postSymbolsRefreshResponse200 = {
-  data: BooleanApiResponse
-  status: 200
-}
-
-export type postSymbolsRefreshResponseSuccess = (postSymbolsRefreshResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postSymbolsRefreshResponse = (postSymbolsRefreshResponseSuccess)
-
-export const getPostSymbolsRefreshUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolsRefresh`
-}
-
-/**
- * Reload the platform's symbol catalog from the MT4 server.
- *
- * Useful after administrative tooling has added or edited symbols on the
- * trade server itself. The call changes the platform's local state, so it
- * is a POST.
- *
- * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Refresh symbol catalog
- */
-export const postSymbolsRefresh = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<postSymbolsRefreshResponse> => {
-
-  return customFetch<postSymbolsRefreshResponse>(getPostSymbolsRefreshUrl(tradePlatform),
   {
     ...options,
     method: 'POST'
@@ -705,8 +326,210 @@ return customFetch<postSymbolChangeResponse>(getPostSymbolChangeUrl(tradePlatfor
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
     body: JSON.stringify(mT4SymbolChangeRequest)
+  }
+);}
+
+
+export type patchSymbolConfigSymbolResponse200 = {
+  data: MT4SymbolConfigApiResponse
+  status: 200
+}
+
+export type patchSymbolConfigSymbolResponseSuccess = (patchSymbolConfigSymbolResponse200) & {
+  headers: Headers;
+};
+;
+
+export type patchSymbolConfigSymbolResponse = (patchSymbolConfigSymbolResponseSuccess)
+
+export const getPatchSymbolConfigSymbolUrl = (tradePlatform: string,
+    symbol: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolConfig/${encodeURIComponent(String(symbol))}`
+}
+
+/**
+ * Type 2 mutator — partial update of a symbol configuration. Same flow as `UserRecordPatch`; reads existing config live, overlays the patch, writes back.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Patch symbol config
+ */
+export const patchSymbolConfigSymbol = async (tradePlatform: string,
+    symbol: string,
+    patchSymbolConfigSymbolBody: PatchSymbolConfigSymbolBody, options?: Parameters<typeof customFetch>[1]): Promise<patchSymbolConfigSymbolResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<patchSymbolConfigSymbolResponse>(getPatchSymbolConfigSymbolUrl(tradePlatform,symbol),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(patchSymbolConfigSymbolBody)
+  }
+);}
+
+
+export type postSymbolHideSymbolResponse200 = {
+  data: BooleanApiResponse
+  status: 200
+}
+
+export type postSymbolHideSymbolResponseSuccess = (postSymbolHideSymbolResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postSymbolHideSymbolResponse = (postSymbolHideSymbolResponseSuccess)
+
+export const getPostSymbolHideSymbolUrl = (tradePlatform: string,
+    symbol: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolHide/${encodeURIComponent(String(symbol))}`
+}
+
+/**
+ * Hide a symbol from the platform's active set.
+ *
+ * Removes the symbol from the active subscription set; ticks stop flowing
+ * and orders are no longer accepted for that symbol. Reversible via
+ * `SymbolAdd`.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Hide symbol
+ */
+export const postSymbolHideSymbol = async (tradePlatform: string,
+    symbol: string, options?: Parameters<typeof customFetch>[1]): Promise<postSymbolHideSymbolResponse> => {
+
+  return customFetch<postSymbolHideSymbolResponse>(getPostSymbolHideSymbolUrl(tradePlatform,symbol),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+export type getSymbolInfoGetResponse200 = {
+  data: MT4SymbolInfoApiResponse
+  status: 200
+}
+
+export type getSymbolInfoGetResponseSuccess = (getSymbolInfoGetResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getSymbolInfoGetResponse = (getSymbolInfoGetResponseSuccess)
+
+export const getGetSymbolInfoGetUrl = (tradePlatform: string,
+    params?: GetSymbolInfoGetParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolInfoGet?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolInfoGet`
+}
+
+/**
+ * Current cached market data for a single symbol.
+ *
+ * Pump-cached read — Bid/Ask/High/Low/Spread/Digits and last-tick time
+ * for the requested instrument. Returns NotFound-shaped envelope (the
+ * platform-level result code surfaces in ManagerAPICode / ErrorCode)
+ * when the symbol is not loaded on the connected server.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get symbol market data (cached)
+ */
+export const getSymbolInfoGet = async (tradePlatform: string,
+    params?: GetSymbolInfoGetParams, options?: Parameters<typeof customFetch>[1]): Promise<getSymbolInfoGetResponse> => {
+
+  return customFetch<getSymbolInfoGetResponse>(getGetSymbolInfoGetUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getSymbolInfoUpdatedResponse200 = {
+  data: MT4SymbolInfoListApiResponse
+  status: 200
+}
+
+export type getSymbolInfoUpdatedResponseSuccess = (getSymbolInfoUpdatedResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getSymbolInfoUpdatedResponse = (getSymbolInfoUpdatedResponseSuccess)
+
+export const getGetSymbolInfoUpdatedUrl = (tradePlatform: string,
+    params?: GetSymbolInfoUpdatedParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolInfoUpdated?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolInfoUpdated`
+}
+
+/**
+ * Snapshot of all symbols that have been updated since the last pump flush, keyed by symbol name (values-only on the wire).
+ *
+ * Pump-cached read — instant local lookup, no MT4 round-trip. Useful for
+ * bulk refresh of a quote panel or watchlist. Sort key is the symbol
+ * name; cursors are opaque base64 strings.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List updated symbols (cached)
+ */
+export const getSymbolInfoUpdated = async (tradePlatform: string,
+    params?: GetSymbolInfoUpdatedParams, options?: Parameters<typeof customFetch>[1]): Promise<getSymbolInfoUpdatedResponse> => {
+
+  return customFetch<getSymbolInfoUpdatedResponse>(getGetSymbolInfoUpdatedUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
   }
 );}
 
@@ -761,6 +584,183 @@ export const postSymbolSendTick = async (tradePlatform: string,
     params?: PostSymbolSendTickParams, options?: Parameters<typeof customFetch>[1]): Promise<postSymbolSendTickResponse> => {
 
   return customFetch<postSymbolSendTickResponse>(getPostSymbolSendTickUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+export type getSymbolSessionsGetSymbolResponse200 = {
+  data: MT4SymbolDaySessionsListApiResponse
+  status: 200
+}
+
+export type getSymbolSessionsGetSymbolResponseSuccess = (getSymbolSessionsGetSymbolResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getSymbolSessionsGetSymbolResponse = (getSymbolSessionsGetSymbolResponseSuccess)
+
+export const getGetSymbolSessionsGetSymbolUrl = (tradePlatform: string,
+    symbol: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolSessionsGet/${encodeURIComponent(String(symbol))}`
+}
+
+/**
+ * Trading session windows for a symbol, per weekday.
+ *
+ * Returns the platform's `ConSymbol.Sessions[7]` array (one entry
+ * per weekday, 0=Sunday). Each weekday entry carries up to three Quote
+ * (price) windows and up to three Trade (order acceptance) windows
+ * plus overnight flags. `CfgRequestSymbol` leaves the sessions out
+ * to keep its response compact; this endpoint returns them.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get symbol sessions
+ */
+export const getSymbolSessionsGetSymbol = async (tradePlatform: string,
+    symbol: string, options?: Parameters<typeof customFetch>[1]): Promise<getSymbolSessionsGetSymbolResponse> => {
+
+  return customFetch<getSymbolSessionsGetSymbolResponse>(getGetSymbolSessionsGetSymbolUrl(tradePlatform,symbol),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getSymbolsGetAllResponse200 = {
+  data: MT4SymbolConfigListApiResponse
+  status: 200
+}
+
+export type getSymbolsGetAllResponseSuccess = (getSymbolsGetAllResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getSymbolsGetAllResponse = (getSymbolsGetAllResponseSuccess)
+
+export const getGetSymbolsGetAllUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolsGetAll`
+}
+
+/**
+ * Every symbol configured on the MT4 server, read through the pumping
+ * connection and mapped to the same configuration shape as
+ * `CfgRequestSymbol`.
+ *
+ * Uses the streaming (pumping) manager object rather than the request
+ * manager, so it works while the platform is streamed by this instance.
+ * The data itself is a full server-side read — typical platforms have
+ * dozens to hundreds of symbols with 50+ fields each.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List symbols (pumping)
+ */
+export const getSymbolsGetAll = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getSymbolsGetAllResponse> => {
+
+  return customFetch<getSymbolsGetAllResponse>(getGetSymbolsGetAllUrl(tradePlatform),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getSymbolsGetAllSymbolResponse200 = {
+  data: MT4SymbolConfigApiResponse
+  status: 200
+}
+
+export type getSymbolsGetAllSymbolResponseSuccess = (getSymbolsGetAllSymbolResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getSymbolsGetAllSymbolResponse = (getSymbolsGetAllSymbolResponseSuccess)
+
+export const getGetSymbolsGetAllSymbolUrl = (tradePlatform: string,
+    symbol: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolsGetAll/${encodeURIComponent(String(symbol))}`
+}
+
+/**
+ * Single symbol configuration by name, read through the pumping
+ * connection. Same shape as one element of `SymbolsGetAll`.
+ *
+ * Returns NotFound envelope when no symbol with the given name is
+ * configured on the server. Symbol names are case-sensitive.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get symbol (pumping)
+ */
+export const getSymbolsGetAllSymbol = async (tradePlatform: string,
+    symbol: string, options?: Parameters<typeof customFetch>[1]): Promise<getSymbolsGetAllSymbolResponse> => {
+
+  return customFetch<getSymbolsGetAllSymbolResponse>(getGetSymbolsGetAllSymbolUrl(tradePlatform,symbol),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type postSymbolsRefreshResponse200 = {
+  data: BooleanApiResponse
+  status: 200
+}
+
+export type postSymbolsRefreshResponseSuccess = (postSymbolsRefreshResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postSymbolsRefreshResponse = (postSymbolsRefreshResponseSuccess)
+
+export const getPostSymbolsRefreshUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SymbolsRefresh`
+}
+
+/**
+ * Reload the platform's symbol catalog from the MT4 server.
+ *
+ * Useful after administrative tooling has added or edited symbols on the
+ * trade server itself. The call changes the platform's local state, so it
+ * is a POST.
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Refresh symbol catalog
+ */
+export const postSymbolsRefresh = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<postSymbolsRefreshResponse> => {
+
+  return customFetch<postSymbolsRefreshResponse>(getPostSymbolsRefreshUrl(tradePlatform),
   {
     ...options,
     method: 'POST'

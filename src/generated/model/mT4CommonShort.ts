@@ -21,90 +21,90 @@ import type { StatementMode } from './statementMode';
  */
 export interface MT4CommonShort {
   /**
-     * Trade server name
+     * Account allocation URL
      * @nullable
      */
-  name?: string | null;
-  /** Socket timeout, seconds */
-  timeout?: number;
-  /** Demo-account subsystem type */
-  demoAccountType?: DemoAccountType;
-  /** Demo-account lifetime, days */
-  timeOfDemo?: number;
+  accountUrl?: string | null;
+  /** Anti-flood control enabled flag */
+  antiFlood?: number;
   /** Daylight-correction setting */
   daylightCorrection?: number;
-  /** Server time zone offset from UTC, in hours (DST-adjusted) */
-  timeZoneReal?: number;
-  /** Server time zone offset from UTC, in hours */
-  timeZone?: number;
-  /** Minimal authorized client version */
-  minClient?: number;
-  /** Minimal authorized API version */
-  minApi?: number;
-  /** Data-feed switch timeout, seconds */
-  feederTimeout?: number;
-  /** Internal mail keep period */
-  keepEmails?: number;
+  /** Demo-account subsystem type */
+  demoAccountType?: DemoAccountType;
   /** End-of-day time: hour */
   endHour?: number;
   /** End-of-day time: minute */
   endMinute?: number;
-  /** Optimization start time, minutes */
-  optimizationTime?: number;
-  /** Optimization last run time */
-  optimizationLastTime?: number;
+  /** Data-feed switch timeout, seconds */
+  feederTimeout?: number;
+  /** Maximum anti-flood connections */
+  floodControl?: number;
+  /** Internal mail keep period */
+  keepEmails?: number;
+  /** Tick history keep period, days */
+  keepTicks?: number;
+  /** Last activation date and time */
+  lastActivate?: string;
+  /** Last assigned account login (read only) */
+  lastLogin?: number;
+  /** Last assigned order ticket (read only) */
+  lastOrder?: number;
+  /** Live-update mode */
+  liveUpdateMode?: LiveUpdateMode;
+  /** Lost-commission account login (read only) */
+  lostLogin?: number;
+  /** Minimal authorized API version */
+  minApi?: number;
+  /** Minimal authorized client version */
+  minClient?: number;
+  /** Monthly statement generation schedule */
+  monthlyStatementMode?: MonthlyStatementMode;
+  /**
+     * Trade server name
+     * @nullable
+     */
+  name?: string | null;
   /** Optimization run counter */
   optimizationCounter?: number;
+  /** Optimization last run time */
+  optimizationLastTime?: number;
+  /** Optimization start time, minutes */
+  optimizationTime?: number;
   /**
      * Reserved for future use
      * @nullable
      */
   optimizationUnused?: number[] | null;
-  /** Anti-flood control enabled flag */
-  antiFlood?: number;
-  /** Maximum anti-flood connections */
-  floodControl?: number;
-  /** Live-update mode */
-  liveUpdateMode?: LiveUpdateMode;
-  /** Last assigned order ticket (read only) */
-  lastOrder?: number;
-  /** Last assigned account login (read only) */
-  lastLogin?: number;
-  /** Lost-commission account login (read only) */
-  lostLogin?: number;
-  /** Overnight rollover mode */
-  rolloverMode?: RolloverMode;
+  /** Month of the last generated report */
+  overmonthLastMonth?: number;
   /** Day of the last overnight */
   overnightLastDay?: number;
   /** Time of the last overnight */
   overnightLastTime?: number;
   /** Time of the overnight before the last one */
   overnightPrevTime?: number;
-  /** Month of the last generated report */
-  overmonthLastMonth?: number;
-  /** Server version */
-  serverVersion?: number;
+  /** Overnight rollover mode */
+  rolloverMode?: RolloverMode;
   /** Server build number */
   serverBuild?: number;
+  /** Server version */
+  serverVersion?: number;
   /** Statement generation mode */
   statementMode?: StatementMode;
-  /** Monthly statement generation schedule */
-  monthlyStatementMode?: MonthlyStatementMode;
-  /** Tick history keep period, days */
-  keepTicks?: number;
   /** Generate statements at weekends */
   statementWeekend?: number;
-  /** Last activation date and time */
-  lastActivate?: string;
-  /** Last stop date and time */
-  stopLast?: string;
   /** Last stop delay */
   stopDelay?: number;
+  /** Last stop date and time */
+  stopLast?: string;
   /** Last stop reason */
   stopReason?: ServerStopReason;
-  /**
-     * Account allocation URL
-     * @nullable
-     */
-  accountUrl?: string | null;
+  /** Demo-account lifetime, days */
+  timeOfDemo?: number;
+  /** Server time zone offset from UTC, in hours */
+  timeZone?: number;
+  /** Server time zone offset from UTC, in hours (DST-adjusted) */
+  timeZoneReal?: number;
+  /** Socket timeout, seconds */
+  timeout?: number;
 }

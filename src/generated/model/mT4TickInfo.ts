@@ -17,6 +17,10 @@
  * readability (`Ctm` → `Time`).
  */
 export interface MT4TickInfo {
+  /** Ask price (best price at which the broker is selling) */
+  ask?: number;
+  /** Bid price (best price at which the broker is buying) */
+  bid?: number;
   /**
      * Symbol the tick applies to (e.g. "EURUSD")
      * @nullable
@@ -24,8 +28,4 @@ export interface MT4TickInfo {
   symbol?: string | null;
   /** Server-side tick timestamp (UTC) */
   time?: string;
-  /** Bid price (best price at which the broker is buying) */
-  bid?: number;
-  /** Ask price (best price at which the broker is selling) */
-  ask?: number;
 }

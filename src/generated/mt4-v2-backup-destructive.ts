@@ -19,6 +19,78 @@ import type {
 import { customFetch } from '../mutator';
 
 
+export type postBackupRestoreOrdersResponse200 = {
+  data: MT4TradeRestoreResultListApiResponse
+  status: 200
+}
+
+export type postBackupRestoreOrdersResponseSuccess = (postBackupRestoreOrdersResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postBackupRestoreOrdersResponse = (postBackupRestoreOrdersResponseSuccess)
+
+export const getPostBackupRestoreOrdersUrl = (tradePlatform: string,
+    params?: PostBackupRestoreOrdersParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRestoreOrders?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRestoreOrders`
+}
+
+/**
+ * Restore order records into the live MT4 database. Destructive — requires `?confirm=true`.
+ *
+ * Manager (live) call to the platform's
+ * `BackupRestoreOrders(TradeRecord[] trades)`. Returns
+ * `MT4TradeRestoreResult[]` — one entry per input trade, with
+ * `Order` (ticket) and `Res` (0 = error, 1 = restored).
+ * Position in the response array matches position in the request.
+ * <br>
+ * Idempotency-Key header is <b>strongly recommended</b>. Batch cap:
+ * 10000 records per call.
+ *
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Restore orders from backup
+ */
+export const postBackupRestoreOrders = async (tradePlatform: string,
+    mT4TradeRestoreInput?: MT4TradeRestoreInput[],
+    params?: PostBackupRestoreOrdersParams, options?: Parameters<typeof customFetch>[1]): Promise<postBackupRestoreOrdersResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postBackupRestoreOrdersResponse>(getPostBackupRestoreOrdersUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4TradeRestoreInput)
+  }
+);}
+
+
 export type postBackupRestoreUsersResponse200 = {
   data: BooleanApiResponse
   status: 200
@@ -88,80 +160,8 @@ return customFetch<postBackupRestoreUsersResponse>(getPostBackupRestoreUsersUrl(
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
     body: JSON.stringify(mT4UserRestoreInput)
-  }
-);}
-
-
-export type postBackupRestoreOrdersResponse200 = {
-  data: MT4TradeRestoreResultListApiResponse
-  status: 200
-}
-
-export type postBackupRestoreOrdersResponseSuccess = (postBackupRestoreOrdersResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postBackupRestoreOrdersResponse = (postBackupRestoreOrdersResponseSuccess)
-
-export const getPostBackupRestoreOrdersUrl = (tradePlatform: string,
-    params?: PostBackupRestoreOrdersParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRestoreOrders?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRestoreOrders`
-}
-
-/**
- * Restore order records into the live MT4 database. Destructive — requires `?confirm=true`.
- *
- * Manager (live) call to the platform's
- * `BackupRestoreOrders(TradeRecord[] trades)`. Returns
- * `MT4TradeRestoreResult[]` — one entry per input trade, with
- * `Order` (ticket) and `Res` (0 = error, 1 = restored).
- * Position in the response array matches position in the request.
- * <br>
- * Idempotency-Key header is <b>strongly recommended</b>. Batch cap:
- * 10000 records per call.
- *
- *
- * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Restore orders from backup
- */
-export const postBackupRestoreOrders = async (tradePlatform: string,
-    mT4TradeRestoreInput?: MT4TradeRestoreInput[],
-    params?: PostBackupRestoreOrdersParams, options?: Parameters<typeof customFetch>[1]): Promise<postBackupRestoreOrdersResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postBackupRestoreOrdersResponse>(getPostBackupRestoreOrdersUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4TradeRestoreInput)
   }
 );}
 

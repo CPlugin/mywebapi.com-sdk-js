@@ -35,7 +35,7 @@ describe('orval generated output', () => {
     expect(blob).toContain('Get server time');
   });
 
-  test('generated surface has at least 159 endpoint functions (spec drift guard)', () => {
+  test('generated surface has at least 456 endpoint functions (spec drift guard)', () => {
     // * Count exported async arrow functions in non-model files.
     //   Matches orval's output pattern: `export const <camelName> = async`.
     //   Model files (in the model/ subdirectory) export types only, so they
@@ -46,6 +46,6 @@ describe('orval generated output', () => {
     const count = matches.length;
     // * Log the actual count so CI output makes drift visible.
     console.log(`Generated endpoint function count: ${count}`);
-    expect(count).toBeGreaterThanOrEqual(159);
+    expect(count).toBeGreaterThanOrEqual(456);
   });
 });

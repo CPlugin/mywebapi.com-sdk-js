@@ -17,6 +17,20 @@ import type { EnCommReasonFlags } from './enCommReasonFlags';
 import type { MT5ConCommTier } from './mT5ConCommTier';
 
 export interface MT5ConCommission {
+  /** EnCommActionMode */
+  actionMode?: EnCommActionMode | null;
+  /** EnCommChargeMode */
+  chargeMode?: EnCommChargeMode | null;
+  /**
+     * description
+     * @maxLength 64
+     * @nullable
+     */
+  description?: string | null;
+  /** EnCommEntryMode */
+  entryMode?: EnCommEntryMode | null;
+  /** EnCommMode */
+  mode?: EnCommMode | null;
   /**
      * commission name
      * @maxLength 64
@@ -24,22 +38,16 @@ export interface MT5ConCommission {
      */
   name?: string | null;
   /**
-     * description
-     * @maxLength 64
-     * @nullable
-     */
-  description?: string | null;
-  /**
      * symbols path
      * @nullable
      */
   path?: string | null;
-  /** EnCommMode */
-  mode?: EnCommMode | null;
+  /** EnCommProfitMode */
+  profitMode?: EnCommProfitMode | null;
   /** EnCommRangeMode */
   rangeMode?: EnCommRangeMode | null;
-  /** EnCommChargeMode */
-  chargeMode?: EnCommChargeMode | null;
+  /** EnCommReasonFlags */
+  reasonFlags?: EnCommReasonFlags | null;
   /**
      * commission tiers. Index in array from 0 means Position of the range.
      * @nullable
@@ -50,12 +58,4 @@ export interface MT5ConCommission {
      * @nullable
      */
   turnoverCurrency?: string | null;
-  /** EnCommEntryMode */
-  entryMode?: EnCommEntryMode | null;
-  /** EnCommActionMode */
-  actionMode?: EnCommActionMode | null;
-  /** EnCommProfitMode */
-  profitMode?: EnCommProfitMode | null;
-  /** EnCommReasonFlags */
-  reasonFlags?: EnCommReasonFlags | null;
 }

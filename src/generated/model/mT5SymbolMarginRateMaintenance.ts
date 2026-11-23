@@ -14,11 +14,11 @@
  */
 export type MT5SymbolMarginRateMaintenance = {
   Buy?: number;
-  Sell?: number;
   BuyLimit?: number;
-  SellLimit?: number;
   BuyStop?: number;
-  SellStop?: number;
   BuyStopLimit?: number;
+  Sell?: number;
+  SellLimit?: number;
+  SellStop?: number;
   SellStopLimit?: number;
 } | null;

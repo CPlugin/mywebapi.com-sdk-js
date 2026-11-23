@@ -17,29 +17,29 @@ import type { EnGatewayAccountFlags } from './enGatewayAccountFlags';
  * as int[8] because the platform exposes a fixed-size 8-slot array.
  */
 export interface MT4GatewayAccount {
-  /** Whether the gateway-account entry is active */
-  enable?: boolean;
-  /**
-     * Public name of the gateway account
-     * @nullable
-     */
-  name?: string | null;
-  /** Internal id (stable identifier) */
-  id?: number;
-  /** Gateway type (obsolete in modern MT4 builds — preserved for API completeness) */
-  type?: number;
-  /** STP MT4 login (account number on the external server) */
-  login?: number;
   /**
      * External MT4 server address (host:port string)
      * @nullable
      */
   address?: string | null;
+  /** Whether the gateway-account entry is active */
+  enable?: boolean;
+  /** Gateway-account flag bitmap (platform enum, serialized as string) */
+  flags?: EnGatewayAccountFlags;
+  /** Internal id (stable identifier) */
+  id?: number;
+  /** STP MT4 login (account number on the external server) */
+  login?: number;
+  /**
+     * Public name of the gateway account
+     * @nullable
+     */
+  name?: string | null;
   /**
      * Logins of broker managers receiving internal-email gateway notifications (fixed-size 8 slots)
      * @nullable
      */
   notifyLogins?: number[] | null;
-  /** Gateway-account flag bitmap (platform enum, serialized as string) */
-  flags?: EnGatewayAccountFlags;
+  /** Gateway type (obsolete in modern MT4 builds — preserved for API completeness) */
+  type?: number;
 }

@@ -14,18 +14,30 @@ import type { TradeActivationFlags } from './tradeActivationFlags';
 import type { TradeModifyFlags } from './tradeModifyFlags';
 
 export interface MT5Position {
-  /**
-     * Gets the login of the client, to whom the trade position belongs
-     * @nullable
-     */
-  login?: number | null;
-  /**
-     * position symbol
-     * @nullable
-     */
-  symbol?: string | null;
   /** PositionAction */
   action?: PositionActions | null;
+  activationFlags?: TradeActivationFlags | null;
+  /** order activation state, time and price */
+  activationMode?: ActivationModes | null;
+  /** @nullable */
+  activationPrice?: number | null;
+  /** @nullable */
+  activationTime?: string | null;
+  /**
+     * @maxLength 32
+     * @nullable
+     */
+  comment?: string | null;
+  /**
+     * symbol contract size
+     * @nullable
+     */
+  contractSize?: number | null;
+  /**
+     * The login of a dealer, who has processed the order that opened the position. 0 means that the order was processed automatically by the server
+     * @nullable
+     */
+  dealer?: number | null;
   /**
      * price digits
      * @nullable
@@ -37,52 +49,42 @@ export interface MT5Position {
      */
   digitsCurrency?: number | null;
   /**
-     * symbol contract size
+     * expert id (filled by expert advisor)
      * @nullable
      */
-  contractSize?: number | null;
+  expertId?: number | null;
   /**
-     * position ticket
+     * expert position id
      * @nullable
      */
-  position?: number | null;
+  expertPositionId?: number | null;
   /**
      * The ticket of a position in an external trading system
      * @nullable
      */
   externalId?: string | null;
   /**
-     * position create time
+     * Gets the login of the client, to whom the trade position belongs
      * @nullable
      */
-  timeCreate?: string | null;
+  login?: number | null;
+  /** modification flags */
+  modificationFlags?: TradeModifyFlags | null;
   /**
-     * position last update time
+     * position ticket
      * @nullable
      */
-  timeUpdate?: string | null;
-  /**
-     * position create time in msc since 1970.01.01
-     * <br /><strong>If the value of this field is specified, the TimeCreate value will be filled in automatically.</strong>
-     * @nullable
-     */
-  timeCreateMsc?: string | null;
-  /**
-     * position last update time in msc since 1970.01.01
-     * <br /><strong>If the value of this field is specified, the TimeUpdate value will be filled in automatically.</strong>
-     * @nullable
-     */
-  timeUpdateMsc?: string | null;
-  /**
-     * position weighted average open price
-     * @nullable
-     */
-  priceOpen?: number | null;
+  position?: number | null;
   /**
      * position current price
      * @nullable
      */
   priceCurrent?: number | null;
+  /**
+     * position weighted average open price
+     * @nullable
+     */
+  priceOpen?: number | null;
   /**
      * position SL price
      * @nullable
@@ -94,6 +96,55 @@ export interface MT5Position {
      */
   priceTP?: number | null;
   /**
+     * position floating profit
+     * @nullable
+     */
+  profit?: number | null;
+  /**
+     * margin conversion rate (from symbol margin currency to deposit currency)
+     * @nullable
+     */
+  rateMargin?: number | null;
+  /**
+     * profit conversion rate (from symbol profit currency to deposit currency)
+     * @nullable
+     */
+  rateProfit?: number | null;
+  /** position reason - PositionReason */
+  reason?: PositionReasons | null;
+  /**
+     * position accumulated swaps
+     * @nullable
+     */
+  storage?: number | null;
+  /**
+     * position symbol
+     * @nullable
+     */
+  symbol?: string | null;
+  /**
+     * position create time
+     * @nullable
+     */
+  timeCreate?: string | null;
+  /**
+     * position create time in msc since 1970.01.01
+     * <br /><strong>If the value of this field is specified, the TimeCreate value will be filled in automatically.</strong>
+     * @nullable
+     */
+  timeCreateMsc?: string | null;
+  /**
+     * position last update time
+     * @nullable
+     */
+  timeUpdate?: string | null;
+  /**
+     * position last update time in msc since 1970.01.01
+     * <br /><strong>If the value of this field is specified, the TimeUpdate value will be filled in automatically.</strong>
+     * @nullable
+     */
+  timeUpdateMsc?: string | null;
+  /**
      * position volume
      * @nullable
      */
@@ -103,55 +154,4 @@ export interface MT5Position {
      * @nullable
      */
   volumeExt?: number | null;
-  /**
-     * position floating profit
-     * @nullable
-     */
-  profit?: number | null;
-  /**
-     * position accumulated swaps
-     * @nullable
-     */
-  storage?: number | null;
-  /**
-     * profit conversion rate (from symbol profit currency to deposit currency)
-     * @nullable
-     */
-  rateProfit?: number | null;
-  /**
-     * margin conversion rate (from symbol margin currency to deposit currency)
-     * @nullable
-     */
-  rateMargin?: number | null;
-  /**
-     * expert id (filled by expert advisor)
-     * @nullable
-     */
-  expertId?: number | null;
-  /**
-     * expert position id
-     * @nullable
-     */
-  expertPositionId?: number | null;
-  /**
-     * @maxLength 32
-     * @nullable
-     */
-  comment?: string | null;
-  /**
-     * The login of a dealer, who has processed the order that opened the position. 0 means that the order was processed automatically by the server
-     * @nullable
-     */
-  dealer?: number | null;
-  /** order activation state, time and price */
-  activationMode?: ActivationModes | null;
-  /** @nullable */
-  activationTime?: string | null;
-  /** @nullable */
-  activationPrice?: number | null;
-  activationFlags?: TradeActivationFlags | null;
-  /** modification flags */
-  modificationFlags?: TradeModifyFlags | null;
-  /** position reason - PositionReason */
-  reason?: PositionReasons | null;
 }

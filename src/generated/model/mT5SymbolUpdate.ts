@@ -15,6 +15,13 @@ import type { EnTradeMode } from './enTradeMode';
  * Editable surface of a symbol record: 15 fields that are safely writable, every one optional.
  */
 export interface MT5SymbolUpdate {
+  /** Margin calculation mode (forex, futures, CFD, etc.). */
+  calcMode?: EnCalcMode | null;
+  /**
+     * Contract size — units of base currency per standard lot.
+     * @nullable
+     */
+  contractSize?: number | null;
   /**
      * Human-readable symbol description shown in the terminal.
      * @nullable
@@ -25,26 +32,13 @@ export interface MT5SymbolUpdate {
      * @nullable
      */
   digits?: number | null;
-  /**
-     * Current spread in points (0 = floating spread).
-     * @nullable
-     */
-  spread?: number | null;
-  /**
-     * Minimum stop loss / take profit distance from current price, in points.
-     * @nullable
-     */
-  stopsLevel?: number | null;
+  /** Order execution mode (instant, market, exchange, request). */
+  execMode?: EnExecutionMode | null;
   /**
      * Distance from current price at which orders are frozen before execution, in points.
      * @nullable
      */
   freezeLevel?: number | null;
-  /**
-     * Contract size — units of base currency per standard lot.
-     * @nullable
-     */
-  contractSize?: number | null;
   /**
      * Initial margin requirement per lot.
      * @nullable
@@ -56,6 +50,16 @@ export interface MT5SymbolUpdate {
      */
   marginMaintenance?: number | null;
   /**
+     * Current spread in points (0 = floating spread).
+     * @nullable
+     */
+  spread?: number | null;
+  /**
+     * Minimum stop loss / take profit distance from current price, in points.
+     * @nullable
+     */
+  stopsLevel?: number | null;
+  /**
      * Minimum price change step (pip size).
      * @nullable
      */
@@ -65,20 +69,16 @@ export interface MT5SymbolUpdate {
      * @nullable
      */
   tickValue?: number | null;
-  /**
-     * Minimum trade volume, in MT5 volume units (1 lot = 10000 units).
-     * @nullable
-     */
-  volumeMin?: number | null;
+  /** Trade mode controlling which order types are allowed (full, close-only, no-trading, etc.). */
+  tradeMode?: EnTradeMode | null;
   /**
      * Maximum trade volume, in MT5 volume units (1 lot = 10000 units).
      * @nullable
      */
   volumeMax?: number | null;
-  /** Trade mode controlling which order types are allowed (full, close-only, no-trading, etc.). */
-  tradeMode?: EnTradeMode | null;
-  /** Margin calculation mode (forex, futures, CFD, etc.). */
-  calcMode?: EnCalcMode | null;
-  /** Order execution mode (instant, market, exchange, request). */
-  execMode?: EnExecutionMode | null;
+  /**
+     * Minimum trade volume, in MT5 volume units (1 lot = 10000 units).
+     * @nullable
+     */
+  volumeMin?: number | null;
 }

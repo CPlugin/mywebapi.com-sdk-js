@@ -15,49 +15,6 @@ import type {
 import { customFetch } from '../mutator';
 
 
-export type getGroupRequestGroupResponse200 = {
-  data: MT5ConGroupApiResponse
-  status: 200
-}
-
-export type getGroupRequestGroupResponseSuccess = (getGroupRequestGroupResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getGroupRequestGroupResponse = (getGroupRequestGroupResponseSuccess)
-
-export const getGetGroupRequestGroupUrl = (tradePlatform: string,
-    group: string,) => {
-
-
-
-
-  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/GroupRequest/${encodeURIComponent(String(group))}`
-}
-
-/**
- * Returns the configuration of the group as stored on the trade server. The read is
- * served by the server itself, so it reflects changes made on the server side at once.
- * The SMTP credentials of the mail reports server (`ReportsSMTPLogin`,
- * `ReportsSMTPPass`) are never returned: both fields are always empty.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get a group by name
- */
-export const getGroupRequestGroup = async (tradePlatform: string,
-    group: string, options?: Parameters<typeof customFetch>[1]): Promise<getGroupRequestGroupResponse> => {
-
-  return customFetch<getGroupRequestGroupResponse>(getGetGroupRequestGroupUrl(tradePlatform,group),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
 export type getGroupGetGroupResponse200 = {
   data: MT5ConGroupApiResponse
   status: 200
@@ -156,6 +113,49 @@ return customFetch<patchGroupRecordGroupMT5Response>(getPatchGroupRecordGroupMT5
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...getHeaders(options?.headers) },
     body: JSON.stringify(patchGroupRecordGroupMT5Body)
+  }
+);}
+
+
+export type getGroupRequestGroupResponse200 = {
+  data: MT5ConGroupApiResponse
+  status: 200
+}
+
+export type getGroupRequestGroupResponseSuccess = (getGroupRequestGroupResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getGroupRequestGroupResponse = (getGroupRequestGroupResponseSuccess)
+
+export const getGetGroupRequestGroupUrl = (tradePlatform: string,
+    group: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/GroupRequest/${encodeURIComponent(String(group))}`
+}
+
+/**
+ * Returns the configuration of the group as stored on the trade server. The read is
+ * served by the server itself, so it reflects changes made on the server side at once.
+ * The SMTP credentials of the mail reports server (`ReportsSMTPLogin`,
+ * `ReportsSMTPPass`) are never returned: both fields are always empty.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get a group by name
+ */
+export const getGroupRequestGroup = async (tradePlatform: string,
+    group: string, options?: Parameters<typeof customFetch>[1]): Promise<getGroupRequestGroupResponse> => {
+
+  return customFetch<getGroupRequestGroupResponse>(getGetGroupRequestGroupUrl(tradePlatform,group),
+  {
+    ...options,
+    method: 'GET'
+
+
   }
 );}
 

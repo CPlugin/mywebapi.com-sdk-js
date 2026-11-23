@@ -8,12 +8,257 @@
  * OpenAPI spec version: 2.0
  */
 import type {
+  GetAttachmentRequestParams,
+  GetClientRequestByGroupParams,
+  GetClientRequestHistoryClientIdParams,
+  GetCommentRequestByClientClientIdParams,
+  GetCommentRequestByDocumentDocumentIdParams,
+  GetDocumentRequestHistoryDocumentIdParams,
+  MT5Attachment,
+  MT5AttachmentApiResponse,
+  MT5AttachmentListApiResponse,
+  MT5BatchResultListApiResponse,
   MT5Client,
   MT5ClientApiResponse,
-  MT5ResultApiResponse
+  MT5ClientListApiResponse,
+  MT5Comment,
+  MT5CommentApiResponse,
+  MT5CommentListApiResponse,
+  MT5Document,
+  MT5DocumentApiResponse,
+  MT5DocumentListApiResponse,
+  MT5ResultApiResponse,
+  UInt64ListApiResponse
 } from './model';
 
 import { customFetch } from '../mutator';
+
+
+export type postAttachmentAddResponse200 = {
+  data: MT5AttachmentApiResponse
+  status: 200
+}
+
+export type postAttachmentAddResponseSuccess = (postAttachmentAddResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postAttachmentAddResponse = (postAttachmentAddResponseSuccess)
+
+export const getPostAttachmentAddUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/AttachmentAdd`
+}
+
+/**
+ * <br>
+ *             Sends the file to the server, which stores it and assigns an identifier, and then links it to the
+ *             document named by `documentID` or to the comment named by `commentID`. At most one of the
+ *             two may be given; with neither, the file is stored on the client record without a link.
+ *             The client must be identified, as the file belongs to it.
+ *
+ * <br>
+ *             The file is stored before the link is written. When the link fails, the file stays on the server
+ *             without an owner and cannot be removed through the API — check the document or comment identifier
+ *             before sending large files.
+ *
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Store a file and link it to a document or a comment
+ */
+export const postAttachmentAdd = async (tradePlatform: string,
+    mT5Attachment?: MT5Attachment, options?: Parameters<typeof customFetch>[1]): Promise<postAttachmentAddResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postAttachmentAddResponse>(getPostAttachmentAddUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Attachment)
+  }
+);}
+
+
+export type postAttachmentAddBatchResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postAttachmentAddBatchResponseSuccess = (postAttachmentAddBatchResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postAttachmentAddBatchResponse = (postAttachmentAddBatchResponseSuccess)
+
+export const getPostAttachmentAddBatchUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/AttachmentAddBatch`
+}
+
+/**
+ * Stores the listed files in one call and links each one to the document or comment named in its own
+ * entry. Every entry follows the rules of the single store: one owner client, at most one link
+ * target, and the file content in the body. One entry per file is returned with the identifier the
+ * server assigned; a failure of the link is reported in the entry of that file.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Store files and link them in bulk
+ */
+export const postAttachmentAddBatch = async (tradePlatform: string,
+    mT5Attachment?: MT5Attachment[], options?: Parameters<typeof customFetch>[1]): Promise<postAttachmentAddBatchResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postAttachmentAddBatchResponse>(getPostAttachmentAddBatchUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Attachment)
+  }
+);}
+
+
+export type postAttachmentAddBatchArrayResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postAttachmentAddBatchArrayResponseSuccess = (postAttachmentAddBatchArrayResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postAttachmentAddBatchArrayResponse = (postAttachmentAddBatchArrayResponseSuccess)
+
+export const getPostAttachmentAddBatchArrayUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/AttachmentAddBatchArray`
+}
+
+/**
+ * Same operation as `AttachmentAddBatch` with the same rules: each file carries its own owner
+ * and link target, and one entry per file is returned with the identifier the server assigned.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Store files and link them in bulk (plain array)
+ */
+export const postAttachmentAddBatchArray = async (tradePlatform: string,
+    mT5Attachment?: MT5Attachment[], options?: Parameters<typeof customFetch>[1]): Promise<postAttachmentAddBatchArrayResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postAttachmentAddBatchArrayResponse>(getPostAttachmentAddBatchArrayUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Attachment)
+  }
+);}
+
+
+export type getAttachmentRequestResponse200 = {
+  data: MT5AttachmentListApiResponse
+  status: 200
+}
+
+export type getAttachmentRequestResponseSuccess = (getAttachmentRequestResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getAttachmentRequestResponse = (getAttachmentRequestResponseSuccess)
+
+export const getGetAttachmentRequestUrl = (tradePlatform: string,
+    params?: GetAttachmentRequestParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["ids"];
+
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? 'null' : String(v));
+      });
+      return;
+    }
+
+
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/AttachmentRequest?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/AttachmentRequest`
+}
+
+/**
+ * Returns the listed files together with their content. An identifier that does not exist is
+ * answered with a platform error. Reading changes nothing.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Read attachments by identifiers
+ */
+export const getAttachmentRequest = async (tradePlatform: string,
+    params?: GetAttachmentRequestParams, options?: Parameters<typeof customFetch>[1]): Promise<getAttachmentRequestResponse> => {
+
+  return customFetch<getAttachmentRequestResponse>(getGetAttachmentRequestUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
 
 
 export type postClientAddResponse200 = {
@@ -65,7 +310,525 @@ return customFetch<postClientAddResponse>(getPostClientAddUrl(tradePlatform),
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Client)
+  }
+);}
+
+
+export type postClientAddBatchResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postClientAddBatchResponseSuccess = (postClientAddBatchResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClientAddBatchResponse = (postClientAddBatchResponseSuccess)
+
+export const getPostClientAddBatchUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientAddBatch`
+}
+
+/**
+ * Adds the listed clients to the server database in one call — the same rules and the same
+ * validation as the single add. Every record receives the identifier the server assigned to it,
+ * which is returned per entry together with its result code. A partial failure answers one entry
+ * per client, so inspect each result instead of trusting the batch as a whole.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Add clients in bulk
+ */
+export const postClientAddBatch = async (tradePlatform: string,
+    mT5Client?: MT5Client[], options?: Parameters<typeof customFetch>[1]): Promise<postClientAddBatchResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postClientAddBatchResponse>(getPostClientAddBatchUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Client)
+  }
+);}
+
+
+export type postClientAddBatchArrayResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postClientAddBatchArrayResponseSuccess = (postClientAddBatchArrayResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClientAddBatchArrayResponse = (postClientAddBatchArrayResponseSuccess)
+
+export const getPostClientAddBatchArrayUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientAddBatchArray`
+}
+
+/**
+ * Same operation as `ClientAddBatch` with the same rules: the batch is validated per record and
+ * one entry per client is returned, together with the identifier the server assigned.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Add clients in bulk (plain array)
+ */
+export const postClientAddBatchArray = async (tradePlatform: string,
+    mT5Client?: MT5Client[], options?: Parameters<typeof customFetch>[1]): Promise<postClientAddBatchArrayResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postClientAddBatchArrayResponse>(getPostClientAddBatchArrayUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Client)
+  }
+);}
+
+
+export type postClientDeleteClientIdResponse200 = {
+  data: MT5ResultApiResponse
+  status: 200
+}
+
+export type postClientDeleteClientIdResponseSuccess = (postClientDeleteClientIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClientDeleteClientIdResponse = (postClientDeleteClientIdResponseSuccess)
+
+export const getPostClientDeleteClientIdUrl = (tradePlatform: string,
+    clientId: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientDelete/${encodeURIComponent(String(clientId))}`
+}
+
+/**
+ * Removes the client record with the given identifier from the server database. The
+ * operation is not reversible. Accounts attached to the client are not deleted by this
+ * call and stay on the server. The response carries the platform result code of the
+ * operation.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Delete a client
+ */
+export const postClientDeleteClientId = async (tradePlatform: string,
+    clientId: number, options?: Parameters<typeof customFetch>[1]): Promise<postClientDeleteClientIdResponse> => {
+
+  return customFetch<postClientDeleteClientIdResponse>(getPostClientDeleteClientIdUrl(tradePlatform,clientId),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+export type postClientDeleteBatchResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postClientDeleteBatchResponseSuccess = (postClientDeleteBatchResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClientDeleteBatchResponse = (postClientDeleteBatchResponseSuccess)
+
+export const getPostClientDeleteBatchUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientDeleteBatch`
+}
+
+/**
+ * Removes several client records from the server database in one call. The operation is not
+ * reversible. Accounts and documents attached to the clients are not deleted by this call.
+ * One entry per identifier is returned, so a partial failure names the records that survived.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Delete clients in bulk
+ */
+export const postClientDeleteBatch = async (tradePlatform: string,
+    postClientDeleteBatchBody?: number[], options?: Parameters<typeof customFetch>[1]): Promise<postClientDeleteBatchResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postClientDeleteBatchResponse>(getPostClientDeleteBatchUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(postClientDeleteBatchBody)
+  }
+);}
+
+
+export type getClientRequestClientIdResponse200 = {
+  data: MT5ClientApiResponse
+  status: 200
+}
+
+export type getClientRequestClientIdResponseSuccess = (getClientRequestClientIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getClientRequestClientIdResponse = (getClientRequestClientIdResponseSuccess)
+
+export const getGetClientRequestClientIdUrl = (tradePlatform: string,
+    clientId: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientRequest/${encodeURIComponent(String(clientId))}`
+}
+
+/**
+ * Fetches the client record of the given identifier from the trade server. The call only
+ * reads and changes nothing. An identifier that does not exist is answered with a platform
+ * error rather than an empty record.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Read a client
+ */
+export const getClientRequestClientId = async (tradePlatform: string,
+    clientId: number, options?: Parameters<typeof customFetch>[1]): Promise<getClientRequestClientIdResponse> => {
+
+  return customFetch<getClientRequestClientIdResponse>(getGetClientRequestClientIdUrl(tradePlatform,clientId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getClientRequestByGroupResponse200 = {
+  data: MT5ClientListApiResponse
+  status: 200
+}
+
+export type getClientRequestByGroupResponseSuccess = (getClientRequestByGroupResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getClientRequestByGroupResponse = (getClientRequestByGroupResponseSuccess)
+
+export const getGetClientRequestByGroupUrl = (tradePlatform: string,
+    params?: GetClientRequestByGroupParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientRequestByGroup?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientRequestByGroup`
+}
+
+/**
+ * Returns the clients whose preferred group matches the mask, and also those without a preferred
+ * group when one of their bound accounts belongs to a matching group. The mask takes one group,
+ * several comma-separated groups or wildcards: `*` matches any value and `!` excludes,
+ * for example `demo*,!demoforex`. Reading changes nothing.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Clients by preferred group
+ */
+export const getClientRequestByGroup = async (tradePlatform: string,
+    params?: GetClientRequestByGroupParams, options?: Parameters<typeof customFetch>[1]): Promise<getClientRequestByGroupResponse> => {
+
+  return customFetch<getClientRequestByGroupResponse>(getGetClientRequestByGroupUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getClientRequestHistoryClientIdResponse200 = {
+  data: MT5ClientListApiResponse
+  status: 200
+}
+
+export type getClientRequestHistoryClientIdResponseSuccess = (getClientRequestHistoryClientIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getClientRequestHistoryClientIdResponse = (getClientRequestHistoryClientIdResponseSuccess)
+
+export const getGetClientRequestHistoryClientIdUrl = (tradePlatform: string,
+    clientId: number,
+    params?: GetClientRequestHistoryClientIdParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientRequestHistory/${encodeURIComponent(String(clientId))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientRequestHistory/${encodeURIComponent(String(clientId))}`
+}
+
+/**
+ * Returns the versions of the client record for the requested time window — the record as it was
+ * after every change. Both bounds are optional: without them the whole history is read. When an
+ * author is given, only the changes made by that manager account are returned. Reading changes
+ * nothing.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary History of a client record
+ */
+export const getClientRequestHistoryClientId = async (tradePlatform: string,
+    clientId: number,
+    params?: GetClientRequestHistoryClientIdParams, options?: Parameters<typeof customFetch>[1]): Promise<getClientRequestHistoryClientIdResponse> => {
+
+  return customFetch<getClientRequestHistoryClientIdResponse>(getGetClientRequestHistoryClientIdUrl(tradePlatform,clientId,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type postClientUpdateResponse200 = {
+  data: MT5ClientApiResponse
+  status: 200
+}
+
+export type postClientUpdateResponseSuccess = (postClientUpdateResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClientUpdateResponse = (postClientUpdateResponseSuccess)
+
+export const getPostClientUpdateUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientUpdate`
+}
+
+/**
+ * Writes the changed client record back to the server database. Send the whole record, not only
+ * the fields that changed: a field left out is written as empty, so read the client first, change
+ * what is needed and send the result. The person name must be filled in, otherwise the record is
+ * refused. A client can only be changed from the server that created it; a record that does not
+ * exist is answered with a platform error. The response carries the record as stored by the server.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update a client
+ */
+export const postClientUpdate = async (tradePlatform: string,
+    mT5Client?: MT5Client, options?: Parameters<typeof customFetch>[1]): Promise<postClientUpdateResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postClientUpdateResponse>(getPostClientUpdateUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Client)
+  }
+);}
+
+
+export type postClientUpdateBatchResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postClientUpdateBatchResponseSuccess = (postClientUpdateBatchResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClientUpdateBatchResponse = (postClientUpdateBatchResponseSuccess)
+
+export const getPostClientUpdateBatchUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientUpdateBatch`
+}
+
+/**
+ * Writes several changed client records back in one call. As with the single update, every record
+ * must be complete, not only the changed fields. One entry per client is returned, so a partial
+ * failure names the clients that were refused.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update clients in bulk
+ */
+export const postClientUpdateBatch = async (tradePlatform: string,
+    mT5Client?: MT5Client[], options?: Parameters<typeof customFetch>[1]): Promise<postClientUpdateBatchResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postClientUpdateBatchResponse>(getPostClientUpdateBatchUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Client)
+  }
+);}
+
+
+export type postClientUpdateBatchArrayResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postClientUpdateBatchArrayResponseSuccess = (postClientUpdateBatchArrayResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClientUpdateBatchArrayResponse = (postClientUpdateBatchArrayResponseSuccess)
+
+export const getPostClientUpdateBatchArrayUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientUpdateBatchArray`
+}
+
+/**
+ * Same operation as `ClientUpdateBatch` with the same rules: every record must be complete and
+ * one entry per client is returned.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update clients in bulk (plain array)
+ */
+export const postClientUpdateBatchArray = async (tradePlatform: string,
+    mT5Client?: MT5Client[], options?: Parameters<typeof customFetch>[1]): Promise<postClientUpdateBatchArrayResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postClientUpdateBatchArrayResponse>(getPostClientUpdateBatchArrayUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
     body: JSON.stringify(mT5Client)
   }
 );}
@@ -116,39 +879,195 @@ export const postClientUserAddClientIdLogin = async (tradePlatform: string,
 );}
 
 
-export type getClientRequestClientIdResponse200 = {
-  data: MT5ClientApiResponse
+export type postClientUserAddBatchClientIdResponse200 = {
+  data: MT5BatchResultListApiResponse
   status: 200
 }
 
-export type getClientRequestClientIdResponseSuccess = (getClientRequestClientIdResponse200) & {
+export type postClientUserAddBatchClientIdResponseSuccess = (postClientUserAddBatchClientIdResponse200) & {
   headers: Headers;
 };
 ;
 
-export type getClientRequestClientIdResponse = (getClientRequestClientIdResponseSuccess)
+export type postClientUserAddBatchClientIdResponse = (postClientUserAddBatchClientIdResponseSuccess)
 
-export const getGetClientRequestClientIdUrl = (tradePlatform: string,
+export const getPostClientUserAddBatchClientIdUrl = (tradePlatform: string,
     clientId: number,) => {
 
 
 
 
-  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientRequest/${encodeURIComponent(String(clientId))}`
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientUserAddBatch/${encodeURIComponent(String(clientId))}`
 }
 
 /**
- * Fetches the client record of the given identifier from the trade server. The call only
- * reads and changes nothing. An identifier that does not exist is answered with a platform
- * error rather than an empty record.
+ * Binds the listed accounts to the client record in one call. The accounts must already exist —
+ * the call does not create them — and the account data is not copied into the client. One entry
+ * per login is returned, so a partial failure names the accounts that stayed unbound.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Bind trading accounts to a client in bulk
+ */
+export const postClientUserAddBatchClientId = async (tradePlatform: string,
+    clientId: number,
+    postClientUserAddBatchClientIdBody?: number[], options?: Parameters<typeof customFetch>[1]): Promise<postClientUserAddBatchClientIdResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postClientUserAddBatchClientIdResponse>(getPostClientUserAddBatchClientIdUrl(tradePlatform,clientId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(postClientUserAddBatchClientIdBody)
+  }
+);}
+
+
+export type postClientUserDeleteClientIdLoginResponse200 = {
+  data: MT5ResultApiResponse
+  status: 200
+}
+
+export type postClientUserDeleteClientIdLoginResponseSuccess = (postClientUserDeleteClientIdLoginResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClientUserDeleteClientIdLoginResponse = (postClientUserDeleteClientIdLoginResponseSuccess)
+
+export const getPostClientUserDeleteClientIdLoginUrl = (tradePlatform: string,
+    clientId: number,
+    login: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientUserDelete/${encodeURIComponent(String(clientId))}/${encodeURIComponent(String(login))}`
+}
+
+/**
+ * Removes the link between the account and the client record. The account itself is not deleted
+ * and stays on the server. The response carries the platform result code of the operation.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Unbind a trading account from a client
+ */
+export const postClientUserDeleteClientIdLogin = async (tradePlatform: string,
+    clientId: number,
+    login: number, options?: Parameters<typeof customFetch>[1]): Promise<postClientUserDeleteClientIdLoginResponse> => {
+
+  return customFetch<postClientUserDeleteClientIdLoginResponse>(getPostClientUserDeleteClientIdLoginUrl(tradePlatform,clientId,login),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+export type postClientUserDeleteBatchClientIdResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postClientUserDeleteBatchClientIdResponseSuccess = (postClientUserDeleteBatchClientIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postClientUserDeleteBatchClientIdResponse = (postClientUserDeleteBatchClientIdResponseSuccess)
+
+export const getPostClientUserDeleteBatchClientIdUrl = (tradePlatform: string,
+    clientId: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientUserDeleteBatch/${encodeURIComponent(String(clientId))}`
+}
+
+/**
+ * Removes the links between the listed accounts and the client record in one call. The accounts
+ * themselves are not deleted. One entry per login is returned, so a partial failure names the
+ * accounts that stayed bound.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Unbind trading accounts from a client in bulk
+ */
+export const postClientUserDeleteBatchClientId = async (tradePlatform: string,
+    clientId: number,
+    postClientUserDeleteBatchClientIdBody?: number[], options?: Parameters<typeof customFetch>[1]): Promise<postClientUserDeleteBatchClientIdResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postClientUserDeleteBatchClientIdResponse>(getPostClientUserDeleteBatchClientIdUrl(tradePlatform,clientId),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(postClientUserDeleteBatchClientIdBody)
+  }
+);}
+
+
+export type getClientUserRequestClientIdResponse200 = {
+  data: UInt64ListApiResponse
+  status: 200
+}
+
+export type getClientUserRequestClientIdResponseSuccess = (getClientUserRequestClientIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getClientUserRequestClientIdResponse = (getClientUserRequestClientIdResponseSuccess)
+
+export const getGetClientUserRequestClientIdUrl = (tradePlatform: string,
+    clientId: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientUserRequest/${encodeURIComponent(String(clientId))}`
+}
+
+/**
+ * Returns the logins of every trading account bound to the client record. Reading changes nothing;
+ * a client without bound accounts answers an empty list.
  *
  * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Read a client
+ * @summary Trading accounts of a client
  */
-export const getClientRequestClientId = async (tradePlatform: string,
-    clientId: number, options?: Parameters<typeof customFetch>[1]): Promise<getClientRequestClientIdResponse> => {
+export const getClientUserRequestClientId = async (tradePlatform: string,
+    clientId: number, options?: Parameters<typeof customFetch>[1]): Promise<getClientUserRequestClientIdResponse> => {
 
-  return customFetch<getClientRequestClientIdResponse>(getGetClientRequestClientIdUrl(tradePlatform,clientId),
+  return customFetch<getClientUserRequestClientIdResponse>(getGetClientUserRequestClientIdUrl(tradePlatform,clientId),
   {
     ...options,
     method: 'GET'
@@ -158,45 +1077,1128 @@ export const getClientRequestClientId = async (tradePlatform: string,
 );}
 
 
-export type postClientDeleteClientIdResponse200 = {
-  data: MT5ResultApiResponse
+export type postCommentAddResponse200 = {
+  data: MT5CommentApiResponse
   status: 200
 }
 
-export type postClientDeleteClientIdResponseSuccess = (postClientDeleteClientIdResponse200) & {
+export type postCommentAddResponseSuccess = (postCommentAddResponse200) & {
   headers: Headers;
 };
 ;
 
-export type postClientDeleteClientIdResponse = (postClientDeleteClientIdResponseSuccess)
+export type postCommentAddResponse = (postCommentAddResponseSuccess)
 
-export const getPostClientDeleteClientIdUrl = (tradePlatform: string,
-    clientId: number,) => {
-
+export const getPostCommentAddUrl = (tradePlatform: string,) => {
 
 
 
-  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/ClientDelete/${encodeURIComponent(String(clientId))}`
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/CommentAdd`
 }
 
 /**
- * Removes the client record with the given identifier from the server database. The
- * operation is not reversible. Accounts attached to the client are not deleted by this
- * call and stay on the server. The response carries the platform result code of the
- * operation.
+ * Stores a comment and returns it as the server saved it, including the identifier it was assigned.
+ * The client must be identified; a document identifier is optional and, when given, makes the
+ * comment belong to that document instead of the client. A comment can only be added from the
+ * server that holds the client. Files are attached to the comment separately.
  *
  * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Delete a client
+ * @summary Add a comment to a client or a document
  */
-export const postClientDeleteClientId = async (tradePlatform: string,
-    clientId: number, options?: Parameters<typeof customFetch>[1]): Promise<postClientDeleteClientIdResponse> => {
+export const postCommentAdd = async (tradePlatform: string,
+    mT5Comment?: MT5Comment, options?: Parameters<typeof customFetch>[1]): Promise<postCommentAddResponse> => {
 
-  return customFetch<postClientDeleteClientIdResponse>(getPostClientDeleteClientIdUrl(tradePlatform,clientId),
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCommentAddResponse>(getPostCommentAddUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Comment)
+  }
+);}
+
+
+export type postCommentAddBatchResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postCommentAddBatchResponseSuccess = (postCommentAddBatchResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCommentAddBatchResponse = (postCommentAddBatchResponseSuccess)
+
+export const getPostCommentAddBatchUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/CommentAddBatch`
+}
+
+/**
+ * Stores the listed comments in one call with the same rules as the single add. One entry per
+ * comment is returned with the identifier the server assigned.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Add comments in bulk
+ */
+export const postCommentAddBatch = async (tradePlatform: string,
+    mT5Comment?: MT5Comment[], options?: Parameters<typeof customFetch>[1]): Promise<postCommentAddBatchResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCommentAddBatchResponse>(getPostCommentAddBatchUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Comment)
+  }
+);}
+
+
+export type postCommentAddBatchArrayResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postCommentAddBatchArrayResponseSuccess = (postCommentAddBatchArrayResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCommentAddBatchArrayResponse = (postCommentAddBatchArrayResponseSuccess)
+
+export const getPostCommentAddBatchArrayUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/CommentAddBatchArray`
+}
+
+/**
+ * Same operation as `CommentAddBatch` with the same rules: one entry per comment is returned
+ * together with the identifier the server assigned.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Add comments in bulk (plain array)
+ */
+export const postCommentAddBatchArray = async (tradePlatform: string,
+    mT5Comment?: MT5Comment[], options?: Parameters<typeof customFetch>[1]): Promise<postCommentAddBatchArrayResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCommentAddBatchArrayResponse>(getPostCommentAddBatchArrayUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Comment)
+  }
+);}
+
+
+export type postCommentDeleteCommentIdResponse200 = {
+  data: MT5ResultApiResponse
+  status: 200
+}
+
+export type postCommentDeleteCommentIdResponseSuccess = (postCommentDeleteCommentIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCommentDeleteCommentIdResponse = (postCommentDeleteCommentIdResponseSuccess)
+
+export const getPostCommentDeleteCommentIdUrl = (tradePlatform: string,
+    commentId: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/CommentDelete/${encodeURIComponent(String(commentId))}`
+}
+
+/**
+ * Removes the comment from the client or document it belongs to. The operation is not reversible and
+ * does not delete the files attached to the comment. The response carries the platform result code.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Delete a comment
+ */
+export const postCommentDeleteCommentId = async (tradePlatform: string,
+    commentId: number, options?: Parameters<typeof customFetch>[1]): Promise<postCommentDeleteCommentIdResponse> => {
+
+  return customFetch<postCommentDeleteCommentIdResponse>(getPostCommentDeleteCommentIdUrl(tradePlatform,commentId),
   {
     ...options,
     method: 'POST'
 
 
+  }
+);}
+
+
+export type postCommentDeleteBatchResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postCommentDeleteBatchResponseSuccess = (postCommentDeleteBatchResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCommentDeleteBatchResponse = (postCommentDeleteBatchResponseSuccess)
+
+export const getPostCommentDeleteBatchUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/CommentDeleteBatch`
+}
+
+/**
+ * Removes several comments in one call. The operation is not reversible and does not delete the
+ * attached files. One entry per identifier is returned, so a partial failure names the comments
+ * that survived.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Delete comments in bulk
+ */
+export const postCommentDeleteBatch = async (tradePlatform: string,
+    postCommentDeleteBatchBody?: number[], options?: Parameters<typeof customFetch>[1]): Promise<postCommentDeleteBatchResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCommentDeleteBatchResponse>(getPostCommentDeleteBatchUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(postCommentDeleteBatchBody)
+  }
+);}
+
+
+export type getCommentRequestCommentIdResponse200 = {
+  data: MT5CommentApiResponse
+  status: 200
+}
+
+export type getCommentRequestCommentIdResponseSuccess = (getCommentRequestCommentIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCommentRequestCommentIdResponse = (getCommentRequestCommentIdResponseSuccess)
+
+export const getGetCommentRequestCommentIdUrl = (tradePlatform: string,
+    commentId: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/CommentRequest/${encodeURIComponent(String(commentId))}`
+}
+
+/**
+ * Fetches the comment of the given identifier together with the list of its attached files
+ * (identifier, name and size — not the content). Reading changes nothing. An identifier that does
+ * not exist is answered with a platform error rather than an empty record.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Read a comment
+ */
+export const getCommentRequestCommentId = async (tradePlatform: string,
+    commentId: number, options?: Parameters<typeof customFetch>[1]): Promise<getCommentRequestCommentIdResponse> => {
+
+  return customFetch<getCommentRequestCommentIdResponse>(getGetCommentRequestCommentIdUrl(tradePlatform,commentId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getCommentRequestByClientClientIdResponse200 = {
+  data: MT5CommentListApiResponse
+  status: 200
+}
+
+export type getCommentRequestByClientClientIdResponseSuccess = (getCommentRequestByClientClientIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCommentRequestByClientClientIdResponse = (getCommentRequestByClientClientIdResponseSuccess)
+
+export const getGetCommentRequestByClientClientIdUrl = (tradePlatform: string,
+    clientId: number,
+    params?: GetCommentRequestByClientClientIdParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/CommentRequestByClient/${encodeURIComponent(String(clientId))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/CommentRequestByClient/${encodeURIComponent(String(clientId))}`
+}
+
+/**
+ * Returns a slice of the comments stored on the client record, in the order the server keeps them.
+ * The slice is set by `position` (zero-based index of the first comment) and `total`
+ * (number of comments to return), so a long thread is read page by page. Reading changes nothing.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Comments on a client
+ */
+export const getCommentRequestByClientClientId = async (tradePlatform: string,
+    clientId: number,
+    params?: GetCommentRequestByClientClientIdParams, options?: Parameters<typeof customFetch>[1]): Promise<getCommentRequestByClientClientIdResponse> => {
+
+  return customFetch<getCommentRequestByClientClientIdResponse>(getGetCommentRequestByClientClientIdUrl(tradePlatform,clientId,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getCommentRequestByDocumentDocumentIdResponse200 = {
+  data: MT5CommentListApiResponse
+  status: 200
+}
+
+export type getCommentRequestByDocumentDocumentIdResponseSuccess = (getCommentRequestByDocumentDocumentIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getCommentRequestByDocumentDocumentIdResponse = (getCommentRequestByDocumentDocumentIdResponseSuccess)
+
+export const getGetCommentRequestByDocumentDocumentIdUrl = (tradePlatform: string,
+    documentId: number,
+    params?: GetCommentRequestByDocumentDocumentIdParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/CommentRequestByDocument/${encodeURIComponent(String(documentId))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/CommentRequestByDocument/${encodeURIComponent(String(documentId))}`
+}
+
+/**
+ * Returns a slice of the comments stored on the document, in the order the server keeps them. The
+ * slice is set by `position` (zero-based index of the first comment) and `total` (number
+ * of comments to return), so a long thread is read page by page. Reading changes nothing.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Comments on a client document
+ */
+export const getCommentRequestByDocumentDocumentId = async (tradePlatform: string,
+    documentId: number,
+    params?: GetCommentRequestByDocumentDocumentIdParams, options?: Parameters<typeof customFetch>[1]): Promise<getCommentRequestByDocumentDocumentIdResponse> => {
+
+  return customFetch<getCommentRequestByDocumentDocumentIdResponse>(getGetCommentRequestByDocumentDocumentIdUrl(tradePlatform,documentId,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type postCommentUpdateResponse200 = {
+  data: MT5CommentApiResponse
+  status: 200
+}
+
+export type postCommentUpdateResponseSuccess = (postCommentUpdateResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCommentUpdateResponse = (postCommentUpdateResponseSuccess)
+
+export const getPostCommentUpdateUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/CommentUpdate`
+}
+
+/**
+ * Writes the changed comment back. Send the whole comment, not only the fields that changed — read
+ * it first and change what is needed. The client and, for a document comment, the document must be
+ * identified. A comment can only be changed from the server that holds its client.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Change a comment
+ */
+export const postCommentUpdate = async (tradePlatform: string,
+    mT5Comment?: MT5Comment, options?: Parameters<typeof customFetch>[1]): Promise<postCommentUpdateResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCommentUpdateResponse>(getPostCommentUpdateUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Comment)
+  }
+);}
+
+
+export type postCommentUpdateBatchResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postCommentUpdateBatchResponseSuccess = (postCommentUpdateBatchResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCommentUpdateBatchResponse = (postCommentUpdateBatchResponseSuccess)
+
+export const getPostCommentUpdateBatchUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/CommentUpdateBatch`
+}
+
+/**
+ * Writes several changed comments back in one call with the same rules as the single change:
+ * every record must be complete. One entry per comment is returned.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Change comments in bulk
+ */
+export const postCommentUpdateBatch = async (tradePlatform: string,
+    mT5Comment?: MT5Comment[], options?: Parameters<typeof customFetch>[1]): Promise<postCommentUpdateBatchResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCommentUpdateBatchResponse>(getPostCommentUpdateBatchUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Comment)
+  }
+);}
+
+
+export type postCommentUpdateBatchArrayResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postCommentUpdateBatchArrayResponseSuccess = (postCommentUpdateBatchArrayResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postCommentUpdateBatchArrayResponse = (postCommentUpdateBatchArrayResponseSuccess)
+
+export const getPostCommentUpdateBatchArrayUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/CommentUpdateBatchArray`
+}
+
+/**
+ * Same operation as `CommentUpdateBatch` with the same rules: every record must be complete
+ * and one entry per comment is returned.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Change comments in bulk (plain array)
+ */
+export const postCommentUpdateBatchArray = async (tradePlatform: string,
+    mT5Comment?: MT5Comment[], options?: Parameters<typeof customFetch>[1]): Promise<postCommentUpdateBatchArrayResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postCommentUpdateBatchArrayResponse>(getPostCommentUpdateBatchArrayUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Comment)
+  }
+);}
+
+
+export type postDocumentAddResponse200 = {
+  data: MT5DocumentApiResponse
+  status: 200
+}
+
+export type postDocumentAddResponseSuccess = (postDocumentAddResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postDocumentAddResponse = (postDocumentAddResponseSuccess)
+
+export const getPostDocumentAddUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DocumentAdd`
+}
+
+/**
+ * Stores a document in the client record and returns it as the server saved it, including the
+ * identifier it was assigned. The client must be identified; otherwise the record is refused.
+ * A document can only be added from the server that holds the client. Files are attached to the
+ * document separately, by the attachment routes.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Add a document to a client record
+ */
+export const postDocumentAdd = async (tradePlatform: string,
+    mT5Document?: MT5Document, options?: Parameters<typeof customFetch>[1]): Promise<postDocumentAddResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postDocumentAddResponse>(getPostDocumentAddUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Document)
+  }
+);}
+
+
+export type postDocumentAddBatchResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postDocumentAddBatchResponseSuccess = (postDocumentAddBatchResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postDocumentAddBatchResponse = (postDocumentAddBatchResponseSuccess)
+
+export const getPostDocumentAddBatchUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DocumentAddBatch`
+}
+
+/**
+ * Stores the listed documents in one call with the same rules as the single add. One entry per
+ * document is returned with the identifier the server assigned, so a partial failure names the
+ * documents that were refused.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Add documents in bulk
+ */
+export const postDocumentAddBatch = async (tradePlatform: string,
+    mT5Document?: MT5Document[], options?: Parameters<typeof customFetch>[1]): Promise<postDocumentAddBatchResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postDocumentAddBatchResponse>(getPostDocumentAddBatchUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Document)
+  }
+);}
+
+
+export type postDocumentAddBatchArrayResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postDocumentAddBatchArrayResponseSuccess = (postDocumentAddBatchArrayResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postDocumentAddBatchArrayResponse = (postDocumentAddBatchArrayResponseSuccess)
+
+export const getPostDocumentAddBatchArrayUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DocumentAddBatchArray`
+}
+
+/**
+ * Same operation as `DocumentAddBatch` with the same rules: one entry per document is
+ * returned together with the identifier the server assigned.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Add documents in bulk (plain array)
+ */
+export const postDocumentAddBatchArray = async (tradePlatform: string,
+    mT5Document?: MT5Document[], options?: Parameters<typeof customFetch>[1]): Promise<postDocumentAddBatchArrayResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postDocumentAddBatchArrayResponse>(getPostDocumentAddBatchArrayUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Document)
+  }
+);}
+
+
+export type postDocumentDeleteDocumentIdResponse200 = {
+  data: MT5ResultApiResponse
+  status: 200
+}
+
+export type postDocumentDeleteDocumentIdResponseSuccess = (postDocumentDeleteDocumentIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postDocumentDeleteDocumentIdResponse = (postDocumentDeleteDocumentIdResponseSuccess)
+
+export const getPostDocumentDeleteDocumentIdUrl = (tradePlatform: string,
+    documentId: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DocumentDelete/${encodeURIComponent(String(documentId))}`
+}
+
+/**
+ * Removes the document from the client record. The operation is not reversible; the files attached
+ * to the document are not deleted by this call. The response carries the platform result code.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Delete a document
+ */
+export const postDocumentDeleteDocumentId = async (tradePlatform: string,
+    documentId: number, options?: Parameters<typeof customFetch>[1]): Promise<postDocumentDeleteDocumentIdResponse> => {
+
+  return customFetch<postDocumentDeleteDocumentIdResponse>(getPostDocumentDeleteDocumentIdUrl(tradePlatform,documentId),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+export type postDocumentDeleteBatchResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postDocumentDeleteBatchResponseSuccess = (postDocumentDeleteBatchResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postDocumentDeleteBatchResponse = (postDocumentDeleteBatchResponseSuccess)
+
+export const getPostDocumentDeleteBatchUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DocumentDeleteBatch`
+}
+
+/**
+ * Removes several documents in one call. The operation is not reversible and does not delete the
+ * attached files. One entry per identifier is returned, so a partial failure names the documents
+ * that survived.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Delete documents in bulk
+ */
+export const postDocumentDeleteBatch = async (tradePlatform: string,
+    postDocumentDeleteBatchBody?: number[], options?: Parameters<typeof customFetch>[1]): Promise<postDocumentDeleteBatchResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postDocumentDeleteBatchResponse>(getPostDocumentDeleteBatchUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(postDocumentDeleteBatchBody)
+  }
+);}
+
+
+export type getDocumentRequestDocumentIdResponse200 = {
+  data: MT5DocumentApiResponse
+  status: 200
+}
+
+export type getDocumentRequestDocumentIdResponseSuccess = (getDocumentRequestDocumentIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getDocumentRequestDocumentIdResponse = (getDocumentRequestDocumentIdResponseSuccess)
+
+export const getGetDocumentRequestDocumentIdUrl = (tradePlatform: string,
+    documentId: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DocumentRequest/${encodeURIComponent(String(documentId))}`
+}
+
+/**
+ * Fetches the document of the given identifier together with the list of its attached files
+ * (identifier, name and size — not the content). Reading changes nothing. An identifier that does
+ * not exist is answered with a platform error rather than an empty record.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Read a document
+ */
+export const getDocumentRequestDocumentId = async (tradePlatform: string,
+    documentId: number, options?: Parameters<typeof customFetch>[1]): Promise<getDocumentRequestDocumentIdResponse> => {
+
+  return customFetch<getDocumentRequestDocumentIdResponse>(getGetDocumentRequestDocumentIdUrl(tradePlatform,documentId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getDocumentRequestByClientClientIdResponse200 = {
+  data: MT5DocumentListApiResponse
+  status: 200
+}
+
+export type getDocumentRequestByClientClientIdResponseSuccess = (getDocumentRequestByClientClientIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getDocumentRequestByClientClientIdResponse = (getDocumentRequestByClientClientIdResponseSuccess)
+
+export const getGetDocumentRequestByClientClientIdUrl = (tradePlatform: string,
+    clientId: number,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DocumentRequestByClient/${encodeURIComponent(String(clientId))}`
+}
+
+/**
+ * Returns every document stored in the client record, each with the list of its attached files
+ * (identifier, name and size — not the content). Reading changes nothing; a client without
+ * documents answers an empty list.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Documents of a client
+ */
+export const getDocumentRequestByClientClientId = async (tradePlatform: string,
+    clientId: number, options?: Parameters<typeof customFetch>[1]): Promise<getDocumentRequestByClientClientIdResponse> => {
+
+  return customFetch<getDocumentRequestByClientClientIdResponse>(getGetDocumentRequestByClientClientIdUrl(tradePlatform,clientId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getDocumentRequestHistoryDocumentIdResponse200 = {
+  data: MT5DocumentListApiResponse
+  status: 200
+}
+
+export type getDocumentRequestHistoryDocumentIdResponseSuccess = (getDocumentRequestHistoryDocumentIdResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getDocumentRequestHistoryDocumentIdResponse = (getDocumentRequestHistoryDocumentIdResponseSuccess)
+
+export const getGetDocumentRequestHistoryDocumentIdUrl = (tradePlatform: string,
+    documentId: number,
+    params?: GetDocumentRequestHistoryDocumentIdParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DocumentRequestHistory/${encodeURIComponent(String(documentId))}?${stringifiedParams}` : `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DocumentRequestHistory/${encodeURIComponent(String(documentId))}`
+}
+
+/**
+ * Returns the versions of the document for the requested time window — the record as it was after
+ * every change. Both bounds are optional: without them the whole history is read. When an author is
+ * given, only the changes made by that manager account are returned. Reading changes nothing.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary History of a document
+ */
+export const getDocumentRequestHistoryDocumentId = async (tradePlatform: string,
+    documentId: number,
+    params?: GetDocumentRequestHistoryDocumentIdParams, options?: Parameters<typeof customFetch>[1]): Promise<getDocumentRequestHistoryDocumentIdResponse> => {
+
+  return customFetch<getDocumentRequestHistoryDocumentIdResponse>(getGetDocumentRequestHistoryDocumentIdUrl(tradePlatform,documentId,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type postDocumentUpdateResponse200 = {
+  data: MT5DocumentApiResponse
+  status: 200
+}
+
+export type postDocumentUpdateResponseSuccess = (postDocumentUpdateResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postDocumentUpdateResponse = (postDocumentUpdateResponseSuccess)
+
+export const getPostDocumentUpdateUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DocumentUpdate`
+}
+
+/**
+ * Writes the changed document back to the client record. Send the whole document, not only the
+ * fields that changed — read it first and change what is needed. A document can only be changed
+ * from the server that holds its client. The response carries the document as stored.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Change a document of a client record
+ */
+export const postDocumentUpdate = async (tradePlatform: string,
+    mT5Document?: MT5Document, options?: Parameters<typeof customFetch>[1]): Promise<postDocumentUpdateResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postDocumentUpdateResponse>(getPostDocumentUpdateUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Document)
+  }
+);}
+
+
+export type postDocumentUpdateBatchResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postDocumentUpdateBatchResponseSuccess = (postDocumentUpdateBatchResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postDocumentUpdateBatchResponse = (postDocumentUpdateBatchResponseSuccess)
+
+export const getPostDocumentUpdateBatchUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DocumentUpdateBatch`
+}
+
+/**
+ * Writes several changed documents back in one call with the same rules as the single change:
+ * every record must be complete. One entry per document is returned.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Change documents in bulk
+ */
+export const postDocumentUpdateBatch = async (tradePlatform: string,
+    mT5Document?: MT5Document[], options?: Parameters<typeof customFetch>[1]): Promise<postDocumentUpdateBatchResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postDocumentUpdateBatchResponse>(getPostDocumentUpdateBatchUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Document)
+  }
+);}
+
+
+export type postDocumentUpdateBatchArrayResponse200 = {
+  data: MT5BatchResultListApiResponse
+  status: 200
+}
+
+export type postDocumentUpdateBatchArrayResponseSuccess = (postDocumentUpdateBatchArrayResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postDocumentUpdateBatchArrayResponse = (postDocumentUpdateBatchArrayResponseSuccess)
+
+export const getPostDocumentUpdateBatchArrayUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DocumentUpdateBatchArray`
+}
+
+/**
+ * Same operation as `DocumentUpdateBatch` with the same rules: every record must be complete
+ * and one entry per document is returned.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Change documents in bulk (plain array)
+ */
+export const postDocumentUpdateBatchArray = async (tradePlatform: string,
+    mT5Document?: MT5Document[], options?: Parameters<typeof customFetch>[1]): Promise<postDocumentUpdateBatchArrayResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postDocumentUpdateBatchArrayResponse>(getPostDocumentUpdateBatchArrayUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Document)
   }
 );}
 

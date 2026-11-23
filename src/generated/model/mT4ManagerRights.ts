@@ -17,48 +17,48 @@
  * fits inside JS Number safely (no precision loss).
  */
 export interface MT4ManagerRights {
-  /** Manager account login (read-only) */
-  login?: number;
-  /**
-     * Display name of the manager (read-only on the platform side)
-     * @nullable
-     */
-  name?: string | null;
+  admin?: boolean;
+  broker?: boolean;
+  email?: boolean;
   /**
      * Comma-separated list of managed group names (wildcard '*' allowed)
      * @nullable
      */
   groups?: string | null;
-  /**
-     * Internal mailbox name used for manager mail
-     * @nullable
-     */
-  mailBox?: string | null;
   /** Maximum reportable history depth, in days */
   infoDepth?: number;
-  manager?: boolean;
-  money?: boolean;
-  online?: boolean;
-  riskMan?: boolean;
-  broker?: boolean;
-  admin?: boolean;
-  logs?: boolean;
-  reports?: boolean;
-  trades?: boolean;
-  marketWatch?: boolean;
-  email?: boolean;
-  userDetails?: boolean;
-  seeTrades?: boolean;
-  news?: boolean;
-  plugins?: boolean;
-  market?: boolean;
-  notifications?: boolean;
-  serverReports?: boolean;
-  techSupport?: boolean;
   /** IP filtering mode (0 = disabled; non-zero = enabled — raw MT4 platform value, semantics preserved) */
   ipFilter?: number;
   /** IP range start (uint widened to long for safe JSON numeric serialization) */
   ipFrom?: number;
   /** IP range end (uint widened to long for safe JSON numeric serialization) */
   ipTo?: number;
+  /** Manager account login (read-only) */
+  login?: number;
+  logs?: boolean;
+  /**
+     * Internal mailbox name used for manager mail
+     * @nullable
+     */
+  mailBox?: string | null;
+  manager?: boolean;
+  market?: boolean;
+  marketWatch?: boolean;
+  money?: boolean;
+  /**
+     * Display name of the manager (read-only on the platform side)
+     * @nullable
+     */
+  name?: string | null;
+  news?: boolean;
+  notifications?: boolean;
+  online?: boolean;
+  plugins?: boolean;
+  reports?: boolean;
+  riskMan?: boolean;
+  seeTrades?: boolean;
+  serverReports?: boolean;
+  techSupport?: boolean;
+  trades?: boolean;
+  userDetails?: boolean;
 }

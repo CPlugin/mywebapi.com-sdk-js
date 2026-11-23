@@ -24,55 +24,60 @@ import type { EnTransferMode } from './enTransferMode';
 import type { MT5ConGroupCommissions } from './mT5ConGroupCommissions';
 
 export interface MT5ConGroup {
-  /**
-     * group name
-     * @nullable
-     */
-  group?: string | null;
-  /**
-     * group trade server ID
-     * @nullable
-     */
-  server?: number | null;
-  /** EnPermissionsFlags */
-  permissionsFlags?: EnPermissionsFlags | null;
   /** EnAuthMode */
   authMode?: EnAuthMode | null;
+  /** OTP authentication mode - EnAuthOTPMode */
+  authOTPMode?: EnAuthOTPMode | null;
   /**
      * minimal password length
      * @nullable
      */
   authPasswordMin?: number | null;
   /**
+     * /// <strong>Setter not yet implemented. If you want to send this value to MT5, ask vendor to implement this feature. Exception will be thrown if you send anything but null here.</strong><br /><br />
+     * @nullable
+     */
+  commissions?: MT5ConGroupCommissions;
+  /**
      * company name
      * @nullable
      */
   company?: string | null;
   /**
-     * company web page URL
+     * company catalog name (for reports and email templates)
      * @nullable
      */
-  companyPage?: string | null;
+  companyCatalog?: string | null;
+  /**
+     * company deposit URL
+     * @nullable
+     */
+  companyDepositPage?: string | null;
   /**
      * company email
      * @nullable
      */
   companyEmail?: string | null;
   /**
-     * company support site URL
+     * company web page URL
      * @nullable
      */
-  companySupportPage?: string | null;
+  companyPage?: string | null;
   /**
      * company support email
      * @nullable
      */
   companySupportEmail?: string | null;
   /**
-     * company catalog name (for reports and email templates)
+     * company support site URL
      * @nullable
      */
-  companyCatalog?: string | null;
+  companySupportPage?: string | null;
+  /**
+     * company deposit URL
+     * @nullable
+     */
+  companyWithdrawalPage?: string | null;
   /**
      * deposit currency
      * @nullable
@@ -80,10 +85,94 @@ export interface MT5ConGroup {
   currency?: string | null;
   /** @nullable */
   currencyDigits?: number | null;
-  /** EnReportsMode */
-  reportsMode?: EnReportsMode | null;
+  /**
+     * default demo accounts deposit
+     * @nullable
+     */
+  demoDeposit?: number | null;
+  /**
+     * demo groups in days, orders and positions will be deleted after this period
+     * @nullable
+     */
+  demoInactivityPeriod?: number | null;
+  /**
+     * default demo accounts leverage
+     * @nullable
+     */
+  demoLeverage?: number | null;
+  /**
+     * group name
+     * @nullable
+     */
+  group?: string | null;
+  /** EnHistoryLimit */
+  limitHistory?: EnHistoryLimit | null;
+  /**
+     * max. order limit
+     * @nullable
+     */
+  limitOrders?: number | null;
+  /**
+     * max. positions limit
+     * @nullable
+     */
+  limitPositions?: number | null;
+  /**
+     * max. selected symbols limit
+     * @nullable
+     */
+  limitSymbols?: number | null;
+  /** EnMailMode */
+  mailMode?: EnMailMode | null;
+  /**
+     * Margin Call level value
+     * @nullable
+     */
+  marginCall?: number | null;
+  /** margin calculation flags EnMarginFlags */
+  marginFlags?: EnMarginCalcFlags | null;
+  /** EnFreeMarginMode */
+  marginFreeMode?: EnFreeMarginMode | null;
+  /**
+     * margin free profit accounting mode
+     * @nullable
+     */
+  marginFreeProfitMode?: number | null;
+  /** group risk management mode - EnMarginMode */
+  marginMode?: EnMarginMode | null;
+  /** EnStopOutMode */
+  marginSOMode?: EnStopOutMode | null;
+  /**
+     * Sto-Out level value
+     * @nullable
+     */
+  marginStopOut?: number | null;
+  /**
+     * news category filter string
+     * @nullable
+     */
+  newsCategory?: string | null;
+  /**
+     * <strong>Setter not yet implemented. If you want to send this value to MT5, ask vendor to implement this feature. Exception will be thrown if you send anything but null here.</strong>
+     * <br />
+     * <br />
+     *             allowed news languages (Windows API LANGID used)
+     * @nullable
+     */
+  newsLang?: number[] | null;
+  /** EnNewsMode */
+  newsMode?: EnNewsMode | null;
+  /** EnPermissionsFlags */
+  permissionsFlags?: EnPermissionsFlags | null;
+  /**
+     * reports SMTP email account
+     * @nullable
+     */
+  reportsEmail?: string | null;
   /** EnReportsFlags */
   reportsFlags?: EnReportsFlags | null;
+  /** EnReportsMode */
+  reportsMode?: EnReportsMode | null;
   /**
      * reports SMTP server address:ports
      * @nullable
@@ -99,23 +188,11 @@ export interface MT5ConGroup {
      * @nullable
      */
   reportsSMTPPass?: string | null;
-  /** EnNewsMode */
-  newsMode?: EnNewsMode | null;
   /**
-     * news category filter string
+     * group trade server ID
      * @nullable
      */
-  newsCategory?: string | null;
-  /**
-     * <strong>Setter not yet implemented. If you want to send this value to MT5, ask vendor to implement this feature. Exception will be thrown if you send anything but null here.</strong>
-     * <br />
-     * <br />
-     *             allowed news languages (Windows API LANGID used)
-     * @nullable
-     */
-  newsLang?: number[] | null;
-  /** EnMailMode */
-  mailMode?: EnMailMode | null;
+  server?: number | null;
   /** EnTradeFlags */
   tradeFlags?: EnTradeRightsFlags | null;
   /**
@@ -123,88 +200,11 @@ export interface MT5ConGroup {
      * @nullable
      */
   tradeInterestRate?: number | null;
+  /** deposit transfer mode - EnTransferMode */
+  tradeTransferMode?: EnTransferMode | null;
   /**
      * virtual credit
      * @nullable
      */
   tradeVirtualCredit?: number | null;
-  /** EnFreeMarginMode */
-  marginFreeMode?: EnFreeMarginMode | null;
-  /** EnStopOutMode */
-  marginSOMode?: EnStopOutMode | null;
-  /**
-     * Margin Call level value
-     * @nullable
-     */
-  marginCall?: number | null;
-  /**
-     * Sto-Out level value
-     * @nullable
-     */
-  marginStopOut?: number | null;
-  /**
-     * default demo accounts leverage
-     * @nullable
-     */
-  demoLeverage?: number | null;
-  /**
-     * default demo accounts deposit
-     * @nullable
-     */
-  demoDeposit?: number | null;
-  /** EnHistoryLimit */
-  limitHistory?: EnHistoryLimit | null;
-  /**
-     * max. order limit
-     * @nullable
-     */
-  limitOrders?: number | null;
-  /**
-     * max. selected symbols limit
-     * @nullable
-     */
-  limitSymbols?: number | null;
-  /**
-     * /// <strong>Setter not yet implemented. If you want to send this value to MT5, ask vendor to implement this feature. Exception will be thrown if you send anything but null here.</strong><br /><br />
-     * @nullable
-     */
-  commissions?: MT5ConGroupCommissions;
-  /**
-     * margin free profit accounting mode
-     * @nullable
-     */
-  marginFreeProfitMode?: number | null;
-  /** group risk management mode - EnMarginMode */
-  marginMode?: EnMarginMode | null;
-  /** OTP authentication mode - EnAuthOTPMode */
-  authOTPMode?: EnAuthOTPMode | null;
-  /** deposit transfer mode - EnTransferMode */
-  tradeTransferMode?: EnTransferMode | null;
-  /** margin calculation flags EnMarginFlags */
-  marginFlags?: EnMarginCalcFlags | null;
-  /**
-     * max. positions limit
-     * @nullable
-     */
-  limitPositions?: number | null;
-  /**
-     * reports SMTP email account
-     * @nullable
-     */
-  reportsEmail?: string | null;
-  /**
-     * company deposit URL
-     * @nullable
-     */
-  companyDepositPage?: string | null;
-  /**
-     * company deposit URL
-     * @nullable
-     */
-  companyWithdrawalPage?: string | null;
-  /**
-     * demo groups in days, orders and positions will be deleted after this period
-     * @nullable
-     */
-  demoInactivityPeriod?: number | null;
 }

@@ -17,63 +17,6 @@ import type {
 import { customFetch } from '../mutator';
 
 
-export type postNewsSendResponse200 = {
-  data: BooleanApiResponse
-  status: 200
-}
-
-export type postNewsSendResponseSuccess = (postNewsSendResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postNewsSendResponse = (postNewsSendResponseSuccess)
-
-export const getPostNewsSendUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/NewsSend`
-}
-
-/**
- * Push a news item to all connected client terminals. Requires 'Send news' admin right.
- *
- * Manager (live) call to the platform's `NewsSend(NewsTopic news)`.
- * Sidecar-only because `mtmanapi64.dll` throws
- * `PlatformNotSupportedException` on the body setter.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Send news to terminals
- */
-export const postNewsSend = async (tradePlatform: string,
-    mT4NewsSendRequest?: MT4NewsSendRequest, options?: Parameters<typeof customFetch>[1]): Promise<postNewsSendResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postNewsSendResponse>(getPostNewsSendUrl(tradePlatform),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4NewsSendRequest)
-  }
-);}
-
-
 export type postMailSendResponse200 = {
   data: BooleanApiResponse
   status: 200
@@ -126,7 +69,7 @@ return customFetch<postMailSendResponse>(getPostMailSendUrl(tradePlatform),
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
     body: JSON.stringify(mT4MailSendRequest)
   }
 );}
@@ -171,6 +114,63 @@ export const getMailsRequest = async (tradePlatform: string, options?: Parameter
     method: 'GET'
 
 
+  }
+);}
+
+
+export type postNewsSendResponse200 = {
+  data: BooleanApiResponse
+  status: 200
+}
+
+export type postNewsSendResponseSuccess = (postNewsSendResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postNewsSendResponse = (postNewsSendResponseSuccess)
+
+export const getPostNewsSendUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/NewsSend`
+}
+
+/**
+ * Push a news item to all connected client terminals. Requires 'Send news' admin right.
+ *
+ * Manager (live) call to the platform's `NewsSend(NewsTopic news)`.
+ * Sidecar-only because `mtmanapi64.dll` throws
+ * `PlatformNotSupportedException` on the body setter.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Send news to terminals
+ */
+export const postNewsSend = async (tradePlatform: string,
+    mT4NewsSendRequest?: MT4NewsSendRequest, options?: Parameters<typeof customFetch>[1]): Promise<postNewsSendResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postNewsSendResponse>(getPostNewsSendUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4NewsSendRequest)
   }
 );}
 

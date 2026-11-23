@@ -14,45 +14,20 @@
  */
 export interface MT4CommonUpdate {
   /**
-     * Trade server display name.
+     * Anti-flood threshold (requests per second).
      * @nullable
      */
-  name?: string | null;
-  /**
-     * Broker / company display name.
-     * @nullable
-     */
-  owner?: string | null;
-  /**
-     * Server time zone offset from UTC, in hours.
-     * @nullable
-     */
-  timeZone?: number | null;
+  antiFlood?: number | null;
   /**
      * DST correction setting (server-specific integer).
      * @nullable
      */
   daylightCorrection?: number | null;
   /**
-     * Real time-zone (no DST) offset from UTC, in hours.
+     * Flood-control behaviour mode.
      * @nullable
      */
-  timeZoneReal?: number | null;
-  /**
-     * NTP server hostname for clock sync.
-     * @nullable
-     */
-  timeSync?: string | null;
-  /**
-     * Minimum acceptable client build number.
-     * @nullable
-     */
-  minClient?: number | null;
-  /**
-     * Minimum client API build the trade server accepts.
-     * @nullable
-     */
-  minApi?: number | null;
+  floodControl?: number | null;
   /**
      * How long (days) to keep mailbox messages.
      * @nullable
@@ -64,13 +39,38 @@ export interface MT4CommonUpdate {
      */
   keepTicks?: number | null;
   /**
-     * Anti-flood threshold (requests per second).
+     * Minimum client API build the trade server accepts.
      * @nullable
      */
-  antiFlood?: number | null;
+  minApi?: number | null;
   /**
-     * Flood-control behaviour mode.
+     * Minimum acceptable client build number.
      * @nullable
      */
-  floodControl?: number | null;
+  minClient?: number | null;
+  /**
+     * Trade server display name.
+     * @nullable
+     */
+  name?: string | null;
+  /**
+     * Broker / company display name.
+     * @nullable
+     */
+  owner?: string | null;
+  /**
+     * NTP server hostname for clock sync.
+     * @nullable
+     */
+  timeSync?: string | null;
+  /**
+     * Server time zone offset from UTC, in hours.
+     * @nullable
+     */
+  timeZone?: number | null;
+  /**
+     * Real time-zone (no DST) offset from UTC, in hours.
+     * @nullable
+     */
+  timeZoneReal?: number | null;
 }

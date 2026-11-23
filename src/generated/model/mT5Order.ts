@@ -16,125 +16,11 @@ import type { TradeActivationFlags } from './tradeActivationFlags';
 
 export interface MT5Order {
   /**
-     * order ticket
-     * @nullable
+     * <strong>Read-only: the trade server does not let this value be changed.</strong>
+     * <br />
+     * <br />
      */
-  order?: number | null;
-  /**
-     * order ticket in external system (exchange, ECN, etc)
-     * @nullable
-     */
-  externalID?: string | null;
-  /**
-     * client login
-     * @nullable
-     */
-  login?: number | null;
-  /**
-     * processed dealer login (0-means auto)
-     * @nullable
-     */
-  dealer?: number | null;
-  /**
-     * counterparty identification
-     * @nullable
-     */
-  partyID?: number | null;
-  /**
-     * order symbol
-     * @nullable
-     */
-  symbol?: string | null;
-  /**
-     * price digits
-     * @nullable
-     */
-  digits?: number | null;
-  /**
-     * currency digits
-     * @nullable
-     */
-  digitsCurrency?: number | null;
-  /**
-     * contract size
-     * @nullable
-     */
-  contractSize?: number | null;
-  /** OrderState */
-  state?: OrderState | null;
-  /** OrderReason */
-  reason?: OrderReason | null;
-  /**
-     * order setup time
-     * @nullable
-     */
-  timeSetup?: string | null;
-  /**
-     * order expiration
-     * @nullable
-     */
-  timeExpiration?: string | null;
-  /**
-     * order filling/cancel time
-     * @nullable
-     */
-  timeDone?: string | null;
-  /** OrderType */
-  type?: OrderType | null;
-  /** OrderFilling */
-  typeFill?: OrderFilling | null;
-  /** OrderTime */
-  typeTime?: OrderTime | null;
-  /**
-     * order price
-     * @nullable
-     */
-  priceOrder?: number | null;
-  /**
-     * order trigger price (stop-limit price)
-     * @nullable
-     */
-  priceTrigger?: number | null;
-  /**
-     * order current price
-     * @nullable
-     */
-  priceCurrent?: number | null;
-  /**
-     * order SL
-     * @nullable
-     */
-  priceSL?: number | null;
-  /**
-     * order TP
-     * @nullable
-     */
-  priceTP?: number | null;
-  /**
-     * order initial volume
-     * @nullable
-     */
-  volumeInitial?: number | null;
-  /**
-     * order current volume
-     * @nullable
-     */
-  volumeCurrent?: number | null;
-  /**
-     * expert id (filled by expert advisor)
-     * @nullable
-     */
-  expertID?: number | null;
-  /**
-     * position id
-     * @nullable
-     */
-  positionID?: number | null;
-  /**
-     * order comment
-     * @nullable
-     */
-  comment?: string | null;
+  activationFlags?: TradeActivationFlags | null;
   /**
      * <strong>Read-only: the trade server does not let this value be changed.</strong>
      * <br />
@@ -147,13 +33,6 @@ export interface MT5Order {
      * <strong>Read-only: the trade server does not let this value be changed.</strong>
      * <br />
      * <br />
-     * @nullable
-     */
-  activationTime?: string | null;
-  /**
-     * <strong>Read-only: the trade server does not let this value be changed.</strong>
-     * <br />
-     * <br />
      *             Gets the price, at which the order was activated
      * @nullable
      */
@@ -162,14 +41,118 @@ export interface MT5Order {
      * <strong>Read-only: the trade server does not let this value be changed.</strong>
      * <br />
      * <br />
-     */
-  activationFlags?: TradeActivationFlags | null;
-  /**
-     * Gets and sets the order placing time in milliseconds, since 1970.01.01
-     * <br /><strong>If the value of this field is specified, the TimeSetup value will be filled in automatically.</strong>
      * @nullable
      */
-  timeSetupMsc?: string | null;
+  activationTime?: string | null;
+  /**
+     * order comment
+     * @nullable
+     */
+  comment?: string | null;
+  /**
+     * contract size
+     * @nullable
+     */
+  contractSize?: number | null;
+  /**
+     * processed dealer login (0-means auto)
+     * @nullable
+     */
+  dealer?: number | null;
+  /**
+     * price digits
+     * @nullable
+     */
+  digits?: number | null;
+  /**
+     * currency digits
+     * @nullable
+     */
+  digitsCurrency?: number | null;
+  /**
+     * expert id (filled by expert advisor)
+     * @nullable
+     */
+  expertID?: number | null;
+  /**
+     * order ticket in external system (exchange, ECN, etc)
+     * @nullable
+     */
+  externalID?: string | null;
+  /**
+     * client login
+     * @nullable
+     */
+  login?: number | null;
+  /**
+     * modification flags
+     * @nullable
+     */
+  modificationFlags?: number | null;
+  /**
+     * order ticket
+     * @nullable
+     */
+  order?: number | null;
+  /**
+     * counterparty identification
+     * @nullable
+     */
+  partyID?: number | null;
+  /**
+     * position by id
+     * @nullable
+     */
+  positionByID?: number | null;
+  /**
+     * position id
+     * @nullable
+     */
+  positionID?: number | null;
+  /**
+     * order current price
+     * @nullable
+     */
+  priceCurrent?: number | null;
+  /**
+     * order price
+     * @nullable
+     */
+  priceOrder?: number | null;
+  /**
+     * order SL
+     * @nullable
+     */
+  priceSL?: number | null;
+  /**
+     * order TP
+     * @nullable
+     */
+  priceTP?: number | null;
+  /**
+     * order trigger price (stop-limit price)
+     * @nullable
+     */
+  priceTrigger?: number | null;
+  /**
+     * margin conversion rate (from symbol margin currency to deposit currency)
+     * @nullable
+     */
+  rateMargin?: number | null;
+  /** OrderReason */
+  reason?: OrderReason | null;
+  /** OrderState */
+  state?: OrderState | null;
+  /**
+     * order symbol
+     * @nullable
+     */
+  symbol?: string | null;
+  /**
+     * order filling/cancel time
+     * @nullable
+     */
+  timeDone?: string | null;
   /**
      * Gets and sets the order execution time in milliseconds, since 1970.01.01
      * <br /><strong>If the value of this field is specified, the TimeDone value will be filled in automatically.</strong>
@@ -177,28 +160,45 @@ export interface MT5Order {
      */
   timeDoneMsc?: string | null;
   /**
-     * margin conversion rate (from symbol margin currency to deposit currency)
+     * order expiration
      * @nullable
      */
-  rateMargin?: number | null;
+  timeExpiration?: string | null;
   /**
-     * position by id
+     * order setup time
      * @nullable
      */
-  positionByID?: number | null;
+  timeSetup?: string | null;
   /**
-     * modification flags
+     * Gets and sets the order placing time in milliseconds, since 1970.01.01
+     * <br /><strong>If the value of this field is specified, the TimeSetup value will be filled in automatically.</strong>
      * @nullable
      */
-  modificationFlags?: number | null;
+  timeSetupMsc?: string | null;
+  /** OrderType */
+  type?: OrderType | null;
+  /** OrderFilling */
+  typeFill?: OrderFilling | null;
+  /** OrderTime */
+  typeTime?: OrderTime | null;
   /**
-     * order initial volume with extended accuracy
+     * order current volume
      * @nullable
      */
-  volumeInitialExt?: number | null;
+  volumeCurrent?: number | null;
   /**
      * order current volume with extended accuracy
      * @nullable
      */
   volumeCurrentExt?: number | null;
+  /**
+     * order initial volume
+     * @nullable
+     */
+  volumeInitial?: number | null;
+  /**
+     * order initial volume with extended accuracy
+     * @nullable
+     */
+  volumeInitialExt?: number | null;
 }
