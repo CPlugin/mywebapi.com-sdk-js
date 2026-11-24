@@ -11,6 +11,10 @@ import type { EnManagerLimit } from './enManagerLimit';
 import type { EnManagerRights } from './enManagerRights';
 
 export interface MT5ConManager {
+  /** Get and set the time period of system logs available to a manager. */
+  limitLogs?: EnManagerLimit | null;
+  /** Get and set the time period of reports available to a manager. */
+  limitReports?: EnManagerLimit | null;
   /**
      * Get and set the login of a manager
      * @nullable
@@ -22,18 +26,14 @@ export interface MT5ConManager {
      */
   mailbox?: string | null;
   /**
-     * Get and set the ID of the trade server, to which the manager belongs.
-     * @nullable
-     */
-  server?: number | null;
-  /** Get and set the time period of system logs available to a manager. */
-  limitLogs?: EnManagerLimit | null;
-  /** Get and set the time period of reports available to a manager. */
-  limitReports?: EnManagerLimit | null;
-  /**
      * What is granted to manager.<br />
      * Features not enlisted here means that such features is not permitted.<br />
      * @nullable
      */
   right?: EnManagerRights[] | null;
+  /**
+     * Get and set the ID of the trade server, to which the manager belongs.
+     * @nullable
+     */
+  server?: number | null;
 }

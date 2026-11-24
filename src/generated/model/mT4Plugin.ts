@@ -13,18 +13,8 @@
  * `ConPlugin` with its embedded `PluginInfo` flattened.
  */
 export interface MT4Plugin {
-  /**
-     * Plugin DLL filename (max 256 chars on the platform side)
-     * @nullable
-     */
-  file?: string | null;
-  /**
-     * Plugin display name (from `PluginInfo.Name`)
-     * @nullable
-     */
-  name?: string | null;
-  /** Plugin version (from `PluginInfo.Version`) */
-  version?: number;
+  /** Configurable flag (plugin exposes editable parameters) */
+  configurable?: number;
   /**
      * Plugin copyright string
      * @nullable
@@ -32,8 +22,18 @@ export interface MT4Plugin {
   copyright?: string | null;
   /** Enabled flag (raw int — 0 = disabled, non-zero = enabled) */
   enabled?: number;
-  /** Configurable flag (plugin exposes editable parameters) */
-  configurable?: number;
+  /**
+     * Plugin DLL filename (max 256 chars on the platform side)
+     * @nullable
+     */
+  file?: string | null;
   /** Manager-terminal-accessible flag */
   managerAccess?: number;
+  /**
+     * Plugin display name (from `PluginInfo.Name`)
+     * @nullable
+     */
+  name?: string | null;
+  /** Plugin version (from `PluginInfo.Version`) */
+  version?: number;
 }

@@ -16,6 +16,52 @@ import type {
 import { customFetch } from '../mutator';
 
 
+export type getGroupRequestArrayMaskResponse200 = {
+  data: MT5ConGroupListApiResponse
+  status: 200
+}
+
+export type getGroupRequestArrayMaskResponseSuccess = (getGroupRequestArrayMaskResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getGroupRequestArrayMaskResponse = (getGroupRequestArrayMaskResponseSuccess)
+
+export const getGetGroupRequestArrayMaskUrl = (tradePlatform: string,
+    mask: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/GroupRequestArray/${encodeURIComponent(String(mask))}`
+}
+
+/**
+ * Returns the configuration of every group matching the mask. The mask takes full group
+ * names including the path (`demo\demoforex`), several names separated by commas, and
+ * the wildcards `*` (any value) and `!` (exclude), for example
+ * `demo*,!demoforex` — every group whose name starts with `demo` except
+ * `demoforex`.
+ * The SMTP credentials of the mail reports server (`ReportsSMTPLogin`,
+ * `ReportsSMTPPass`) are never returned: both fields are always empty.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Groups by mask
+ */
+export const getGroupRequestArrayMask = async (tradePlatform: string,
+    mask: string, options?: Parameters<typeof customFetch>[1]): Promise<getGroupRequestArrayMaskResponse> => {
+
+  return customFetch<getGroupRequestArrayMaskResponse>(getGetGroupRequestArrayMaskUrl(tradePlatform,mask),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
 export type getSymbolRequestArrayMaskResponse200 = {
   data: MT5SymbolListApiResponse
   status: 200
@@ -65,52 +111,6 @@ export const getSymbolRequestArrayMask = async (tradePlatform: string,
     params?: GetSymbolRequestArrayMaskParams, options?: Parameters<typeof customFetch>[1]): Promise<getSymbolRequestArrayMaskResponse> => {
 
   return customFetch<getSymbolRequestArrayMaskResponse>(getGetSymbolRequestArrayMaskUrl(tradePlatform,mask,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getGroupRequestArrayMaskResponse200 = {
-  data: MT5ConGroupListApiResponse
-  status: 200
-}
-
-export type getGroupRequestArrayMaskResponseSuccess = (getGroupRequestArrayMaskResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getGroupRequestArrayMaskResponse = (getGroupRequestArrayMaskResponseSuccess)
-
-export const getGetGroupRequestArrayMaskUrl = (tradePlatform: string,
-    mask: string,) => {
-
-
-
-
-  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/GroupRequestArray/${encodeURIComponent(String(mask))}`
-}
-
-/**
- * Returns the configuration of every group matching the mask. The mask takes full group
- * names including the path (`demo\demoforex`), several names separated by commas, and
- * the wildcards `*` (any value) and `!` (exclude), for example
- * `demo*,!demoforex` — every group whose name starts with `demo` except
- * `demoforex`.
- * The SMTP credentials of the mail reports server (`ReportsSMTPLogin`,
- * `ReportsSMTPPass`) are never returned: both fields are always empty.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Groups by mask
- */
-export const getGroupRequestArrayMask = async (tradePlatform: string,
-    mask: string, options?: Parameters<typeof customFetch>[1]): Promise<getGroupRequestArrayMaskResponse> => {
-
-  return customFetch<getGroupRequestArrayMaskResponse>(getGetGroupRequestArrayMaskUrl(tradePlatform,mask),
   {
     ...options,
     method: 'GET'

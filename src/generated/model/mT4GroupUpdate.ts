@@ -18,82 +18,99 @@ import type { OTPMode } from './oTPMode';
  */
 export interface MT4GroupUpdate {
   /**
-     * Group name to update (required identity; never changed by this call)
+     * Max balance under which an account becomes archivable
      * @nullable
      */
-  group?: string | null;
+  archiveMaxBalance?: number | null;
   /**
-     * 0 = group disabled, non-zero = enabled
+     * Pending orders clean-up period (days)
      * @nullable
      */
-  enable?: number | null;
+  archivePendingPeriod?: number | null;
   /**
-     * Trade confirmation timeout, seconds
+     * Inactivity period (days) before account archival
      * @nullable
      */
-  timeout?: number | null;
-  /** One-time password requirement mode */
-  otpMode?: OTPMode | null;
+  archivePeriod?: number | null;
+  /**
+     * 0 = no IE check, non-zero = check IE prices
+     * @nullable
+     */
+  checkIEPrices?: number | null;
+  /**
+     * 0 = LIFO, non-zero = FIFO close rule
+     * @nullable
+     */
+  closeFIFO?: number | null;
+  /**
+     * 0 = standard, non-zero = close-and-reopen mode
+     * @nullable
+     */
+  closeReopen?: number | null;
   /**
      * Company name shown on statements
      * @nullable
      */
   company?: string | null;
   /**
-     * Statement signature line
-     * @nullable
-     */
-  signature?: string | null;
-  /**
-     * Support page URL
-     * @nullable
-     */
-  supportPage?: string | null;
-  /**
-     * Support email
-     * @nullable
-     */
-  supportEmail?: string | null;
-  /**
      * Statement copy count
      * @nullable
      */
   copies?: number | null;
-  /**
-     * 0 = statements disabled, non-zero = enabled
-     * @nullable
-     */
-  reports?: number | null;
-  /**
-     * Default leverage when accounts omit their own
-     * @nullable
-     */
-  defaultLeverage?: number | null;
-  /**
-     * Default deposit when accounts omit their own balance
-     * @nullable
-     */
-  defaultDeposit?: number | null;
-  /**
-     * Max simultaneously open securities
-     * @nullable
-     */
-  maxSecurities?: number | null;
-  /**
-     * Deposit currency
-     * @nullable
-     */
-  currency?: string | null;
   /**
      * Virtual credit applied to group's accounts
      * @nullable
      */
   credit?: number | null;
   /**
+     * Deposit currency
+     * @nullable
+     */
+  currency?: string | null;
+  /**
+     * Default deposit when accounts omit their own balance
+     * @nullable
+     */
+  defaultDeposit?: number | null;
+  /**
+     * Default leverage when accounts omit their own
+     * @nullable
+     */
+  defaultLeverage?: number | null;
+  /**
+     * 0 = group disabled, non-zero = enabled
+     * @nullable
+     */
+  enable?: number | null;
+  /**
+     * Group name to update (required identity; never changed by this call)
+     * @nullable
+     */
+  group?: string | null;
+  /** Permissions bit mask */
+  groupRights?: GroupRights | null;
+  /**
+     * 0 = standard, non-zero = treat large hedged leg specially
+     * @nullable
+     */
+  hedgeLargeLeg?: number | null;
+  /**
+     * 0 = hedging allowed, non-zero = prohibited
+     * @nullable
+     */
+  hedgeProhibited?: number | null;
+  /**
+     * Annual interest rate (percent)
+     * @nullable
+     */
+  interestRate?: number | null;
+  /**
      * Margin call threshold (percent)
      * @nullable
      */
   marginCall?: number | null;
+  /** Margin controlling unit (percent vs deposit currency) */
+  marginControllingType?: MarginControllingType | null;
   /** Margin calculation mode */
   marginMode?: MarginMode | null;
   /**
@@ -102,69 +119,52 @@ export interface MT4GroupUpdate {
      */
   marginStopout?: number | null;
   /**
-     * Annual interest rate (percent)
-     * @nullable
-     */
-  interestRate?: number | null;
-  /**
-     * 0 = no rollovers, non-zero = use them
-     * @nullable
-     */
-  useSwap?: number | null;
-  /** News delivery mode */
-  newsMode?: NewsMode | null;
-  /** Permissions bit mask */
-  groupRights?: GroupRights | null;
-  /**
-     * 0 = no IE check, non-zero = check IE prices
-     * @nullable
-     */
-  checkIEPrices?: number | null;
-  /**
      * Maximum simultaneous orders and open positions
      * @nullable
      */
   maxPositions?: number | null;
   /**
-     * 0 = standard, non-zero = close-and-reopen mode
+     * Max simultaneously open securities
      * @nullable
      */
-  closeReopen?: number | null;
+  maxSecurities?: number | null;
+  /** News delivery mode */
+  newsMode?: NewsMode | null;
+  /** One-time password requirement mode */
+  otpMode?: OTPMode | null;
   /**
-     * 0 = hedging allowed, non-zero = prohibited
+     * 0 = statements disabled, non-zero = enabled
      * @nullable
      */
-  hedgeProhibited?: number | null;
+  reports?: number | null;
   /**
-     * 0 = LIFO, non-zero = FIFO close rule
+     * Statement signature line
      * @nullable
      */
-  closeFIFO?: number | null;
-  /**
-     * 0 = standard, non-zero = treat large hedged leg specially
-     * @nullable
-     */
-  hedgeLargeLeg?: number | null;
-  /** Margin controlling unit (percent vs deposit currency) */
-  marginControllingType?: MarginControllingType | null;
-  /**
-     * Inactivity period (days) before account archival
-     * @nullable
-     */
-  archivePeriod?: number | null;
-  /**
-     * Max balance under which an account becomes archivable
-     * @nullable
-     */
-  archiveMaxBalance?: number | null;
+  signature?: string | null;
   /**
      * 0 = include hedged in stop-out checks, non-zero = skip them
      * @nullable
      */
   stopoutSkipHedged?: number | null;
   /**
-     * Pending orders clean-up period (days)
+     * Support email
      * @nullable
      */
-  archivePendingPeriod?: number | null;
+  supportEmail?: string | null;
+  /**
+     * Support page URL
+     * @nullable
+     */
+  supportPage?: string | null;
+  /**
+     * Trade confirmation timeout, seconds
+     * @nullable
+     */
+  timeout?: number | null;
+  /**
+     * 0 = no rollovers, non-zero = use them
+     * @nullable
+     */
+  useSwap?: number | null;
 }

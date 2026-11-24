@@ -15,20 +15,20 @@
  */
 export interface MT4NewsSendRequest {
   /**
-     * News headline (required, up to 256 chars)
+     * News body text (required)
      * @nullable
      */
-  topic?: string | null;
+  body?: string | null;
   /**
      * News category (optional, up to 64 chars)
      * @nullable
      */
   category?: string | null;
-  /**
-     * News body text (required)
-     * @nullable
-     */
-  body?: string | null;
   /** High-priority flag (`true` = priority 1, `false` = priority 0) */
   highPriority?: boolean;
+  /**
+     * News headline (required, up to 256 chars)
+     * @nullable
+     */
+  topic?: string | null;
 }

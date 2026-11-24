@@ -18,16 +18,16 @@
  * underscore-prefixed unix-time field is masked by MT4Performance.Ctm.
  */
 export interface MT4Performance {
-  /** Snapshot timestamp (platform internal: __time32_t) */
-  ctm?: string;
-  /** Connected-users count at the snapshot */
-  users?: number;
   /** CPU load, percent (0..100) */
   cpu?: number;
+  /** Snapshot timestamp (platform internal: __time32_t) */
+  ctm?: string;
   /** Free memory at the snapshot, in kilobytes */
   freeMem?: number;
   /** Network throughput at the snapshot, in kilobytes per second */
   network?: number;
   /** Open-sockets count at the snapshot */
   sockets?: number;
+  /** Connected-users count at the snapshot */
+  users?: number;
 }

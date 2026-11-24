@@ -23,137 +23,6 @@ import type {
 import { customFetch } from '../mutator';
 
 
-export type getPerformanceRequestResponse200 = {
-  data: MT4PerformanceListApiResponse
-  status: 200
-}
-
-export type getPerformanceRequestResponseSuccess = (getPerformanceRequestResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getPerformanceRequestResponse = (getPerformanceRequestResponseSuccess)
-
-export const getGetPerformanceRequestUrl = (tradePlatform: string,
-    params?: GetPerformanceRequestParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/PerformanceRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/PerformanceRequest`
-}
-
-/**
- * Time series of MT4 server resource snapshots — CPU, memory, network, sockets, connected-users — captured at server-defined cadence.
- *
- * Manager-live read (round-trip to MT4 server). The MT4 server records
- * these snapshots periodically (typically every five minutes, broker-
- * configurable). Pass from as the earliest timestamp
- * to include; the server returns every snapshot at or after that point
- * up to the present, in ascending `Ctm` order. Useful for capacity
- * dashboards, oncall incident timelines, and load investigations. Pump
- * cache is NOT consulted — data reflects the authoritative server log.
- * Returns an empty list (Ok envelope, not an error) when the window
- * contains no snapshots.
- *
- * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get server performance series
- */
-export const getPerformanceRequest = async (tradePlatform: string,
-    params?: GetPerformanceRequestParams, options?: Parameters<typeof customFetch>[1]): Promise<getPerformanceRequestResponse> => {
-
-  return customFetch<getPerformanceRequestResponse>(getGetPerformanceRequestUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getReportsRequestResponse200 = {
-  data: MT4TradeListApiResponse
-  status: 200
-}
-
-export type getReportsRequestResponseSuccess = (getReportsRequestResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getReportsRequestResponse = (getReportsRequestResponseSuccess)
-
-export const getGetReportsRequestUrl = (tradePlatform: string,
-    params?: GetReportsRequestParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    const explodeParameters = ["logins"];
-
-    if (Array.isArray(value) && explodeParameters.includes(key)) {
-      value.forEach((v) => {
-        normalizedParams.append(key, v === null ? 'null' : String(v));
-      });
-      return;
-    }
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ReportsRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ReportsRequest`
-}
-
-/**
- * Closed-trade reports for a batch of account logins within a time window — the data set that drives broker financial reporting (PnL, commissions, taxes) and customer trade-history exports.
- *
- * Manager-live read (round-trip to MT4 server). Pass logins as repeated
- * query parameters: `?logins=1001&logins=1002&logins=1003`.
- * Server-side billing counts this as one Manager request regardless of
- * batch size — prefer one batched call over a per-login loop.
- *
- * The platform returns a dictionary keyed by order ticket; the v2 envelope
- * flattens it to a list. Missing logins are silently omitted (no error
- * envelope). The optional name parameter selects a
- * server-defined report template — leave it null/empty to use the
- * default `"RTL_report"` template (closed trades within the window).
- *
- * Pump cache is NOT consulted — data reflects authoritative server
- * history. Note: the platform comment warns that asking for a window
- * where the manager account lacks the `Reports` permission may
- * cause MT4 to drop the manager connection; this endpoint guards that
- * indirectly via the API-side `ResourceAccess` check, but a broker
- * that mis-configured the underlying manager rights can still observe
- * transient connection bounces.
- *
- * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get closed-trade reports
- */
-export const getReportsRequest = async (tradePlatform: string,
-    params?: GetReportsRequestParams, options?: Parameters<typeof customFetch>[1]): Promise<getReportsRequestResponse> => {
-
-  return customFetch<getReportsRequestResponse>(getGetReportsRequestUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
 export type getDailyReportsRequestResponse200 = {
   data: MT4DailyReportListApiResponse
   status: 200
@@ -291,6 +160,53 @@ export const getDailyReportsRequestEx = async (tradePlatform: string,
 );}
 
 
+export type postDailySyncReadResponse200 = {
+  data: MT4DailyReportListApiResponse
+  status: 200
+}
+
+export type postDailySyncReadResponseSuccess = (postDailySyncReadResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postDailySyncReadResponse = (postDailySyncReadResponseSuccess)
+
+export const getPostDailySyncReadUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/DailySyncRead`
+}
+
+/**
+ * Drains the daily-report snapshot opened by the most recent `DailySyncStart` call. Returns every record reserved by the server in that sync session.
+ *
+ * Manager-live POST (consumes server-side session state — the snapshot
+ * is dropped after a successful read). Empty payload (`[]`) is a
+ * valid response when the snapshot held no records; this is NOT an
+ * error.
+ *
+ * Call `DailySyncStart` first; calling `DailySyncRead` without
+ * a prior `DailySyncStart` may return an empty list or a non-Ok
+ * `managerAPICode` depending on server build.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Read daily-report sync
+ */
+export const postDailySyncRead = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<postDailySyncReadResponse> => {
+
+  return customFetch<postDailySyncReadResponse>(getPostDailySyncReadUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
 export type postDailySyncStartResponse200 = {
   data: BooleanApiResponse
   status: 200
@@ -350,47 +266,131 @@ export const postDailySyncStart = async (tradePlatform: string,
 );}
 
 
-export type postDailySyncReadResponse200 = {
-  data: MT4DailyReportListApiResponse
+export type getPerformanceRequestResponse200 = {
+  data: MT4PerformanceListApiResponse
   status: 200
 }
 
-export type postDailySyncReadResponseSuccess = (postDailySyncReadResponse200) & {
+export type getPerformanceRequestResponseSuccess = (getPerformanceRequestResponse200) & {
   headers: Headers;
 };
 ;
 
-export type postDailySyncReadResponse = (postDailySyncReadResponseSuccess)
+export type getPerformanceRequestResponse = (getPerformanceRequestResponseSuccess)
 
-export const getPostDailySyncReadUrl = (tradePlatform: string,) => {
+export const getGetPerformanceRequestUrl = (tradePlatform: string,
+    params?: GetPerformanceRequestParams,) => {
+  const normalizedParams = new URLSearchParams();
 
+  Object.entries(params || {}).forEach(([key, value]) => {
 
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
 
+  const stringifiedParams = normalizedParams.toString();
 
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/DailySyncRead`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/PerformanceRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/PerformanceRequest`
 }
 
 /**
- * Drains the daily-report snapshot opened by the most recent `DailySyncStart` call. Returns every record reserved by the server in that sync session.
+ * Time series of MT4 server resource snapshots — CPU, memory, network, sockets, connected-users — captured at server-defined cadence.
  *
- * Manager-live POST (consumes server-side session state — the snapshot
- * is dropped after a successful read). Empty payload (`[]`) is a
- * valid response when the snapshot held no records; this is NOT an
- * error.
- *
- * Call `DailySyncStart` first; calling `DailySyncRead` without
- * a prior `DailySyncStart` may return an empty list or a non-Ok
- * `managerAPICode` depending on server build.
+ * Manager-live read (round-trip to MT4 server). The MT4 server records
+ * these snapshots periodically (typically every five minutes, broker-
+ * configurable). Pass from as the earliest timestamp
+ * to include; the server returns every snapshot at or after that point
+ * up to the present, in ascending `Ctm` order. Useful for capacity
+ * dashboards, oncall incident timelines, and load investigations. Pump
+ * cache is NOT consulted — data reflects the authoritative server log.
+ * Returns an empty list (Ok envelope, not an error) when the window
+ * contains no snapshots.
  *
  * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Read daily-report sync
+ * @summary Get server performance series
  */
-export const postDailySyncRead = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<postDailySyncReadResponse> => {
+export const getPerformanceRequest = async (tradePlatform: string,
+    params?: GetPerformanceRequestParams, options?: Parameters<typeof customFetch>[1]): Promise<getPerformanceRequestResponse> => {
 
-  return customFetch<postDailySyncReadResponse>(getPostDailySyncReadUrl(tradePlatform),
+  return customFetch<getPerformanceRequestResponse>(getGetPerformanceRequestUrl(tradePlatform,params),
   {
     ...options,
-    method: 'POST'
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getReportsRequestResponse200 = {
+  data: MT4TradeListApiResponse
+  status: 200
+}
+
+export type getReportsRequestResponseSuccess = (getReportsRequestResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getReportsRequestResponse = (getReportsRequestResponseSuccess)
+
+export const getGetReportsRequestUrl = (tradePlatform: string,
+    params?: GetReportsRequestParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["logins"];
+
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? 'null' : String(v));
+      });
+      return;
+    }
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ReportsRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ReportsRequest`
+}
+
+/**
+ * Closed-trade reports for a batch of account logins within a time window — the data set that drives broker financial reporting (PnL, commissions, taxes) and customer trade-history exports.
+ *
+ * Manager-live read (round-trip to MT4 server). Pass logins as repeated
+ * query parameters: `?logins=1001&logins=1002&logins=1003`.
+ * Server-side billing counts this as one Manager request regardless of
+ * batch size — prefer one batched call over a per-login loop.
+ *
+ * The platform returns a dictionary keyed by order ticket; the v2 envelope
+ * flattens it to a list. Missing logins are silently omitted (no error
+ * envelope). The optional name parameter selects a
+ * server-defined report template — leave it null/empty to use the
+ * default `"RTL_report"` template (closed trades within the window).
+ *
+ * Pump cache is NOT consulted — data reflects authoritative server
+ * history. Note: the platform comment warns that asking for a window
+ * where the manager account lacks the `Reports` permission may
+ * cause MT4 to drop the manager connection; this endpoint guards that
+ * indirectly via the API-side `ResourceAccess` check, but a broker
+ * that mis-configured the underlying manager rights can still observe
+ * transient connection bounces.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get closed-trade reports
+ */
+export const getReportsRequest = async (tradePlatform: string,
+    params?: GetReportsRequestParams, options?: Parameters<typeof customFetch>[1]): Promise<getReportsRequestResponse> => {
+
+  return customFetch<getReportsRequestResponse>(getGetReportsRequestUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
 
 
   }

@@ -21,11 +21,6 @@ export interface MT4ServerLog {
      */
   code?: string | null;
   /**
-     * Server-side timestamp as the platform formats it (string, not DateTime — preserved verbatim)
-     * @nullable
-     */
-  time?: string | null;
-  /**
      * Client IP recorded for the event (empty for server-internal events)
      * @nullable
      */
@@ -35,4 +30,9 @@ export interface MT4ServerLog {
      * @nullable
      */
   message?: string | null;
+  /**
+     * Server-side timestamp as the platform formats it (string, not DateTime — preserved verbatim)
+     * @nullable
+     */
+  time?: string | null;
 }

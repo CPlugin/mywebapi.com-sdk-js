@@ -14,36 +14,36 @@
  * disaster-recovery flow needs to recreate.
  */
 export interface MT4UserRestoreInput {
-  /** Account login (record key) */
-  login?: number;
-  /**
-     * Group name
-     * @nullable
-     */
-  group?: string | null;
-  /**
-     * Account holder display name
-     * @nullable
-     */
-  name?: string | null;
-  /**
-     * Email address
-     * @nullable
-     */
-  email?: string | null;
+  /** Account balance (broker base currency) */
+  balance?: number;
   /**
      * Country
      * @nullable
      */
   country?: string | null;
-  /** Trading leverage (e.g. 100 for 1:100) */
-  leverage?: number;
-  /** Account balance (broker base currency) */
-  balance?: number;
   /** Account credit (e.g. promotional bonus) */
   credit?: number;
+  /**
+     * Email address
+     * @nullable
+     */
+  email?: string | null;
   /** Account enabled flag (0 = disabled, 1 = enabled — raw platform int) */
   enable?: number;
   /** Read-only flag (1 = cannot open positions) */
   enableReadOnly?: number;
+  /**
+     * Group name
+     * @nullable
+     */
+  group?: string | null;
+  /** Trading leverage (e.g. 100 for 1:100) */
+  leverage?: number;
+  /** Account login (record key) */
+  login?: number;
+  /**
+     * Account holder display name
+     * @nullable
+     */
+  name?: string | null;
 }

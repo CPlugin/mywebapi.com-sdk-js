@@ -17,70 +17,6 @@ import type {
 import { customFetch } from '../mutator';
 
 
-export type postDealerSendResponse200 = {
-  data: MT5RequestApiResponse
-  status: 200
-}
-
-export type postDealerSendResponseSuccess = (postDealerSendResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postDealerSendResponse = (postDealerSendResponseSuccess)
-
-export const getPostDealerSendUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealerSend`
-}
-
-/**
- * <br>
- *             Sends a trade request to the trade server as a dealer and waits for the server answer.
- *             Only dealer request types (200–255, the `Dealer*` actions) are accepted; any other
- *             request type is rejected by the server with the corresponding platform error, which is
- *             returned in the error envelope.
- *
- * <br>
- *             The call blocks while the dealer answer is awaited. When the answer does not arrive
- *             before the server timeout, the platform error `MT_RET_ERR_TIMEOUT` is returned.
- *             The response carries the request as the server processed it, including the assigned
- *             request identifier and the resulting order and deal references.
- *
- *
- * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Send a trade request on behalf of the dealer
- */
-export const postDealerSend = async (tradePlatform: string,
-    mT5Request?: MT5Request, options?: Parameters<typeof customFetch>[1]): Promise<postDealerSendResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postDealerSendResponse>(getPostDealerSendUrl(tradePlatform),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT5Request)
-  }
-);}
-
-
 export type postDealerBalanceResponse200 = {
   data: UInt64ApiResponse
   status: 200
@@ -137,7 +73,7 @@ return customFetch<postDealerBalanceResponse>(getPostDealerBalanceUrl(tradePlatf
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
     body: JSON.stringify(dealerBalanceRequest)
   }
 );}
@@ -198,8 +134,72 @@ return customFetch<postDealerBalanceRawResponse>(getPostDealerBalanceRawUrl(trad
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
     body: JSON.stringify(dealerBalanceRequest)
+  }
+);}
+
+
+export type postDealerSendResponse200 = {
+  data: MT5RequestApiResponse
+  status: 200
+}
+
+export type postDealerSendResponseSuccess = (postDealerSendResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postDealerSendResponse = (postDealerSendResponseSuccess)
+
+export const getPostDealerSendUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT5/${encodeURIComponent(String(tradePlatform))}/DealerSend`
+}
+
+/**
+ * <br>
+ *             Sends a trade request to the trade server as a dealer and waits for the server answer.
+ *             Only dealer request types (200–255, the `Dealer*` actions) are accepted; any other
+ *             request type is rejected by the server with the corresponding platform error, which is
+ *             returned in the error envelope.
+ *
+ * <br>
+ *             The call blocks while the dealer answer is awaited. When the answer does not arrive
+ *             before the server timeout, the platform error `MT_RET_ERR_TIMEOUT` is returned.
+ *             The response carries the request as the server processed it, including the assigned
+ *             request identifier and the resulting order and deal references.
+ *
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Send a trade request on behalf of the dealer
+ */
+export const postDealerSend = async (tradePlatform: string,
+    mT5Request?: MT5Request, options?: Parameters<typeof customFetch>[1]): Promise<postDealerSendResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postDealerSendResponse>(getPostDealerSendUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT5Request)
   }
 );}
 

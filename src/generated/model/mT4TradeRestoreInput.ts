@@ -14,44 +14,44 @@ import type { TradeCommand } from './tradeCommand';
  * identity + economic state that a disaster-recovery flow needs.
  */
 export interface MT4TradeRestoreInput {
-  /** Order ticket (the input array position is the binding key for the result) */
-  order?: number;
-  /** Owner's login */
-  login?: number;
-  /**
-     * Symbol (e.g. `EURUSD`; max 12 ASCII chars on the platform side)
-     * @nullable
-     */
-  symbol?: string | null;
-  /** Trade command (buy / sell / pending / balance / etc.) */
-  tradeCommand?: TradeCommand;
-  /** Volume in 1/100 lots (15 = 0.15 lot) */
-  volume?: number;
-  /** Open price */
-  openPrice?: number;
-  /** Stop loss */
-  sl?: number;
-  /** Take profit */
-  tp?: number;
   /** Close price (0 for still-open trades) */
   closePrice?: number;
-  /** Trade profit/loss */
-  profit?: number;
-  /** Swap (rollover charge) */
-  storage?: number;
-  /** Commission */
-  commission?: number;
-  /** Open time (UTC) */
-  openTime?: string;
   /** Close time (UTC; default for still-open) */
   closeTime?: string;
-  /** Expiration time (UTC; default for non-pending orders) */
-  expiration?: string;
-  /** Magic number (EA identifier) */
-  magic?: number;
   /**
      * Free-form comment (max ~31 ASCII chars on the platform side)
      * @nullable
      */
   comment?: string | null;
+  /** Commission */
+  commission?: number;
+  /** Expiration time (UTC; default for non-pending orders) */
+  expiration?: string;
+  /** Owner's login */
+  login?: number;
+  /** Magic number (EA identifier) */
+  magic?: number;
+  /** Open price */
+  openPrice?: number;
+  /** Open time (UTC) */
+  openTime?: string;
+  /** Order ticket (the input array position is the binding key for the result) */
+  order?: number;
+  /** Trade profit/loss */
+  profit?: number;
+  /** Stop loss */
+  sl?: number;
+  /** Swap (rollover charge) */
+  storage?: number;
+  /**
+     * Symbol (e.g. `EURUSD`; max 12 ASCII chars on the platform side)
+     * @nullable
+     */
+  symbol?: string | null;
+  /** Take profit */
+  tp?: number;
+  /** Trade command (buy / sell / pending / balance / etc.) */
+  tradeCommand?: TradeCommand;
+  /** Volume in 1/100 lots (15 = 0.15 lot) */
+  volume?: number;
 }

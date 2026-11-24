@@ -22,62 +22,62 @@ import type { TradeRecordState } from './tradeRecordState';
  * ActivationType) are returned as their names — e.g. "Buy" rather than 0.
  */
 export interface MT4Trade {
-  /** Order ticket number */
-  order?: number;
-  /** Owner account login */
-  login?: number;
-  /**
-     * Symbol traded (e.g. EURUSD)
-     * @nullable
-     */
-  symbol?: string | null;
-  /** Symbol precision (number of digits after the decimal point) */
-  digits?: number;
-  /** Trade direction / pending order type (Buy/Sell/BuyLimit/etc) */
-  tradeCommand?: TradeCommand;
-  /** Volume stored ×100 (e.g. 15 means 0.15 lots — see VolumeLots) */
-  volume?: number;
-  /** Volume expressed in lots, for human consumption (Volume / 100) */
-  volumeLots?: number;
-  /** Lifecycle state of the trade record */
-  tradeRecordState?: TradeRecordState;
-  /** Price at which the order was opened */
-  openPrice?: number;
-  /** Stop-loss price (0 if unset) */
-  sl?: number;
-  /** Take-profit price (0 if unset) */
-  tp?: number;
-  /** Order open timestamp */
-  openTime?: string;
-  /** Order close timestamp (default for still-open orders) */
-  closeTime?: string;
+  /** How a pending order was activated */
+  activationType?: ActivationType;
   /** Price at which the order was closed */
   closePrice?: number;
-  /** Broker commission */
-  commission?: number;
-  /** Agent (IB) commission */
-  commissionAgent?: number;
-  /** Accumulated swap / rollover charges */
-  storage?: number;
-  /** Realised / floating profit */
-  profit?: number;
-  /** Taxes withheld */
-  taxes?: number;
-  /** Expert advisor magic number — client-supplied tag */
-  magic?: number;
+  /** Order close timestamp (default for still-open orders) */
+  closeTime?: string;
   /**
      * Free-form order comment
      * @nullable
      */
   comment?: string | null;
+  /** Broker commission */
+  commission?: number;
+  /** Agent (IB) commission */
+  commissionAgent?: number;
+  /** Symbol precision (number of digits after the decimal point) */
+  digits?: number;
   /** Expiration timestamp for pending orders */
   expiration?: string;
-  /** Reason the trade record was created/modified (Client/Expert/Dealer/Stopout/etc) */
-  tradeRecordReason?: TradeRecordReason;
-  /** How a pending order was activated */
-  activationType?: ActivationType;
-  /** Last modification timestamp of the trade record */
-  timeStamp?: string;
+  /** Owner account login */
+  login?: number;
+  /** Expert advisor magic number — client-supplied tag */
+  magic?: number;
   /** Margin conversion rate (margin currency → deposit currency) */
   marginRate?: number;
+  /** Price at which the order was opened */
+  openPrice?: number;
+  /** Order open timestamp */
+  openTime?: string;
+  /** Order ticket number */
+  order?: number;
+  /** Realised / floating profit */
+  profit?: number;
+  /** Stop-loss price (0 if unset) */
+  sl?: number;
+  /** Accumulated swap / rollover charges */
+  storage?: number;
+  /**
+     * Symbol traded (e.g. EURUSD)
+     * @nullable
+     */
+  symbol?: string | null;
+  /** Taxes withheld */
+  taxes?: number;
+  /** Last modification timestamp of the trade record */
+  timeStamp?: string;
+  /** Take-profit price (0 if unset) */
+  tp?: number;
+  /** Trade direction / pending order type (Buy/Sell/BuyLimit/etc) */
+  tradeCommand?: TradeCommand;
+  /** Reason the trade record was created/modified (Client/Expert/Dealer/Stopout/etc) */
+  tradeRecordReason?: TradeRecordReason;
+  /** Lifecycle state of the trade record */
+  tradeRecordState?: TradeRecordState;
+  /** Volume stored ×100 (e.g. 15 means 0.15 lots — see VolumeLots) */
+  volume?: number;
+  /** Volume expressed in lots, for human consumption (Volume / 100) */
+  volumeLots?: number;
 }

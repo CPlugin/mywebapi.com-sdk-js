@@ -25,61 +25,6 @@ import type {
 import { customFetch } from '../mutator';
 
 
-export type getChartRequestSymbolMT4Response200 = {
-  data: MT4ChartBarListApiResponse
-  status: 200
-}
-
-export type getChartRequestSymbolMT4ResponseSuccess = (getChartRequestSymbolMT4Response200) & {
-  headers: Headers;
-};
-;
-
-export type getChartRequestSymbolMT4Response = (getChartRequestSymbolMT4ResponseSuccess)
-
-export const getGetChartRequestSymbolMT4Url = (tradePlatform: string,
-    symbol: string,
-    params?: GetChartRequestSymbolMT4Params,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartRequest/${encodeURIComponent(String(symbol))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartRequest/${encodeURIComponent(String(symbol))}`
-}
-
-/**
- * OHLC chart bars for a symbol over a date range.
- *
- * Manager (live) call. Resolves the symbol's `ConSymbol` first
- * (needed by the platform to set scale/digits), then asks for bars of
- * the given `period` in the date window. `mode` defaults to
- * `RangeInExcludeOutOfRage` — bars whose time falls strictly
- * inside the window.
- *
- * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get chart bars
- */
-export const getChartRequestSymbolMT4 = async (tradePlatform: string,
-    symbol: string,
-    params?: GetChartRequestSymbolMT4Params, options?: Parameters<typeof customFetch>[1]): Promise<getChartRequestSymbolMT4Response> => {
-
-  return customFetch<getChartRequestSymbolMT4Response>(getGetChartRequestSymbolMT4Url(tradePlatform,symbol,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
 export type postChartAddSymbolResponse200 = {
   data: BooleanApiResponse
   status: 200
@@ -146,77 +91,7 @@ return customFetch<postChartAddSymbolResponse>(getPostChartAddSymbolUrl(tradePla
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4ChartWriteRequest)
-  }
-);}
-
-
-export type postChartUpdateSymbolResponse200 = {
-  data: BooleanApiResponse
-  status: 200
-}
-
-export type postChartUpdateSymbolResponseSuccess = (postChartUpdateSymbolResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postChartUpdateSymbolResponse = (postChartUpdateSymbolResponseSuccess)
-
-export const getPostChartUpdateSymbolUrl = (tradePlatform: string,
-    symbol: string,
-    params?: PostChartUpdateSymbolParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartUpdate/${encodeURIComponent(String(symbol))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartUpdate/${encodeURIComponent(String(symbol))}`
-}
-
-/**
- * Overwrite existing OHLC bars in a symbol's chart history — POST destructive.
- *
- * Manager (live) call. Replaces bars at the timestamps provided in
- * `Rates` for the given `period`. Bars whose timestamps don't
- * match an existing bar are silently ignored by the MT4 server.
- *
- * Idempotency-Key strongly recommended.
- *
- * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Update chart bars
- */
-export const postChartUpdateSymbol = async (tradePlatform: string,
-    symbol: string,
-    mT4ChartWriteRequest?: MT4ChartWriteRequest,
-    params?: PostChartUpdateSymbolParams, options?: Parameters<typeof customFetch>[1]): Promise<postChartUpdateSymbolResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postChartUpdateSymbolResponse>(getPostChartUpdateSymbolUrl(tradePlatform,symbol,params),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
     body: JSON.stringify(mT4ChartWriteRequest)
   }
 );}
@@ -288,7 +163,132 @@ return customFetch<postChartDeleteSymbolResponse>(getPostChartDeleteSymbolUrl(tr
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4ChartWriteRequest)
+  }
+);}
+
+
+export type getChartRequestSymbolMT4Response200 = {
+  data: MT4ChartBarListApiResponse
+  status: 200
+}
+
+export type getChartRequestSymbolMT4ResponseSuccess = (getChartRequestSymbolMT4Response200) & {
+  headers: Headers;
+};
+;
+
+export type getChartRequestSymbolMT4Response = (getChartRequestSymbolMT4ResponseSuccess)
+
+export const getGetChartRequestSymbolMT4Url = (tradePlatform: string,
+    symbol: string,
+    params?: GetChartRequestSymbolMT4Params,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartRequest/${encodeURIComponent(String(symbol))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartRequest/${encodeURIComponent(String(symbol))}`
+}
+
+/**
+ * OHLC chart bars for a symbol over a date range.
+ *
+ * Manager (live) call. Resolves the symbol's `ConSymbol` first
+ * (needed by the platform to set scale/digits), then asks for bars of
+ * the given `period` in the date window. `mode` defaults to
+ * `RangeInExcludeOutOfRage` — bars whose time falls strictly
+ * inside the window.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get chart bars
+ */
+export const getChartRequestSymbolMT4 = async (tradePlatform: string,
+    symbol: string,
+    params?: GetChartRequestSymbolMT4Params, options?: Parameters<typeof customFetch>[1]): Promise<getChartRequestSymbolMT4Response> => {
+
+  return customFetch<getChartRequestSymbolMT4Response>(getGetChartRequestSymbolMT4Url(tradePlatform,symbol,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type postChartUpdateSymbolResponse200 = {
+  data: BooleanApiResponse
+  status: 200
+}
+
+export type postChartUpdateSymbolResponseSuccess = (postChartUpdateSymbolResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postChartUpdateSymbolResponse = (postChartUpdateSymbolResponseSuccess)
+
+export const getPostChartUpdateSymbolUrl = (tradePlatform: string,
+    symbol: string,
+    params?: PostChartUpdateSymbolParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartUpdate/${encodeURIComponent(String(symbol))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/ChartUpdate/${encodeURIComponent(String(symbol))}`
+}
+
+/**
+ * Overwrite existing OHLC bars in a symbol's chart history — POST destructive.
+ *
+ * Manager (live) call. Replaces bars at the timestamps provided in
+ * `Rates` for the given `period`. Bars whose timestamps don't
+ * match an existing bar are silently ignored by the MT4 server.
+ *
+ * Idempotency-Key strongly recommended.
+ *
+ * **Timeout:** 15 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Update chart bars
+ */
+export const postChartUpdateSymbol = async (tradePlatform: string,
+    symbol: string,
+    mT4ChartWriteRequest?: MT4ChartWriteRequest,
+    params?: PostChartUpdateSymbolParams, options?: Parameters<typeof customFetch>[1]): Promise<postChartUpdateSymbolResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postChartUpdateSymbolResponse>(getPostChartUpdateSymbolUrl(tradePlatform,symbol,params),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
     body: JSON.stringify(mT4ChartWriteRequest)
   }
 );}
@@ -345,51 +345,40 @@ export const postHistoryCorrectSymbol = async (tradePlatform: string,
 );}
 
 
-export type getTicksRequestSymbolResponse200 = {
-  data: MT4TickRecordListApiResponse
+export type getTickInfoLastResponse200 = {
+  data: MT4TickInfoListApiResponse
   status: 200
 }
 
-export type getTicksRequestSymbolResponseSuccess = (getTicksRequestSymbolResponse200) & {
+export type getTickInfoLastResponseSuccess = (getTickInfoLastResponse200) & {
   headers: Headers;
 };
 ;
 
-export type getTicksRequestSymbolResponse = (getTicksRequestSymbolResponseSuccess)
+export type getTickInfoLastResponse = (getTickInfoLastResponseSuccess)
 
-export const getGetTicksRequestSymbolUrl = (tradePlatform: string,
-    symbol: string,
-    params?: GetTicksRequestSymbolParams,) => {
-  const normalizedParams = new URLSearchParams();
+export const getGetTickInfoLastUrl = (tradePlatform: string,) => {
 
-  Object.entries(params || {}).forEach(([key, value]) => {
 
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
 
-  const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TicksRequest/${encodeURIComponent(String(symbol))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TicksRequest/${encodeURIComponent(String(symbol))}`
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TickInfoLast`
 }
 
 /**
- * Historical ticks for a symbol over a date range.
+ * Last known bid/ask tick for ALL symbols in the pump cache.
  *
- * Manager (live) call returning a list of `MT4TickRecord` DTOs.
- * `flags` controls whether raw and/or normalised ticks are
- * included (defaults to `All`). Heavy endpoint — pair with
- * `Idempotency-Key` for retry safety.
+ * Snapshot of every symbol the pump has received quotes for. Empty list
+ * when no quotes have been received yet. For sub-second updates use the
+ * SignalR tick stream — this endpoint is intended for one-shot snapshots
+ * (warm-up, monitoring dashboards, idempotent cache scenarios).
  *
- * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get historical ticks
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get last ticks, all symbols (cached)
  */
-export const getTicksRequestSymbol = async (tradePlatform: string,
-    symbol: string,
-    params?: GetTicksRequestSymbolParams, options?: Parameters<typeof customFetch>[1]): Promise<getTicksRequestSymbolResponse> => {
+export const getTickInfoLast = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getTickInfoLastResponse> => {
 
-  return customFetch<getTicksRequestSymbolResponse>(getGetTicksRequestSymbolUrl(tradePlatform,symbol,params),
+  return customFetch<getTickInfoLastResponse>(getGetTickInfoLastUrl(tradePlatform),
   {
     ...options,
     method: 'GET'
@@ -445,40 +434,51 @@ export const getTickInfoLastSymbol = async (tradePlatform: string,
 );}
 
 
-export type getTickInfoLastResponse200 = {
-  data: MT4TickInfoListApiResponse
+export type getTicksRequestSymbolResponse200 = {
+  data: MT4TickRecordListApiResponse
   status: 200
 }
 
-export type getTickInfoLastResponseSuccess = (getTickInfoLastResponse200) & {
+export type getTicksRequestSymbolResponseSuccess = (getTicksRequestSymbolResponse200) & {
   headers: Headers;
 };
 ;
 
-export type getTickInfoLastResponse = (getTickInfoLastResponseSuccess)
+export type getTicksRequestSymbolResponse = (getTicksRequestSymbolResponseSuccess)
 
-export const getGetTickInfoLastUrl = (tradePlatform: string,) => {
+export const getGetTicksRequestSymbolUrl = (tradePlatform: string,
+    symbol: string,
+    params?: GetTicksRequestSymbolParams,) => {
+  const normalizedParams = new URLSearchParams();
 
+  Object.entries(params || {}).forEach(([key, value]) => {
 
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
 
+  const stringifiedParams = normalizedParams.toString();
 
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TickInfoLast`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TicksRequest/${encodeURIComponent(String(symbol))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TicksRequest/${encodeURIComponent(String(symbol))}`
 }
 
 /**
- * Last known bid/ask tick for ALL symbols in the pump cache.
+ * Historical ticks for a symbol over a date range.
  *
- * Snapshot of every symbol the pump has received quotes for. Empty list
- * when no quotes have been received yet. For sub-second updates use the
- * SignalR tick stream — this endpoint is intended for one-shot snapshots
- * (warm-up, monitoring dashboards, idempotent cache scenarios).
+ * Manager (live) call returning a list of `MT4TickRecord` DTOs.
+ * `flags` controls whether raw and/or normalised ticks are
+ * included (defaults to `All`). Heavy endpoint — pair with
+ * `Idempotency-Key` for retry safety.
  *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get last ticks, all symbols (cached)
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get historical ticks
  */
-export const getTickInfoLast = async (tradePlatform: string, options?: Parameters<typeof customFetch>[1]): Promise<getTickInfoLastResponse> => {
+export const getTicksRequestSymbol = async (tradePlatform: string,
+    symbol: string,
+    params?: GetTicksRequestSymbolParams, options?: Parameters<typeof customFetch>[1]): Promise<getTicksRequestSymbolResponse> => {
 
-  return customFetch<getTickInfoLastResponse>(getGetTickInfoLastUrl(tradePlatform),
+  return customFetch<getTicksRequestSymbolResponse>(getGetTicksRequestSymbolUrl(tradePlatform,symbol,params),
   {
     ...options,
     method: 'GET'

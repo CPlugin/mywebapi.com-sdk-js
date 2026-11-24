@@ -172,7 +172,7 @@ return customFetch<postSymbolUpdateSymbolResponse>(getPostSymbolUpdateSymbolUrl(
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
     body: JSON.stringify(mT5SymbolUpdate)
   }
 );}

@@ -17,13 +17,13 @@
  */
 export interface MT4SymbolGroup {
   /**
-     * Group name (e.g. "Forex", "CFD", "Metals")
-     * @nullable
-     */
-  name?: string | null;
-  /**
      * Human-readable description of the group
      * @nullable
      */
   description?: string | null;
+  /**
+     * Group name (e.g. "Forex", "CFD", "Metals")
+     * @nullable
+     */
+  name?: string | null;
 }

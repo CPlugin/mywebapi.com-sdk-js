@@ -16,18 +16,18 @@ import type { MT4SymbolSession } from './mT4SymbolSession';
 export interface MT4SymbolDaySessions {
   /** Day of week: 0=Sunday ... 6=Saturday (.NET DayOfWeek numeric) */
   dayOfWeek?: number;
-  /** Whether quote sessions roll over midnight */
-  quoteOvernight?: number;
-  /** Whether trade sessions roll over midnight */
-  tradeOvernight?: number;
   /**
      * Up to three quote (price) session windows for the day
      * @nullable
      */
   quote?: MT4SymbolSession[] | null;
+  /** Whether quote sessions roll over midnight */
+  quoteOvernight?: number;
   /**
      * Up to three trade (order acceptance) session windows for the day
      * @nullable
      */
   trade?: MT4SymbolSession[] | null;
+  /** Whether trade sessions roll over midnight */
+  tradeOvernight?: number;
 }

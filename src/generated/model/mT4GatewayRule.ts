@@ -21,42 +21,42 @@
 export interface MT4GatewayRule {
   /** Whether the rule is active */
   enable?: boolean;
+  /** Execution gateway-account internal id */
+  exeAccountId?: number;
+  /**
+     * Execution gateway-account name
+     * @nullable
+     */
+  exeAccountName?: string | null;
+  /** Current open position on the execution account */
+  exeAccountPos?: number;
+  /** Execution flags bitmap (raw platform int) */
+  exeFlags?: number;
+  /** Maximum allowed deviation (pips) between requested and executed price */
+  exeMaxDeviation?: number;
+  /** Maximum slippage in pips on losing-side execution */
+  exeMaxLosingSlippage?: number;
+  /** Maximum slippage volume in lots on losing-side execution */
+  exeMaxLosingSlippageLots?: number;
+  /** Maximum slippage in pips on profit-side execution */
+  exeMaxProfitSlippage?: number;
+  /** Maximum slippage volume in lots on profit-side execution */
+  exeMaxProfitSlippageLots?: number;
+  /** Coverage percentage (volume routed externally vs. internal book) */
+  exeVolumePercent?: number;
   /**
      * Public name of the rule (assumed unique within the rules table — used as cursor key)
      * @nullable
      */
   name?: string | null;
   /**
-     * Order-matching symbol name, mask, or symbol-group identifier
-     * @nullable
-     */
-  requestSymbol?: string | null;
-  /**
      * Order-matching account group name or group mask
      * @nullable
      */
   requestGroup?: string | null;
   /**
-     * Execution gateway-account name
+     * Order-matching symbol name, mask, or symbol-group identifier
      * @nullable
      */
-  exeAccountName?: string | null;
-  /** Execution gateway-account internal id */
-  exeAccountId?: number;
-  /** Maximum allowed deviation (pips) between requested and executed price */
-  exeMaxDeviation?: number;
-  /** Maximum slippage in pips on profit-side execution */
-  exeMaxProfitSlippage?: number;
-  /** Maximum slippage volume in lots on profit-side execution */
-  exeMaxProfitSlippageLots?: number;
-  /** Maximum slippage in pips on losing-side execution */
-  exeMaxLosingSlippage?: number;
-  /** Maximum slippage volume in lots on losing-side execution */
-  exeMaxLosingSlippageLots?: number;
-  /** Current open position on the execution account */
-  exeAccountPos?: number;
-  /** Coverage percentage (volume routed externally vs. internal book) */
-  exeVolumePercent?: number;
-  /** Execution flags bitmap (raw platform int) */
-  exeFlags?: number;
+  requestSymbol?: string | null;
 }

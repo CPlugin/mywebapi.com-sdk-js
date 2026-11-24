@@ -14,6 +14,16 @@
  * `ResultCode MailSend(MailBox mail, ICollection<int> logins)`.
  */
 export interface MT4MailSendRequest {
+  /**
+     * Email body (required, non-empty)
+     * @nullable
+     */
+  body?: string | null;
+  /**
+     * Recipient logins (at least 1, batch cap 10000)
+     * @nullable
+     */
+  logins?: number[] | null;
   /** Sender login (0 = no reply allowed; otherwise valid manager login) */
   senderLogin?: number;
   /**
@@ -26,14 +36,4 @@ export interface MT4MailSendRequest {
      * @nullable
      */
   subject?: string | null;
-  /**
-     * Email body (required, non-empty)
-     * @nullable
-     */
-  body?: string | null;
-  /**
-     * Recipient logins (at least 1, batch cap 10000)
-     * @nullable
-     */
-  logins?: number[] | null;
 }

@@ -22,10 +22,31 @@
  */
 export interface MT4TradeTransaction {
   /**
-     * Transaction type (required). Manager-side operations use the `Br*` types, e.g. `BrBalance` with trade command `Balance` or `Credit` for a balance or credit operation.<br/>One of: PricesGet, PricesRequote, OpenInstant, OpenRequest, OpenMarket, PendingOpen, CloseInstant, CloseRequest, CloseMarket, Modify, Delete, CloseBy, CloseAll, BrOpen, BrClose, BrDelete, BrCloseBy, BrCloseAll, BrModify, BrActivate, BrComment, BrBalance. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation.
+     * Free-form comment (broker-visible)
      * @nullable
      */
-  tradeTransactionType?: string | null;
+  comment?: string | null;
+  /** CRC for transaction integrity; usually 0 (server fills). */
+  crc?: number;
+  /** Pending order expiration time. Default value means GTC. */
+  expiration?: string;
+  /** Instant-execution price deviation tolerance (points) */
+  ieDeviation?: number;
+  /** Order ticket. 0 on Open requests; server fills this on success. */
+  order?: number;
+  /** Login (account number). Required for Balance/Credit operations. */
+  orderBy?: number;
+  /** Order price */
+  price?: number;
+  /** Stop-loss price (0 = none) */
+  sl?: number;
+  /**
+     * Symbol (max 12 chars)
+     * @nullable
+     */
+  symbol?: string | null;
+  /** Take-profit price (0 = none) */
+  tp?: number;
   /**
      * Trade command. Empty means `Buy`.<br/>One of: Buy, Sell, BuyLimit, SellLimit, BuyStop, SellStop, Balance, Credit. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation.
      * @nullable
@@ -36,32 +57,11 @@ export interface MT4TradeTransaction {
      * @nullable
      */
   tradeRequestFlags?: string | null;
-  /** Pending order expiration time. Default value means GTC. */
-  expiration?: string;
-  /** Order ticket. 0 on Open requests; server fills this on success. */
-  order?: number;
-  /** Login (account number). Required for Balance/Credit operations. */
-  orderBy?: number;
   /**
-     * Symbol (max 12 chars)
+     * Transaction type (required). Manager-side operations use the `Br*` types, e.g. `BrBalance` with trade command `Balance` or `Credit` for a balance or credit operation.<br/>One of: PricesGet, PricesRequote, OpenInstant, OpenRequest, OpenMarket, PendingOpen, CloseInstant, CloseRequest, CloseMarket, Modify, Delete, CloseBy, CloseAll, BrOpen, BrClose, BrDelete, BrCloseBy, BrCloseAll, BrModify, BrActivate, BrComment, BrBalance. Case-insensitive; the numeric value is accepted too. Any other value is refused with error code Validation.
      * @nullable
      */
-  symbol?: string | null;
+  tradeTransactionType?: string | null;
   /** Volume in MT4 internal units. 1 lot = 100, so e.g. 250 = 2.5 lots. */
   volume?: number;
-  /** Order price */
-  price?: number;
-  /** Stop-loss price (0 = none) */
-  sl?: number;
-  /** Take-profit price (0 = none) */
-  tp?: number;
-  /** Instant-execution price deviation tolerance (points) */
-  ieDeviation?: number;
-  /**
-     * Free-form comment (broker-visible)
-     * @nullable
-     */
-  comment?: string | null;
-  /** CRC for transaction integrity; usually 0 (server fills). */
-  crc?: number;
 }

@@ -18,64 +18,6 @@ import type {
 import { customFetch } from '../mutator';
 
 
-export type postSrvRestartResponse200 = {
-  data: BooleanApiResponse
-  status: 200
-}
-
-export type postSrvRestartResponseSuccess = (postSrvRestartResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postSrvRestartResponse = (postSrvRestartResponseSuccess)
-
-export const getPostSrvRestartUrl = (tradePlatform: string,
-    params?: PostSrvRestartParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvRestart?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvRestart`
-}
-
-/**
- * Soft-restart of the MT4 server process. Destructive — requires `?confirm=true`.
- *
- * Manager (live) call to the platform's `SrvRestart()`. The current
- * manager connection is dropped during the restart cycle — clients
- * should expect the next request to surface a fresh login. Audit lines
- * are emitted on both sides of the platform call (independently of the
- * HTTP response).
- * <br>
- * The `?confirm=true` guard rejects calls without the literal
- * query string. It is a deliberateness signal, NOT an authorization
- * mechanism — admin rights are still enforced separately.
- *
- *
- * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Restart server
- */
-export const postSrvRestart = async (tradePlatform: string,
-    params?: PostSrvRestartParams, options?: Parameters<typeof customFetch>[1]): Promise<postSrvRestartResponse> => {
-
-  return customFetch<postSrvRestartResponse>(getPostSrvRestartUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'POST'
-
-
-  }
-);}
-
-
 export type postSrvChartsSyncResponse200 = {
   data: BooleanApiResponse
   status: 200
@@ -119,6 +61,57 @@ export const postSrvChartsSync = async (tradePlatform: string,
     params?: PostSrvChartsSyncParams, options?: Parameters<typeof customFetch>[1]): Promise<postSrvChartsSyncResponse> => {
 
   return customFetch<postSrvChartsSyncResponse>(getPostSrvChartsSyncUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+export type postSrvFeedsRestartResponse200 = {
+  data: BooleanApiResponse
+  status: 200
+}
+
+export type postSrvFeedsRestartResponseSuccess = (postSrvFeedsRestartResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postSrvFeedsRestartResponse = (postSrvFeedsRestartResponseSuccess)
+
+export const getPostSrvFeedsRestartUrl = (tradePlatform: string,
+    params?: PostSrvFeedsRestartParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvFeedsRestart?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvFeedsRestart`
+}
+
+/**
+ * Restart all running data feeders. Destructive — requires `?confirm=true`.
+ *
+ * Manager (live) call to the platform's `SrvFeedsRestart()`.
+ * Cycles all running quote/news feeders. May cause a brief gap in
+ * the tick stream — typically a second or two. Idempotent.
+ *
+ * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Restart data feeders
+ */
+export const postSrvFeedsRestart = async (tradePlatform: string,
+    params?: PostSrvFeedsRestartParams, options?: Parameters<typeof customFetch>[1]): Promise<postSrvFeedsRestartResponse> => {
+
+  return customFetch<postSrvFeedsRestartResponse>(getPostSrvFeedsRestartUrl(tradePlatform,params),
   {
     ...options,
     method: 'POST'
@@ -179,20 +172,20 @@ export const postSrvLiveUpdateStart = async (tradePlatform: string,
 );}
 
 
-export type postSrvFeedsRestartResponse200 = {
+export type postSrvRestartResponse200 = {
   data: BooleanApiResponse
   status: 200
 }
 
-export type postSrvFeedsRestartResponseSuccess = (postSrvFeedsRestartResponse200) & {
+export type postSrvRestartResponseSuccess = (postSrvRestartResponse200) & {
   headers: Headers;
 };
 ;
 
-export type postSrvFeedsRestartResponse = (postSrvFeedsRestartResponseSuccess)
+export type postSrvRestartResponse = (postSrvRestartResponseSuccess)
 
-export const getPostSrvFeedsRestartUrl = (tradePlatform: string,
-    params?: PostSrvFeedsRestartParams,) => {
+export const getPostSrvRestartUrl = (tradePlatform: string,
+    params?: PostSrvRestartParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -204,23 +197,30 @@ export const getPostSrvFeedsRestartUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvFeedsRestart?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvFeedsRestart`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvRestart?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvRestart`
 }
 
 /**
- * Restart all running data feeders. Destructive — requires `?confirm=true`.
+ * Soft-restart of the MT4 server process. Destructive — requires `?confirm=true`.
  *
- * Manager (live) call to the platform's `SrvFeedsRestart()`.
- * Cycles all running quote/news feeders. May cause a brief gap in
- * the tick stream — typically a second or two. Idempotent.
+ * Manager (live) call to the platform's `SrvRestart()`. The current
+ * manager connection is dropped during the restart cycle — clients
+ * should expect the next request to surface a fresh login. Audit lines
+ * are emitted on both sides of the platform call (independently of the
+ * HTTP response).
+ * <br>
+ * The `?confirm=true` guard rejects calls without the literal
+ * query string. It is a deliberateness signal, NOT an authorization
+ * mechanism — admin rights are still enforced separately.
+ *
  *
  * **Timeout:** 60 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Restart data feeders
+ * @summary Restart server
  */
-export const postSrvFeedsRestart = async (tradePlatform: string,
-    params?: PostSrvFeedsRestartParams, options?: Parameters<typeof customFetch>[1]): Promise<postSrvFeedsRestartResponse> => {
+export const postSrvRestart = async (tradePlatform: string,
+    params?: PostSrvRestartParams, options?: Parameters<typeof customFetch>[1]): Promise<postSrvRestartResponse> => {
 
-  return customFetch<postSrvFeedsRestartResponse>(getPostSrvFeedsRestartUrl(tradePlatform,params),
+  return customFetch<postSrvRestartResponse>(getPostSrvRestartUrl(tradePlatform,params),
   {
     ...options,
     method: 'POST'

@@ -15,11 +15,11 @@ import type { MT4PluginConfig } from './mT4PluginConfig';
  * Mirrors the platform's `ConPluginParam`.
  */
 export interface MT4PluginParam {
-  /** Plugin metadata */
-  plugin?: MT4Plugin | null;
   /**
      * Plugin parameter array (name/value pairs)
      * @nullable
      */
   params?: MT4PluginConfig[] | null;
+  /** Plugin metadata */
+  plugin?: MT4Plugin | null;
 }

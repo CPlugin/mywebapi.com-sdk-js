@@ -12,15 +12,15 @@
  * Server time configuration (MT5 CIMTConTime), v2 read DTO.
  */
 export interface MT5Time {
-  /** Server time zone, minutes from GMT (0 = GMT, 60 = GMT+1). */
-  timeZone?: number;
+  /** Daylight saving time mode enabled. */
+  daylight?: boolean;
+  /** Daylight saving state (0 = no DST in zone, non-zero otherwise). */
+  daylightState?: number;
   /**
      * Time synchronization server address (TIME/NTP).
      * @nullable
      */
   timeServer?: string | null;
-  /** Daylight saving time mode enabled. */
-  daylight?: boolean;
-  /** Daylight saving state (0 = no DST in zone, non-zero otherwise). */
-  daylightState?: number;
+  /** Server time zone, minutes from GMT (0 = GMT, 60 = GMT+1). */
+  timeZone?: number;
 }

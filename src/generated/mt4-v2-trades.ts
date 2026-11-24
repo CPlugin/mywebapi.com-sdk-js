@@ -27,6 +27,551 @@ import type {
 import { customFetch } from '../mutator';
 
 
+export type postAdmTradeRecordModifyTicketResponse200 = {
+  data: MT4TradeApiResponse
+  status: 200
+}
+
+export type postAdmTradeRecordModifyTicketResponseSuccess = (postAdmTradeRecordModifyTicketResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postAdmTradeRecordModifyTicketResponse = (postAdmTradeRecordModifyTicketResponseSuccess)
+
+export const getPostAdmTradeRecordModifyTicketUrl = (tradePlatform: string,
+    ticket: number,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmTradeRecordModify/${encodeURIComponent(String(ticket))}`
+}
+
+/**
+ * Admin direct edit of a single trade record — Type 1 with read-first.
+ *
+ * <br>
+ * Low-level back-office override that writes directly to the trade
+ * record. For SL/TP edits prefer
+ * `POST TradeTransaction` with `tradeTransactionType=BrModify`
+ * — that route goes through the platform's audited path. Use this
+ * endpoint for manual accounting corrections (commission/storage/taxes/
+ * profit, comment, magic) that the standard TradeTransaction path
+ * does not cover.
+ * <br>
+ * Flow: read existing trade via `TradeRecordsRequest`, patch the
+ * allow-listed fields in place, submit via `AdmTradeRecordModify`.
+ * Order/Login/Symbol/Volume/OpenPrice/OpenTime/CloseTime and gateway
+ * internals are preserved by virtue of not being on the input DTO.
+ * <br>
+ * Idempotency-Key strongly recommended. A retried edit without it can
+ * land twice — usually harmless, but generates audit log noise.
+ *
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Modify trade record (admin)
+ */
+export const postAdmTradeRecordModifyTicket = async (tradePlatform: string,
+    ticket: number,
+    mT4TradeUpdate?: MT4TradeUpdate, options?: Parameters<typeof customFetch>[1]): Promise<postAdmTradeRecordModifyTicketResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postAdmTradeRecordModifyTicketResponse>(getPostAdmTradeRecordModifyTicketUrl(tradePlatform,ticket),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4TradeUpdate)
+  }
+);}
+
+
+export type postAdmTradesDeleteResponse200 = {
+  data: BooleanApiResponse
+  status: 200
+}
+
+export type postAdmTradesDeleteResponseSuccess = (postAdmTradesDeleteResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postAdmTradesDeleteResponse = (postAdmTradesDeleteResponseSuccess)
+
+export const getPostAdmTradesDeleteUrl = (tradePlatform: string,
+    params?: PostAdmTradesDeleteParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["orders"];
+
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? 'null' : String(v));
+      });
+      return;
+    }
+
+
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmTradesDelete?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmTradesDelete`
+}
+
+/**
+ * Bulk-deletes a list of trade tickets (administrative scope). Used for cleanup after reconciliation mistakes, simulator state reset, or compliance-mandated removal.
+ *
+ * Manager-live POST. The platform accepts a flat `int[]` of order
+ * tickets and a count; we mirror the existing batched-int pattern
+ * (repeat `?orders=` per ticket — same convention as
+ * `UserRecordsRequest`'s `?logins=`). Empty arrays are
+ * rejected with Validation.
+ *
+ * **Destructive.** Each ticket in the array is removed from the
+ * server's trade table; this is not reversible from the API side.
+ * Pair with `Idempotency-Key` so retries don't re-process partial
+ * failures.
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Delete trades (admin)
+ */
+export const postAdmTradesDelete = async (tradePlatform: string,
+    params?: PostAdmTradesDeleteParams, options?: Parameters<typeof customFetch>[1]): Promise<postAdmTradesDeleteResponse> => {
+
+  return customFetch<postAdmTradesDeleteResponse>(getPostAdmTradesDeleteUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+export type getAdmTradesRequestGroupResponse200 = {
+  data: MT4TradeListApiResponse
+  status: 200
+}
+
+export type getAdmTradesRequestGroupResponseSuccess = (getAdmTradesRequestGroupResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getAdmTradesRequestGroupResponse = (getAdmTradesRequestGroupResponseSuccess)
+
+export const getGetAdmTradesRequestGroupUrl = (tradePlatform: string,
+    group: string,
+    params?: GetAdmTradesRequestGroupParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmTradesRequest/${encodeURIComponent(String(group))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmTradesRequest/${encodeURIComponent(String(group))}`
+}
+
+/**
+ * All trades belonging to accounts in a given group (admin scope).
+ *
+ * Manager (live) call. Returns trades for every account assigned to
+ * the given group. `openOnly=true` filters out closed trades on
+ * the server side. Pair with `Idempotency-Key` on retry — large
+ * groups can return substantial payloads.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List group trades (admin)
+ */
+export const getAdmTradesRequestGroup = async (tradePlatform: string,
+    group: string,
+    params?: GetAdmTradesRequestGroupParams, options?: Parameters<typeof customFetch>[1]): Promise<getAdmTradesRequestGroupResponse> => {
+
+  return customFetch<getAdmTradesRequestGroupResponse>(getGetAdmTradesRequestGroupUrl(tradePlatform,group,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type postTradeCheckStopsResponse200 = {
+  data: BooleanApiResponse
+  status: 200
+}
+
+export type postTradeCheckStopsResponseSuccess = (postTradeCheckStopsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postTradeCheckStopsResponse = (postTradeCheckStopsResponseSuccess)
+
+export const getPostTradeCheckStopsUrl = (tradePlatform: string,
+    params?: PostTradeCheckStopsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeCheckStops?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeCheckStops`
+}
+
+/**
+ * Validate an order's SL/TP/pending-open levels against the symbol's administrator-set `stops_level`.
+ *
+ * Pump-cached call. The MT4 server verifies that the supplied SL/TP
+ * (and, for pending orders, the open price) sit at least
+ * `stops_level` away from the current market and that pending
+ * expiration is at least ten minutes in the future. Returns a bare
+ * boolean envelope: `true` when the platform's `ResultCode`
+ * is `Ok`.
+ *
+ * Useful for client-side pre-flight before submitting a real
+ * `TradeTransaction` — saves a server round-trip for invalid
+ * orders.
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Validate order stops
+ */
+export const postTradeCheckStops = async (tradePlatform: string,
+    mT4TradeTransaction?: MT4TradeTransaction,
+    params?: PostTradeCheckStopsParams, options?: Parameters<typeof customFetch>[1]): Promise<postTradeCheckStopsResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postTradeCheckStopsResponse>(getPostTradeCheckStopsUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4TradeTransaction)
+  }
+);}
+
+
+export type postTradeClearRollbackOrderResponse200 = {
+  data: BooleanApiResponse
+  status: 200
+}
+
+export type postTradeClearRollbackOrderResponseSuccess = (postTradeClearRollbackOrderResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postTradeClearRollbackOrderResponse = (postTradeClearRollbackOrderResponseSuccess)
+
+export const getPostTradeClearRollbackOrderUrl = (tradePlatform: string,
+    order: number,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeClearRollback/${encodeURIComponent(String(order))}`
+}
+
+/**
+ * Roll back an in-flight trade transaction by ticket.
+ *
+ * Pump-cached call. Cancels a pending trade transaction that the
+ * MT4 server is still holding in the rollback buffer (e.g. an
+ * instant-execution requote that has not yet been confirmed). Has
+ * no effect once the transaction has been committed; returns the
+ * the platform's `ResultCode` as part of the envelope on failure.
+ *
+ * Idempotent on already-committed/already-rolled-back tickets.
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Roll back trade transaction
+ */
+export const postTradeClearRollbackOrder = async (tradePlatform: string,
+    order: number, options?: Parameters<typeof customFetch>[1]): Promise<postTradeClearRollbackOrderResponse> => {
+
+  return customFetch<postTradeClearRollbackOrderResponse>(getPostTradeClearRollbackOrderUrl(tradePlatform,order),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+export type getTradeRecordGetOrderResponse200 = {
+  data: MT4TradeApiResponse
+  status: 200
+}
+
+export type getTradeRecordGetOrderResponseSuccess = (getTradeRecordGetOrderResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getTradeRecordGetOrderResponse = (getTradeRecordGetOrderResponseSuccess)
+
+export const getGetTradeRecordGetOrderUrl = (tradePlatform: string,
+    order: number,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeRecordGet/${encodeURIComponent(String(order))}`
+}
+
+/**
+ * Single trade record by order ticket from the pump cache.
+ *
+ * Pump-cached lookup of one order. Platform-level failures (unknown
+ * ticket, cache miss) surface in the envelope's ManagerAPICode /
+ * ErrorCode pair — clients must branch on isError before dereferencing
+ * payload.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get trade record (cached)
+ */
+export const getTradeRecordGetOrder = async (tradePlatform: string,
+    order: number, options?: Parameters<typeof customFetch>[1]): Promise<getTradeRecordGetOrderResponse> => {
+
+  return customFetch<getTradeRecordGetOrderResponse>(getGetTradeRecordGetOrderUrl(tradePlatform,order),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getTradeRecordRequestOrderResponse200 = {
+  data: MT4TradeApiResponse
+  status: 200
+}
+
+export type getTradeRecordRequestOrderResponseSuccess = (getTradeRecordRequestOrderResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getTradeRecordRequestOrderResponse = (getTradeRecordRequestOrderResponseSuccess)
+
+export const getGetTradeRecordRequestOrderUrl = (tradePlatform: string,
+    order: number,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeRecordRequest/${encodeURIComponent(String(order))}`
+}
+
+/**
+ * Fresh-from-server fetch of a single trade record by ticket.
+ *
+ * Manager (live) counterpart to `TradeRecordGet`. Where the pump
+ * variant reads from local cache (may lag by milliseconds), this round-
+ * trips to the MT4 server every call — slower but authoritative.
+ * Useful for reconciliation, post-close ticket lookups (pump may have
+ * flushed), or any flow where the caller can tolerate the latency cost
+ * in exchange for guaranteed freshness. Returns NotFound envelope when
+ * the ticket does not exist on the server.
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get trade record (live)
+ */
+export const getTradeRecordRequestOrder = async (tradePlatform: string,
+    order: number, options?: Parameters<typeof customFetch>[1]): Promise<getTradeRecordRequestOrderResponse> => {
+
+  return customFetch<getTradeRecordRequestOrderResponse>(getGetTradeRecordRequestOrderUrl(tradePlatform,order),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getTradeRecordsRequestResponse200 = {
+  data: MT4TradeListApiResponse
+  status: 200
+}
+
+export type getTradeRecordsRequestResponseSuccess = (getTradeRecordsRequestResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getTradeRecordsRequestResponse = (getTradeRecordsRequestResponseSuccess)
+
+export const getGetTradeRecordsRequestUrl = (tradePlatform: string,
+    params?: GetTradeRecordsRequestParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    const explodeParameters = ["orders"];
+
+    if (Array.isArray(value) && explodeParameters.includes(key)) {
+      value.forEach((v) => {
+        normalizedParams.append(key, v === null ? 'null' : String(v));
+      });
+      return;
+    }
+
+
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeRecordsRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeRecordsRequest`
+}
+
+/**
+ * Trade records for a batch of order tickets — live round-trip.
+ *
+ * Manager (live) call. Pass tickets as repeated query parameters:
+ * `?orders=12345&orders=67890`. Server-side billing counts this
+ * as one Manager request regardless of array length — prefer this over
+ * looping single `TradeRecordGet` calls.
+ *
+ * Returns the trade records the server has for the requested tickets.
+ * Order in the response is NOT guaranteed to match the request order;
+ * missing tickets are silently omitted (the envelope is not an error
+ * envelope in that case — match by `order` field on the client).
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Get trade records batch (live)
+ */
+export const getTradeRecordsRequest = async (tradePlatform: string,
+    params?: GetTradeRecordsRequestParams, options?: Parameters<typeof customFetch>[1]): Promise<getTradeRecordsRequestResponse> => {
+
+  return customFetch<getTradeRecordsRequestResponse>(getGetTradeRecordsRequestUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type postTradeTransactionResponse200 = {
+  data: MT4TradeTransactionApiResponse
+  status: 200
+}
+
+export type postTradeTransactionResponseSuccess = (postTradeTransactionResponse200) & {
+  headers: Headers;
+};
+;
+
+export type postTradeTransactionResponse = (postTradeTransactionResponseSuccess)
+
+export const getPostTradeTransactionUrl = (tradePlatform: string,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeTransaction`
+}
+
+/**
+ * Submit a trade transaction — open / modify / close / balance op.
+ *
+ * <br>
+ * POST mutator covering every platform trade operation through the single
+ * `TradeTransaction` entry point. The request body's
+ * `tradeTransactionType` + `tradeCommand` combination selects
+ * the actual operation — `OpenMarket`+`Buy`, `PendingOpen`+`BuyLimit`,
+ * `CloseMarket`+`Sell`, and the manager-side `Br*` types:
+ * `BrModify` (open price, SL, TP of an order), `BrDelete`,
+ * `BrBalance`+`Balance` or `Credit` (balance/credit operation on
+ * `orderBy`). The schema of the request body lists every accepted value.
+ * <br>
+ * An unknown `tradeTransactionType`, `tradeCommand` or
+ * `tradeRequestFlags` value is refused with error code `Validation`
+ * and the list of valid values; nothing is sent to the trading platform.
+ * Names are case-insensitive; the numeric value of a member is accepted too.
+ * <br>
+ * On success the response echoes the platform's mutated structure — most
+ * importantly the `Order` field, which the server assigns on Open
+ * operations and clients use to track the ticket afterwards.
+ * <br><b>Idempotency-Key is essentially mandatory.</b> A retried trade
+ * transaction without the header can open a second position, double-
+ * close, or apply a balance op twice. With the header the second call
+ * returns the cached envelope from the first.
+ *
+ *
+ * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
+ * @summary Submit trade transaction
+ */
+export const postTradeTransaction = async (tradePlatform: string,
+    mT4TradeTransaction?: MT4TradeTransaction, options?: Parameters<typeof customFetch>[1]): Promise<postTradeTransactionResponse> => {
+
+    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
+    if (!h) return {};
+    if (h instanceof Headers) return Object.fromEntries(h.entries());
+    if (Symbol.iterator in h) {
+      return Object.fromEntries(
+        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
+      );
+    }
+    const headers: Record<string, string | readonly string[]> = {};
+    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
+      if (value !== undefined) headers[name] = value;
+    }
+    return headers;
+  };
+return customFetch<postTradeTransactionResponse>(getPostTradeTransactionUrl(tradePlatform),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
+    body: JSON.stringify(mT4TradeTransaction)
+  }
+);}
+
+
 export type getTradesGetResponse200 = {
   data: MT4TradeListApiResponse
   status: 200
@@ -168,57 +713,6 @@ export const getTradesGetByLoginLoginGroup = async (tradePlatform: string,
 );}
 
 
-export type getTradesGetBySymbolResponse200 = {
-  data: MT4TradeListApiResponse
-  status: 200
-}
-
-export type getTradesGetBySymbolResponseSuccess = (getTradesGetBySymbolResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getTradesGetBySymbolResponse = (getTradesGetBySymbolResponseSuccess)
-
-export const getGetTradesGetBySymbolUrl = (tradePlatform: string,
-    params?: GetTradesGetBySymbolParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesGetBySymbol?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesGetBySymbol`
-}
-
-/**
- * Open and pending orders for a specific symbol from the pump cache.
- *
- * Pump-cached snapshot — instant local lookup, no MT4 round-trip. Useful
- * for per-instrument risk monitoring. Empty array is a legitimate result
- * (no live trades on that symbol).
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List trades by symbol (cached)
- */
-export const getTradesGetBySymbol = async (tradePlatform: string,
-    params?: GetTradesGetBySymbolParams, options?: Parameters<typeof customFetch>[1]): Promise<getTradesGetBySymbolResponse> => {
-
-  return customFetch<getTradesGetBySymbolResponse>(getGetTradesGetBySymbolUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
 export type getTradesGetByMarketResponse200 = {
   data: MT4TradeListApiResponse
   status: 200
@@ -261,65 +755,20 @@ export const getTradesGetByMarket = async (tradePlatform: string, options?: Para
 );}
 
 
-export type getTradeRecordGetOrderResponse200 = {
-  data: MT4TradeApiResponse
+export type getTradesGetBySymbolResponse200 = {
+  data: MT4TradeListApiResponse
   status: 200
 }
 
-export type getTradeRecordGetOrderResponseSuccess = (getTradeRecordGetOrderResponse200) & {
+export type getTradesGetBySymbolResponseSuccess = (getTradesGetBySymbolResponse200) & {
   headers: Headers;
 };
 ;
 
-export type getTradeRecordGetOrderResponse = (getTradeRecordGetOrderResponseSuccess)
+export type getTradesGetBySymbolResponse = (getTradesGetBySymbolResponseSuccess)
 
-export const getGetTradeRecordGetOrderUrl = (tradePlatform: string,
-    order: number,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeRecordGet/${encodeURIComponent(String(order))}`
-}
-
-/**
- * Single trade record by order ticket from the pump cache.
- *
- * Pump-cached lookup of one order. Platform-level failures (unknown
- * ticket, cache miss) surface in the envelope's ManagerAPICode /
- * ErrorCode pair — clients must branch on isError before dereferencing
- * payload.
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get trade record (cached)
- */
-export const getTradeRecordGetOrder = async (tradePlatform: string,
-    order: number, options?: Parameters<typeof customFetch>[1]): Promise<getTradeRecordGetOrderResponse> => {
-
-  return customFetch<getTradeRecordGetOrderResponse>(getGetTradeRecordGetOrderUrl(tradePlatform,order),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type postTradeCheckStopsResponse200 = {
-  data: BooleanApiResponse
-  status: 200
-}
-
-export type postTradeCheckStopsResponseSuccess = (postTradeCheckStopsResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postTradeCheckStopsResponse = (postTradeCheckStopsResponseSuccess)
-
-export const getPostTradeCheckStopsUrl = (tradePlatform: string,
-    params?: PostTradeCheckStopsParams,) => {
+export const getGetTradesGetBySymbolUrl = (tradePlatform: string,
+    params?: GetTradesGetBySymbolParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -331,141 +780,23 @@ export const getPostTradeCheckStopsUrl = (tradePlatform: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeCheckStops?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeCheckStops`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesGetBySymbol?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesGetBySymbol`
 }
 
 /**
- * Validate an order's SL/TP/pending-open levels against the symbol's administrator-set `stops_level`.
+ * Open and pending orders for a specific symbol from the pump cache.
  *
- * Pump-cached call. The MT4 server verifies that the supplied SL/TP
- * (and, for pending orders, the open price) sit at least
- * `stops_level` away from the current market and that pending
- * expiration is at least ten minutes in the future. Returns a bare
- * boolean envelope: `true` when the platform's `ResultCode`
- * is `Ok`.
- *
- * Useful for client-side pre-flight before submitting a real
- * `TradeTransaction` — saves a server round-trip for invalid
- * orders.
- *
- * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Validate order stops
- */
-export const postTradeCheckStops = async (tradePlatform: string,
-    mT4TradeTransaction?: MT4TradeTransaction,
-    params?: PostTradeCheckStopsParams, options?: Parameters<typeof customFetch>[1]): Promise<postTradeCheckStopsResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postTradeCheckStopsResponse>(getPostTradeCheckStopsUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4TradeTransaction)
-  }
-);}
-
-
-export type postTradeClearRollbackOrderResponse200 = {
-  data: BooleanApiResponse
-  status: 200
-}
-
-export type postTradeClearRollbackOrderResponseSuccess = (postTradeClearRollbackOrderResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postTradeClearRollbackOrderResponse = (postTradeClearRollbackOrderResponseSuccess)
-
-export const getPostTradeClearRollbackOrderUrl = (tradePlatform: string,
-    order: number,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeClearRollback/${encodeURIComponent(String(order))}`
-}
-
-/**
- * Roll back an in-flight trade transaction by ticket.
- *
- * Pump-cached call. Cancels a pending trade transaction that the
- * MT4 server is still holding in the rollback buffer (e.g. an
- * instant-execution requote that has not yet been confirmed). Has
- * no effect once the transaction has been committed; returns the
- * the platform's `ResultCode` as part of the envelope on failure.
- *
- * Idempotent on already-committed/already-rolled-back tickets.
- *
- * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Roll back trade transaction
- */
-export const postTradeClearRollbackOrder = async (tradePlatform: string,
-    order: number, options?: Parameters<typeof customFetch>[1]): Promise<postTradeClearRollbackOrderResponse> => {
-
-  return customFetch<postTradeClearRollbackOrderResponse>(getPostTradeClearRollbackOrderUrl(tradePlatform,order),
-  {
-    ...options,
-    method: 'POST'
-
-
-  }
-);}
-
-
-export type getTradeRecordRequestOrderResponse200 = {
-  data: MT4TradeApiResponse
-  status: 200
-}
-
-export type getTradeRecordRequestOrderResponseSuccess = (getTradeRecordRequestOrderResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getTradeRecordRequestOrderResponse = (getTradeRecordRequestOrderResponseSuccess)
-
-export const getGetTradeRecordRequestOrderUrl = (tradePlatform: string,
-    order: number,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeRecordRequest/${encodeURIComponent(String(order))}`
-}
-
-/**
- * Fresh-from-server fetch of a single trade record by ticket.
- *
- * Manager (live) counterpart to `TradeRecordGet`. Where the pump
- * variant reads from local cache (may lag by milliseconds), this round-
- * trips to the MT4 server every call — slower but authoritative.
- * Useful for reconciliation, post-close ticket lookups (pump may have
- * flushed), or any flow where the caller can tolerate the latency cost
- * in exchange for guaranteed freshness. Returns NotFound envelope when
- * the ticket does not exist on the server.
+ * Pump-cached snapshot — instant local lookup, no MT4 round-trip. Useful
+ * for per-instrument risk monitoring. Empty array is a legitimate result
+ * (no live trades on that symbol).
  *
  * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get trade record (live)
+ * @summary List trades by symbol (cached)
  */
-export const getTradeRecordRequestOrder = async (tradePlatform: string,
-    order: number, options?: Parameters<typeof customFetch>[1]): Promise<getTradeRecordRequestOrderResponse> => {
+export const getTradesGetBySymbol = async (tradePlatform: string,
+    params?: GetTradesGetBySymbolParams, options?: Parameters<typeof customFetch>[1]): Promise<getTradesGetBySymbolResponse> => {
 
-  return customFetch<getTradeRecordRequestOrderResponse>(getGetTradeRecordRequestOrderUrl(tradePlatform,order),
+  return customFetch<getTradesGetBySymbolResponse>(getGetTradesGetBySymbolUrl(tradePlatform,params),
   {
     ...options,
     method: 'GET'
@@ -524,337 +855,6 @@ export const getTradesRequest = async (tradePlatform: string,
   {
     ...options,
     method: 'GET'
-
-
-  }
-);}
-
-
-export type postAdmTradeRecordModifyTicketResponse200 = {
-  data: MT4TradeApiResponse
-  status: 200
-}
-
-export type postAdmTradeRecordModifyTicketResponseSuccess = (postAdmTradeRecordModifyTicketResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postAdmTradeRecordModifyTicketResponse = (postAdmTradeRecordModifyTicketResponseSuccess)
-
-export const getPostAdmTradeRecordModifyTicketUrl = (tradePlatform: string,
-    ticket: number,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmTradeRecordModify/${encodeURIComponent(String(ticket))}`
-}
-
-/**
- * Admin direct edit of a single trade record — Type 1 with read-first.
- *
- * <br>
- * Low-level back-office override that writes directly to the trade
- * record. For SL/TP edits prefer
- * `POST TradeTransaction` with `tradeTransactionType=BrModify`
- * — that route goes through the platform's audited path. Use this
- * endpoint for manual accounting corrections (commission/storage/taxes/
- * profit, comment, magic) that the standard TradeTransaction path
- * does not cover.
- * <br>
- * Flow: read existing trade via `TradeRecordsRequest`, patch the
- * allow-listed fields in place, submit via `AdmTradeRecordModify`.
- * Order/Login/Symbol/Volume/OpenPrice/OpenTime/CloseTime and gateway
- * internals are preserved by virtue of not being on the input DTO.
- * <br>
- * Idempotency-Key strongly recommended. A retried edit without it can
- * land twice — usually harmless, but generates audit log noise.
- *
- *
- * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Modify trade record (admin)
- */
-export const postAdmTradeRecordModifyTicket = async (tradePlatform: string,
-    ticket: number,
-    mT4TradeUpdate?: MT4TradeUpdate, options?: Parameters<typeof customFetch>[1]): Promise<postAdmTradeRecordModifyTicketResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postAdmTradeRecordModifyTicketResponse>(getPostAdmTradeRecordModifyTicketUrl(tradePlatform,ticket),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4TradeUpdate)
-  }
-);}
-
-
-export type postTradeTransactionResponse200 = {
-  data: MT4TradeTransactionApiResponse
-  status: 200
-}
-
-export type postTradeTransactionResponseSuccess = (postTradeTransactionResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postTradeTransactionResponse = (postTradeTransactionResponseSuccess)
-
-export const getPostTradeTransactionUrl = (tradePlatform: string,) => {
-
-
-
-
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeTransaction`
-}
-
-/**
- * Submit a trade transaction — open / modify / close / balance op.
- *
- * <br>
- * POST mutator covering every platform trade operation through the single
- * `TradeTransaction` entry point. The request body's
- * `tradeTransactionType` + `tradeCommand` combination selects
- * the actual operation — `OpenMarket`+`Buy`, `PendingOpen`+`BuyLimit`,
- * `CloseMarket`+`Sell`, and the manager-side `Br*` types:
- * `BrModify` (open price, SL, TP of an order), `BrDelete`,
- * `BrBalance`+`Balance` or `Credit` (balance/credit operation on
- * `orderBy`). The schema of the request body lists every accepted value.
- * <br>
- * An unknown `tradeTransactionType`, `tradeCommand` or
- * `tradeRequestFlags` value is refused with error code `Validation`
- * and the list of valid values; nothing is sent to the trading platform.
- * Names are case-insensitive; the numeric value of a member is accepted too.
- * <br>
- * On success the response echoes the platform's mutated structure — most
- * importantly the `Order` field, which the server assigns on Open
- * operations and clients use to track the ticket afterwards.
- * <br><b>Idempotency-Key is essentially mandatory.</b> A retried trade
- * transaction without the header can open a second position, double-
- * close, or apply a balance op twice. With the header the second call
- * returns the cached envelope from the first.
- *
- *
- * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Submit trade transaction
- */
-export const postTradeTransaction = async (tradePlatform: string,
-    mT4TradeTransaction?: MT4TradeTransaction, options?: Parameters<typeof customFetch>[1]): Promise<postTradeTransactionResponse> => {
-
-    const getHeaders = (h?: NonNullable<RequestInit['headers']>): Record<string, string | readonly string[]> => {
-    if (!h) return {};
-    if (h instanceof Headers) return Object.fromEntries(h.entries());
-    if (Symbol.iterator in h) {
-      return Object.fromEntries(
-        Array.from(h as Iterable<Iterable<string>>, (entry) => Array.from(entry) as [string, string]),
-      );
-    }
-    const headers: Record<string, string | readonly string[]> = {};
-    for (const [name, value] of Object.entries<string | readonly string[] | undefined>(h)) {
-      if (value !== undefined) headers[name] = value;
-    }
-    return headers;
-  };
-return customFetch<postTradeTransactionResponse>(getPostTradeTransactionUrl(tradePlatform),
-  {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
-    body: JSON.stringify(mT4TradeTransaction)
-  }
-);}
-
-
-export type getTradeRecordsRequestResponse200 = {
-  data: MT4TradeListApiResponse
-  status: 200
-}
-
-export type getTradeRecordsRequestResponseSuccess = (getTradeRecordsRequestResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getTradeRecordsRequestResponse = (getTradeRecordsRequestResponseSuccess)
-
-export const getGetTradeRecordsRequestUrl = (tradePlatform: string,
-    params?: GetTradeRecordsRequestParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    const explodeParameters = ["orders"];
-
-    if (Array.isArray(value) && explodeParameters.includes(key)) {
-      value.forEach((v) => {
-        normalizedParams.append(key, v === null ? 'null' : String(v));
-      });
-      return;
-    }
-
-
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeRecordsRequest?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradeRecordsRequest`
-}
-
-/**
- * Trade records for a batch of order tickets — live round-trip.
- *
- * Manager (live) call. Pass tickets as repeated query parameters:
- * `?orders=12345&orders=67890`. Server-side billing counts this
- * as one Manager request regardless of array length — prefer this over
- * looping single `TradeRecordGet` calls.
- *
- * Returns the trade records the server has for the requested tickets.
- * Order in the response is NOT guaranteed to match the request order;
- * missing tickets are silently omitted (the envelope is not an error
- * envelope in that case — match by `order` field on the client).
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Get trade records batch (live)
- */
-export const getTradeRecordsRequest = async (tradePlatform: string,
-    params?: GetTradeRecordsRequestParams, options?: Parameters<typeof customFetch>[1]): Promise<getTradeRecordsRequestResponse> => {
-
-  return customFetch<getTradeRecordsRequestResponse>(getGetTradeRecordsRequestUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getAdmTradesRequestGroupResponse200 = {
-  data: MT4TradeListApiResponse
-  status: 200
-}
-
-export type getAdmTradesRequestGroupResponseSuccess = (getAdmTradesRequestGroupResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getAdmTradesRequestGroupResponse = (getAdmTradesRequestGroupResponseSuccess)
-
-export const getGetAdmTradesRequestGroupUrl = (tradePlatform: string,
-    group: string,
-    params?: GetAdmTradesRequestGroupParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmTradesRequest/${encodeURIComponent(String(group))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmTradesRequest/${encodeURIComponent(String(group))}`
-}
-
-/**
- * All trades belonging to accounts in a given group (admin scope).
- *
- * Manager (live) call. Returns trades for every account assigned to
- * the given group. `openOnly=true` filters out closed trades on
- * the server side. Pair with `Idempotency-Key` on retry — large
- * groups can return substantial payloads.
- *
- * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List group trades (admin)
- */
-export const getAdmTradesRequestGroup = async (tradePlatform: string,
-    group: string,
-    params?: GetAdmTradesRequestGroupParams, options?: Parameters<typeof customFetch>[1]): Promise<getAdmTradesRequestGroupResponse> => {
-
-  return customFetch<getAdmTradesRequestGroupResponse>(getGetAdmTradesRequestGroupUrl(tradePlatform,group,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type postAdmTradesDeleteResponse200 = {
-  data: BooleanApiResponse
-  status: 200
-}
-
-export type postAdmTradesDeleteResponseSuccess = (postAdmTradesDeleteResponse200) & {
-  headers: Headers;
-};
-;
-
-export type postAdmTradesDeleteResponse = (postAdmTradesDeleteResponseSuccess)
-
-export const getPostAdmTradesDeleteUrl = (tradePlatform: string,
-    params?: PostAdmTradesDeleteParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    const explodeParameters = ["orders"];
-
-    if (Array.isArray(value) && explodeParameters.includes(key)) {
-      value.forEach((v) => {
-        normalizedParams.append(key, v === null ? 'null' : String(v));
-      });
-      return;
-    }
-
-
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmTradesDelete?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/AdmTradesDelete`
-}
-
-/**
- * Bulk-deletes a list of trade tickets (administrative scope). Used for cleanup after reconciliation mistakes, simulator state reset, or compliance-mandated removal.
- *
- * Manager-live POST. The platform accepts a flat `int[]` of order
- * tickets and a count; we mirror the existing batched-int pattern
- * (repeat `?orders=` per ticket — same convention as
- * `UserRecordsRequest`'s `?logins=`). Empty arrays are
- * rejected with Validation.
- *
- * **Destructive.** Each ticket in the array is removed from the
- * server's trade table; this is not reversible from the API side.
- * Pair with `Idempotency-Key` so retries don't re-process partial
- * failures.
- *
- * **Timeout:** 5 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: The operation may still be completed by the server (`X-Request-Outcome: unknown`): check its result before repeating it.
- * @summary Delete trades (admin)
- */
-export const postAdmTradesDelete = async (tradePlatform: string,
-    params?: PostAdmTradesDeleteParams, options?: Parameters<typeof customFetch>[1]): Promise<postAdmTradesDeleteResponse> => {
-
-  return customFetch<postAdmTradesDeleteResponse>(getPostAdmTradesDeleteUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'POST'
 
 
   }

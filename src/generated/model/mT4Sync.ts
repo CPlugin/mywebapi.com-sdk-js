@@ -16,29 +16,29 @@ import type { SynchronizationMode } from './synchronizationMode';
  * field (replication credentials to the upstream sync source).
  */
 export interface MT4Sync {
-  /**
-     * Upstream sync server address (used as cursor key)
-     * @nullable
-     */
-  server?: string | null;
+  /** Enable flag (0 = disabled, 1 = enabled — raw platform int) */
+  enable?: number;
+  /** Sync range start (negative = whole chart) */
+  from?: number;
   /**
      * Replication login (upstream credential identifier)
      * @nullable
      */
   login?: string | null;
-  /** Enable flag (0 = disabled, 1 = enabled — raw platform int) */
-  enable?: number;
   /** Synchronization mode (Add / Update / Insert — platform enum) */
   mode?: SynchronizationMode;
-  /** Sync range start (negative = whole chart) */
-  from?: number;
-  /** Sync range end (negative = whole chart) */
-  to?: number;
   /**
      * Comma-separated list of symbols to synchronize
      * @nullable
      */
   securities?: string | null;
+  /**
+     * Upstream sync server address (used as cursor key)
+     * @nullable
+     */
+  server?: string | null;
   /** Time correction in minutes applied to incoming bars */
   timeCorrection?: number;
+  /** Sync range end (negative = whole chart) */
+  to?: number;
 }

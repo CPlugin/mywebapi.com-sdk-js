@@ -15,15 +15,15 @@
  * `Reserved` int[7] padding is dropped.
  */
 export interface MT4GroupMargin {
+  /** Margin divider override (1.0 = use default) */
+  marginDivider?: number;
+  /** Swap charge for long positions */
+  swapLong?: number;
+  /** Swap charge for short positions */
+  swapShort?: number;
   /**
      * Symbol the override applies to (max 12 chars)
      * @nullable
      */
   symbol?: string | null;
-  /** Swap charge for long positions */
-  swapLong?: number;
-  /** Swap charge for short positions */
-  swapShort?: number;
-  /** Margin divider override (1.0 = use default) */
-  marginDivider?: number;
 }

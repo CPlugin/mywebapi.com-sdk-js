@@ -16,6 +16,17 @@
  * adjustments BidMarkup and AskMarkup expressed in pips.
  */
 export interface MT4GatewayMarkup {
+  /** Gateway-account internal id (obsolete — see AccountName note) */
+  accountId?: number;
+  /**
+     * Gateway-account name (obsolete in modern MT4 builds — preserved for API completeness)
+     * @nullable
+     */
+  accountName?: string | null;
+  /** Ask-side markup in pips (added to the external ask quote) */
+  askMarkup?: number;
+  /** Bid-side markup in pips (added to the external bid quote) */
+  bidMarkup?: number;
   /** Whether the markup rule is active */
   enable?: boolean;
   /**
@@ -28,15 +39,4 @@ export interface MT4GatewayMarkup {
      * @nullable
      */
   symbol?: string | null;
-  /**
-     * Gateway-account name (obsolete in modern MT4 builds — preserved for API completeness)
-     * @nullable
-     */
-  accountName?: string | null;
-  /** Gateway-account internal id (obsolete — see AccountName note) */
-  accountId?: number;
-  /** Bid-side markup in pips (added to the external bid quote) */
-  bidMarkup?: number;
-  /** Ask-side markup in pips (added to the external ask quote) */
-  askMarkup?: number;
 }

@@ -12,78 +12,11 @@
  * Input shape for `UserRecordUpdate`: the editable part of an MT4 account record.
  */
 export interface MT4UserUpdate {
-  /** Login of the account to update (required identity; never changed by this call) */
-  login?: number;
-  /**
-     * Group name the account belongs to
-     * @nullable
-     */
-  group?: string | null;
-  /**
-     * Display name of the account holder
-     * @nullable
-     */
-  name?: string | null;
-  /**
-     * External customer identifier (CRM/KYC link)
-     * @nullable
-     */
-  externalId?: string | null;
-  /**
-     * MT4-internal status string
-     * @nullable
-     */
-  status?: string | null;
-  /**
-     * Country
-     * @nullable
-     */
-  country?: string | null;
-  /**
-     * City
-     * @nullable
-     */
-  city?: string | null;
-  /**
-     * State / region
-     * @nullable
-     */
-  state?: string | null;
-  /**
-     * Postal / ZIP code
-     * @nullable
-     */
-  zipCode?: string | null;
   /**
      * Street address
      * @nullable
      */
   address?: string | null;
-  /**
-     * Lead source / referral channel tag
-     * @nullable
-     */
-  leadSource?: string | null;
-  /**
-     * Contact phone
-     * @nullable
-     */
-  phone?: string | null;
-  /**
-     * Contact email
-     * @nullable
-     */
-  email?: string | null;
-  /**
-     * Free-form back-office comment
-     * @nullable
-     */
-  comment?: string | null;
-  /**
-     * Account leverage (e.g. 100 means 1:100)
-     * @nullable
-     */
-  leverage?: number | null;
   /**
      * IB / agent account number that referred this client
      * @nullable
@@ -95,38 +28,105 @@ export interface MT4UserUpdate {
      */
   balance?: number | null;
   /**
+     * City
+     * @nullable
+     */
+  city?: string | null;
+  /**
+     * Free-form back-office comment
+     * @nullable
+     */
+  comment?: string | null;
+  /**
+     * Country
+     * @nullable
+     */
+  country?: string | null;
+  /**
      * Credit on the account
      * @nullable
      */
   credit?: number | null;
   /**
-     * Interest rate
+     * Contact email
      * @nullable
      */
-  interestRate?: number | null;
-  /**
-     * Tax rate
-     * @nullable
-     */
-  taxes?: number | null;
+  email?: string | null;
   /**
      * Account flag bitfield — see MT4User.EnableFlags for bit semantics
      * @nullable
      */
   enableFlags?: number | null;
   /**
-     * 0 = no reports, non-zero = nightly email reports enabled
+     * External customer identifier (CRM/KYC link)
      * @nullable
      */
-  sendReports?: number | null;
+  externalId?: string | null;
+  /**
+     * Group name the account belongs to
+     * @nullable
+     */
+  group?: string | null;
+  /**
+     * Interest rate
+     * @nullable
+     */
+  interestRate?: number | null;
+  /**
+     * Lead source / referral channel tag
+     * @nullable
+     */
+  leadSource?: string | null;
+  /**
+     * Account leverage (e.g. 100 means 1:100)
+     * @nullable
+     */
+  leverage?: number | null;
+  /** Login of the account to update (required identity; never changed by this call) */
+  login?: number;
   /**
      * MetaQuotes ID for mobile push notifications
      * @nullable
      */
   mqid?: number | null;
   /**
+     * Display name of the account holder
+     * @nullable
+     */
+  name?: string | null;
+  /**
+     * Contact phone
+     * @nullable
+     */
+  phone?: string | null;
+  /**
+     * 0 = no reports, non-zero = nightly email reports enabled
+     * @nullable
+     */
+  sendReports?: number | null;
+  /**
+     * State / region
+     * @nullable
+     */
+  state?: string | null;
+  /**
+     * MT4-internal status string
+     * @nullable
+     */
+  status?: string | null;
+  /**
+     * Tax rate
+     * @nullable
+     */
+  taxes?: number | null;
+  /**
      * UI tint color in terminal client lists
      * @nullable
      */
   userColor?: number | null;
+  /**
+     * Postal / ZIP code
+     * @nullable
+     */
+  zipCode?: string | null;
 }

@@ -21,37 +21,16 @@ import type { WatchdogState } from './watchdogState';
  * returned. Enumerations are returned as their names.
  */
 export interface MT4Backup {
-  /**
-     * Filesystem path where full backups are written
-     * @nullable
-     */
-  fullBackupPath?: string | null;
-  /** Full backup schedule period (1h / 4h / 1d) */
-  fullBackupPeriod?: BackupExecutionPeriod;
-  /** How long full backups are retained (1m / 3m / 6m / 1y) */
-  fullBackupStore?: BackupStorePeriod;
-  /** Full backup time-shift in minutes */
-  fullBackupShift?: number;
-  /** Last full backup completion timestamp (UTC) */
-  fullBackupLastTime?: string;
-  /**
-     * Path to external processing directory
-     * @nullable
-     */
-  externalPath?: string | null;
-  /** Archive backup schedule period (5m / 15m / 30m / 1h) */
-  archivePeriod?: ArcBackupExecutionPeriod;
-  /** How long archive backups are retained (1w / 2w / 1m / 3m / 6m) */
-  archiveStore?: ArcBackupStorePeriod;
-  /** Archive backup time-shift in minutes */
-  archiveShift?: number;
   /** Last archive backup completion timestamp (UTC) */
   archiveLastTime?: string;
-  /**
-     * Comma-separated list of exported securities
-     * @nullable
-     */
-  exportSecurities?: string | null;
+  /** Archive backup schedule period (5m / 15m / 30m / 1h) */
+  archivePeriod?: ArcBackupExecutionPeriod;
+  /** Archive backup time-shift in minutes */
+  archiveShift?: number;
+  /** How long archive backups are retained (1w / 2w / 1m / 3m / 6m) */
+  archiveStore?: ArcBackupStorePeriod;
+  /** Last export completion timestamp (UTC) */
+  exportLastTime?: string;
   /**
      * Path to export script
      * @nullable
@@ -59,25 +38,46 @@ export interface MT4Backup {
   exportPath?: string | null;
   /** Export schedule period (1m / 5m / 15m / 30m / 1h) */
   exportPeriod?: ExportExecutionPeriod;
-  /** Last export completion timestamp (UTC) */
-  exportLastTime?: string;
-  /** Server role in HA pair (stand-alone / master / slave) */
-  watchRole?: ServerRole;
+  /**
+     * Comma-separated list of exported securities
+     * @nullable
+     */
+  exportSecurities?: string | null;
+  /**
+     * Path to external processing directory
+     * @nullable
+     */
+  externalPath?: string | null;
+  /** Last full backup completion timestamp (UTC) */
+  fullBackupLastTime?: string;
+  /**
+     * Filesystem path where full backups are written
+     * @nullable
+     */
+  fullBackupPath?: string | null;
+  /** Full backup schedule period (1h / 4h / 1d) */
+  fullBackupPeriod?: BackupExecutionPeriod;
+  /** Full backup time-shift in minutes */
+  fullBackupShift?: number;
+  /** How long full backups are retained (1m / 3m / 6m / 1y) */
+  fullBackupStore?: BackupStorePeriod;
+  /** Watchdog failover mode */
+  watchFailover?: WatchdogFailoverMode;
+  /** Watchdog IP (32-bit, raw platform representation) */
+  watchIp?: number;
+  /** Watchdog login */
+  watchLogin?: number;
   /**
      * Opposite server's IP:port string (not secret)
      * @nullable
      */
   watchOpposite?: string | null;
-  /** Watchdog IP (32-bit, raw platform representation) */
-  watchIp?: number;
+  /** Server role in HA pair (stand-alone / master / slave) */
+  watchRole?: ServerRole;
   /** Watchdog state */
   watchState?: WatchdogState;
-  /** Watchdog failover mode */
-  watchFailover?: WatchdogFailoverMode;
   /** Watchdog response timeout, seconds */
   watchTimeout?: number;
-  /** Watchdog login */
-  watchLogin?: number;
   /** Watchdog last-seen timestamp (raw int — platform does not auto-convert) */
   watchTimestamp?: number;
 }

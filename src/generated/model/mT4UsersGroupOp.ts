@@ -18,11 +18,6 @@ export interface MT4UsersGroupOp {
      * @nullable
      */
   command?: string | null;
-  /**
-     * Target group name (max 15 chars + NUL). Only used by `SetGroup`.
-     * @nullable
-     */
-  newGroup?: string | null;
   /** New leverage value (e.g. 100, 200, 500). Only used by `Leverage`. */
   leverage?: number;
   /**
@@ -30,4 +25,9 @@ export interface MT4UsersGroupOp {
      * @nullable
      */
   logins?: number[] | null;
+  /**
+     * Target group name (max 15 chars + NUL). Only used by `SetGroup`.
+     * @nullable
+     */
+  newGroup?: string | null;
 }

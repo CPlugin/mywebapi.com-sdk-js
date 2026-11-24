@@ -19,36 +19,36 @@
  * as appropriate.
  */
 export interface MT4DailyReport {
-  /** Account login the report belongs to */
-  login?: number;
-  /** Day boundary timestamp (platform internal: __time32_t, server-local time) */
-  ctm?: string;
-  /**
-     * Trading group the account was in on that day
-     * @nullable
-     */
-  group?: string | null;
+  /** Balance at the end of the reporting day */
+  balance?: number;
+  /** Balance at the start of the reporting day */
+  balancePrev?: number;
   /**
      * Free-form bank/payment identifier recorded with the day's deposits
      * @nullable
      */
   bank?: string | null;
-  /** Balance at the start of the reporting day */
-  balancePrev?: number;
-  /** Balance at the end of the reporting day */
-  balance?: number;
-  /** Net deposits credited within the day (positive = inflow) */
-  deposit?: number;
   /** Credit balance at end-of-day */
   credit?: number;
-  /** Closed-position profit/loss realised within the day */
-  profitClosed?: number;
-  /** Floating (open-position) profit/loss at end-of-day */
-  profit?: number;
+  /** Day boundary timestamp (platform internal: __time32_t, server-local time) */
+  ctm?: string;
+  /** Net deposits credited within the day (positive = inflow) */
+  deposit?: number;
   /** Equity at end-of-day (Balance + Credit + Profit) */
   equity?: number;
+  /**
+     * Trading group the account was in on that day
+     * @nullable
+     */
+  group?: string | null;
+  /** Account login the report belongs to */
+  login?: number;
   /** Used margin at end-of-day */
   margin?: number;
   /** Free margin at end-of-day (Equity - Margin) */
   marginFree?: number;
+  /** Floating (open-position) profit/loss at end-of-day */
+  profit?: number;
+  /** Closed-position profit/loss realised within the day */
+  profitClosed?: number;
 }

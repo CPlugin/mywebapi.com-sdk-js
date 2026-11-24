@@ -2,6 +2,62 @@
 
 All notable changes to `@mywebapi.com/sdk`. The package follows [semver](https://semver.org/); while it is at `0.x`, a minor release may contain breaking changes.
 
+## 0.6.0
+
+Regenerated from the WebAPI v2 specification of 24.11.2026 (x64 stand plus the 13 MT4 x86 sidecar operations, 456 in total). Minor release: the operation catalog and every method name and signature are unchanged; two models gain an optional field.
+
+### Added
+
+- `MT5ConSubscription.priceCost` (`number`, nullable) — the real cost of the subscription, the amount the client is actually charged, alongside the existing `price`, `pricePro` and `priceCurrency`.
+- `MT5SubscriptionHistory.time` (`number`, nullable) — the time of the action in seconds since the Unix epoch (1970-01-01), as published by the trade server.
+
+### Tests
+
+- `tests/generated-shape.test.ts` pins `priceCost` and `time` so a spec regression shows up in CI.
+
+## 0.5.1
+
+Regenerated from the WebAPI v2 specification of 23.11.2026 (x64 stand plus the 13 MT4 x86 sidecar operations, 456 in total). Patch release: the operation catalog and the names of every method are unchanged; only the types of the subscription contract and the payload of two models moved to what the server now publishes.
+
+### Changed
+
+- Subscriptions describe their codes by name instead of a number. `MT5Subscription.status` is now `MT5SubscriptionStatus` (`Active`, `Suspended`, `Canceled`) and `MT5SubscriptionHistory.action` is `MT5SubscriptionAction` (`Subscribe`, `Renewal`, `Suspend`, `Cancel`, `Deleted`); `MT5Subscription.flags` and `MT5ConSubscription.flags` are a string of the set bit names (`FreePeriod`), `"None"` when none is set, and `MT5ConSubscription` takes `controlMode` (`Full`, `Unsubscribe`, `View`, `Hidden`), `type` (`Subscription`, `Folder`), `periodMode` (`Once`, `Daily`, `Weekly`, `Monthly`, `Quarterly`, `Annual`, `Custom`) and `periodFreeMode` (`None`, `Day`, `Week`, `Month`, `Quarter`, `Year`, `Custom`) as those named types. The server still accepts the numeric value on input, so a numeric payload keeps working; reading a subscription now yields names.
+- `MT5ConSubscriptionSymbol.level` takes `MT5SubscriptionSymbolLevel` (`Delayed`, `RealtimeLevel1`, `RealtimeLevel2`) and `MT5SubscriptionHistory.tickHistory` takes `MT5SubscriptionTickHistory` (`None` through `All`).
+- `MT5MarketTickStat` carries the option greeks — `priceGreeksDelta`, `priceGreeksGamma`, `priceGreeksOmega`, `priceGreeksRho`, `priceGreeksTheta`, `priceGreeksVega` — and `priceSensitivity`.
+- `MT5News.time` and `MT5NewsSendRequest.time` are the trade server's wall-clock time, not UTC: the platform stores the value without a zone. The type stays `string`; only the documented meaning changed.
+
+### Tests
+
+- `tests/generated-shape.test.ts` pins the subscription enums to their names and checks that `MT5MarketTickStat` exposes the greeks.
+
+## 0.5.0
+
+Regenerated from the WebAPI v2 specification of 23.11.2026, which adds the groups v2 still lacked for MT5 management and the MT4 dealer tools. Minor release: the catalog grows from 224 to 456 operations and no existing method changes signature or name.
+
+### Added
+
+- MT4 dealer: `getExposureGet`, `getExposureValueGetCurrency`, `postLogsMode`, `postLogsOut`, `getSummaryCurrency`, `getSummaryGetSymbol`, `getSummaryGetAll`, `getSummaryGetByCountCount`, `getSummaryGetByTypeSecType`, plus their POST variants — exposure, dealer journal and per-symbol/currency summary.
+- MT5 subscriptions: `getSubscriptionCfgGetName`, `getSubscriptionCfgRequestName`, `getSubscriptionCfgGetByIDId`, `getSubscriptionCfgRequestByIDId`, `getSubscriptionRequestLogin`, `getSubscriptionRequestByGroupMask`, `postSubscriptionUpdate`, `postSubscriptionUpdateBatch`, `postSubscriptionDeleteId`, `postSubscriptionDeleteBatch`, `postSubscriptionJoin`, `postSubscriptionCancel`, subscription-history calls and the batch-array variants.
+- MT5 configuration and config-trade: `postGroupUpdateGroup` / `postGroupUpdateBatch`, `getLeverageGetName` / `getLeverageRequestName` / `getLeverageRequestArray`, plugin configuration (`getPluginGetName`, `postPluginUpdate`), symbol existence and the rest of the 11 operations on the configuration-trading controller.
+- MT5 reports: daily, daily-light, exposure and margin reports in per-login, per-group and per-logins variants (14 operations).
+- MT5 market insight: order book (`getBookGetSymbol`), online sessions (`getOnlineGetLogin`, `getOnlineRequest`, disconnects), selected symbols (`postSelectedAdd`, `postSelectedAddAll`, `postSelectedAddBatch`) and the rest of the group.
+- MT5 communications: custom command, geo resolution, licence check, logger calls (`getLoggerServerRequest`, `postLoggerFlush`, `postLoggerOut`, `postLoggerOutString`) — 26 operations.
+- MT5 clients: attachments (`getAttachmentRequest`, `postAttachmentAdd` and batch variants) alongside the account, document and comment calls, 42 operations in total.
+- MT5 trading: `postDealAdd`, `postDealPerform`, `postDealDeleteTicket`, `getDealRequestByLogins`, `getDealRequestByLoginsSymbolSymbol` and the batch variants — 41 operations over orders, deals and positions.
+- MT5 trade operations: dealer answers (`postDealerAnswer`, `postDealerStart`, `postDealerStop`, `postDealerLockId`), `getRequestGetAll` / `getRequestGetId`, `postTradeAccountSet` and the request/dealer batch calls.
+- MT5 market data: `getTickLastSymbol`, `getTickLastRawSymbol`, `getTickStatSymbol`, `getTickHistoryRequestRawSymbol`, tick add/replace and chart delete/replace/split/update.
+- MT5 users extras: `getUserCertGetLogin`, `postUserCertConfirmLogin`, `postUserCertUpdateLogin`, `postUserCertDeleteLogin` and the account/subscription helpers on the users-extras controller.
+- `lib`: nothing else — every new operation is reachable from `client.mt4` / `client.mt5`, with `ApiResponse<T>` unwrapping and the server timeout already applied.
+
+### Changed
+
+- The generated catalog covers 456 operations (443 from the x64 v2 specification plus the 13 MT4 x86 sidecar operations the SDK already exposed).
+- `src/request-timeouts.generated.ts` now carries the server timeout of all 456 operations.
+
+### Tests
+
+- `tests/new-groups.test.ts` — one typed round-trip per new group: MT4 dealer, MT5 subscriptions, configuration, config-trade, reports, market insight, communications, clients, trading, trade operations, market data and users extras.
+
 ## 0.4.0
 
 Regenerated from the WebAPI v2 specification of 23.11.2026. v2 now carries the same operation names as v1 and the operations v2 was missing, so a client no longer needs v1 for MT5 management. Minor release with breaking changes: every renamed or removed call is listed under Changed and Removed.

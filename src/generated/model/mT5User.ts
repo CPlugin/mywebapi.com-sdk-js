@@ -15,18 +15,48 @@ import type { MT5UserRights } from './mT5UserRights';
  *             `Rights` is a flags string: the names of the set bits, `"Enabled, Password"`.
  */
 export interface MT5User {
-  /** User login (identity, read-only). */
-  login?: number;
   /**
-     * User group name.
+     * Account ID string (external account identifier).
      * @nullable
      */
-  group?: string | null;
+  account?: string | null;
   /**
-     * Full display name of the account holder.
+     * Client postal/physical address.
      * @nullable
      */
-  name?: string | null;
+  address?: string | null;
+  /** Introducing agent login. */
+  agent?: number;
+  /** Current account balance. */
+  balance?: number;
+  /** Balance at end of previous trading day. */
+  balancePrevDay?: number;
+  /** Balance at end of previous calendar month. */
+  balancePrevMonth?: number;
+  /** SSL certificate serial number (read-only). */
+  certSerialNumber?: number;
+  /**
+     * Client city.
+     * @nullable
+     */
+  city?: string | null;
+  /** External CRM client ID. */
+  clientID?: number;
+  /** Colour tag assigned to the account in MT5 Manager (ARGB uint). */
+  color?: number;
+  /**
+     * Internal comment on the account.
+     * @nullable
+     */
+  comment?: string | null;
+  /** Agent commission accrued today. */
+  commissionAgentDaily?: number;
+  /** Agent commission accrued this month. */
+  commissionAgentMonthly?: number;
+  /** Accumulated commission for the current day. */
+  commissionDaily?: number;
+  /** Accumulated commission for the current month. */
+  commissionMonthly?: number;
   /**
      * Company or organisation name.
      * @nullable
@@ -37,64 +67,56 @@ export interface MT5User {
      * @nullable
      */
   country?: string | null;
-  /**
-     * Client city.
-     * @nullable
-     */
-  city?: string | null;
-  /**
-     * Client state or province.
-     * @nullable
-     */
-  state?: string | null;
-  /**
-     * Client postal code.
-     * @nullable
-     */
-  zipCode?: string | null;
-  /**
-     * Client phone number.
-     * @nullable
-     */
-  phone?: string | null;
+  /** Current credit facility amount. */
+  credit?: number;
   /**
      * Client email address.
      * @nullable
      */
   eMail?: string | null;
+  /** Equity at end of previous trading day. */
+  equityPrevDay?: number;
+  /** Equity at end of previous calendar month. */
+  equityPrevMonth?: number;
   /**
-     * Internal comment on the account.
+     * Given name (first name).
      * @nullable
      */
-  comment?: string | null;
-  /** Colour tag assigned to the account in MT5 Manager (ARGB uint). */
-  color?: number;
-  /** Account leverage (e.g. 100 = 1:100). */
-  leverage?: number;
+  firstName?: string | null;
   /**
-     * Account ID string (external account identifier).
+     * User group name.
      * @nullable
      */
-  account?: string | null;
-  /** Client language code (MT5 locale uint). */
-  language?: number;
-  /**
-     * Client postal/physical address.
-     * @nullable
-     */
-  address?: string | null;
+  group?: string | null;
   /**
      * Client document ID (passport, national ID, etc.).
      * @nullable
      */
   id?: string | null;
+  /** Annual interest rate on credit. */
+  interestRate?: number;
+  /** Client language code (MT5 locale uint). */
+  language?: number;
   /**
-     * Client KYC / account status label.
+     * Last login timestamp (UTC). Null when not set.
      * @nullable
      */
-  status?: string | null;
-  /** Introducing agent login. */
-  agent?: number;
+  lastAccess?: string | null;
+  /**
+     * Last known client IP address.
+     * @nullable
+     */
+  lastIP?: string | null;
+  /**
+     * Family name (last name).
+     * @nullable
+     */
+  lastName?: string | null;
+  /**
+     * Last password change timestamp (UTC). Null when not set.
+     * @nullable
+     */
+  lastPassChange?: string | null;
   /**
      * Marketing lead campaign name.
      * @nullable
@@ -105,67 +127,45 @@ export interface MT5User {
      * @nullable
      */
   leadSource?: string | null;
-  /** External CRM client ID. */
-  clientID?: number;
-  /**
-     * Given name (first name).
-     * @nullable
-     */
-  firstName?: string | null;
-  /**
-     * Family name (last name).
-     * @nullable
-     */
-  lastName?: string | null;
+  /** Account leverage (e.g. 100 = 1:100). */
+  leverage?: number;
+  /** User login (identity, read-only). */
+  login?: number;
   /**
      * Patronymic / middle name.
      * @nullable
      */
   middleName?: string | null;
-  /** Account permission flags: names of the set bits, `"Enabled, Password"` (the MT5UserRights schema). */
-  rights?: MT5UserRights;
-  /** SSL certificate serial number (read-only). */
-  certSerialNumber?: number;
+  /**
+     * Full display name of the account holder.
+     * @nullable
+     */
+  name?: string | null;
+  /**
+     * Client phone number.
+     * @nullable
+     */
+  phone?: string | null;
   /**
      * Account registration timestamp (UTC). Null when not set (unix 0).
      * @nullable
      */
   registration?: string | null;
+  /** Account permission flags: names of the set bits, `"Enabled, Password"` (the MT5UserRights schema). */
+  rights?: MT5UserRights;
   /**
-     * Last login timestamp (UTC). Null when not set.
+     * Client state or province.
      * @nullable
      */
-  lastAccess?: string | null;
+  state?: string | null;
   /**
-     * Last password change timestamp (UTC). Null when not set.
+     * Client KYC / account status label.
      * @nullable
      */
-  lastPassChange?: string | null;
+  status?: string | null;
   /**
-     * Last known client IP address.
+     * Client postal code.
      * @nullable
      */
-  lastIP?: string | null;
-  /** Current account balance. */
-  balance?: number;
-  /** Current credit facility amount. */
-  credit?: number;
-  /** Annual interest rate on credit. */
-  interestRate?: number;
-  /** Accumulated commission for the current day. */
-  commissionDaily?: number;
-  /** Accumulated commission for the current month. */
-  commissionMonthly?: number;
-  /** Agent commission accrued today. */
-  commissionAgentDaily?: number;
-  /** Agent commission accrued this month. */
-  commissionAgentMonthly?: number;
-  /** Balance at end of previous trading day. */
-  balancePrevDay?: number;
-  /** Balance at end of previous calendar month. */
-  balancePrevMonth?: number;
-  /** Equity at end of previous trading day. */
-  equityPrevDay?: number;
-  /** Equity at end of previous calendar month. */
-  equityPrevMonth?: number;
+  zipCode?: string | null;
 }

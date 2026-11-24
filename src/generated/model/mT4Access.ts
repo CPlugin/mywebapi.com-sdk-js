@@ -21,13 +21,13 @@ export interface MT4Access {
      * itself surfaces it as int).
      */
   action?: number;
-  /** IP range start (uint widened to long for JSON safety) */
-  ipFrom?: number;
-  /** IP range end (uint widened to long for JSON safety) */
-  ipTo?: number;
   /**
      * Free-form comment for the rule
      * @nullable
      */
   comment?: string | null;
+  /** IP range start (uint widened to long for JSON safety) */
+  ipFrom?: number;
+  /** IP range end (uint widened to long for JSON safety) */
+  ipTo?: number;
 }

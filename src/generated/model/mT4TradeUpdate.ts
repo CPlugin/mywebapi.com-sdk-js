@@ -22,14 +22,6 @@
  * low-level admin override for back-office corrections.
  */
 export interface MT4TradeUpdate {
-  /** Order ticket to edit (path parameter is the source of truth) */
-  order?: number;
-  /** New stop-loss price (0 = remove SL) */
-  sl?: number;
-  /** New take-profit price (0 = remove TP) */
-  tp?: number;
-  /** Magic number / EA tag */
-  magic?: number;
   /**
      * Comment (broker-visible)
      * @nullable
@@ -39,10 +31,18 @@ export interface MT4TradeUpdate {
   commission?: number;
   /** Manual agent-commission override */
   commissionAgent?: number;
-  /** Swap / storage override */
-  storage?: number;
+  /** Magic number / EA tag */
+  magic?: number;
+  /** Order ticket to edit (path parameter is the source of truth) */
+  order?: number;
   /** Profit override (back-office correction only) */
   profit?: number;
+  /** New stop-loss price (0 = remove SL) */
+  sl?: number;
+  /** Swap / storage override */
+  storage?: number;
   /** Taxes override */
   taxes?: number;
+  /** New take-profit price (0 = remove TP) */
+  tp?: number;
 }

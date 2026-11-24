@@ -23,44 +23,44 @@
  * usable credentials.
  */
 export interface MT4UserCreate {
+  /** @nullable */
+  address?: string | null;
+  agentAccount?: number;
+  /** @nullable */
+  city?: string | null;
+  /** @nullable */
+  comment?: string | null;
+  /** @nullable */
+  country?: string | null;
+  /** @nullable */
+  email?: string | null;
+  enableFlags?: number;
+  /** @nullable */
+  externalId?: string | null;
+  /** @nullable */
+  group?: string | null;
+  interestRate?: number;
+  /** @nullable */
+  leadSource?: string | null;
+  leverage?: number;
   /**
      * Optional preferred login. `0` = let server assign the next free
      * id. `> 0` = request this exact id (server rejects collisions
      * via platform error code).
      */
   login?: number;
-  /** @nullable */
-  group?: string | null;
+  mqid?: number;
   /** @nullable */
   name?: string | null;
   /** @nullable */
-  externalId?: string | null;
-  /** @nullable */
-  status?: string | null;
-  /** @nullable */
-  country?: string | null;
-  /** @nullable */
-  city?: string | null;
+  phone?: string | null;
+  sendReports?: number;
   /** @nullable */
   state?: string | null;
   /** @nullable */
-  zipCode?: string | null;
-  /** @nullable */
-  address?: string | null;
-  /** @nullable */
-  leadSource?: string | null;
-  /** @nullable */
-  phone?: string | null;
-  /** @nullable */
-  email?: string | null;
-  /** @nullable */
-  comment?: string | null;
-  leverage?: number;
-  agentAccount?: number;
-  interestRate?: number;
+  status?: string | null;
   taxes?: number;
-  enableFlags?: number;
-  sendReports?: number;
-  mqid?: number;
   userColor?: number;
+  /** @nullable */
+  zipCode?: string | null;
 }

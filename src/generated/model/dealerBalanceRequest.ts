@@ -10,10 +10,10 @@
 import type { EnDealAction } from './enDealAction';
 
 export interface DealerBalanceRequest {
-  login: number;
-  value: number;
-  /** if none specified - it will be Balance operation. Buy/Sell actions here - pointless. */
-  type?: EnDealAction | null;
   /** @nullable */
   comment?: string | null;
+  login: number;
+  /** if none specified - it will be Balance operation. Buy/Sell actions here - pointless. */
+  type?: EnDealAction | null;
+  value: number;
 }

@@ -17,25 +17,25 @@
  */
 export interface MT4DataServer {
   /**
-     * Server address as "host:port" or "host"
-     * @nullable
-     */
-  server?: string | null;
-  /** Server IP (raw platform int — sign-preserved; high-bit IPs may serialize as negative) */
-  ip?: number;
-  /**
      * Free-form server description
      * @nullable
      */
   description?: string | null;
-  /** Whether the server can act as a proxy (0/1; raw platform int preserved) */
-  isProxy?: number;
-  /** Connection priority: 0-7 base, 255 = idle */
-  priority?: number;
-  /** Reported server load (UINT_MAX = no information reported) */
-  loading?: number;
+  /** Server IP (raw platform int — sign-preserved; high-bit IPs may serialize as negative) */
+  ip?: number;
   /** Internal IP address (widened uint → long) */
   ipInternal?: number;
+  /** Whether the server can act as a proxy (0/1; raw platform int preserved) */
+  isProxy?: number;
   /** Failover-witness flag (0 / 1) */
   isWitness?: number;
+  /** Reported server load (UINT_MAX = no information reported) */
+  loading?: number;
+  /** Connection priority: 0-7 base, 255 = idle */
+  priority?: number;
+  /**
+     * Server address as "host:port" or "host"
+     * @nullable
+     */
+  server?: string | null;
 }

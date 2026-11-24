@@ -16,21 +16,8 @@
  * conversion to avoid timezone ambiguity for date-only entries).
  */
 export interface MT4Holiday {
-  /** Calendar year of the holiday (e.g. 2026) */
-  year?: number;
-  /** Calendar month, 1..12 */
-  month?: number;
   /** Day-of-month, 1..31 */
   day?: number;
-  /** Work-day start time, in minutes from midnight (0 if closed all day) */
-  from?: number;
-  /** Work-day end time, in minutes from midnight */
-  to?: number;
-  /**
-     * Symbol name, symbol group name, or "All" for global holiday
-     * @nullable
-     */
-  symbol?: string | null;
   /**
      * Free-form description of the holiday
      * @nullable
@@ -38,4 +25,17 @@ export interface MT4Holiday {
   description?: string | null;
   /** Whether the holiday entry is active */
   enable?: boolean;
+  /** Work-day start time, in minutes from midnight (0 if closed all day) */
+  from?: number;
+  /** Calendar month, 1..12 */
+  month?: number;
+  /**
+     * Symbol name, symbol group name, or "All" for global holiday
+     * @nullable
+     */
+  symbol?: string | null;
+  /** Work-day end time, in minutes from midnight */
+  to?: number;
+  /** Calendar year of the holiday (e.g. 2026) */
+  year?: number;
 }

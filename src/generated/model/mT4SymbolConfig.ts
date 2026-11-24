@@ -18,52 +18,32 @@
  * `MarginCalculationMode`) are returned as their names.
  */
 export interface MT4SymbolConfig {
-  /**
-     * Symbol name (max 12 chars)
-     * @nullable
-     */
-  symbol?: string | null;
-  /**
-     * Human-readable description
-     * @nullable
-     */
-  description?: string | null;
-  /**
-     * Data feed source identifier
-     * @nullable
-     */
-  source?: string | null;
+  /** Ask tick value */
+  askTickValue?: number;
+  /** Background colour for terminal client (BGR int) */
+  backgroundColor?: number;
+  /** Bid tick value */
+  bidTickValue?: number;
+  /** Contract size */
+  contractSize?: number;
+  /** Tick counter for the symbol (computed) */
+  count?: number;
+  /** Original tick counter (computed) */
+  countOriginal?: number;
   /**
      * Quote currency code
      * @nullable
      */
   currency?: string | null;
-  /** Symbol type identifier */
-  type?: number;
+  /**
+     * Human-readable description
+     * @nullable
+     */
+  description?: string | null;
   /** Number of decimal digits in the quote */
   digits?: number;
-  /**
-     * Trading mode (Disabled / CloseOnly / Full)
-     * @nullable
-     */
-  tradeMode?: string | null;
-  /** Background colour for terminal client (BGR int) */
-  backgroundColor?: number;
-  /** Tick counter for the symbol (computed) */
-  count?: number;
-  /** Original tick counter (computed) */
-  countOriginal?: number;
-  /** 0 = synthetic, non-zero = real-time feed */
-  realtime?: number;
-  /** Symbol activation date (UTC) */
-  starting?: string;
   /** Symbol expiration date (UTC) */
   expiration?: string;
-  /**
-     * Profit calculation mode (Forex / CFD / Futures)
-     * @nullable
-     */
-  profitCalculationMode?: string | null;
   /** Tick filter type */
   filter?: number;
   /** Tick filter counter (computed) */
@@ -72,85 +52,105 @@ export interface MT4SymbolConfig {
   filterLimit?: number;
   /** Tick filter smoothing factor */
   filterSmoothing?: number;
-  /** 0 = no logging, non-zero = log price changes */
-  logging?: number;
-  /** Spread in points (0 = floating) */
-  spread?: number;
-  /** Spread balance correction */
-  spreadBalance?: number;
-  /**
-     * Symbol execution mode
-     * @nullable
-     */
-  symbolExecMode?: string | null;
-  /** 0 = swaps disabled, non-zero = enabled */
-  swapEnable?: number;
-  /**
-     * Swap type (Points / SymbolBase / SymbolMargin / CurrencyMargin)
-     * @nullable
-     */
-  swapType?: string | null;
-  /** Swap value for long positions */
-  swapLong?: number;
-  /** Swap value for short positions */
-  swapShort?: number;
-  /** Day of week (1-7) when 3-day rollover applies */
-  swapRollover3Days?: number;
-  /** Contract size */
-  contractSize?: number;
-  /** Tick value in deposit currency */
-  tickValue?: number;
-  /** Tick size */
-  tickSize?: number;
-  /** Minimum distance to current price for SL/TP (points) */
-  stopsLevel?: number;
+  /** Freeze level (points before expiration to freeze trading) */
+  freezeLevel?: number;
   /**
      * Pending order GTC mode
      * @nullable
      */
   gtcMode?: string | null;
+  /** Max instant-execution volume (lots, 0 = unlimited) */
+  instantMaxVolume?: number;
+  /** 0 = no logging, non-zero = log price changes */
+  logging?: number;
+  /** 0 = long+short, non-zero = long-only */
+  longOnly?: number;
   /**
      * Margin calculation mode (Forex / CFD / Futures / CFDIndex / CFDLeverage)
      * @nullable
      */
   marginCalculationMode?: string | null;
-  /** Initial margin per lot */
-  marginInitial?: number;
-  /** Maintenance margin per lot */
-  marginMaintenance?: number;
-  /** Hedged margin per lot */
-  marginHedged?: number;
-  /** Margin divider */
-  marginDivider?: number;
-  /** Percentage */
-  percentage?: number;
-  /** Point size */
-  point?: number;
-  /** Multiplier */
-  multiply?: number;
-  /** Bid tick value */
-  bidTickValue?: number;
-  /** Ask tick value */
-  askTickValue?: number;
-  /** 0 = long+short, non-zero = long-only */
-  longOnly?: number;
-  /** Max instant-execution volume (lots, 0 = unlimited) */
-  instantMaxVolume?: number;
   /**
      * Margin currency for non-deposit-currency symbols
      * @nullable
      */
   marginCurrency?: string | null;
-  /** Freeze level (points before expiration to freeze trading) */
-  freezeLevel?: number;
+  /** Margin divider */
+  marginDivider?: number;
+  /** Hedged margin per lot */
+  marginHedged?: number;
   /** Strong hedge margin per lot */
   marginHedgedStrong?: number;
-  /** Value date (UTC) */
-  valueDate?: string;
+  /** Initial margin per lot */
+  marginInitial?: number;
+  /** Maintenance margin per lot */
+  marginMaintenance?: number;
+  /** Multiplier */
+  multiply?: number;
+  /** Percentage */
+  percentage?: number;
+  /** Point size */
+  point?: number;
+  /**
+     * Profit calculation mode (Forex / CFD / Futures)
+     * @nullable
+     */
+  profitCalculationMode?: string | null;
   /** Quotes delay in seconds (0 = real time) */
   quotesDelay?: number;
+  /** 0 = synthetic, non-zero = real-time feed */
+  realtime?: number;
+  /**
+     * Data feed source identifier
+     * @nullable
+     */
+  source?: string | null;
+  /** Spread in points (0 = floating) */
+  spread?: number;
+  /** Spread balance correction */
+  spreadBalance?: number;
+  /** Symbol activation date (UTC) */
+  starting?: string;
+  /** Minimum distance to current price for SL/TP (points) */
+  stopsLevel?: number;
+  /** 0 = swaps disabled, non-zero = enabled */
+  swapEnable?: number;
+  /** Swap value for long positions */
+  swapLong?: number;
   /** 0 = standard, non-zero = use open price for swaps */
   swapOpenPrice?: number;
+  /** Day of week (1-7) when 3-day rollover applies */
+  swapRollover3Days?: number;
+  /** Swap value for short positions */
+  swapShort?: number;
+  /**
+     * Swap type (Points / SymbolBase / SymbolMargin / CurrencyMargin)
+     * @nullable
+     */
+  swapType?: string | null;
   /** 0 = swap, non-zero = variation margin */
   swapVariationMargin?: number;
+  /**
+     * Symbol name (max 12 chars)
+     * @nullable
+     */
+  symbol?: string | null;
+  /**
+     * Symbol execution mode
+     * @nullable
+     */
+  symbolExecMode?: string | null;
+  /** Tick size */
+  tickSize?: number;
+  /** Tick value in deposit currency */
+  tickValue?: number;
+  /**
+     * Trading mode (Disabled / CloseOnly / Full)
+     * @nullable
+     */
+  tradeMode?: string | null;
+  /** Symbol type identifier */
+  type?: number;
+  /** Value date (UTC) */
+  valueDate?: string;
 }

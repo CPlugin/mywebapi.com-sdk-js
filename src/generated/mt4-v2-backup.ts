@@ -18,6 +18,51 @@ import type {
 import { customFetch } from '../mutator';
 
 
+export type getBackupInfoOrdersModeResponse200 = {
+  data: MT4BackupInfoListApiResponse
+  status: 200
+}
+
+export type getBackupInfoOrdersModeResponseSuccess = (getBackupInfoOrdersModeResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getBackupInfoOrdersModeResponse = (getBackupInfoOrdersModeResponseSuccess)
+
+export const getGetBackupInfoOrdersModeUrl = (tradePlatform: string,
+    mode: number,) => {
+
+
+
+
+  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupInfoOrders/${encodeURIComponent(String(mode))}`
+}
+
+/**
+ * List backup order files available on the MT4 server for a given mode.
+ *
+ * Manager (live) call to the platform's
+ * `BackupInfoOrders(int mode)`. Order-side counterpart of
+ * `BackupInfoUsers` — same shape, different catalog.
+ * Read-only operation.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List order backup files
+ */
+export const getBackupInfoOrdersMode = async (tradePlatform: string,
+    mode: number, options?: Parameters<typeof customFetch>[1]): Promise<getBackupInfoOrdersModeResponse> => {
+
+  return customFetch<getBackupInfoOrdersModeResponse>(getGetBackupInfoOrdersModeUrl(tradePlatform,mode),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
 export type getBackupInfoUsersModeResponse200 = {
   data: MT4BackupInfoListApiResponse
   status: 200
@@ -67,42 +112,52 @@ export const getBackupInfoUsersMode = async (tradePlatform: string,
 );}
 
 
-export type getBackupInfoOrdersModeResponse200 = {
-  data: MT4BackupInfoListApiResponse
+export type getBackupRequestOrdersFileResponse200 = {
+  data: MT4TradeListApiResponse
   status: 200
 }
 
-export type getBackupInfoOrdersModeResponseSuccess = (getBackupInfoOrdersModeResponse200) & {
+export type getBackupRequestOrdersFileResponseSuccess = (getBackupRequestOrdersFileResponse200) & {
   headers: Headers;
 };
 ;
 
-export type getBackupInfoOrdersModeResponse = (getBackupInfoOrdersModeResponseSuccess)
+export type getBackupRequestOrdersFileResponse = (getBackupRequestOrdersFileResponseSuccess)
 
-export const getGetBackupInfoOrdersModeUrl = (tradePlatform: string,
-    mode: number,) => {
+export const getGetBackupRequestOrdersFileUrl = (tradePlatform: string,
+    file: string,
+    params?: GetBackupRequestOrdersFileParams,) => {
+  const normalizedParams = new URLSearchParams();
 
+  Object.entries(params || {}).forEach(([key, value]) => {
 
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
 
+  const stringifiedParams = normalizedParams.toString();
 
-  return `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupInfoOrders/${encodeURIComponent(String(mode))}`
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRequestOrders/${encodeURIComponent(String(file))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRequestOrders/${encodeURIComponent(String(file))}`
 }
 
 /**
- * List backup order files available on the MT4 server for a given mode.
+ * Read trade records out of a backup file (does NOT restore — read-only).
  *
  * Manager (live) call to the platform's
- * `BackupInfoOrders(int mode)`. Order-side counterpart of
- * `BackupInfoUsers` — same shape, different catalog.
- * Read-only operation.
+ * `BackupRequestOrders(string file, string request)`. Order-side
+ * counterpart of `BackupRequestUsers`. Same caveats:
+ * read-only, full file loaded server-side regardless of `limit`,
+ * destructive restore is a separate (Wave 4b) operation.
  *
  * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List order backup files
+ * @summary Read orders from backup
  */
-export const getBackupInfoOrdersMode = async (tradePlatform: string,
-    mode: number, options?: Parameters<typeof customFetch>[1]): Promise<getBackupInfoOrdersModeResponse> => {
+export const getBackupRequestOrdersFile = async (tradePlatform: string,
+    file: string,
+    params?: GetBackupRequestOrdersFileParams, options?: Parameters<typeof customFetch>[1]): Promise<getBackupRequestOrdersFileResponse> => {
 
-  return customFetch<getBackupInfoOrdersModeResponse>(getGetBackupInfoOrdersModeUrl(tradePlatform,mode),
+  return customFetch<getBackupRequestOrdersFileResponse>(getGetBackupRequestOrdersFileUrl(tradePlatform,file,params),
   {
     ...options,
     method: 'GET'
@@ -168,61 +223,6 @@ export const getBackupRequestUsersFile = async (tradePlatform: string,
     params?: GetBackupRequestUsersFileParams, options?: Parameters<typeof customFetch>[1]): Promise<getBackupRequestUsersFileResponse> => {
 
   return customFetch<getBackupRequestUsersFileResponse>(getGetBackupRequestUsersFileUrl(tradePlatform,file,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getBackupRequestOrdersFileResponse200 = {
-  data: MT4TradeListApiResponse
-  status: 200
-}
-
-export type getBackupRequestOrdersFileResponseSuccess = (getBackupRequestOrdersFileResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getBackupRequestOrdersFileResponse = (getBackupRequestOrdersFileResponseSuccess)
-
-export const getGetBackupRequestOrdersFileUrl = (tradePlatform: string,
-    file: string,
-    params?: GetBackupRequestOrdersFileParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRequestOrders/${encodeURIComponent(String(file))}?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/BackupRequestOrders/${encodeURIComponent(String(file))}`
-}
-
-/**
- * Read trade records out of a backup file (does NOT restore — read-only).
- *
- * Manager (live) call to the platform's
- * `BackupRequestOrders(string file, string request)`. Order-side
- * counterpart of `BackupRequestUsers`. Same caveats:
- * read-only, full file loaded server-side regardless of `limit`,
- * destructive restore is a separate (Wave 4b) operation.
- *
- * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Read orders from backup
- */
-export const getBackupRequestOrdersFile = async (tradePlatform: string,
-    file: string,
-    params?: GetBackupRequestOrdersFileParams, options?: Parameters<typeof customFetch>[1]): Promise<getBackupRequestOrdersFileResponse> => {
-
-  return customFetch<getBackupRequestOrdersFileResponse>(getGetBackupRequestOrdersFileUrl(tradePlatform,file,params),
   {
     ...options,
     method: 'GET'

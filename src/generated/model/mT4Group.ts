@@ -39,90 +39,90 @@ import type { OTPMode } from './oTPMode';
  * `GroupRights` is a flags string, the names of the set bits.
  */
 export interface MT4Group {
-  /**
-     * Group name (unique per platform, max 16 chars)
-     * @nullable
-     */
-  group?: string | null;
-  /** 0 = group disabled, non-zero = enabled (accounts in this group can log in) */
-  enable?: number;
-  /** Trade confirmation timeout, seconds */
-  timeout?: number;
-  /** One-time password requirement mode */
-  otpMode?: OTPMode;
+  /** Maximum balance under which an account is eligible for archiving */
+  archiveMaxBalance?: number;
+  /** Pending orders clean-up period (days) */
+  archivePendingPeriod?: number;
+  /** Inactivity period (days) before account moves to archive */
+  archivePeriod?: number;
+  /** 0 = no IE check, non-zero = check Instant Execution prices */
+  checkIEPrices?: number;
+  /** 0 = LIFO, non-zero = FIFO close rule */
+  closeFIFO?: number;
+  /** 0 = standard close, non-zero = close-and-reopen mode */
+  closeReopen?: number;
   /**
      * Company name shown on statements
      * @nullable
      */
   company?: string | null;
-  /**
-     * Statement signature line
-     * @nullable
-     */
-  signature?: string | null;
-  /**
-     * Support page URL shown to clients
-     * @nullable
-     */
-  supportPage?: string | null;
-  /**
-     * Support email shown to clients
-     * @nullable
-     */
-  supportEmail?: string | null;
   /** Number of statement copies sent to support address */
   copies?: number;
-  /** 0 = statements disabled, non-zero = nightly statements enabled */
-  reports?: number;
-  /** Default leverage applied when an account omits its own leverage */
-  defaultLeverage?: number;
-  /** Default deposit applied when an account omits its own balance */
-  defaultDeposit?: number;
-  /** Max simultaneously open securities */
-  maxSecurities?: number;
-  /** Count of special securities settings (SecMargins) in use */
-  secMarginsTotal?: number;
+  /** Virtual credit applied to the group's accounts */
+  credit?: number;
   /**
      * Deposit currency (e.g. "USD")
      * @nullable
      */
   currency?: string | null;
-  /** Virtual credit applied to the group's accounts */
-  credit?: number;
+  /** Default deposit applied when an account omits its own balance */
+  defaultDeposit?: number;
+  /** Default leverage applied when an account omits its own leverage */
+  defaultLeverage?: number;
+  /** 0 = group disabled, non-zero = enabled (accounts in this group can log in) */
+  enable?: number;
+  /**
+     * Group name (unique per platform, max 16 chars)
+     * @nullable
+     */
+  group?: string | null;
+  /** Permissions bit mask for this group */
+  groupRights?: GroupRights;
+  /** 0 = standard hedge, non-zero = treat large hedged leg specially */
+  hedgeLargeLeg?: number;
+  /** 0 = hedging allowed, non-zero = hedging prohibited */
+  hedgeProhibited?: number;
+  /** Annual interest rate (percent) */
+  interestRate?: number;
   /** Margin call threshold (percent of equity) */
   marginCall?: number;
+  /** Margin controlling unit (percent vs deposit currency) */
+  marginControllingType?: MarginControllingType;
   /** Margin calculation mode (don't use / use all / use profit / use loss) */
   marginMode?: MarginMode;
   /** Stop-out threshold */
   marginStopout?: number;
-  /** Annual interest rate (percent) */
-  interestRate?: number;
-  /** 0 = no rollovers, non-zero = use rollovers and interest rate */
-  useSwap?: number;
-  /** News delivery mode */
-  newsMode?: NewsMode;
-  /** Permissions bit mask for this group */
-  groupRights?: GroupRights;
-  /** 0 = no IE check, non-zero = check Instant Execution prices */
-  checkIEPrices?: number;
   /** Maximum simultaneous orders and open positions */
   maxPositions?: number;
-  /** 0 = standard close, non-zero = close-and-reopen mode */
-  closeReopen?: number;
-  /** 0 = hedging allowed, non-zero = hedging prohibited */
-  hedgeProhibited?: number;
-  /** 0 = LIFO, non-zero = FIFO close rule */
-  closeFIFO?: number;
-  /** 0 = standard hedge, non-zero = treat large hedged leg specially */
-  hedgeLargeLeg?: number;
-  /** Margin controlling unit (percent vs deposit currency) */
-  marginControllingType?: MarginControllingType;
-  /** Inactivity period (days) before account moves to archive */
-  archivePeriod?: number;
-  /** Maximum balance under which an account is eligible for archiving */
-  archiveMaxBalance?: number;
+  /** Max simultaneously open securities */
+  maxSecurities?: number;
+  /** News delivery mode */
+  newsMode?: NewsMode;
+  /** One-time password requirement mode */
+  otpMode?: OTPMode | null;
+  /** 0 = statements disabled, non-zero = nightly statements enabled */
+  reports?: number;
+  /** Count of special securities settings (SecMargins) in use */
+  secMarginsTotal?: number;
+  /**
+     * Statement signature line
+     * @nullable
+     */
+  signature?: string | null;
   /** 0 = include hedged accounts in stop-out checks, non-zero = skip them */
   stopoutSkipHedged?: number;
-  /** Pending orders clean-up period (days) */
-  archivePendingPeriod?: number;
+  /**
+     * Support email shown to clients
+     * @nullable
+     */
+  supportEmail?: string | null;
+  /**
+     * Support page URL shown to clients
+     * @nullable
+     */
+  supportPage?: string | null;
+  /** Trade confirmation timeout, seconds */
+  timeout?: number;
+  /** 0 = no rollovers, non-zero = use rollovers and interest rate */
+  useSwap?: number;
 }

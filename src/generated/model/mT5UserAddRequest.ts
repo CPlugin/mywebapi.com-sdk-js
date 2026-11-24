@@ -15,30 +15,40 @@ import type { MT5UserRights } from './mT5UserRights';
  */
 export interface MT5UserAddRequest {
   /**
-     * Account login to create. Omit or send zero to let the trade server allocate one.
+     * Account ID string (external account identifier).
      * @nullable
      */
-  login?: number | null;
+  account?: string | null;
   /**
-     * Master password. Optional — generated when missing.
+     * Client postal/physical address.
      * @nullable
      */
-  password?: string | null;
+  address?: string | null;
   /**
-     * Investor (read-only) password. Optional — generated when missing.
+     * Introducing agent login.
      * @nullable
      */
-  passwordInvestor?: string | null;
+  agent?: number | null;
   /**
-     * User group name.
+     * Client city.
      * @nullable
      */
-  group?: string | null;
+  city?: string | null;
   /**
-     * Full display name of the account holder.
+     * External CRM client ID.
      * @nullable
      */
-  name?: string | null;
+  clientID?: number | null;
+  /**
+     * Colour tag assigned to the account in MT5 Manager (ARGB uint).
+     * @nullable
+     */
+  color?: number | null;
+  /**
+     * Internal comment on the account.
+     * @nullable
+     */
+  comment?: string | null;
   /**
      * Company or organisation name.
      * @nullable
@@ -50,82 +60,35 @@ export interface MT5UserAddRequest {
      */
   country?: string | null;
   /**
-     * Client city.
-     * @nullable
-     */
-  city?: string | null;
-  /**
-     * Client state or province.
-     * @nullable
-     */
-  state?: string | null;
-  /**
-     * Client postal code.
-     * @nullable
-     */
-  zipCode?: string | null;
-  /**
-     * Client phone number.
-     * @nullable
-     */
-  phone?: string | null;
-  /**
-     * Phone password used for telephone trading.
-     * @nullable
-     */
-  phonePassword?: string | null;
-  /**
      * Client email address.
      * @nullable
      */
   eMail?: string | null;
   /**
-     * Internal comment on the account.
+     * Given name (first name).
      * @nullable
      */
-  comment?: string | null;
+  firstName?: string | null;
   /**
-     * Colour tag assigned to the account in MT5 Manager (ARGB uint).
+     * User group name.
      * @nullable
      */
-  color?: number | null;
-  /**
-     * Account leverage (e.g. 100 = 1:100).
-     * @nullable
-     */
-  leverage?: number | null;
-  /** Account permission flags: names of the set bits, `"Enabled, Password"` (the MT5UserRights schema). */
-  rights?: MT5UserRights | null;
-  /**
-     * Account ID string (external account identifier).
-     * @nullable
-     */
-  account?: string | null;
-  /**
-     * Client language code (MT5 locale uint).
-     * @nullable
-     */
-  language?: number | null;
-  /**
-     * Client postal/physical address.
-     * @nullable
-     */
-  address?: string | null;
+  group?: string | null;
   /**
      * Client document ID (passport, national ID, etc.).
      * @nullable
      */
   id?: string | null;
   /**
-     * Client KYC / account status label.
+     * Client language code (MT5 locale uint).
      * @nullable
      */
-  status?: string | null;
+  language?: number | null;
   /**
-     * Introducing agent login.
+     * Family name (last name).
      * @nullable
      */
-  agent?: number | null;
+  lastName?: string | null;
   /**
      * Marketing lead campaign name.
      * @nullable
@@ -137,33 +100,70 @@ export interface MT5UserAddRequest {
      */
   leadSource?: string | null;
   /**
-     * External CRM client ID.
+     * Account leverage (e.g. 100 = 1:100).
      * @nullable
      */
-  clientID?: number | null;
+  leverage?: number | null;
   /**
-     * Given name (first name).
+     * Account login to create. Omit or send zero to let the trade server allocate one.
      * @nullable
      */
-  firstName?: string | null;
-  /**
-     * Family name (last name).
-     * @nullable
-     */
-  lastName?: string | null;
+  login?: number | null;
   /**
      * Patronymic / middle name.
      * @nullable
      */
   middleName?: string | null;
   /**
-     * Account registration date and time.
+     * Full display name of the account holder.
      * @nullable
      */
-  registration?: string | null;
+  name?: string | null;
   /**
      * Shared secret for two-factor authentication (OTP).
      * @nullable
      */
   otpSecret?: string | null;
+  /**
+     * Master password. Optional — generated when missing.
+     * @nullable
+     */
+  password?: string | null;
+  /**
+     * Investor (read-only) password. Optional — generated when missing.
+     * @nullable
+     */
+  passwordInvestor?: string | null;
+  /**
+     * Client phone number.
+     * @nullable
+     */
+  phone?: string | null;
+  /**
+     * Phone password used for telephone trading.
+     * @nullable
+     */
+  phonePassword?: string | null;
+  /**
+     * Account registration date and time.
+     * @nullable
+     */
+  registration?: string | null;
+  /** Account permission flags: names of the set bits, `"Enabled, Password"` (the MT5UserRights schema). */
+  rights?: MT5UserRights | null;
+  /**
+     * Client state or province.
+     * @nullable
+     */
+  state?: string | null;
+  /**
+     * Client KYC / account status label.
+     * @nullable
+     */
+  status?: string | null;
+  /**
+     * Client postal code.
+     * @nullable
+     */
+  zipCode?: string | null;
 }

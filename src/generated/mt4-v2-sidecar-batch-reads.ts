@@ -19,6 +19,107 @@ import type {
 import { customFetch } from '../mutator';
 
 
+export type getTradesSnapshotResponse200 = {
+  data: MT4TradeListApiResponse
+  status: 200
+}
+
+export type getTradesSnapshotResponseSuccess = (getTradesSnapshotResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getTradesSnapshotResponse = (getTradesSnapshotResponseSuccess)
+
+export const getGetTradesSnapshotUrl = (tradePlatform: string,
+    params?: GetTradesSnapshotParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesSnapshot?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesSnapshot`
+}
+
+/**
+ * Atomic snapshot of all open/pending trades on the MT4 server.
+ *
+ * Manager (live) call to the platform's `TradesSnapshot()`.
+ * Same UnpackObject-loop hazard as the user batch reads. Sidecar-only.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Snapshot all trades
+ */
+export const getTradesSnapshot = async (tradePlatform: string,
+    params?: GetTradesSnapshotParams, options?: Parameters<typeof customFetch>[1]): Promise<getTradesSnapshotResponse> => {
+
+  return customFetch<getTradesSnapshotResponse>(getGetTradesSnapshotUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getTradesSyncReadResponse200 = {
+  data: MT4TradeListApiResponse
+  status: 200
+}
+
+export type getTradesSyncReadResponseSuccess = (getTradesSyncReadResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getTradesSyncReadResponse = (getTradesSyncReadResponseSuccess)
+
+export const getGetTradesSyncReadUrl = (tradePlatform: string,
+    params?: GetTradesSyncReadParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesSyncRead?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesSyncRead`
+}
+
+/**
+ * Read trade records buffered by a prior `TradesSyncStart` call.
+ *
+ * Manager (live) call to the platform's `TradesSyncRead()`.
+ * Must be preceded by `POST TradesSyncStart` on the main x64
+ * API. Same UnpackObject hazard — sidecar-only.
+ *
+ * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary Read trade-records sync
+ */
+export const getTradesSyncRead = async (tradePlatform: string,
+    params?: GetTradesSyncReadParams, options?: Parameters<typeof customFetch>[1]): Promise<getTradesSyncReadResponse> => {
+
+  return customFetch<getTradesSyncReadResponse>(getGetTradesSyncReadUrl(tradePlatform,params),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
 export type getUsersSnapshotResponse200 = {
   data: MT4UserListApiResponse
   status: 200
@@ -115,107 +216,6 @@ export const getUsersSyncRead = async (tradePlatform: string,
     params?: GetUsersSyncReadParams, options?: Parameters<typeof customFetch>[1]): Promise<getUsersSyncReadResponse> => {
 
   return customFetch<getUsersSyncReadResponse>(getGetUsersSyncReadUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getTradesSnapshotResponse200 = {
-  data: MT4TradeListApiResponse
-  status: 200
-}
-
-export type getTradesSnapshotResponseSuccess = (getTradesSnapshotResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getTradesSnapshotResponse = (getTradesSnapshotResponseSuccess)
-
-export const getGetTradesSnapshotUrl = (tradePlatform: string,
-    params?: GetTradesSnapshotParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesSnapshot?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesSnapshot`
-}
-
-/**
- * Atomic snapshot of all open/pending trades on the MT4 server.
- *
- * Manager (live) call to the platform's `TradesSnapshot()`.
- * Same UnpackObject-loop hazard as the user batch reads. Sidecar-only.
- *
- * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Snapshot all trades
- */
-export const getTradesSnapshot = async (tradePlatform: string,
-    params?: GetTradesSnapshotParams, options?: Parameters<typeof customFetch>[1]): Promise<getTradesSnapshotResponse> => {
-
-  return customFetch<getTradesSnapshotResponse>(getGetTradesSnapshotUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
-export type getTradesSyncReadResponse200 = {
-  data: MT4TradeListApiResponse
-  status: 200
-}
-
-export type getTradesSyncReadResponseSuccess = (getTradesSyncReadResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getTradesSyncReadResponse = (getTradesSyncReadResponseSuccess)
-
-export const getGetTradesSyncReadUrl = (tradePlatform: string,
-    params?: GetTradesSyncReadParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesSyncRead?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/TradesSyncRead`
-}
-
-/**
- * Read trade records buffered by a prior `TradesSyncStart` call.
- *
- * Manager (live) call to the platform's `TradesSyncRead()`.
- * Must be preceded by `POST TradesSyncStart` on the main x64
- * API. Same UnpackObject hazard — sidecar-only.
- *
- * **Timeout:** 30 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary Read trade-records sync
- */
-export const getTradesSyncRead = async (tradePlatform: string,
-    params?: GetTradesSyncReadParams, options?: Parameters<typeof customFetch>[1]): Promise<getTradesSyncReadResponse> => {
-
-  return customFetch<getTradesSyncReadResponse>(getGetTradesSyncReadUrl(tradePlatform,params),
   {
     ...options,
     method: 'GET'

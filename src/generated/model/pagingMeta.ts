@@ -16,11 +16,11 @@
  * can avoid string-null checks.
  */
 export interface PagingMeta {
+  /** True if more items are available; explicit boolean form of NextCursor != null. */
+  hasMore?: boolean;
   /**
      * Opaque token for the next page; pass it back as ?cursor=. Null when there are no more items.
      * @nullable
      */
   nextCursor?: string | null;
-  /** True if more items are available; explicit boolean form of NextCursor != null. */
-  hasMore?: boolean;
 }

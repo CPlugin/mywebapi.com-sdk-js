@@ -18,18 +18,6 @@
  */
 export interface MT4NewsTopic {
   /**
-     * News key — the identifier used by `NewsBodyGet` and
-     * `NewsBodyRequest` to fetch the body for this topic.
-     */
-  key?: number;
-  /** Published time of the news topic (UTC). */
-  time?: string;
-  /**
-     * News headline / subject (max 256 chars at the platform layer).
-     * @nullable
-     */
-  topic?: string | null;
-  /**
      * News category. Slash-separated path on the platform side (e.g.
      * "Markets\Asian Markets News") used by the MT4 client terminal to
      * build a tree view. Max 64 chars at the platform layer.
@@ -37,17 +25,29 @@ export interface MT4NewsTopic {
      */
   category?: string | null;
   /**
+     * News key — the identifier used by `NewsBodyGet` and
+     * `NewsBodyRequest` to fetch the body for this topic.
+     */
+  key?: number;
+  /**
      * Comma-separated keyword list (max 256 chars). Used by quote-feed
      * brokers as a symbol filter — for example `"!EURUSD, EUR*"`
      * selects all EUR pairs except EURUSD.
      * @nullable
      */
   keywords?: string | null;
-  /** News priority: 0 = general, 1 = high. */
-  priority?: number;
   /**
      * Windows LCID language id. 0 means unspecified; otherwise the low
      * 16 bits of a Windows LCID (the language portion).
      */
   langId?: number;
+  /** News priority: 0 = general, 1 = high. */
+  priority?: number;
+  /** Published time of the news topic (UTC). */
+  time?: string;
+  /**
+     * News headline / subject (max 256 chars at the platform layer).
+     * @nullable
+     */
+  topic?: string | null;
 }

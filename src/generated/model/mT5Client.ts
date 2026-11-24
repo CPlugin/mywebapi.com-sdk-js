@@ -24,19 +24,106 @@ import type { WealthSource } from './wealthSource';
  */
 export interface MT5Client {
   /**
-     * record id
+     * address city
      * @nullable
      */
-  recordID?: number | null;
-  /** client type */
-  clientType?: ClientTypes | null;
-  /** client status */
-  clientStatus?: ClientStatuses | null;
+  addressCity?: string | null;
+  /**
+     * address country
+     * @nullable
+     */
+  addressCountry?: string | null;
+  /**
+     * address postcode
+     * @nullable
+     */
+  addressPostcode?: string | null;
+  /**
+     * address state
+     * @nullable
+     */
+  addressState?: string | null;
+  /**
+     * address street
+     * @nullable
+     */
+  addressStreet?: string | null;
   /**
      * assigned manager
      * @nullable
      */
   assignedManager?: number | null;
+  /**
+     * external ID
+     * @nullable
+     */
+  clientExternalID?: string | null;
+  /** client origin */
+  clientOrigin?: ClientOrigins | null;
+  /**
+     * client origin login
+     * @nullable
+     */
+  clientOriginLogin?: number | null;
+  /** client status */
+  clientStatus?: ClientStatuses | null;
+  /** client type */
+  clientType?: ClientTypes | null;
+  /**
+     * company address
+     * @nullable
+     */
+  companyAddress?: string | null;
+  /**
+     * company country
+     * @nullable
+     */
+  companyCountry?: string | null;
+  /**
+     * company LEI
+     * @nullable
+     */
+  companyLEI?: string | null;
+  /**
+     * company license authority
+     * @nullable
+     */
+  companyLicenseAuthority?: string | null;
+  /**
+     * company license number
+     * @nullable
+     */
+  companyLicenseNumber?: string | null;
+  /**
+     * company name
+     * @nullable
+     */
+  companyName?: string | null;
+  /**
+     * company registration authority
+     * @nullable
+     */
+  companyRegAuthority?: string | null;
+  /**
+     * Company registration date in seconds that elapsed since 01.01.1970 (UnixTime).
+     * @nullable
+     */
+  companyRegDate?: string | null;
+  /**
+     * company registration number
+     * @nullable
+     */
+  companyRegNumber?: string | null;
+  /**
+     * company VAT
+     * @nullable
+     */
+  companyVAT?: string | null;
+  /**
+     * company website
+     * @nullable
+     */
+  companyWebsite?: string | null;
   /**
      * compliance approved by
      * @nullable
@@ -58,6 +145,63 @@ export interface MT5Client {
      */
   complianceDateTermination?: string | null;
   /**
+     * contact email
+     * @nullable
+     */
+  contactEmail?: string | null;
+  /**
+     * contact language
+     * @nullable
+     */
+  contactLanguage?: string | null;
+  /**
+     * Contact last date
+     * @nullable
+     */
+  contactLastDate?: string | null;
+  /**
+     * contact messengers
+     * @nullable
+     */
+  contactMessengers?: string | null;
+  /**
+     * contact phone
+     * @nullable
+     */
+  contactPhone?: string | null;
+  /** contact preferred */
+  contactPreferred?: PreferredCommunication | null;
+  /**
+     * contact social networks
+     * @nullable
+     */
+  contactSocialNetworks?: string | null;
+  /**
+     * record creation date
+     * @nullable
+     */
+  dateCreated?: string | null;
+  /**
+     * record modification date
+     * @nullable
+     */
+  dateModified?: string | null;
+  /** experience of CFD */
+  experienceCFD?: TradingExperience | null;
+  /** experience of FX */
+  experienceFX?: TradingExperience | null;
+  /** experience of Futures */
+  experienceFutures?: TradingExperience | null;
+  /** experience of Stocks */
+  experienceStocks?: TradingExperience | null;
+  /**
+     * introducer
+     * @nullable
+     */
+  introducer?: string | null;
+  /** KYC status */
+  kycStatus?: KYCStatuses | null;
+  /**
      * lead campaign
      * @nullable
      */
@@ -68,30 +212,15 @@ export interface MT5Client {
      */
   leadSource?: string | null;
   /**
-     * introducer
+     * person annual deposit
      * @nullable
      */
-  introducer?: string | null;
+  personAnnualDeposit?: number | null;
   /**
-     * person title
+     * person annual income
      * @nullable
      */
-  personTitle?: string | null;
-  /**
-     * person name
-     * @minLength 1
-     */
-  personName: string;
-  /**
-     * person middle name
-     * @nullable
-     */
-  personMiddleName?: string | null;
-  /**
-     * person last name
-     * @nullable
-     */
-  personLastName?: string | null;
+  personAnnualIncome?: number | null;
   /**
      * person birth date<br />
      * The date of birth is specified in the FILETIME format: the number of 100-nanosecond intervals that have elapsed since January 1, 1601
@@ -103,23 +232,6 @@ export interface MT5Client {
      * @nullable
      */
   personCitizenship?: string | null;
-  /** person gender */
-  personGender?: Genders | null;
-  /**
-     * person taxid
-     * @nullable
-     */
-  personTaxID?: string | null;
-  /**
-     * person document type
-     * @nullable
-     */
-  personDocumentType?: string | null;
-  /**
-     * person document number
-     * @nullable
-     */
-  personDocumentNumber?: string | null;
   /**
      * issue date of the identification document (of passport, driver's license, etc.).<br />
      * in seconds since 01.01.1970 (UnixTime).
@@ -127,185 +239,73 @@ export interface MT5Client {
      */
   personDocumentDate?: string | null;
   /**
+     * person document expiration date
+     * @nullable
+     */
+  personDocumentExpiration?: string | null;
+  /**
      * person document extra
      * @nullable
      */
   personDocumentExtra?: string | null;
-  /** person employment */
-  personEmployment?: Employment | null;
-  /** person industry */
-  personIndustry?: EmploymentIndustry | null;
-  /** person education */
-  personEducation?: EducationLevel | null;
-  /** person wealth source */
-  personWealthSource?: WealthSource | null;
   /**
-     * person annual income
+     * person document number
      * @nullable
      */
-  personAnnualIncome?: number | null;
+  personDocumentNumber?: string | null;
+  /**
+     * person document type
+     * @nullable
+     */
+  personDocumentType?: string | null;
+  /** person education */
+  personEducation?: EducationLevel | null;
+  /** person employment */
+  personEmployment?: Employment | null;
+  /** person gender */
+  personGender?: Genders | null;
+  /** person industry */
+  personIndustry?: EmploymentIndustry | null;
+  /**
+     * person last name
+     * @nullable
+     */
+  personLastName?: string | null;
+  /**
+     * person middle name
+     * @nullable
+     */
+  personMiddleName?: string | null;
+  /**
+     * person name
+     * @minLength 1
+     */
+  personName: string;
   /**
      * person net worth
      * @nullable
      */
   personNetWorth?: number | null;
   /**
-     * person annual deposit
+     * person taxid
      * @nullable
      */
-  personAnnualDeposit?: number | null;
+  personTaxID?: string | null;
   /**
-     * company name
+     * person title
      * @nullable
      */
-  companyName?: string | null;
+  personTitle?: string | null;
+  /** person wealth source */
+  personWealthSource?: WealthSource | null;
   /**
-     * company registration number
+     * record id
      * @nullable
      */
-  companyRegNumber?: string | null;
-  /**
-     * Company registration date in seconds that elapsed since 01.01.1970 (UnixTime).
-     * @nullable
-     */
-  companyRegDate?: string | null;
-  /**
-     * company registration authority
-     * @nullable
-     */
-  companyRegAuthority?: string | null;
-  /**
-     * company VAT
-     * @nullable
-     */
-  companyVAT?: string | null;
-  /**
-     * company LEI
-     * @nullable
-     */
-  companyLEI?: string | null;
-  /**
-     * company license number
-     * @nullable
-     */
-  companyLicenseNumber?: string | null;
-  /**
-     * company license authority
-     * @nullable
-     */
-  companyLicenseAuthority?: string | null;
-  /**
-     * company country
-     * @nullable
-     */
-  companyCountry?: string | null;
-  /**
-     * company address
-     * @nullable
-     */
-  companyAddress?: string | null;
-  /**
-     * company website
-     * @nullable
-     */
-  companyWebsite?: string | null;
-  /** contact preferred */
-  contactPreferred?: PreferredCommunication | null;
-  /**
-     * contact language
-     * @nullable
-     */
-  contactLanguage?: string | null;
-  /**
-     * contact email
-     * @nullable
-     */
-  contactEmail?: string | null;
-  /**
-     * contact phone
-     * @nullable
-     */
-  contactPhone?: string | null;
-  /**
-     * contact messengers
-     * @nullable
-     */
-  contactMessengers?: string | null;
-  /**
-     * contact social networks
-     * @nullable
-     */
-  contactSocialNetworks?: string | null;
-  /**
-     * Contact last date
-     * @nullable
-     */
-  contactLastDate?: string | null;
-  /**
-     * address country
-     * @nullable
-     */
-  addressCountry?: string | null;
-  /**
-     * address postcode
-     * @nullable
-     */
-  addressPostcode?: string | null;
-  /**
-     * address street
-     * @nullable
-     */
-  addressStreet?: string | null;
-  /**
-     * address state
-     * @nullable
-     */
-  addressState?: string | null;
-  /**
-     * address city
-     * @nullable
-     */
-  addressCity?: string | null;
-  /** experience of FX */
-  experienceFX?: TradingExperience | null;
-  /** experience of CFD */
-  experienceCFD?: TradingExperience | null;
-  /** experience of Futures */
-  experienceFutures?: TradingExperience | null;
-  /** experience of Stocks */
-  experienceStocks?: TradingExperience | null;
+  recordID?: number | null;
   /**
      * trading group
      * @nullable
      */
   tradingGroup?: string | null;
-  /** client origin */
-  clientOrigin?: ClientOrigins | null;
-  /**
-     * client origin login
-     * @nullable
-     */
-  clientOriginLogin?: number | null;
-  /**
-     * external ID
-     * @nullable
-     */
-  clientExternalID?: string | null;
-  /**
-     * person document expiration date
-     * @nullable
-     */
-  personDocumentExpiration?: string | null;
-  /** KYC status */
-  kycStatus?: KYCStatuses | null;
-  /**
-     * record creation date
-     * @nullable
-     */
-  dateCreated?: string | null;
-  /**
-     * record modification date
-     * @nullable
-     */
-  dateModified?: string | null;
 }

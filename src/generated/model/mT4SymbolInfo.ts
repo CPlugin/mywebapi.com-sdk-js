@@ -21,33 +21,33 @@ import type { SymbolPriceDirection } from './symbolPriceDirection';
  * that don't belong on a real-time market-data wire.
  */
 export interface MT4SymbolInfo {
-  /**
-     * Symbol name (e.g. "EURUSD")
-     * @nullable
-     */
-  symbol?: string | null;
-  /** Number of digits after decimal point for prices on this symbol */
-  digits?: number;
-  /** Security group index this symbol belongs to (refers to ConGroupSec) */
-  type?: number;
-  /** Point size (e.g. 0.00001 for 5-digit FX); price increment per point */
-  point?: number;
-  /** Current spread, in points */
-  spread?: number;
-  /** Direction of the last tick (Up/Down/Flat) — useful for UI flash highlights */
-  direction?: SymbolPriceDirection;
-  /** Current bid price */
-  bid?: number;
   /** Current ask price */
   ask?: number;
+  /** Current bid price */
+  bid?: number;
+  /** Number of digits after decimal point for prices on this symbol */
+  digits?: number;
+  /** Direction of the last tick (Up/Down/Flat) — useful for UI flash highlights */
+  direction?: SymbolPriceDirection;
   /** Session high price */
   high?: number;
-  /** Session low price */
-  low?: number;
   /**
      * Timestamp of the last tick; null when the pump has not yet
      *             observed a tick for this symbol since connect.
      * @nullable
      */
   lastTime?: string | null;
+  /** Session low price */
+  low?: number;
+  /** Point size (e.g. 0.00001 for 5-digit FX); price increment per point */
+  point?: number;
+  /** Current spread, in points */
+  spread?: number;
+  /**
+     * Symbol name (e.g. "EURUSD")
+     * @nullable
+     */
+  symbol?: string | null;
+  /** Security group index this symbol belongs to (refers to ConGroupSec) */
+  type?: number;
 }

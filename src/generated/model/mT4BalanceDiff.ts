@@ -16,8 +16,8 @@
  * be set to `recorded + Diff` if `AdmBalanceFix` ran.
  */
 export interface MT4BalanceDiff {
-  /** Account login */
-  login?: number;
   /** Difference (signed). Zero means balance integrity check passed. */
   diff?: number;
+  /** Account login */
+  login?: number;
 }

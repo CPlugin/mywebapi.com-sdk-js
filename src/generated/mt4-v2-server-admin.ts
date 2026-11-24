@@ -18,63 +18,6 @@ import type {
 import { customFetch } from '../mutator';
 
 
-export type getSrvFeedersResponse200 = {
-  data: MT4FeederListApiResponse
-  status: 200
-}
-
-export type getSrvFeedersResponseSuccess = (getSrvFeedersResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getSrvFeedersResponse = (getSrvFeedersResponseSuccess)
-
-export const getGetSrvFeedersUrl = (tradePlatform: string,
-    params?: GetSrvFeedersParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : String(value))
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvFeeders?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvFeeders`
-}
-
-/**
- * List of running data feeders on the MT4 server (admin-only read).
- *
- * Manager (live) call to the platform's `SrvFeeders`. Returns the
- * current set of running feeder configurations as opposed to
- * `CfgRequestFeeder` which returns the static configuration. The
- * data shape is the same as `CfgRequestFeeder` — `MT4Feeder`
- * — and the credential (`Password`) is intentionally excluded.
- * <br>
- * Sorted by `Name` ascending. Paged with the same cursor codec as
- * the rest of the v2 paged endpoints (`Name` is the cursor key).
- *
- *
- * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
- * @summary List data feeders
- */
-export const getSrvFeeders = async (tradePlatform: string,
-    params?: GetSrvFeedersParams, options?: Parameters<typeof customFetch>[1]): Promise<getSrvFeedersResponse> => {
-
-  return customFetch<getSrvFeedersResponse>(getGetSrvFeedersUrl(tradePlatform,params),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-);}
-
-
 export type getLicenseCheckLicenseNameResponse200 = {
   data: BooleanApiResponse
   status: 200
@@ -179,7 +122,7 @@ return customFetch<postNotificationsSendResponse>(getPostNotificationsSendUrl(tr
   {
     ...options,
     method: 'POST',
-    headers: { 'Content-Type': 'application/json-patch+json', ...getHeaders(options?.headers) },
+    headers: { 'Content-Type': 'application/*+json', ...getHeaders(options?.headers) },
     body: JSON.stringify(mT4NotificationsSendRequest)
   }
 );}
@@ -221,6 +164,63 @@ export const getSrvFeederLogName = async (tradePlatform: string,
     name: string, options?: Parameters<typeof customFetch>[1]): Promise<getSrvFeederLogNameResponse> => {
 
   return customFetch<getSrvFeederLogNameResponse>(getGetSrvFeederLogNameUrl(tradePlatform,name),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+export type getSrvFeedersResponse200 = {
+  data: MT4FeederListApiResponse
+  status: 200
+}
+
+export type getSrvFeedersResponseSuccess = (getSrvFeedersResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getSrvFeedersResponse = (getSrvFeedersResponseSuccess)
+
+export const getGetSrvFeedersUrl = (tradePlatform: string,
+    params?: GetSrvFeedersParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : String(value))
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvFeeders?${stringifiedParams}` : `/api/v2/MT4/${encodeURIComponent(String(tradePlatform))}/SrvFeeders`
+}
+
+/**
+ * List of running data feeders on the MT4 server (admin-only read).
+ *
+ * Manager (live) call to the platform's `SrvFeeders`. Returns the
+ * current set of running feeder configurations as opposed to
+ * `CfgRequestFeeder` which returns the static configuration. The
+ * data shape is the same as `CfgRequestFeeder` — `MT4Feeder`
+ * — and the credential (`Password`) is intentionally excluded.
+ * <br>
+ * Sorted by `Name` ascending. Paged with the same cursor codec as
+ * the rest of the v2 paged endpoints (`Name` is the cursor key).
+ *
+ *
+ * **Timeout:** 10 s by default, adjustable per request with the `X-Request-Timeout` header. When the trade server does not answer in time: Nothing was changed; the request is safe to repeat.
+ * @summary List data feeders
+ */
+export const getSrvFeeders = async (tradePlatform: string,
+    params?: GetSrvFeedersParams, options?: Parameters<typeof customFetch>[1]): Promise<getSrvFeedersResponse> => {
+
+  return customFetch<getSrvFeedersResponse>(getGetSrvFeedersUrl(tradePlatform,params),
   {
     ...options,
     method: 'GET'

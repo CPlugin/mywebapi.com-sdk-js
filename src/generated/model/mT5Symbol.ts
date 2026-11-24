@@ -35,45 +35,49 @@ import type { MT5SymbolSession } from './mT5SymbolSession';
 
 export interface MT5Symbol {
   /**
-     * name
+     * bond accrued interest
      * @nullable
      */
-  symbol?: string | null;
-  /**
-     * hierarchical symbol path (including symbol name)
-     * @nullable
-     */
-  path?: string | null;
-  /**
-     * ISIN
-     * @nullable
-     */
-  isin?: string | null;
-  /**
-     * local description
-     * @nullable
-     */
-  description?: string | null;
-  /**
-     * internation description
-     * @nullable
-     */
-  international?: string | null;
+  accruedInterest?: number | null;
   /**
      * basic symbol name
      * @nullable
      */
   basis?: string | null;
+  /** EnCalcMode */
+  calcMode?: EnCalcMode | null;
   /**
-     * source symbol name
+     * category
      * @nullable
      */
-  source?: string | null;
+  category?: string | null;
   /**
-     * symbol specification page URL
+     * CFI
      * @nullable
      */
-  page?: string | null;
+  cfi?: string | null;
+  /** chart mode */
+  chartMode?: EnChartMode | null;
+  /**
+     * symbol color
+     * @nullable
+     */
+  color?: number | null;
+  /**
+     * symbol background color
+     * @nullable
+     */
+  colorBackground?: number | null;
+  /**
+     * contract size
+     * @nullable
+     */
+  contractSize?: number | null;
+  /**
+     * Country - ISO 3166-1 alpha-3 code
+     * @nullable
+     */
+  country?: string | null;
   /**
      * symbol base currency
      * @nullable
@@ -87,18 +91,6 @@ export interface MT5Symbol {
      */
   currencyBaseDigits?: number | null;
   /**
-     * symbol profit currency
-     * @nullable
-     */
-  currencyProfit?: string | null;
-  /**
-     * <strong>Read-only: the trade server does not let this value be changed.</strong>
-     * <br />
-     * <br />
-     * @nullable
-     */
-  currencyProfitDigits?: number | null;
-  /**
      * symbol margin currency
      * @nullable
      */
@@ -111,46 +103,58 @@ export interface MT5Symbol {
      */
   currencyMarginDigits?: number | null;
   /**
-     * symbol color
+     * symbol profit currency
      * @nullable
      */
-  color?: number | null;
-  /**
-     * symbol background color
-     * @nullable
-     */
-  colorBackground?: number | null;
-  /**
-     * symbol digits
-     * @nullable
-     */
-  digits?: number | null;
-  /** @nullable */
-  point?: number | null;
+  currencyProfit?: string | null;
   /**
      * <strong>Read-only: the trade server does not let this value be changed.</strong>
      * <br />
      * <br />
      * @nullable
      */
-  multiply?: number | null;
-  /** EnTickFlags */
-  tickFlags?: EnTickFlags | null;
+  currencyProfitDigits?: number | null;
   /**
-     * Depth of Market depth (both legs)
+     * local description
      * @nullable
      */
-  tickBookDepth?: number | null;
+  description?: string | null;
   /**
-     * filtration soft level
+     * symbol digits
      * @nullable
      */
-  filterSoft?: number | null;
+  digits?: number | null;
   /**
-     * filtration soft level counter
+     * exchange
      * @nullable
      */
-  filterSoftTicks?: number | null;
+  exchange?: string | null;
+  /** EnExecutionMode */
+  execMode?: EnExecutionMode | null;
+  /** EnExpirationFlags */
+  expirFlags?: EnExpirationFlags | null;
+  /**
+     * bond face value
+     * @nullable
+     */
+  faceValue?: number | null;
+  /** EnFillingFlags */
+  fillFlags?: EnFillingFlags | null;
+  /**
+     * filtration discard level
+     * @nullable
+     */
+  filterDiscard?: number | null;
+  /**
+     * gap level
+     * @nullable
+     */
+  filterGap?: number | null;
+  /**
+     * gap level ticks
+     * @nullable
+     */
+  filterGapTicks?: number | null;
   /**
      * filtration hard level
      * @nullable
@@ -162,10 +166,15 @@ export interface MT5Symbol {
      */
   filterHardTicks?: number | null;
   /**
-     * filtration discard level
+     * filtration soft level
      * @nullable
      */
-  filterDiscard?: number | null;
+  filterSoft?: number | null;
+  /**
+     * filtration soft level counter
+     * @nullable
+     */
+  filterSoftTicks?: number | null;
   /**
      * spread max value
      * @nullable
@@ -176,18 +185,206 @@ export interface MT5Symbol {
      * @nullable
      */
   filterSpreadMin?: number | null;
-  /** EnTradeMode */
-  tradeMode?: EnTradeMode | null;
-  /** EnCalcMode */
-  calcMode?: EnCalcMode | null;
-  /** EnExecutionMode */
-  execMode?: EnExecutionMode | null;
+  /**
+     * freeze level
+     * @nullable
+     */
+  freezeLevel?: number | null;
   /** EnGTCMode */
   gtcMode?: EnGtcMode | null;
-  /** EnFillingFlags */
-  fillFlags?: EnFillingFlags | null;
-  /** EnExpirationFlags */
-  expirFlags?: EnExpirationFlags | null;
+  /** instant execution check mode */
+  ieCheckMode?: EnInstantMode | null;
+  /** instant execution flags with extended accuracy */
+  ieFlags?: EnInstantFlags | null;
+  /**
+     * instant execution losing slippage
+     * @nullable
+     */
+  ieSlipLosing?: number | null;
+  /**
+     * instant execution profit slippage
+     * @nullable
+     */
+  ieSlipProfit?: number | null;
+  /**
+     * Get and set the maximum allowed difference between the time of arrival of the price, at which the client places an order, and the time of the last price.
+     * @nullable
+     */
+  ieTimeout?: number | null;
+  /**
+     * instant execution max volume
+     * @nullable
+     */
+  ieVolumeMax?: number | null;
+  /**
+     * instant execution max volume with extended accuracy
+     * @nullable
+     */
+  ieVolumeMaxExt?: number | null;
+  /** Industry */
+  industry?: EnIndustries | null;
+  /**
+     * internation description
+     * @nullable
+     */
+  international?: string | null;
+  /**
+     * ISIN
+     * @nullable
+     */
+  isin?: string | null;
+  /** EnMarginFlags */
+  marginFlags?: EnMarginFlags | null;
+  /**
+     * hedged positions margin rate
+     * @nullable
+     */
+  marginHedged?: number | null;
+  /**
+     * initial margin
+     * @nullable
+     */
+  marginInitial?: number | null;
+  /**
+     * limit orders and positions margin rate
+     * @nullable
+     */
+  marginLimit?: number | null;
+  /**
+     * long orders and positions margin rate
+     * @nullable
+     */
+  marginLong?: number | null;
+  /**
+     * maintenance margin
+     * @nullable
+     */
+  marginMaintenance?: number | null;
+  /**
+     * currency rate
+     * @nullable
+     */
+  marginRateCurrency?: number | null;
+  /**
+     * orders and positions margin rates
+     * @nullable
+     */
+  marginRateInitial?: MT5SymbolMarginRateInitial;
+  /**
+     * liquidity rate
+     * @nullable
+     */
+  marginRateLiquidity?: number | null;
+  /**
+     * orders and positions margin rates
+     * @nullable
+     */
+  marginRateMaintenance?: MT5SymbolMarginRateMaintenance;
+  /**
+     * short orders and positions margin rate
+     * @nullable
+     */
+  marginShort?: number | null;
+  /**
+     * stop orders and positions margin rate
+     * @nullable
+     */
+  marginStop?: number | null;
+  /**
+     * stop-limit orders and positions margin rate
+     * @nullable
+     */
+  marginStopLimit?: number | null;
+  /**
+     * <strong>Read-only: the trade server does not let this value be changed.</strong>
+     * <br />
+     * <br />
+     * @nullable
+     */
+  multiply?: number | null;
+  /** options mode EnOptionMode */
+  optionsMode?: EnOptionMode | null;
+  /** EnOrderFlags */
+  orderFlags?: EnOrderFlags | null;
+  /**
+     * symbol specification page URL
+     * @nullable
+     */
+  page?: string | null;
+  /**
+     * hierarchical symbol path (including symbol name)
+     * @nullable
+     */
+  path?: string | null;
+  /** @nullable */
+  point?: number | null;
+  /**
+     * price limit max (for futures)
+     * @nullable
+     */
+  priceLimitMax?: number | null;
+  /**
+     * price limit min (for futures)
+     * @nullable
+     */
+  priceLimitMin?: number | null;
+  /**
+     * settle price (for futures)
+     * @nullable
+     */
+  priceSettle?: number | null;
+  /**
+     * option strike price value
+     * @nullable
+     */
+  priceStrike?: number | null;
+  /**
+     * The time to wait for quotes in seconds, after which trading is automatically disabled for the symbol.
+     * @nullable
+     */
+  quotesTimeout?: number | null;
+  /** request execution flags */
+  reFlags?: EnRequestFlags | null;
+  /**
+     * Time in seconds during which the price issued by a dealer in the request execution mode is valid.
+     * @nullable
+     */
+  reTimeout?: number | null;
+  /** Sector */
+  sector?: EnSectors | null;
+  /**
+     * <strong>Not yet implemented. Contact us for further information</strong>
+     * <br />
+     * <br />
+     *             Update a quoting session of a symbol by the day and index. The day is specified by a value 0 (Sunday) to 6 (Saturday).
+     * @minItems 7
+     * @maxItems 7
+     * @nullable
+     */
+  sessionQuote?: MT5SymbolSession[][] | null;
+  /**
+     * <strong>Not yet implemented. Contact us for further information</strong>
+     * <br />
+     * <br />
+     * @minItems 7
+     * @maxItems 7
+     * @nullable
+     */
+  sessionTrade?: MT5SymbolSession[][] | null;
+  /**
+     * source symbol name
+     * @nullable
+     */
+  source?: string | null;
+  /**
+     * The splicing shift as a number of days to the past from the symbol's expiration date IMTConSymbol::TimeExpiration
+     * @nullable
+     */
+  spliceTimeDays?: number | null;
+  /** futures splice time type EnSpliceType */
+  spliceTimeType?: EnSpliceTimeType | null;
+  /** futures splice type EnSpliceType */
+  spliceType?: EnSpliceType | null;
   /**
      * symbol spread (0-floating)
      * @nullable
@@ -209,320 +406,51 @@ export interface MT5Symbol {
      */
   spreadDiffBalance?: number | null;
   /**
-     * tick value
-     * @nullable
-     */
-  tickValue?: number | null;
-  /**
-     * tick size
-     * @nullable
-     */
-  tickSize?: number | null;
-  /**
-     * contract size
-     * @nullable
-     */
-  contractSize?: number | null;
-  /**
      * stops level
      * @nullable
      */
   stopsLevel?: number | null;
   /**
-     * freeze level
+     * Delay for subscriptions
      * @nullable
      */
-  freezeLevel?: number | null;
-  /**
-     * The time to wait for quotes in seconds, after which trading is automatically disabled for the symbol.
-     * @nullable
-     */
-  quotesTimeout?: number | null;
-  /**
-     * minimal volume
-     * @nullable
-     */
-  volumeMin?: number | null;
-  /**
-     * maximal volume
-     * @nullable
-     */
-  volumeMax?: number | null;
-  /**
-     * volume step
-     * @nullable
-     */
-  volumeStep?: number | null;
-  /**
-     * cumulative positions and orders limit
-     * @nullable
-     */
-  volumeLimit?: number | null;
-  /** EnMarginFlags */
-  marginFlags?: EnMarginFlags | null;
-  /**
-     * initial margin
-     * @nullable
-     */
-  marginInitial?: number | null;
-  /**
-     * maintenance margin
-     * @nullable
-     */
-  marginMaintenance?: number | null;
-  /**
-     * long orders and positions margin rate
-     * @nullable
-     */
-  marginLong?: number | null;
-  /**
-     * short orders and positions margin rate
-     * @nullable
-     */
-  marginShort?: number | null;
-  /**
-     * limit orders and positions margin rate
-     * @nullable
-     */
-  marginLimit?: number | null;
-  /**
-     * stop orders and positions margin rate
-     * @nullable
-     */
-  marginStop?: number | null;
-  /**
-     * stop-limit orders and positions margin rate
-     * @nullable
-     */
-  marginStopLimit?: number | null;
-  /** EnSwapMode */
-  swapMode?: EnSwapMode | null;
+  subscriptionsDelay?: number | null;
+  /** 3 time swaps day, EnSwapDay */
+  swap3Day?: EnSwapDays | null;
+  /** swap flags */
+  swapFlags?: EnSwapFlags | null;
   /**
      * long positions swaps rate
      * @nullable
      */
   swapLong?: number | null;
+  /** EnSwapMode */
+  swapMode?: EnSwapMode | null;
   /**
-     * short positions swaps rate
+     * swap rate for Friday
      * @nullable
      */
-  swapShort?: number | null;
-  /** 3 time swaps day, EnSwapDay */
-  swap3Day?: EnSwapDays | null;
+  swapRateFriday?: number | null;
   /**
-     * trade start date
+     * swap rate for Monday
      * @nullable
      */
-  timeStart?: string | null;
+  swapRateMonday?: number | null;
   /**
-     * The date of trading expiration for a symbol.<br />
-     * It is considered that there is no time limitation for trading by a symbol if both IMTConSymbol::TimeStart and IMTConSymbol::TimeExpiration are equal to 0.
+     * swap rate for Saturday
      * @nullable
      */
-  timeExpiration?: string | null;
-  /**
-     * <strong>Not yet implemented. Contact us for further information</strong>
-     * <br />
-     * <br />
-     *             Update a quoting session of a symbol by the day and index. The day is specified by a value 0 (Sunday) to 6 (Saturday).
-     * @minItems 7
-     * @maxItems 7
-     * @nullable
-     */
-  sessionQuote?: MT5SymbolSession[][] | null;
-  /**
-     * <strong>Not yet implemented. Contact us for further information</strong>
-     * <br />
-     * <br />
-     * @minItems 7
-     * @maxItems 7
-     * @nullable
-     */
-  sessionTrade?: MT5SymbolSession[][] | null;
-  /** request execution flags */
-  reFlags?: EnRequestFlags | null;
-  /**
-     * Time in seconds during which the price issued by a dealer in the request execution mode is valid.
-     * @nullable
-     */
-  reTimeout?: number | null;
-  /** instant execution check mode */
-  ieCheckMode?: EnInstantMode | null;
-  /**
-     * Get and set the maximum allowed difference between the time of arrival of the price, at which the client places an order, and the time of the last price.
-     * @nullable
-     */
-  ieTimeout?: number | null;
-  /**
-     * instant execution profit slippage
-     * @nullable
-     */
-  ieSlipProfit?: number | null;
-  /**
-     * instant execution losing slippage
-     * @nullable
-     */
-  ieSlipLosing?: number | null;
-  /**
-     * instant execution max volume
-     * @nullable
-     */
-  ieVolumeMax?: number | null;
-  /**
-     * settle price (for futures)
-     * @nullable
-     */
-  priceSettle?: number | null;
-  /**
-     * price limit max (for futures)
-     * @nullable
-     */
-  priceLimitMax?: number | null;
-  /**
-     * price limit min (for futures)
-     * @nullable
-     */
-  priceLimitMin?: number | null;
-  /** EnTradeFlags */
-  tradeFlags?: EnTradeFlags | null;
-  /** EnOrderFlags */
-  orderFlags?: EnOrderFlags | null;
-  /**
-     * orders and positions margin rates
-     * @nullable
-     */
-  marginRateInitial?: MT5SymbolMarginRateInitial;
-  /**
-     * orders and positions margin rates
-     * @nullable
-     */
-  marginRateMaintenance?: MT5SymbolMarginRateMaintenance;
-  /** options mode EnOptionMode */
-  optionsMode?: EnOptionMode | null;
-  /**
-     * option strike price value
-     * @nullable
-     */
-  priceStrike?: number | null;
-  /**
-     * liquidity rate
-     * @nullable
-     */
-  marginRateLiquidity?: number | null;
-  /**
-     * bond face value
-     * @nullable
-     */
-  faceValue?: number | null;
-  /**
-     * bond accrued interest
-     * @nullable
-     */
-  accruedInterest?: number | null;
-  /** futures splice type EnSpliceType */
-  spliceType?: EnSpliceType | null;
-  /** futures splice time type EnSpliceType */
-  spliceTimeType?: EnSpliceTimeType | null;
-  /**
-     * The splicing shift as a number of days to the past from the symbol's expiration date IMTConSymbol::TimeExpiration
-     * @nullable
-     */
-  spliceTimeDays?: number | null;
-  /**
-     * hedged positions margin rate
-     * @nullable
-     */
-  marginHedged?: number | null;
-  /**
-     * currency rate
-     * @nullable
-     */
-  marginRateCurrency?: number | null;
-  /**
-     * gap level
-     * @nullable
-     */
-  filterGap?: number | null;
-  /**
-     * gap level ticks
-     * @nullable
-     */
-  filterGapTicks?: number | null;
-  /** chart mode */
-  chartMode?: EnChartMode | null;
-  /** instant execution flags with extended accuracy */
-  ieFlags?: EnInstantFlags | null;
-  /**
-     * minimal volume with extended accuracy
-     * @nullable
-     */
-  volumeMinExt?: number | null;
-  /**
-     * maximal volume with extended accuracy
-     * @nullable
-     */
-  volumeMaxExt?: number | null;
-  /**
-     * volume step with extended accuracy
-     * @nullable
-     */
-  volumeStepExt?: number | null;
-  /**
-     * cumulative positions and orders limit with extended accuracy
-     * @nullable
-     */
-  volumeLimitExt?: number | null;
-  /**
-     * instant execution max volume with extended accuracy
-     * @nullable
-     */
-  ieVolumeMaxExt?: number | null;
-  /**
-     * category
-     * @nullable
-     */
-  category?: string | null;
-  /**
-     * exchange
-     * @nullable
-     */
-  exchange?: string | null;
-  /**
-     * CFI
-     * @nullable
-     */
-  cfi?: string | null;
-  /** Sector */
-  sector?: EnSectors | null;
-  /** Industry */
-  industry?: EnIndustries | null;
-  /**
-     * Country - ISO 3166-1 alpha-3 code
-     * @nullable
-     */
-  country?: string | null;
-  /**
-     * Delay for subscriptions
-     * @nullable
-     */
-  subscriptionsDelay?: number | null;
-  /**
-     * Days in year
-     * @nullable
-     */
-  swapYearDays?: number | null;
-  /** swap flags */
-  swapFlags?: EnSwapFlags | null;
+  swapRateSaturday?: number | null;
   /**
      * swap rate for Sunday
      * @nullable
      */
   swapRateSunday?: number | null;
   /**
-     * swap rate for Monday
+     * swap rate for Thursday
      * @nullable
      */
-  swapRateMonday?: number | null;
+  swapRateThursday?: number | null;
   /**
      * swap rate for Tuesday
      * @nullable
@@ -534,18 +462,90 @@ export interface MT5Symbol {
      */
   swapRateWednesday?: number | null;
   /**
-     * swap rate for Thursday
+     * short positions swaps rate
      * @nullable
      */
-  swapRateThursday?: number | null;
+  swapShort?: number | null;
   /**
-     * swap rate for Friday
+     * Days in year
      * @nullable
      */
-  swapRateFriday?: number | null;
+  swapYearDays?: number | null;
   /**
-     * swap rate for Saturday
+     * name
      * @nullable
      */
-  swapRateSaturday?: number | null;
+  symbol?: string | null;
+  /**
+     * Depth of Market depth (both legs)
+     * @nullable
+     */
+  tickBookDepth?: number | null;
+  /** EnTickFlags */
+  tickFlags?: EnTickFlags | null;
+  /**
+     * tick size
+     * @nullable
+     */
+  tickSize?: number | null;
+  /**
+     * tick value
+     * @nullable
+     */
+  tickValue?: number | null;
+  /**
+     * The date of trading expiration for a symbol.<br />
+     * It is considered that there is no time limitation for trading by a symbol if both IMTConSymbol::TimeStart and IMTConSymbol::TimeExpiration are equal to 0.
+     * @nullable
+     */
+  timeExpiration?: string | null;
+  /**
+     * trade start date
+     * @nullable
+     */
+  timeStart?: string | null;
+  /** EnTradeFlags */
+  tradeFlags?: EnTradeFlags | null;
+  /** EnTradeMode */
+  tradeMode?: EnTradeMode | null;
+  /**
+     * cumulative positions and orders limit
+     * @nullable
+     */
+  volumeLimit?: number | null;
+  /**
+     * cumulative positions and orders limit with extended accuracy
+     * @nullable
+     */
+  volumeLimitExt?: number | null;
+  /**
+     * maximal volume
+     * @nullable
+     */
+  volumeMax?: number | null;
+  /**
+     * maximal volume with extended accuracy
+     * @nullable
+     */
+  volumeMaxExt?: number | null;
+  /**
+     * minimal volume
+     * @nullable
+     */
+  volumeMin?: number | null;
+  /**
+     * minimal volume with extended accuracy
+     * @nullable
+     */
+  volumeMinExt?: number | null;
+  /**
+     * volume step
+     * @nullable
+     */
+  volumeStep?: number | null;
+  /**
+     * volume step with extended accuracy
+     * @nullable
+     */
+  volumeStepExt?: number | null;
 }

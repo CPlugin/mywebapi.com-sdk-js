@@ -11,30 +11,6 @@ import type { EnCommissionMode } from './enCommissionMode';
 import type { EnCommissionVolumeType } from './enCommissionVolumeType';
 
 export interface MT5ConCommTier {
-  /** EnCommissionMode */
-  mode?: EnCommissionMode | null;
-  /** EnCommissionVolumeType */
-  type?: EnCommissionVolumeType | null;
-  /**
-     * commission value
-     * @nullable
-     */
-  value?: number | null;
-  /**
-     * minimal commission value
-     * @nullable
-     */
-  minimal?: number | null;
-  /**
-     * tier range from
-     * @nullable
-     */
-  rangeFrom?: number | null;
-  /**
-     * tier range to
-     * @nullable
-     */
-  rangeTo?: number | null;
   /**
      * commission currency (for Mode==COMM_MONEY_SPECIFIED)
      * @nullable
@@ -45,4 +21,28 @@ export interface MT5ConCommTier {
      * @nullable
      */
   maximal?: number | null;
+  /**
+     * minimal commission value
+     * @nullable
+     */
+  minimal?: number | null;
+  /** EnCommissionMode */
+  mode?: EnCommissionMode | null;
+  /**
+     * tier range from
+     * @nullable
+     */
+  rangeFrom?: number | null;
+  /**
+     * tier range to
+     * @nullable
+     */
+  rangeTo?: number | null;
+  /** EnCommissionVolumeType */
+  type?: EnCommissionVolumeType | null;
+  /**
+     * commission value
+     * @nullable
+     */
+  value?: number | null;
 }

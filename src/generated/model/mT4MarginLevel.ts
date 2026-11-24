@@ -17,31 +17,31 @@ import type { MarginLevelType } from './marginLevelType';
  * (e.g. "Percent" rather than 0).
  */
 export interface MT4MarginLevel {
-  /** Trading account number */
-  login?: number;
+  /** Account balance (deposit minus losses) */
+  balance?: number;
+  /** Whether margin is controlled by percentage or currency */
+  controllingType?: MarginControllingType;
+  /** Equity (balance + floating P&L) */
+  equity?: number;
+  /** Free margin (equity − margin) */
+  free?: number;
   /**
      * Group the account belongs to
      * @nullable
      */
   group?: string | null;
-  /** Account leverage (e.g. 100 means 1:100) */
-  leverage?: number;
-  /** Last update timestamp (MT4 unix-time int) */
-  updated?: number;
-  /** Account balance (deposit minus losses) */
-  balance?: number;
-  /** Equity (balance + floating P&L) */
-  equity?: number;
-  /** Open volume across all positions */
-  volume?: number;
-  /** Used margin */
-  margin?: number;
-  /** Free margin (equity − margin) */
-  free?: number;
   /** Margin level in % (equity / margin × 100) */
   level?: number;
-  /** Whether margin is controlled by percentage or currency */
-  controllingType?: MarginControllingType;
   /** Indicates margin call / stop-out state */
   levelType?: MarginLevelType;
+  /** Account leverage (e.g. 100 means 1:100) */
+  leverage?: number;
+  /** Trading account number */
+  login?: number;
+  /** Used margin */
+  margin?: number;
+  /** Last update timestamp (MT4 unix-time int) */
+  updated?: number;
+  /** Open volume across all positions */
+  volume?: number;
 }
