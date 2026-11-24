@@ -12,6 +12,8 @@
  * Input shape for `UserRecordUpdate`: the editable part of an MT4 account record.
  */
 export interface MT4UserUpdate {
+  /** Login of the account to update (required identity; never changed by this call) */
+  login?: number;
   /**
      * Street address
      * @nullable

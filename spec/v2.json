@@ -1512,6 +1512,22 @@
         ],
         "type": "string"
       },
+      "KYCStatuses": {
+        "enum": [
+          "Undefined",
+          "Approved",
+          "Declined"
+        ],
+        "type": "string"
+      },
+      "LiveUpdateMode": {
+        "enum": [
+          "No",
+          "All",
+          "NoServer"
+        ],
+        "type": "string"
+      },
       "MT4Access": {
         "additionalProperties": false,
         "description": "v2 DTO for a single MT4 firewall (access) rule. Curated subset of\r\nthe platform's ConAccess struct — drops the 17-int Reserved padding.\r\nIpFrom/IpTo are widened from uint to long so the JSON-serialized\r\nnumeric value fits inside JS Number safely (no precision loss).",
@@ -3676,7 +3692,8 @@
                 "$ref": "#/components/schemas/OTPMode"
               }
             ],
-            "description": "One-time password requirement mode"
+            "description": "One-time password requirement mode",
+            "nullable": true
           },
           "reports": {
             "description": "0 = statements disabled, non-zero = nightly statements enabled",
@@ -16550,6 +16567,221 @@
         },
         "type": "object"
       },
+      "MT5SymbolUpdate": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "description": "Human-readable symbol description shown in the terminal.",
+            "nullable": true
+          },
+          "digits": {
+            "type": "integer",
+            "description": "Number of decimal places in the price quote.",
+            "format": "int32",
+            "nullable": true
+          },
+          "spread": {
+            "type": "integer",
+            "description": "Current spread in points (0 = floating spread).",
+            "format": "int32",
+            "nullable": true
+          },
+          "stopsLevel": {
+            "type": "integer",
+            "description": "Minimum stop loss / take profit distance from current price, in points.",
+            "format": "int32",
+            "nullable": true
+          },
+          "freezeLevel": {
+            "type": "integer",
+            "description": "Distance from current price at which orders are frozen before execution, in points.",
+            "format": "int32",
+            "nullable": true
+          },
+          "contractSize": {
+            "type": "number",
+            "description": "Contract size — units of base currency per standard lot.",
+            "format": "double",
+            "nullable": true
+          },
+          "marginInitial": {
+            "type": "number",
+            "description": "Initial margin requirement per lot.",
+            "format": "double",
+            "nullable": true
+          },
+          "marginMaintenance": {
+            "type": "number",
+            "description": "Maintenance margin requirement per lot (below this level triggers a margin call).",
+            "format": "double",
+            "nullable": true
+          },
+          "tickSize": {
+            "type": "number",
+            "description": "Minimum price change step (pip size).",
+            "format": "double",
+            "nullable": true
+          },
+          "tickValue": {
+            "type": "number",
+            "description": "Monetary value of one tick move for one standard lot.",
+            "format": "double",
+            "nullable": true
+          },
+          "volumeMin": {
+            "type": "integer",
+            "description": "Minimum trade volume, in MT5 volume units (1 lot = 10000 units).",
+            "format": "int64",
+            "nullable": true
+          },
+          "volumeMax": {
+            "type": "integer",
+            "description": "Maximum trade volume, in MT5 volume units (1 lot = 10000 units).",
+            "format": "int64",
+            "nullable": true
+          },
+          "tradeMode": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EnTradeMode"
+              }
+            ],
+            "description": "Trade mode controlling which order types are allowed (full, close-only, no-trading, etc.).",
+            "nullable": true
+          },
+          "calcMode": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EnCalcMode"
+              }
+            ],
+            "description": "Margin calculation mode (forex, futures, CFD, etc.).",
+            "nullable": true
+          },
+          "execMode": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/EnExecutionMode"
+              }
+            ],
+            "description": "Order execution mode (instant, market, exchange, request).",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Editable surface of a symbol record: 15 fields that are safely writable, every one optional."
+      },
+      "MT5TickPage": {
+        "type": "object",
+        "properties": {
+          "ticks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MT5TickV2"
+            },
+            "description": "Ticks of this page, ordered by time ascending.",
+            "nullable": true
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total number of ticks in the requested window.",
+            "format": "int32"
+          },
+          "truncated": {
+            "type": "boolean",
+            "description": "True when `Total` exceeds the page and more ticks were available than returned."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Ticks of one history request, v2 read DTO."
+      },
+      "MT5TickPageApiResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT5TickPage"
+              }
+            ],
+            "description": "Ticks of one history request, v2 read DTO.",
+            "nullable": true
+          },
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            ],
+            "description": "v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4\r\nResultCode (serialized as a string for a known enum member, or as a number for an\r\nunrecognised value returned by MT4); Message is a human-readable description.",
+            "nullable": true
+          },
+          "meta": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiMeta"
+              }
+            ],
+            "description": "Response metadata. ActivityId identifies the request — quote it when you contact support.\r\nPaging is present only on paginated list responses; otherwise it is omitted.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Unified v2 response envelope: data is the payload (null on error); error is the\r\nerror object (null on success, always serialised); meta contains response metadata\r\n(activityId and optional paging). HTTP status is always 200."
+      },
+      "MT5TickV2": {
+        "type": "object",
+        "properties": {
+          "timeMsc": {
+            "type": "integer",
+            "description": "Tick time — milliseconds since 01.01.1970, in the trade server's trading time.",
+            "format": "int64"
+          },
+          "time": {
+            "type": "integer",
+            "description": "The same tick time in seconds since 01.01.1970.",
+            "format": "int64"
+          },
+          "dateTime": {
+            "type": "string",
+            "description": "The same tick time as a date-time without offset, for direct display.",
+            "format": "date-time"
+          },
+          "bid": {
+            "type": "number",
+            "description": "Bid price at the tick.",
+            "format": "double"
+          },
+          "ask": {
+            "type": "number",
+            "description": "Ask price at the tick.",
+            "format": "double"
+          },
+          "last": {
+            "type": "number",
+            "description": "The price of the last committed transaction.",
+            "format": "double"
+          },
+          "volume": {
+            "type": "integer",
+            "description": "Volume as the data provider passed it. The platform fills both this and\r\n`VolumeExt`; the extended value has the higher accuracy.",
+            "format": "int64"
+          },
+          "volumeExt": {
+            "type": "integer",
+            "description": "Volume with extended accuracy, as the data provider passed it.",
+            "format": "int64"
+          },
+          "flags": {
+            "type": "string",
+            "description": "Tick kind flags as a string: the names of the set bits, lowest bit first,\r\njoined by a comma and a space — for example `\"Bid, Volume\"`. `None`\r\nwhen no bit is set.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "One historical tick of a symbol, v2 read DTO."
+      },
       "MT5Time": {
         "additionalProperties": false,
         "description": "Server time configuration (MT5 CIMTConTime), v2 read DTO.",
@@ -17424,6 +17656,260 @@
         },
         "type": "object"
       },
+      "MT5UserApiResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT5User"
+              }
+            ],
+            "description": "MT5 user, v2 read DTO — full field set (A4 expansion). Includes all editable\r\n            fields mirrored from MT5UserUpdate plus read-only financial/metadata fields.\r\n            `Rights` is a flags string: the names of the set bits, `\"Enabled, Password\"`.",
+            "nullable": true
+          },
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            ],
+            "description": "v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4\r\nResultCode (serialized as a string for a known enum member, or as a number for an\r\nunrecognised value returned by MT4); Message is a human-readable description.",
+            "nullable": true
+          },
+          "meta": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiMeta"
+              }
+            ],
+            "description": "Response metadata. ActivityId identifies the request — quote it when you contact support.\r\nPaging is present only on paginated list responses; otherwise it is omitted.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Unified v2 response envelope: data is the payload (null on error); error is the\r\nerror object (null on success, always serialised); meta contains response metadata\r\n(activityId and optional paging). HTTP status is always 200."
+      },
+      "MT5UserListApiResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MT5User"
+            },
+            "nullable": true
+          },
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              }
+            ],
+            "description": "v2 error body. Code is the stable transport error code; ManagerCode is the raw MT4\r\nResultCode (serialized as a string for a known enum member, or as a number for an\r\nunrecognised value returned by MT4); Message is a human-readable description.",
+            "nullable": true
+          },
+          "meta": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiMeta"
+              }
+            ],
+            "description": "Response metadata. ActivityId identifies the request — quote it when you contact support.\r\nPaging is present only on paginated list responses; otherwise it is omitted.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Unified v2 response envelope: data is the payload (null on error); error is the\r\nerror object (null on success, always serialised); meta contains response metadata\r\n(activityId and optional paging). HTTP status is always 200."
+      },
+      "MT5UserRights": {
+        "pattern": "^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$",
+        "type": "string",
+        "description": "MT5 user permission flags. Values mirror CIMTUser.EnUsersRights.<br/>Flags: names of the set bits joined by \", \" (\"Enabled, Password\"), \"None\" when none is set; a set bit without a name is \"Bit<n>\" (bit number). Bits: Enabled = 0x1, Password = 0x2, TradeDisabled = 0x4, Investor = 0x8, Confirmed = 0x10, Trailing = 0x20, Expert = 0x40, Obsolete = 0x80, Reports = 0x100, Readonly = 0x200, ResetPass = 0x400, OTPEnabled = 0x800, SponsoredHosting = 0x2000, APIEnabled = 0x4000, PushNotification = 0x8000, Technical = 0x10000, ExcludeReports = 0x20000.",
+        "example": "Enabled, Password",
+        "x-enumFlags": true,
+        "x-enum-varnames": [
+          "None",
+          "Enabled",
+          "Password",
+          "TradeDisabled",
+          "Investor",
+          "Confirmed",
+          "Trailing",
+          "Expert",
+          "Obsolete",
+          "Reports",
+          "Readonly",
+          "ResetPass",
+          "OTPEnabled",
+          "SponsoredHosting",
+          "APIEnabled",
+          "PushNotification",
+          "Technical",
+          "ExcludeReports"
+        ],
+        "x-enum-values": [
+          0,
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64,
+          128,
+          256,
+          512,
+          1024,
+          2048,
+          8192,
+          16384,
+          32768,
+          65536,
+          131072
+        ]
+      },
+      "MT5UserUpdate": {
+        "type": "object",
+        "properties": {
+          "group": {
+            "type": "string",
+            "description": "User group name.",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "Full display name of the account holder.",
+            "nullable": true
+          },
+          "company": {
+            "type": "string",
+            "description": "Company or organisation name.",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "description": "Client country.",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "description": "Client city.",
+            "nullable": true
+          },
+          "state": {
+            "type": "string",
+            "description": "Client state or province.",
+            "nullable": true
+          },
+          "zipCode": {
+            "type": "string",
+            "description": "Client postal code.",
+            "nullable": true
+          },
+          "phone": {
+            "type": "string",
+            "description": "Client phone number.",
+            "nullable": true
+          },
+          "eMail": {
+            "type": "string",
+            "description": "Client email address.",
+            "nullable": true
+          },
+          "comment": {
+            "type": "string",
+            "description": "Internal comment on the account.",
+            "nullable": true
+          },
+          "color": {
+            "type": "integer",
+            "description": "Colour tag assigned to the account in MT5 Manager (ARGB uint).",
+            "format": "int32",
+            "nullable": true
+          },
+          "leverage": {
+            "type": "integer",
+            "description": "Account leverage (e.g. 100 = 1:100).",
+            "format": "int32",
+            "nullable": true
+          },
+          "rights": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MT5UserRights"
+              }
+            ],
+            "description": "Account permission flags: names of the set bits, `\"Enabled, Password\"` (the MT5UserRights schema).",
+            "nullable": true
+          },
+          "account": {
+            "type": "string",
+            "description": "Account ID string (external account identifier).",
+            "nullable": true
+          },
+          "language": {
+            "type": "integer",
+            "description": "Client language code (MT5 locale uint).",
+            "format": "int32",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "description": "Client postal/physical address.",
+            "nullable": true
+          },
+          "id": {
+            "type": "string",
+            "description": "Client document ID (passport, national ID, etc.).",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "description": "Client KYC / account status label.",
+            "nullable": true
+          },
+          "agent": {
+            "type": "integer",
+            "description": "Introducing agent login.",
+            "format": "int64",
+            "nullable": true
+          },
+          "leadCampaign": {
+            "type": "string",
+            "description": "Marketing lead campaign name.",
+            "nullable": true
+          },
+          "leadSource": {
+            "type": "string",
+            "description": "Marketing lead source name.",
+            "nullable": true
+          },
+          "clientID": {
+            "type": "integer",
+            "description": "External CRM client ID.",
+            "format": "int64",
+            "nullable": true
+          },
+          "firstName": {
+            "type": "string",
+            "description": "Given name (first name).",
+            "nullable": true
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Family name (last name).",
+            "nullable": true
+          },
+          "middleName": {
+            "type": "string",
+            "description": "Patronymic / middle name.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "MT5 user update DTO: the editable field set of an account, every field optional."
+      },
       "MarginCalculationMode": {
         "enum": [
           "Forex",
@@ -17868,6 +18354,74 @@
           "SkipMarginCheck"
         ],
         "x-enumFlags": true
+      },
+      "TradeActions": {
+        "enum": [
+          "Price",
+          "Request",
+          "Instant",
+          "Market",
+          "Exchange",
+          "Pending",
+          "SLTP",
+          "Modify",
+          "Remove",
+          "Transfer",
+          "CloseBy",
+          "Activate",
+          "ActivateSL",
+          "ActivateTP",
+          "ActivateStopLimit",
+          "StopOutOrder",
+          "StopOutPosition",
+          "Expiration",
+          "DealerPosExecute",
+          "DealerOrdPending",
+          "DealerPosModify",
+          "DealerOrdModify",
+          "DealerOrdRemove",
+          "DealerOrdActivate",
+          "DealerBalance",
+          "DealerOrdSLimit",
+          "DealerCloseBy",
+          "End"
+        ],
+        "type": "string"
+      },
+      "TradeActionFlags": {
+        "pattern": "^[A-Za-z][A-Za-z0-9]*(, [A-Za-z][A-Za-z0-9]*)*$",
+        "type": "string",
+        "description": "Flags: names of the set bits joined by \", \" (\"Close, Market\"), \"None\" when none is set; a set bit without a name is \"Bit<n>\" (bit number). Bits: Close = 0x1, Market = 0x2, ChangedPrice = 0x4, ChangedTrigger = 0x8, ChangedSL = 0x10, ChangedTP = 0x20, ChangedExpType = 0x40, ChangedExpTime = 0x80, Expert = 0x100, Signal = 0x200, SkipMarginCheck = 0x400. Accepted on input, never written: All = Close, Market, ChangedPrice, ChangedTrigger, ChangedSL, ChangedTP, ChangedExpType, ChangedExpTime, Expert, Signal, SkipMarginCheck.",
+        "example": "Close, Market",
+        "x-enumFlags": true,
+        "x-enum-varnames": [
+          "None",
+          "Close",
+          "Market",
+          "ChangedPrice",
+          "ChangedTrigger",
+          "ChangedSL",
+          "ChangedTP",
+          "ChangedExpType",
+          "ChangedExpTime",
+          "Expert",
+          "Signal",
+          "SkipMarginCheck"
+        ],
+        "x-enum-values": [
+          0,
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64,
+          128,
+          256,
+          512,
+          1024
+        ]
       },
       "TradeActions": {
         "enum": [
