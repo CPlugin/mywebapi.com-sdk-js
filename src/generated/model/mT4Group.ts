@@ -99,7 +99,7 @@ export interface MT4Group {
   /** News delivery mode */
   newsMode?: NewsMode;
   /** One-time password requirement mode */
-  otpMode?: OTPMode;
+  otpMode?: OTPMode | null;
   /** 0 = statements disabled, non-zero = nightly statements enabled */
   reports?: number;
   /** Count of special securities settings (SecMargins) in use */

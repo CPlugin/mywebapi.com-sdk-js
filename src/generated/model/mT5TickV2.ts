@@ -12,25 +12,18 @@
  * One historical tick of a symbol, v2 read DTO.
  */
 export interface MT5TickV2 {
-  /** Ask price at the tick. */
-  ask?: number;
-  /** Bid price at the tick. */
-  bid?: number;
-  /** The same tick time as a date-time without offset, for direct display. */
-  dateTime?: string;
-  /**
-     * Tick kind flags as a string: the names of the set bits, lowest bit first,
-     * joined by a comma and a space — for example `"Bid, Volume"`. `None`
-     * when no bit is set.
-     * @nullable
-     */
-  flags?: string | null;
-  /** The price of the last committed transaction. */
-  last?: number;
-  /** The same tick time in seconds since 01.01.1970. */
-  time?: number;
   /** Tick time — milliseconds since 01.01.1970, in the trade server's trading time. */
   timeMsc?: number;
+  /** The same tick time in seconds since 01.01.1970. */
+  time?: number;
+  /** The same tick time as a date-time without offset, for direct display. */
+  dateTime?: string;
+  /** Bid price at the tick. */
+  bid?: number;
+  /** Ask price at the tick. */
+  ask?: number;
+  /** The price of the last committed transaction. */
+  last?: number;
   /**
      * Volume as the data provider passed it. The platform fills both this and
      * `VolumeExt`; the extended value has the higher accuracy.
@@ -38,4 +31,11 @@ export interface MT5TickV2 {
   volume?: number;
   /** Volume with extended accuracy, as the data provider passed it. */
   volumeExt?: number;
+  /**
+     * Tick kind flags as a string: the names of the set bits, lowest bit first,
+     * joined by a comma and a space — for example `"Bid, Volume"`. `None`
+     * when no bit is set.
+     * @nullable
+     */
+  flags?: string | null;
 }

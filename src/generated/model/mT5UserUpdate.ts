@@ -14,40 +14,15 @@ import type { MT5UserRights } from './mT5UserRights';
  */
 export interface MT5UserUpdate {
   /**
-     * Account ID string (external account identifier).
+     * User group name.
      * @nullable
      */
-  account?: string | null;
+  group?: string | null;
   /**
-     * Client postal/physical address.
+     * Full display name of the account holder.
      * @nullable
      */
-  address?: string | null;
-  /**
-     * Introducing agent login.
-     * @nullable
-     */
-  agent?: number | null;
-  /**
-     * Client city.
-     * @nullable
-     */
-  city?: string | null;
-  /**
-     * External CRM client ID.
-     * @nullable
-     */
-  clientID?: number | null;
-  /**
-     * Colour tag assigned to the account in MT5 Manager (ARGB uint).
-     * @nullable
-     */
-  color?: number | null;
-  /**
-     * Internal comment on the account.
-     * @nullable
-     */
-  comment?: string | null;
+  name?: string | null;
   /**
      * Company or organisation name.
      * @nullable
@@ -59,35 +34,77 @@ export interface MT5UserUpdate {
      */
   country?: string | null;
   /**
+     * Client city.
+     * @nullable
+     */
+  city?: string | null;
+  /**
+     * Client state or province.
+     * @nullable
+     */
+  state?: string | null;
+  /**
+     * Client postal code.
+     * @nullable
+     */
+  zipCode?: string | null;
+  /**
+     * Client phone number.
+     * @nullable
+     */
+  phone?: string | null;
+  /**
      * Client email address.
      * @nullable
      */
   eMail?: string | null;
   /**
-     * Given name (first name).
+     * Internal comment on the account.
      * @nullable
      */
-  firstName?: string | null;
+  comment?: string | null;
   /**
-     * User group name.
+     * Colour tag assigned to the account in MT5 Manager (ARGB uint).
      * @nullable
      */
-  group?: string | null;
+  color?: number | null;
   /**
-     * Client document ID (passport, national ID, etc.).
+     * Account leverage (e.g. 100 = 1:100).
      * @nullable
      */
-  id?: string | null;
+  leverage?: number | null;
+  /** Account permission flags: names of the set bits, `"Enabled, Password"` (the MT5UserRights schema). */
+  rights?: MT5UserRights | null;
+  /**
+     * Account ID string (external account identifier).
+     * @nullable
+     */
+  account?: string | null;
   /**
      * Client language code (MT5 locale uint).
      * @nullable
      */
   language?: number | null;
   /**
-     * Family name (last name).
+     * Client postal/physical address.
      * @nullable
      */
-  lastName?: string | null;
+  address?: string | null;
+  /**
+     * Client document ID (passport, national ID, etc.).
+     * @nullable
+     */
+  id?: string | null;
+  /**
+     * Client KYC / account status label.
+     * @nullable
+     */
+  status?: string | null;
+  /**
+     * Introducing agent login.
+     * @nullable
+     */
+  agent?: number | null;
   /**
      * Marketing lead campaign name.
      * @nullable
@@ -99,40 +116,23 @@ export interface MT5UserUpdate {
      */
   leadSource?: string | null;
   /**
-     * Account leverage (e.g. 100 = 1:100).
+     * External CRM client ID.
      * @nullable
      */
-  leverage?: number | null;
+  clientID?: number | null;
+  /**
+     * Given name (first name).
+     * @nullable
+     */
+  firstName?: string | null;
+  /**
+     * Family name (last name).
+     * @nullable
+     */
+  lastName?: string | null;
   /**
      * Patronymic / middle name.
      * @nullable
      */
   middleName?: string | null;
-  /**
-     * Full display name of the account holder.
-     * @nullable
-     */
-  name?: string | null;
-  /**
-     * Client phone number.
-     * @nullable
-     */
-  phone?: string | null;
-  /** Account permission flags: names of the set bits, `"Enabled, Password"` (the MT5UserRights schema). */
-  rights?: MT5UserRights | null;
-  /**
-     * Client state or province.
-     * @nullable
-     */
-  state?: string | null;
-  /**
-     * Client KYC / account status label.
-     * @nullable
-     */
-  status?: string | null;
-  /**
-     * Client postal code.
-     * @nullable
-     */
-  zipCode?: string | null;
 }
