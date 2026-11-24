@@ -2,6 +2,12 @@
 
 All notable changes to `@mywebapi.com/sdk`. The package follows [semver](https://semver.org/); while it is at `0.x`, a minor release may contain breaking changes.
 
+## [0.6.1]
+
+### Fixed
+
+- Release re-cut: `MyWebApi.Sdk` 0.6.0 did not reach nuget.org while `MyWebApi.Sdk.Models` 0.6.0 did, so the four SDKs move to 0.6.1 together. The API surface is identical to 0.6.0.
+
 ## 0.6.0
 
 Regenerated from the WebAPI v2 specification of 24.11.2026 (x64 stand plus the 13 MT4 x86 sidecar operations, 456 in total). Minor release: the operation catalog and every method name and signature are unchanged; two models gain an optional field.
