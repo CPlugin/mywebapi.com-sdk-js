@@ -82,6 +82,11 @@ export interface MT5ConSubscription {
      */
   price?: number | null;
   /**
+     * Real cost of the subscription, the amount the client is actually charged.
+     * @nullable
+     */
+  priceCost?: number | null;
+  /**
      * Currency of the subscription price.
      * @nullable
      */

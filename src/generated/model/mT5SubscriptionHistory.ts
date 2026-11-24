@@ -50,4 +50,9 @@ export interface MT5SubscriptionHistory {
      * @nullable
      */
   subscription?: number | null;
+  /**
+     * Time of the action, in seconds since 1970-01-01.
+     * @nullable
+     */
+  time?: number | null;
 }

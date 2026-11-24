@@ -69,6 +69,14 @@ describe('orval generated output', () => {
     });
   });
 
+  test('subscription cost and history time are present', () => {
+    // * Both fields were added to the 24.11.2026 spec as optional numbers.
+    const con = readFileSync(join(GEN, 'model', 'mT5ConSubscription.ts'), 'utf8');
+    expect(con).toContain('priceCost?: number');
+    const history = readFileSync(join(GEN, 'model', 'mT5SubscriptionHistory.ts'), 'utf8');
+    expect(history).toContain('time?: number');
+  });
+
   test('MT5MarketTickStat carries the option greeks', () => {
     const source = readFileSync(join(GEN, 'model', 'mT5MarketTickStat.ts'), 'utf8');
     for (const field of [

@@ -2,6 +2,19 @@
 
 All notable changes to `@mywebapi.com/sdk`. The package follows [semver](https://semver.org/); while it is at `0.x`, a minor release may contain breaking changes.
 
+## 0.6.0
+
+Regenerated from the WebAPI v2 specification of 24.11.2026 (x64 stand plus the 13 MT4 x86 sidecar operations, 456 in total). Minor release: the operation catalog and every method name and signature are unchanged; two models gain an optional field.
+
+### Added
+
+- `MT5ConSubscription.priceCost` (`number`, nullable) — the real cost of the subscription, the amount the client is actually charged, alongside the existing `price`, `pricePro` and `priceCurrency`.
+- `MT5SubscriptionHistory.time` (`number`, nullable) — the time of the action in seconds since the Unix epoch (1970-01-01), as published by the trade server.
+
+### Tests
+
+- `tests/generated-shape.test.ts` pins `priceCost` and `time` so a spec regression shows up in CI.
+
 ## 0.5.1
 
 Regenerated from the WebAPI v2 specification of 23.11.2026 (x64 stand plus the 13 MT4 x86 sidecar operations, 456 in total). Patch release: the operation catalog and the names of every method are unchanged; only the types of the subscription contract and the payload of two models moved to what the server now publishes.

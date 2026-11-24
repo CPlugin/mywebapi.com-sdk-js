@@ -18,7 +18,7 @@ from: string;
  */
 to?: string;
 /**
- * Maximum number of ticks returned; 0 means no limit. Defaults to 0.
+ * Maximum number of ticks returned; 0 means no limit within the window. Defaults to 0.
  */
 limit?: number;
 };
